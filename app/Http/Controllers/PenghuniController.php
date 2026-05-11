@@ -30,7 +30,41 @@ class PenghuniController extends Controller
     }
     public function edit(User $penghuni){ return view('admin.penghuni.edit',['item'=>$penghuni]); }
     public function update(Request $r, User $penghuni){ abort_if($penghuni->role!=='penghuni kost',404); $d=$r->validate(['nama'=>'required','no_hp'=>'required','password'=>'nullable|min:8|confirmed']); if(!empty($d['password'])) $d['password']=Hash::make($d['password']); else unset($d['password']); $penghuni->update($d); return redirect()->route('admin.penghuni.index')->with('success','Penghuni diperbarui.'); }
-    public function destroy(User $penghuni){ abort_if($penghuni->role!=='penghuni kost',404); $penghuni->delete(); return back()->with('success','Penghuni dihapus.'); }
+    public function destroy(User $penghuni)
+{
+    abort_if($penghuni->role !== 'penghuni kost', 404);
+
+    DB::transaction(function () use ($penghuni) {
+
+        // Ambil semua id tagihan penghuni
+        $tagihanIds = Tagihan::where('id_user', $penghuni->id)
+            ->pluck('id_tagihan');
+
+        // Hapus pembayaran
+        DB::table('pembayarans')
+            ->whereIn('id_tagihan', $tagihanIds)
+            ->delete();
+
+        // Hapus tagihan
+        Tagihan::where('id_user', $penghuni->id)
+            ->delete();
+
+        // Kosongkan kamar lagi
+        KamarKost::where('id_kamar', function ($q) use ($penghuni) {
+            $q->select('id_kamar')
+                ->from('tagihans')
+                ->where('id_user', $penghuni->id)
+                ->limit(1);
+        })->update([
+            'status' => 'kosong'
+        ]);
+
+        // Hapus penghuni
+        $penghuni->delete();
+    });
+
+    return back()->with('success', 'Penghuni berhasil dihapus.');
+}
     private function makeTagihanPeriods(string $start, string $end, int $jumlahInterval, string $satuanInterval): array
     {
         $current = Carbon::parse($start)->startOfDay();
