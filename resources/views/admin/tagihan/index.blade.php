@@ -33,7 +33,7 @@
                     </th>
 
                     <th class="px-6 py-4 text-left text-sm font-semibold text-gray-600">
-                        Kamar
+                        No Kamar
                     </th>
 
                     <th class="px-6 py-4 text-left text-sm font-semibold text-gray-600">
@@ -78,7 +78,7 @@
 
                         <div class="font-medium text-[#0F0937]">
 
-                            {{ $i->kamar?->nama_kamar }}
+                            {{ $i->kamar?->nomor_kamar }}
 
                         </div>
 

@@ -144,33 +144,6 @@
 
                     </div>
 
-                    <div class="mb-4">
-
-                        <label class="text-sm text-gray-500">
-                            Deskripsi
-                        </label>
-
-                        <textarea
-                            name="deskripsi"
-                            rows="4"
-                            class="w-full border border-gray-300 rounded-lg px-4 py-3"
-                        ></textarea>
-
-                    </div>
-
-                    <div class="mb-6">
-
-                        <label class="text-sm text-gray-500">
-                            Foto Kost
-                        </label>
-
-                        <input
-                            type="file"
-                            name="foto_kost"
-                            class="w-full border border-gray-300 rounded-lg px-4 py-3"
-                        >
-                    </div>
-
                 </div>
 
                 {{-- BUTTON --}}
@@ -196,18 +169,6 @@
                 </p>
 
             </form>
-
-        </div>
-    </div>
-
-    {{-- IMAGE --}}
-    <div class="hidden lg:block w-2/4">
-        <div class="sticky top-0 h-screen">
-
-            <img
-                src="{{ asset('pintu-login.png') }}"
-                class="w-full h-full object-cover"
-            >
 
         </div>
     </div>

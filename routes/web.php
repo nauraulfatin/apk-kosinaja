@@ -69,6 +69,43 @@ Route::middleware([
         FasilitasController::class
     )->except(['show']);
 
+    /*
+|--------------------------------------------------------------------------
+| PENGAJUAN ADMIN KOST
+|--------------------------------------------------------------------------
+*/
+
+Route::get(
+    '/pengajuan',
+    [SuperAdminController::class, 'pengajuan']
+)->name('pengajuan.index');
+
+Route::get(
+    '/pengajuan/{user}',
+    [SuperAdminController::class, 'detailPengajuan']
+)->name('admin.detail');
+
+/*
+|--------------------------------------------------------------------------
+| RIWAYAT PENGAJUAN
+|--------------------------------------------------------------------------
+*/
+
+Route::get(
+    '/riwayat',
+    [SuperAdminController::class, 'riwayat']
+)->name('riwayat.index');
+
+Route::get(
+    '/riwayat/{user}/edit',
+    [SuperAdminController::class, 'editRiwayat']
+)->name('riwayat.edit');
+
+Route::delete(
+    '/admin-kost/{user}/hapus',
+    [SuperAdminController::class, 'hapusAdmin']
+)->name('admin.hapus');
+
 });
 
 /*
