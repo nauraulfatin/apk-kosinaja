@@ -1,0 +1,3 @@
+<?php
+use Illuminate\Database\Migrations\Migration; use Illuminate\Database\Schema\Blueprint; use Illuminate\Support\Facades\Schema;
+return new class extends Migration { public function up(): void { Schema::create('kamar_kosts', function(Blueprint $table){ $table->id('id_kamar'); $table->foreignId('id_kost')->constrained('kosts')->cascadeOnDelete(); $table->string('nama_kamar'); $table->string('nomor_kamar'); $table->string('ukuran_kamar')->nullable(); $table->string('foto_kamar')->nullable(); $table->enum('status', ['kosong','terisi'])->default('kosong'); $table->timestamps(); $table->unique(['id_kost','nomor_kamar']); }); } public function down(): void { Schema::dropIfExists('kamar_kosts'); } };

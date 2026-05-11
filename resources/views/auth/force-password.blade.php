@@ -1,0 +1,1 @@
+@extends('layouts.app') @section('content')<div class="card"><h2>Ganti Password Awal</h2><form method="post">@csrf<label>Password Baru</label><input type="password" name="password"><label>Konfirmasi Password</label><input type="password" name="password_confirmation"><button>Simpan</button></form></div>@endsection
