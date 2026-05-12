@@ -80,76 +80,138 @@
             </div>
 
             {{-- ===================================================== --}}
-{{-- MENU --}}
-{{-- ===================================================== --}}
-<nav class="px-4 py-4 space-y-1">
+            {{-- MENU --}}
+            {{-- ===================================================== --}}
+            <nav class="flex-1 px-4 py-6 flex flex-col">
 
-    @php
+                @php
 
-        $menuClass =
-            'flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium transition';
+                    $menuClass =
+                        'flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium transition';
 
-        $activeClass =
-            'bg-[#D6E5D6] text-[#3A5C3A]';
+                    $activeClass =
+                        'bg-[#D6E5D6] text-[#3A5C3A]';
 
-        $inactiveClass =
-            'text-gray-500 hover:bg-gray-100';
+                    $inactiveClass =
+                        'text-gray-500 hover:bg-gray-100';
 
-    @endphp
+                @endphp
 
-    {{-- DASHBOARD --}}
-    <a
-        href="{{ route('superadmin.dashboard') }}"
-        class="{{ $menuClass }}
-        {{ request()->routeIs('superadmin.dashboard')
-            ? $activeClass
-            : $inactiveClass }}"
-    >
+                {{-- DASHBOARD --}}
+                <a
+                    href="{{ route('superadmin.dashboard') }}"
+                    class="{{ $menuClass }}
+                    {{ request()->routeIs('superadmin.dashboard')
+                        ? $activeClass
+                        : $inactiveClass }}"
+                >
 
-        🏠 Dashboard
+                    <svg xmlns="http://www.w3.org/2000/svg"
+                         class="h-5 w-5"
+                         fill="none"
+                         viewBox="0 0 24 24"
+                         stroke="currentColor">
 
-    </a>
+                        <path
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                            stroke-width="2"
+                            d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"
+                        />
 
-    {{-- PENGAJUAN --}}
-    <a
-        href="{{ route('superadmin.pengajuan.index') }}"
-        class="{{ $menuClass }}
-        {{ request()->routeIs('superadmin.pengajuan.*')
-            ? $activeClass
-            : $inactiveClass }}"
-    >
+                    </svg>
 
-        📋 Pengajuan
+                    Dashboard
 
-    </a>
+                </a>
 
-    {{-- RIWAYAT --}}
-    <a
-        href="{{ route('superadmin.riwayat.index') }}"
-        class="{{ $menuClass }}
-        {{ request()->routeIs('superadmin.riwayat.*')
-            ? $activeClass
-            : $inactiveClass }}"
-    >
+                {{-- PENGAJUAN --}}
+                <a
+                    href="{{ route('superadmin.pengajuan.index') }}"
+                    class="{{ $menuClass }}
+                    {{ request()->routeIs('superadmin.pengajuan.*')
+                        ? $activeClass
+                        : $inactiveClass }}"
+                >
 
-        🕘 Riwayat
+                    <svg xmlns="http://www.w3.org/2000/svg"
+                         class="h-5 w-5"
+                         fill="none"
+                         viewBox="0 0 24 24"
+                         stroke="currentColor">
 
-    </a>
+                        <path
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                            stroke-width="2"
+                            d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"
+                        />
 
-    {{-- MASTER FASILITAS --}}
-    <a
-        href="{{ route('superadmin.fasilitas.index') }}"
-        class="{{ $menuClass }}
-        {{ request()->routeIs('superadmin.fasilitas.*')
-            ? $activeClass
-            : $inactiveClass }}"
-    >
+                    </svg>
 
-        🛏️ Master Fasilitas
+                    Pengajuan
 
-    </a>
+                </a>
 
-</nav>
+                {{-- RIWAYAT --}}
+                <a
+                    href="{{ route('superadmin.riwayat.index') }}"
+                    class="{{ $menuClass }}
+                    {{ request()->routeIs('superadmin.riwayat.*')
+                        ? $activeClass
+                        : $inactiveClass }}"
+                >
+
+                    <svg xmlns="http://www.w3.org/2000/svg"
+                         class="h-5 w-5"
+                         fill="none"
+                         viewBox="0 0 24 24"
+                         stroke="currentColor">
+
+                        <path
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                            stroke-width="2"
+                            d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"
+                        />
+
+                    </svg>
+
+                    Riwayat
+
+                </a>
+
+                {{-- FASILITAS --}}
+                <a
+                    href="{{ route('superadmin.fasilitas.index') }}"
+                    class="{{ $menuClass }}
+                    {{ request()->routeIs('superadmin.fasilitas.*')
+                        ? $activeClass
+                        : $inactiveClass }}"
+                >
+
+                    <svg xmlns="http://www.w3.org/2000/svg"
+                         class="w-5 h-5"
+                         fill="none"
+                         viewBox="0 0 24 24"
+                         stroke="currentColor">
+
+                        <path
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                            stroke-width="2"
+                            d="M3 7h18M3 12h18M3 17h18"
+                        />
+
+                    </svg>
+
+                    Daftar Fasilitas Kos
+
+                </a>
+
+            </nav>
+
+        </div>
 
         {{-- ===================================================== --}}
         {{-- LOGOUT --}}
@@ -165,8 +227,23 @@
 
                 <button
                     type="submit"
-                    class="w-full bg-red-50 hover:bg-red-100 text-red-500 py-3 rounded-xl text-sm font-semibold transition"
+                    class="w-full flex items-center justify-center gap-2 bg-red-50 hover:bg-red-100 text-red-500 py-3 rounded-xl text-sm font-semibold transition"
                 >
+
+                    <svg xmlns="http://www.w3.org/2000/svg"
+                         class="w-5 h-5"
+                         fill="none"
+                         viewBox="0 0 24 24"
+                         stroke="currentColor">
+
+                        <path
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                            stroke-width="2"
+                            d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1m0-10V4m-6 16h6a2 2 0 002-2V6a2 2 0 00-2-2H7a2 2 0 00-2 2v12a2 2 0 002 2z"
+                        />
+
+                    </svg>
 
                     Logout
 
