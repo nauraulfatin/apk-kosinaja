@@ -52,7 +52,7 @@
                 type="text"
                 name="nama_kamar"
                 value="{{ old('nama_kamar', $item->nama_kamar) }}"
-                placeholder="Contoh: Kamar Melati"
+                placeholder="Opsional, Contoh: Kamar Melati"
                 class="w-full border border-gray-300 rounded-xl px-4 py-3 focus:ring-[#6C8B6B] focus:border-[#6C8B6B]"
             >
 
@@ -72,7 +72,7 @@
                     type="text"
                     name="nomor_kamar"
                     value="{{ old('nomor_kamar', $item->nomor_kamar) }}"
-                    placeholder="Contoh: A01"
+                    placeholder="Contoh: A01 atau 01"
                     class="w-full border border-gray-300 rounded-xl px-4 py-3 focus:ring-[#6C8B6B] focus:border-[#6C8B6B]"
                 >
 
@@ -97,73 +97,258 @@
 
         </div>
 
-        {{-- FOTO --}}
-        <div>
+        {{-- ========================================================= --}}
+{{-- FOTO KAMAR --}}
+{{-- ========================================================= --}}
+<div>
 
-            <label class="block text-sm font-medium text-gray-700 mb-2">
-                Foto Kamar
-            </label>
+    <label class="block text-sm font-medium text-gray-700 mb-3">
 
-            <input
-                type="file"
-                name="foto_kamar"
-                class="w-full border border-gray-300 rounded-xl px-4 py-3 bg-white"
-            >
+        Foto Kamar
 
-            <p class="text-xs text-gray-400 mt-2">
-                Format: JPG, PNG, JPEG
+    </label>
+
+    <div class="bg-[#F8F5F0] border border-gray-200 rounded-2xl p-6">
+
+        {{-- INFO --}}
+        <div class="mb-5">
+
+            <p class="text-sm text-gray-600">
+
+                Upload satu atau lebih foto kamar.
+
+            </p>
+
+            <p class="text-xs text-[#6C8B6B] mt-2 font-medium">
+
+                Foto pertama akan menjadi foto utama kamar.
+
             </p>
 
         </div>
 
-        {{-- PREVIEW FOTO --}}
-        @if($item->exists && $item->foto_kamar)
+        {{-- INPUT --}}
+        <div class="flex flex-col gap-4">
 
-        <div>
+            <label
+                for="foto_kamar"
+                class="w-fit cursor-pointer bg-white border border-gray-300
+                       hover:border-[#6C8B6B]
+                       px-5 py-3 rounded-xl text-sm font-medium
+                       text-gray-700 transition"
+            >
 
-            <p class="text-sm text-gray-500 mb-3">
-                Foto Saat Ini
+                Pilih Foto
+
+            </label>
+
+            <input
+                type="file"
+                name="foto_kamar[]"
+                id="foto_kamar"
+                multiple
+                accept="image/*"
+                class="hidden"
+            >
+
+            <p
+                id="file-count"
+                class="text-sm text-gray-500"
+            >
+
+                Belum ada foto dipilih
+
             </p>
 
-            <img
-                src="{{ asset('storage/' . $item->foto_kamar) }}"
-                alt="Foto Kamar"
-                class="w-full max-w-md rounded-2xl border border-gray-200 shadow-sm"
-            >
+        </div>
+
+        {{-- PREVIEW --}}
+        <div
+            id="preview-container"
+            class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 mt-6"
+        ></div>
+
+        {{-- FOTO LAMA --}}
+        @if($item->exists && $item->foto_kamar)
+
+        <div class="mt-10">
+
+            <p class="text-sm font-semibold text-[#0F0937] mb-4">
+
+                Foto Saat Ini
+
+            </p>
+
+            <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+
+                @foreach($item->foto_kamar as $foto)
+
+                <div class="relative">
+
+                    <img
+                        src="{{ asset('storage/' . $foto) }}"
+                        class="w-full h-40 object-cover rounded-2xl border border-gray-200"
+                    >
+
+                    @if($loop->first)
+
+                    <div
+                        class="absolute top-2 left-2
+                               bg-[#6C8B6B] text-white
+                               text-[10px] px-2 py-1 rounded-full"
+                    >
+
+                        Foto Utama
+
+                    </div>
+
+                    @endif
+
+                </div>
+
+                @endforeach
+
+            </div>
 
         </div>
 
         @endif
 
-        {{-- STATUS --}}
-        <div>
+    </div>
 
-            <label class="block text-sm font-medium text-gray-700 mb-2">
-                Status Kamar
-            </label>
+</div>
 
-            <select
-                name="status"
-                class="w-full border border-gray-300 rounded-xl px-4 py-3 focus:ring-[#6C8B6B] focus:border-[#6C8B6B]"
-            >
+{{-- ========================================================= --}}
+{{-- SCRIPT PREVIEW --}}
+{{-- ========================================================= --}}
+<script>
 
-                <option
-                    value="kosong"
-                    @selected(old('status', $item->status) === 'kosong')
-                >
-                    Kosong
-                </option>
+    const inputFoto =
+        document.getElementById('foto_kamar');
 
-                <option
-                    value="terisi"
-                    @selected(old('status', $item->status) === 'terisi')
-                >
-                    Terisi
-                </option>
+    const previewContainer =
+        document.getElementById('preview-container');
 
-            </select>
+    const fileCount =
+        document.getElementById('file-count');
 
-        </div>
+    let selectedFiles = [];
+
+    inputFoto.addEventListener('change', function (e)
+    {
+        const newFiles =
+            Array.from(e.target.files);
+
+        selectedFiles = [
+
+            ...selectedFiles,
+
+            ...newFiles
+
+        ];
+
+        updateInputFiles();
+
+        renderPreview();
+    });
+
+    function updateInputFiles()
+    {
+        const dataTransfer =
+            new DataTransfer();
+
+        selectedFiles.forEach(file =>
+        {
+            dataTransfer.items.add(file);
+        });
+
+        inputFoto.files =
+            dataTransfer.files;
+    }
+
+    function renderPreview()
+    {
+        previewContainer.innerHTML = '';
+
+        fileCount.innerHTML =
+            selectedFiles.length
+            ? `${selectedFiles.length} foto dipilih`
+            : 'Belum ada foto dipilih';
+
+        selectedFiles.forEach((file, index) =>
+        {
+            const reader = new FileReader();
+
+            reader.onload = function (e)
+            {
+                const wrapper =
+                    document.createElement('div');
+
+                wrapper.className =
+                    'relative';
+
+                wrapper.innerHTML = `
+
+                    <img
+                        src="${e.target.result}"
+                        class="w-full h-40 object-cover rounded-2xl border border-gray-200"
+                    >
+
+                    ${
+                        index === 0
+                        ?
+                        `
+                        <div
+                            class="absolute top-2 left-2
+                                   bg-[#6C8B6B] text-white
+                                   text-[10px] px-2 py-1 rounded-full"
+                        >
+                            Foto Utama
+                        </div>
+                        `
+                        :
+                        ''
+                    }
+
+                    <button
+                        type="button"
+                        data-index="${index}"
+                        class="remove-image absolute top-2 right-2
+                               bg-red-500 hover:bg-red-600
+                               text-white rounded-full
+                               w-8 h-8 flex items-center justify-center"
+                    >
+
+                        ✕
+
+                    </button>
+
+                `;
+
+                previewContainer.appendChild(wrapper);
+
+                wrapper
+                    .querySelector('.remove-image')
+                    .addEventListener('click', function ()
+                    {
+                        const removeIndex =
+                            parseInt(this.dataset.index);
+
+                        selectedFiles.splice(removeIndex, 1);
+
+                        updateInputFiles();
+
+                        renderPreview();
+                    });
+
+            };
+
+            reader.readAsDataURL(file);
+
+        });
+    }
+
+</script>
 
         {{-- BUTTON --}}
         <div class="flex flex-wrap gap-3 pt-4">

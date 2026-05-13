@@ -222,9 +222,8 @@ public function index(Request $request)
         $data = $request->validate([
 
             'nama_kost' => 'required',
-
+            'no_hp' => 'required',
             'alamat' => 'required',
-
             'deskripsi' => 'nullable',
             'fasilitas' => 'nullable|array',
             'fasilitas.*' => 'exists:fasilitas,id_fasilitas',
@@ -280,6 +279,19 @@ public function index(Request $request)
         */
 
         $kost->update($data);
+
+/*
+|--------------------------------------------------------------------------
+| UPDATE NO HP USER
+|--------------------------------------------------------------------------
+*/
+
+$request->user()->update([
+
+    'no_hp' => $request->no_hp
+
+]);
+
         /*
 |--------------------------------------------------------------------------
 | SYNC FASILITAS

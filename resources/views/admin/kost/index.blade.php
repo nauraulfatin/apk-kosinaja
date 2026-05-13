@@ -139,6 +139,25 @@
                     </p>
 
                 </div>
+                {{-- NO HP --}}
+<div class="mt-6">
+
+    <p class="text-sm text-gray-500 mb-2">
+
+        Nomor WhatsApp
+
+    </p>
+
+    <div
+        class="border border-gray-200 rounded-xl
+               px-4 py-3 text-sm text-gray-700"
+    >
+
+        {{ $kost->user->no_hp ?: '-' }}
+
+    </div>
+
+</div>
 
             </div>
 

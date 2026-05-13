@@ -58,6 +58,33 @@
         </div>
 
         {{-- ========================================================= --}}
+{{-- NOMOR WHATSAPP --}}
+{{-- ========================================================= --}}
+<div>
+
+    <label class="block text-sm font-medium text-gray-700 mb-2">
+
+        Nomor WhatsApp
+
+    </label>
+
+    <input
+        type="text"
+        name="no_hp"
+        value="{{ old('no_hp', auth()->user()->no_hp) }}"
+        placeholder="08xxxxxxxxxx"
+        class="w-full border border-gray-300 rounded-xl px-4 py-3"
+    >
+
+    <p class="text-xs text-gray-400 mt-2">
+
+        Nomor ini akan ditampilkan pada katalog kost.
+
+    </p>
+
+</div>
+
+        {{-- ========================================================= --}}
         {{-- ALAMAT --}}
         {{-- ========================================================= --}}
         <div>
