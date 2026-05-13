@@ -15,7 +15,7 @@
         </h1>
 
         <p class="text-gray-500 mt-2">
-            Kelola penghuni kost dan data akun mereka.
+            Kelola daftar penghuni kost anda!
         </p>
 
     </div>

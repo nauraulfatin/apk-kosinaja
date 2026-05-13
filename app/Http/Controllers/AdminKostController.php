@@ -65,7 +65,21 @@ class AdminKostController extends Controller
 
             'deskripsi' => 'nullable',
 
-            'foto_kost' => 'nullable|image|max:2048',
+            /*
+            |--------------------------------------------------------------------------
+            | MULTIPLE FOTO
+            |--------------------------------------------------------------------------
+            */
+
+            'foto_kost' => 'nullable|array',
+
+            'foto_kost.*' => 'image|max:2048',
+
+            /*
+            |--------------------------------------------------------------------------
+            | GOOGLE MAPS
+            |--------------------------------------------------------------------------
+            */
 
             'lokasi' => 'nullable|string',
 
@@ -99,12 +113,24 @@ class AdminKostController extends Controller
 
             /*
             |--------------------------------------------------------------------------
-            | FOTO KOST
+            | MULTIPLE FOTO KOST
             |--------------------------------------------------------------------------
             */
 
-            $foto = $request->file('foto_kost')
-                ?->store('kost', 'public');
+            $fotos = [];
+
+            if ($request->hasFile('foto_kost')) {
+
+                foreach ($request->file('foto_kost') as $file) {
+
+                    $fotos[] = $file->store(
+                        'kost',
+                        'public'
+                    );
+
+                }
+
+            }
 
             /*
             |--------------------------------------------------------------------------
@@ -120,7 +146,7 @@ class AdminKostController extends Controller
 
                 'deskripsi' => $data['deskripsi'] ?? null,
 
-                'foto_kost' => $foto,
+                'foto_kost' => $fotos,
 
                 'lokasi' => $data['lokasi'] ?? null,
 
@@ -184,7 +210,15 @@ class AdminKostController extends Controller
 
             'deskripsi' => 'nullable',
 
-            'foto_kost' => 'nullable|image|max:2048',
+            /*
+            |--------------------------------------------------------------------------
+            | MULTIPLE FOTO
+            |--------------------------------------------------------------------------
+            */
+
+            'foto_kost' => 'nullable|array',
+
+            'foto_kost.*' => 'image|max:2048',
 
             /*
             |--------------------------------------------------------------------------
@@ -200,15 +234,24 @@ class AdminKostController extends Controller
 
         /*
         |--------------------------------------------------------------------------
-        | UPLOAD FOTO
+        | UPLOAD MULTIPLE FOTO
         |--------------------------------------------------------------------------
         */
 
         if ($request->hasFile('foto_kost')) {
 
-            $data['foto_kost'] = $request->file('foto_kost')
-                ->store('kost', 'public');
+            $fotos = [];
 
+            foreach ($request->file('foto_kost') as $file) {
+
+                $fotos[] = $file->store(
+                    'kost',
+                    'public'
+                );
+
+            }
+
+            $data['foto_kost'] = $fotos;
         }
 
         /*

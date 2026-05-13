@@ -6,15 +6,34 @@
 
 @section('content')
 
-<div class="mb-8">
+<div class="flex items-center justify-between mb-8">
 
-    <h1 class="text-3xl font-bold text-[#0F0937]">
-        Validasi Tagihan
-    </h1>
+    <div>
 
-    <p class="text-gray-500 mt-2">
-        Validasi pembayaran penghuni kost.
-    </p>
+        <h1 class="text-3xl font-bold text-[#0F0937]">
+           Pembayaran
+        </h1>
+
+        <p class="text-gray-500 mt-2">
+            Validasi pembayaran penghuni kost anda!
+        </p>
+
+    </div>
+
+    {{-- BUTTON --}}
+    <div class="flex gap-3">
+
+        {{-- PERIODE PENAGIHAN --}}
+        <a
+            href="{{ route('admin.periode.index') }}"
+            class="bg-[#6C8B6B] hover:bg-[#5B765A] text-white px-5 py-3 rounded-xl font-semibold transition"
+        >
+
+            Kelola Periode Penagihan
+
+        </a>
+
+    </div>
 
 </div>
 

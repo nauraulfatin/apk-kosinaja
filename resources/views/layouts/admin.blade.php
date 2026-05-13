@@ -64,37 +64,131 @@
 
                 <a href="{{ route('admin.dashboard') }}"
                    class="{{ $menuClass }} {{ request()->routeIs('admin.dashboard') ? $activeClass : $inactiveClass }}">
-                    🏠 Dashboard
+                   <svg xmlns="http://www.w3.org/2000/svg"
+                         class="h-5 w-5"
+                         fill="none"
+                         viewBox="0 0 24 24"
+                         stroke="currentColor">
+
+                        <path
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                            stroke-width="2"
+                            d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"
+                        />
+
+                    </svg> 
+                   Dashboard
                 </a>
 
                 <a href="{{ route('admin.kamar.index') }}"
                    class="{{ $menuClass }} {{ request()->routeIs('admin.kamar.*') ? $activeClass : $inactiveClass }}">
-                    🛏 Daftar Kamar
+                    <svg xmlns="http://www.w3.org/2000/svg"
+         class="h-5 w-5"
+         fill="none"
+         viewBox="0 0 24 24"
+         stroke="currentColor">
+
+        <path
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            stroke-width="2"
+            d="M3 7h18M3 12h18M3 17h18"
+        />
+
+    </svg>
+                   Daftar Kamar
                 </a>
 
                 <a href="{{ route('admin.penghuni.index') }}"
                    class="{{ $menuClass }} {{ request()->routeIs('admin.penghuni.*') ? $activeClass : $inactiveClass }}">
-                    👥 Penghuni
+                     <svg xmlns="http://www.w3.org/2000/svg"
+                         class="h-5 w-5"
+                         fill="none"
+                         viewBox="0 0 24 24"
+                         stroke="currentColor">
+
+                        <path
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                            stroke-width="2"
+                            d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"
+                        />
+
+                    </svg> Penghuni
                 </a>
 
                 <a href="{{ route('admin.tagihan.index') }}"
                    class="{{ $menuClass }} {{ request()->routeIs('admin.pembayaran.*') ? $activeClass : $inactiveClass }}">
-                    💳 Pembayaran
+                     <svg xmlns="http://www.w3.org/2000/svg"
+         class="h-5 w-5"
+         fill="none"
+         viewBox="0 0 24 24"
+         stroke="currentColor">
+
+        <path
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            stroke-width="2"
+            d="M12 1v22m5-18H9.5a3.5 3.5 0 000 7h5a3.5 3.5 0 010 7H7"
+        />
+
+    </svg>
+ Pembayaran
                 </a>
 
                 <a href="#"
                    class="{{ $menuClass }} {{ request()->routeIs('admin.aduan.*') ? $activeClass : $inactiveClass }}">
-                    📢 Aduan
+                    <svg xmlns="http://www.w3.org/2000/svg"
+         class="h-5 w-5"
+         fill="none"
+         viewBox="0 0 24 24"
+         stroke="currentColor">
+
+        <path
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            stroke-width="2"
+            d="M8 10h.01M12 10h.01M16 10h.01M9 16H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-5l-4 4v-4z"
+        />
+
+    </svg> Aduan
                 </a>
 
                 <a href="#"
                    class="{{ $menuClass }} {{ request()->routeIs('admin.aturan.*') ? $activeClass : $inactiveClass }}">
-                    📄 Aturan Kos
+                    <svg xmlns="http://www.w3.org/2000/svg"
+                         class="h-5 w-5"
+                         fill="none"
+                         viewBox="0 0 24 24"
+                         stroke="currentColor">
+
+                        <path
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                            stroke-width="2"
+                            d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"
+                        />
+
+                    </svg> Aturan Kos
                 </a>
 
                 <a href="{{ route('admin.kost.edit') }}"
    class="{{ $menuClass }} {{ request()->routeIs('kost.*') ? $activeClass : $inactiveClass }}">
-    ℹ Informasi Kos
+      <svg xmlns="http://www.w3.org/2000/svg"
+         class="h-5 w-5"
+         fill="none"
+         viewBox="0 0 24 24"
+         stroke="currentColor">
+
+        <path
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            stroke-width="2"
+            d="M13 16h-1v-4h-1m1-4h.01M12 20h.01M12 4a8 8 0 100 16 8 8 0 000-16z"
+        />
+
+    </svg> Informasi Kos
 </a>
 
             </nav>

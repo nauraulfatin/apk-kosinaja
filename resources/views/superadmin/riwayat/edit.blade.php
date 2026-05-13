@@ -134,40 +134,6 @@
 
         </div>
 
-        {{-- DESKRIPSI --}}
-        <div class="mt-8">
-
-            <p class="text-sm text-gray-500 mb-2">
-                Deskripsi Kost
-            </p>
-
-            <div class="bg-[#F8F5F0] rounded-2xl p-5 text-gray-700 leading-relaxed">
-
-                {{ $user->kost?->deskripsi }}
-
-            </div>
-
-        </div>
-
-        {{-- FOTO --}}
-        @if($user->kost?->foto_kost)
-
-        <div class="mt-8">
-
-            <p class="text-sm text-gray-500 mb-3">
-                Foto Kost
-            </p>
-
-            <img
-                src="{{ asset('storage/' . $user->kost->foto_kost) }}"
-                alt="Foto Kost"
-                class="w-full max-w-xl rounded-2xl border border-gray-200"
-            >
-
-        </div>
-
-        @endif
-
         {{-- STATUS --}}
         <div class="mt-8">
 

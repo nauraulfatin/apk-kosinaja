@@ -11,11 +11,11 @@
     <div>
 
         <h1 class="text-3xl font-bold text-[#0F0937]">
-            CRUD Kamar Kost
+           Daftar kamar
         </h1>
 
         <p class="text-gray-500 mt-2">
-            Kelola data kamar kost.
+            Kelola daftar kamar kost anda
         </p>
 
     </div>
