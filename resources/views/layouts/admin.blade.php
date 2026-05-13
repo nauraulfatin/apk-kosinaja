@@ -173,7 +173,7 @@
                     </svg> Aturan Kos
                 </a>
 
-                <a href="{{ route('admin.kost.edit') }}"
+                <a href="{{ route('admin.kost.index') }}"
    class="{{ $menuClass }} {{ request()->routeIs('kost.*') ? $activeClass : $inactiveClass }}">
       <svg xmlns="http://www.w3.org/2000/svg"
          class="h-5 w-5"

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Fasilitas;
 use App\Models\Kost;
 use App\Models\User;
 use Illuminate\Http\Request;
@@ -186,14 +187,30 @@ class AdminKostController extends Controller
     */
 
     public function editKost(Request $request)
-    {
-        return view('admin.kost-edit', [
+{
+    return view('admin.kost-edit', [
 
-            'kost' => $request->user()->kost
+        'kost' => $request->user()->kost,
 
-        ]);
-    }
+        /*
+        |--------------------------------------------------------------------------
+        | MASTER FASILITAS
+        |--------------------------------------------------------------------------
+        */
 
+        'fasilitas' => Fasilitas::all(),
+
+    ]);
+}
+
+public function index(Request $request)
+{
+    return view('admin.kost.index', [
+
+        'kost' => $request->user()->kost
+
+    ]);
+}
     /*
     |--------------------------------------------------------------------------
     | UPDATE KOST
@@ -209,6 +226,8 @@ class AdminKostController extends Controller
             'alamat' => 'required',
 
             'deskripsi' => 'nullable',
+            'fasilitas' => 'nullable|array',
+            'fasilitas.*' => 'exists:fasilitas,id_fasilitas',
 
             /*
             |--------------------------------------------------------------------------
@@ -261,10 +280,23 @@ class AdminKostController extends Controller
         */
 
         $kost->update($data);
+        /*
+|--------------------------------------------------------------------------
+| SYNC FASILITAS
+|--------------------------------------------------------------------------
+*/
 
-        return back()->with(
-            'success',
-            'Data kost diperbarui.'
-        );
+$kost->fasilitas()->sync(
+
+    $request->fasilitas ?? []
+
+);
+
+       return redirect()
+    ->route('admin.kost.index')
+    ->with(
+        'success',
+        'Informasi kost berhasil diperbarui.'
+    );
     }
 }

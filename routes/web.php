@@ -139,6 +139,10 @@ Route::middleware([
     | INFORMASI KOST
     |--------------------------------------------------------------------------
     */
+    Route::get(
+    '/kost',
+    [AdminKostController::class, 'index']
+)->name('kost.index');
 
     Route::get(
         '/kost/edit',

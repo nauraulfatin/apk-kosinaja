@@ -61,7 +61,7 @@
 
             <tbody class="divide-y divide-gray-100">
 
-                @foreach($items as $i)
+                @forelse($items as $i)
 
                 <tr class="hover:bg-gray-50">
 
@@ -112,7 +112,22 @@
 
                 </tr>
 
-                @endforeach
+                @empty
+
+                <tr>
+
+                    <td
+                        colspan="4"
+                        class="px-6 py-10 text-center text-gray-500"
+                    >
+
+                        Belum ada data penghuni
+
+                    </td>
+
+                </tr>
+
+                @endforelse
 
             </tbody>
 

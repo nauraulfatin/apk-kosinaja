@@ -1,0 +1,58 @@
+<?php
+
+namespace App\Models;
+
+use Illuminate\Database\Eloquent\Model;
+
+class Fasilitas extends Model
+{
+    protected $table = 'fasilitas';
+    protected $primaryKey = 'id_fasilitas';
+    protected $fillable = [
+
+        'nama_fasilitas'
+
+    ];
+
+    /*
+    |--------------------------------------------------------------------------
+    | RELASI KAMAR
+    |--------------------------------------------------------------------------
+    */
+
+    public function kamars()
+    {
+        return $this->belongsToMany(
+
+            KamarKost::class,
+
+            'fasilitas_kamar',
+
+            'id_fasilitas',
+
+            'id_kamar'
+
+        );
+    }
+
+    /*
+    |--------------------------------------------------------------------------
+    | RELASI KOST
+    |--------------------------------------------------------------------------
+    */
+
+    public function kosts()
+    {
+        return $this->belongsToMany(
+
+            Kost::class,
+
+            'kost_fasilitas',
+
+            'id_fasilitas',
+
+            'id_kost'
+
+        );
+    }
+}

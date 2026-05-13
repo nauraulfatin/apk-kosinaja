@@ -61,4 +61,25 @@ class Kost extends Model
             'id_kost'
         );
     }
+
+    /*
+|--------------------------------------------------------------------------
+| RELASI FASILITAS KOST
+|--------------------------------------------------------------------------
+*/
+
+public function fasilitas()
+{
+    return $this->belongsToMany(
+
+        Fasilitas::class,
+
+        'fasilitas_kost',
+
+        'id_kost',
+
+        'id_fasilitas'
+
+    );
+}
 }

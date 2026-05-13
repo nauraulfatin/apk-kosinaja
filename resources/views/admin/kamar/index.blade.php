@@ -11,7 +11,7 @@
     <div>
 
         <h1 class="text-3xl font-bold text-[#0F0937]">
-           Daftar kamar
+           Daftar Kamar
         </h1>
 
         <p class="text-gray-500 mt-2">
@@ -65,7 +65,7 @@
 
             <tbody class="divide-y divide-gray-100">
 
-                @foreach($items as $i)
+                @forelse($items as $i)
 
                 <tr class="hover:bg-gray-50">
 
@@ -143,7 +143,22 @@
 
                 </tr>
 
-                @endforeach
+                @empty
+
+                <tr>
+
+                    <td
+                        colspan="5"
+                        class="px-6 py-10 text-center text-gray-500"
+                    >
+
+                        Belum ada data kamar
+
+                    </td>
+
+                </tr>
+
+                @endforelse
 
             </tbody>
 

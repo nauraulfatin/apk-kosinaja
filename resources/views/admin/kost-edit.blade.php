@@ -98,37 +98,349 @@
         </div>
 
         {{-- ========================================================= --}}
-        {{-- FOTO --}}
+        {{-- FASILITAS KOST --}}
         {{-- ========================================================= --}}
         <div>
 
-            <label class="block text-sm font-medium text-gray-700 mb-3">
+            <label class="block text-sm font-medium text-gray-700 mb-4">
 
-                Foto Kost
+                Fasilitas Kost
 
             </label>
 
-            @if($kost->foto_kost)
+            <div
+                class="grid grid-cols-1 md:grid-cols-2 gap-4 bg-[#F8F5F0] border border-gray-200 rounded-2xl p-5"
+            >
 
-            <div class="mb-5">
+                @foreach($fasilitas as $f)
 
-                <img
-                    src="{{ asset('storage/' . $kost->foto_kost) }}"
-                    alt="Foto Kost"
-                    class="w-full max-w-md rounded-2xl border border-gray-200"
+                <label
+                    class="flex items-center gap-3 bg-white rounded-xl px-4 py-3 border border-gray-100 hover:border-[#6C8B6B] cursor-pointer transition"
                 >
+
+                    <input
+    type="checkbox"
+    name="fasilitas[]"
+    value="{{ $f->id_fasilitas }}"
+
+    @checked(
+        $kost->fasilitas->contains(
+            'id_fasilitas',
+            $f->id_fasilitas
+        )
+    )
+
+    class="rounded border-gray-300 text-[#6C8B6B] focus:ring-[#6C8B6B]"
+>
+
+                    <span class="text-sm text-gray-700">
+
+                        {{ $f->nama_fasilitas }}
+
+                    </span>
+
+                </label>
+
+                @endforeach
 
             </div>
 
-            @endif
+        </div>
+
+      {{-- ========================================================= --}}
+{{-- FOTO KOST --}}
+{{-- ========================================================= --}}
+<div>
+
+    <label class="block text-sm font-medium text-gray-700 mb-3">
+
+        Foto Kost
+
+    </label>
+
+    <div class="bg-[#F8F5F0] border border-gray-200 rounded-2xl p-6">
+
+        {{-- INFO --}}
+        <div class="mb-5">
+
+            <p class="text-sm text-gray-600">
+
+                Upload satu atau lebih foto kost.
+
+            </p>
+
+            <p class="text-xs text-[#6C8B6B] mt-2 font-medium">
+
+                Foto pertama akan menjadi foto utama / thumbnail katalog kost.
+
+            </p>
+
+        </div>
+
+        {{-- CUSTOM INPUT --}}
+        <div class="flex flex-col gap-4">
+
+            <label
+                for="foto_kost"
+                class="w-fit cursor-pointer bg-white border border-gray-300 hover:border-[#6C8B6B]
+                       px-5 py-3 rounded-xl text-sm font-medium text-gray-700 transition"
+            >
+
+                Pilih Foto
+
+            </label>
 
             <input
                 type="file"
-                name="foto_kost"
-                class="w-full border border-gray-300 rounded-xl px-4 py-3 bg-white"
+                name="foto_kost[]"
+                id="foto_kost"
+                multiple
+                accept="image/*"
+                class="hidden"
             >
 
+            <p
+                id="file-count"
+                class="text-sm text-gray-500"
+            >
+
+                Belum ada foto dipilih
+
+            </p>
+
         </div>
+
+        <p class="text-xs text-gray-400 mt-3">
+
+            Format: JPG, PNG, JPEG
+
+        </p>
+
+        {{-- PREVIEW FOTO BARU --}}
+        <div
+            id="preview-container"
+            class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 mt-6"
+        ></div>
+
+        {{-- FOTO LAMA --}}
+        @if($kost->foto_kost)
+
+        <div class="mt-10">
+
+            <p class="text-sm font-semibold text-[#0F0937] mb-4">
+
+                Foto Saat Ini
+
+            </p>
+
+            <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+
+                @foreach($kost->foto_kost as $foto)
+
+                <div class="relative">
+
+                    <img
+                        src="{{ asset('storage/' . $foto) }}"
+                        class="w-full h-40 object-cover rounded-2xl border border-gray-200"
+                    >
+
+                    @if($loop->first)
+
+                    <div
+                        class="absolute top-2 left-2
+                               bg-[#6C8B6B] text-white
+                               text-[10px] px-2 py-1 rounded-full"
+                    >
+
+                        Foto Utama
+
+                    </div>
+
+                    @endif
+
+                </div>
+
+                @endforeach
+
+            </div>
+
+        </div>
+
+        @endif
+
+    </div>
+
+</div>
+
+{{-- ========================================================= --}}
+{{-- SCRIPT PREVIEW FOTO --}}
+{{-- ========================================================= --}}
+<script>
+
+    const inputFoto =
+        document.getElementById('foto_kost');
+
+    const previewContainer =
+        document.getElementById('preview-container');
+
+    const fileCount =
+        document.getElementById('file-count');
+
+    let selectedFiles = [];
+
+    /*
+    |--------------------------------------------------------------------------
+    | SELECT FILE
+    |--------------------------------------------------------------------------
+    */
+
+    inputFoto.addEventListener('change', function (e)
+    {
+        const newFiles =
+            Array.from(e.target.files);
+
+        /*
+        |--------------------------------------------------------------------------
+        | GABUNG FILE BARU
+        |--------------------------------------------------------------------------
+        */
+
+        selectedFiles = [
+
+            ...selectedFiles,
+
+            ...newFiles
+
+        ];
+
+        updateInputFiles();
+
+        renderPreview();
+    });
+
+    /*
+    |--------------------------------------------------------------------------
+    | UPDATE INPUT FILES
+    |--------------------------------------------------------------------------
+    */
+
+    function updateInputFiles()
+    {
+        const dataTransfer =
+            new DataTransfer();
+
+        selectedFiles.forEach(file =>
+        {
+            dataTransfer.items.add(file);
+        });
+
+        inputFoto.files =
+            dataTransfer.files;
+    }
+
+    /*
+    |--------------------------------------------------------------------------
+    | RENDER PREVIEW
+    |--------------------------------------------------------------------------
+    */
+
+    function renderPreview()
+    {
+        previewContainer.innerHTML = '';
+
+        /*
+        |--------------------------------------------------------------------------
+        | FILE COUNT
+        |--------------------------------------------------------------------------
+        */
+
+        fileCount.innerHTML =
+            selectedFiles.length
+            ? `${selectedFiles.length} foto dipilih`
+            : 'Belum ada foto dipilih';
+
+        selectedFiles.forEach((file, index) =>
+        {
+            const reader = new FileReader();
+
+            reader.onload = function (e)
+            {
+                const wrapper =
+                    document.createElement('div');
+
+                wrapper.className =
+                    'relative';
+
+                wrapper.innerHTML = `
+
+                    <img
+                        src="${e.target.result}"
+                        class="w-full h-40 object-cover rounded-2xl border border-gray-200"
+                    >
+
+                    ${
+                        index === 0
+                        ?
+                        `
+                        <div
+                            class="absolute top-2 left-2
+                                   bg-[#6C8B6B] text-white
+                                   text-[10px] px-2 py-1 rounded-full"
+                        >
+                            Foto Utama
+                        </div>
+                        `
+                        :
+                        ''
+                    }
+
+                    <button
+                        type="button"
+                        data-index="${index}"
+                        class="remove-image
+                               absolute top-2 right-2
+                               bg-red-500 hover:bg-red-600
+                               text-white rounded-full
+                               w-8 h-8 flex items-center justify-center
+                               shadow-lg transition"
+                    >
+
+                        ✕
+
+                    </button>
+
+                `;
+
+                previewContainer.appendChild(wrapper);
+
+                /*
+                |--------------------------------------------------------------------------
+                | REMOVE FOTO
+                |--------------------------------------------------------------------------
+                */
+
+                wrapper
+                    .querySelector('.remove-image')
+                    .addEventListener('click', function ()
+                    {
+                        const removeIndex =
+                            parseInt(this.dataset.index);
+
+                        selectedFiles.splice(removeIndex, 1);
+
+                        updateInputFiles();
+
+                        renderPreview();
+                    });
+
+            };
+
+            reader.readAsDataURL(file);
+
+        });
+    }
+
+</script>
 
         {{-- ========================================================= --}}
         {{-- GOOGLE MAPS --}}
@@ -152,25 +464,15 @@
 
                 <ol class="list-decimal ml-5 space-y-2">
 
-                    <li>
-                        Buka Google Maps
-                    </li>
+                    <li>Buka Google Maps</li>
 
-                    <li>
-                        Cari lokasi kost Anda
-                    </li>
+                    <li>Cari lokasi kost Anda</li>
 
-                    <li>
-                        Klik tombol <b>Bagikan</b>
-                    </li>
+                    <li>Klik tombol <b>Bagikan</b></li>
 
-                    <li>
-                        Pilih menu <b>Sematkan Peta</b>
-                    </li>
+                    <li>Pilih menu <b>Sematkan Peta</b></li>
 
-                    <li>
-                        Klik <b>Salin HTML</b>
-                    </li>
+                    <li>Klik <b>Salin HTML</b></li>
 
                     <li>
                         Ambil hanya link pada bagian:
@@ -184,9 +486,7 @@
 
                     </li>
 
-                    <li>
-                        Tempel link tersebut di kolom bawah
-                    </li>
+                    <li>Tempel link tersebut di kolom bawah</li>
 
                 </ol>
 
@@ -248,7 +548,7 @@
             </button>
 
             <a
-                href="{{ route('admin.dashboard') }}"
+                href="{{ route('admin.kost.index') }}"
                 class="bg-gray-100 hover:bg-gray-200 text-gray-700 px-8 py-3 rounded-xl font-semibold transition"
             >
 
@@ -261,5 +561,38 @@
     </form>
 
 </div>
+
+{{-- ========================================================= --}}
+{{-- PREVIEW FOTO --}}
+{{-- ========================================================= --}}
+<script>
+
+    document.getElementById('fotoKostInput')
+    .addEventListener('change', function(e)
+    {
+        const preview =
+            document.getElementById('previewFotoKost');
+
+        preview.innerHTML = '';
+
+        Array.from(e.target.files).forEach(file =>
+        {
+            const reader = new FileReader();
+
+            reader.onload = function(event)
+            {
+                preview.innerHTML += `
+                    <img
+                        src="${event.target.result}"
+                        class="w-full h-48 object-cover rounded-2xl border border-gray-200"
+                    >
+                `;
+            }
+
+            reader.readAsDataURL(file);
+        });
+    });
+
+</script>
 
 @endsection

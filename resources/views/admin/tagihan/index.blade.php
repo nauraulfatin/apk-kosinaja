@@ -297,7 +297,7 @@
                         class="px-6 py-10 text-center text-gray-500"
                     >
 
-                        Belum ada data tagihan.
+                        Belum ada data tagihan
 
                     </td>
 
