@@ -13,10 +13,65 @@ use Illuminate\Support\Facades\Hash;
 
 class PenghuniController extends Controller
 {
-    public function dashboard(Request $r)
-    {
-        return view('penghuni.dashboard');
-    }
+   public function dashboard(Request $r)
+{
+    /*
+    |--------------------------------------------------------------------------
+    | TAGIHAN TERBARU
+    |--------------------------------------------------------------------------
+    */
+
+    $tagihan = Tagihan::with([
+
+        'kamar.kost',
+
+        'hargaKamar.periode',
+
+        'pembayaran'
+
+    ])
+    ->where('id_user', $r->user()->id)
+    ->latest('tanggal_mulai')
+    ->first();
+
+    /*
+    |--------------------------------------------------------------------------
+    | TOTAL TAGIHAN
+    |--------------------------------------------------------------------------
+    */
+
+    $jumlahTagihan = Tagihan::where(
+
+        'id_user',
+        $r->user()->id
+
+    )->count();
+
+    /*
+    |--------------------------------------------------------------------------
+    | TAGIHAN BELUM LUNAS
+    |--------------------------------------------------------------------------
+    */
+
+    $tagihanPending = Tagihan::where(
+
+        'id_user',
+        $r->user()->id
+
+    )
+    ->where('status', 'pending')
+    ->count();
+
+    return view('penghuni.dashboard', [
+
+        'tagihan' => $tagihan,
+
+        'jumlahTagihan' => $jumlahTagihan,
+
+        'tagihanPending' => $tagihanPending,
+
+    ]);
+}
 
     public function index(Request $r)
     {

@@ -283,18 +283,66 @@ Route::middleware([
 
     /*
     |--------------------------------------------------------------------------
-    | TAGIHAN & PEMBAYARAN
+    | PEMBAYARAN
     |--------------------------------------------------------------------------
     */
 
     Route::get(
-        '/tagihan',
+        '/pembayaran',
         [TagihanController::class, 'penghuniIndex']
-    )->name('tagihan.index');
+    )->name('pembayaran.index');
+
+    Route::get(
+        '/pembayaran/create',
+        [TagihanController::class, 'createPembayaran']
+    )->name('pembayaran.create');
 
     Route::post(
-        '/tagihan/{tagihan}/upload-bukti',
-        [TagihanController::class, 'uploadBukti']
-    )->name('tagihan.upload');
+        '/pembayaran',
+        [TagihanController::class, 'storePembayaran']
+    )->name('pembayaran.store');
+
+    /*
+    |--------------------------------------------------------------------------
+    | ATURAN
+    |--------------------------------------------------------------------------
+    */
+
+    Route::view(
+        '/aturan',
+        'penghuni.aturan.index'
+    )->name('aturan.index');
+
+    /*
+    |--------------------------------------------------------------------------
+    | ADUAN
+    |--------------------------------------------------------------------------
+    */
+
+    Route::view(
+        '/aduan',
+        'penghuni.aduan.index'
+    )->name('aduan.index');
+
+    /*
+    |--------------------------------------------------------------------------
+    | PROFIL
+    |--------------------------------------------------------------------------
+    */
+
+    Route::get(
+        '/profil',
+        [PenghuniController::class, 'profil']
+    )->name('profil.index');
+
+    Route::get(
+        '/profil/edit',
+        [PenghuniController::class, 'editProfil']
+    )->name('profil.edit');
+
+    Route::put(
+        '/profil',
+        [PenghuniController::class, 'updateProfil']
+    )->name('profil.update');
 
 });
