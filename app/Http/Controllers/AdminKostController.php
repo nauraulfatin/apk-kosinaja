@@ -170,14 +170,131 @@ class AdminKostController extends Controller
     */
 
     public function dashboard(Request $request)
-    {
-        return view('admin.dashboard', [
+{
+    $kost = $request->user()->kost;
 
-            'kost' => $request->user()->kost
+    /*
+    |--------------------------------------------------------------------------
+    | TOTAL KAMAR
+    |--------------------------------------------------------------------------
+    */
 
-        ]);
-    }
+    $totalKamar =
+        $kost
+            ?->kamars()
+            ->count() ?? 0;
 
+    /*
+    |--------------------------------------------------------------------------
+    | TOTAL PENGHUNI
+    |--------------------------------------------------------------------------
+    */
+
+    $totalPenghuni = User::whereHas(
+
+        'tagihans.kamar',
+
+        function($q) use ($kost){
+
+            $q->where(
+                'id_kost',
+                $kost->id
+            );
+
+        }
+
+    )
+    ->where(
+        'role',
+        'penghuni kost'
+    )
+    ->distinct()
+    ->count();
+
+    /*
+    |--------------------------------------------------------------------------
+    | PEMBAYARAN PENDING
+    |--------------------------------------------------------------------------
+    */
+
+    $pendingPembayaran = \App\Models\Tagihan::whereHas(
+
+        'kamar',
+
+        function($q) use ($kost){
+
+            $q->where(
+                'id_kost',
+                $kost->id
+            );
+
+        }
+
+    )
+    ->where(
+        'status_bukti',
+        'menunggu'
+    )
+    ->count();
+
+    /*
+    |--------------------------------------------------------------------------
+    | PEMBAYARAN TERBARU
+    |--------------------------------------------------------------------------
+    */
+
+    $pembayaranTerbaru = \App\Models\Tagihan::with([
+
+        'user',
+        'pembayaran',
+
+    ])
+    ->whereHas('kamar', function($q)
+    use ($kost){
+
+        $q->where(
+            'id_kost',
+            $kost->id
+        );
+
+    })
+    ->where(
+        'status_bukti',
+        'menunggu'
+    )
+    ->latest()
+    ->take(5)
+    ->get();
+
+    /*
+    |--------------------------------------------------------------------------
+    | ADUAN TERBARU
+    |--------------------------------------------------------------------------
+    */
+
+    $aduanTerbaru = [];
+
+    return view('admin.dashboard', [
+
+        'kost' => $kost,
+
+        'totalKamar' =>
+            $totalKamar,
+
+        'totalPenghuni' =>
+            $totalPenghuni,
+
+        'pendingPembayaran' =>
+            $pendingPembayaran,
+
+        'pembayaranTerbaru' =>
+            $pembayaranTerbaru,
+
+        'aduanTerbaru' =>
+            $aduanTerbaru,
+
+    ]);
+}
     /*
     |--------------------------------------------------------------------------
     | HALAMAN INFORMASI KOST

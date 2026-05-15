@@ -143,7 +143,7 @@ class TagihanController extends Controller
 
                     $tagihan
                         ->hargaKamar
-                        ->harga,
+                        ?->harga ?? 0,
 
                 'tanggal_bayar' => now(),
 
@@ -181,18 +181,92 @@ class TagihanController extends Controller
     */
 
     public function adminIndex(Request $r)
+{
+    $kostId = $r->user()->kost->id;
+
+    /*
+    |--------------------------------------------------------------------------
+    | QUERY
+    |--------------------------------------------------------------------------
+    */
+
+    $query = Tagihan::with([
+
+        'user',
+        'kamar',
+        'hargaKamar.periode',
+        'pembayaran',
+
+    ])
+    ->whereHas('kamar', function ($q)
+    use ($kostId) {
+
+        $q->where(
+            'id_kost',
+            $kostId
+        );
+
+    });
+
+    /*
+    |--------------------------------------------------------------------------
+    | FILTER
+    |--------------------------------------------------------------------------
+    */
+
+    if($r->filter === 'menunggu')
     {
-        $kostId = $r->user()->kost->id;
+        $query->where(
+            'status_bukti',
+            'menunggu'
+        );
+    }
 
-        $items = Tagihan::with([
+    elseif($r->filter === 'lunas')
+    {
+        $query->where(
+            'status',
+            'lunas'
+        );
+    }
 
-            'user',
-            'kamar',
-            'hargaKamar.periode',
-            'pembayaran',
+    elseif($r->filter === 'telat')
+    {
+        $query->where(
+            'status',
+            'telat'
+        );
+    }
 
-        ])
-        ->whereHas('kamar', function ($q)
+    elseif($r->filter === 'tagihan')
+    {
+        $query->where(
+            'status',
+            'pending'
+        );
+    }
+
+    /*
+|--------------------------------------------------------------------------
+| ITEMS GROUPED
+|--------------------------------------------------------------------------
+*/
+
+$items = $query
+    ->get()
+    ->groupBy('id_user');
+
+    /*
+    |--------------------------------------------------------------------------
+    | MONITORING
+    |--------------------------------------------------------------------------
+    */
+
+    $all = Tagihan::whereHas(
+
+        'kamar',
+
+        function ($q)
         use ($kostId) {
 
             $q->where(
@@ -200,18 +274,118 @@ class TagihanController extends Controller
                 $kostId
             );
 
-        })
-        ->latest()
-        ->get();
+        }
 
-        return view(
+    )->get();
 
-            'admin.tagihan.index',
+    $totalTagihan =
+        $all
+            ->where(
+                'status',
+                'pending'
+            )
+            ->count();
 
-            compact('items')
+    $totalMenunggu =
+        $all
+            ->where(
+                'status_bukti',
+                'menunggu'
+            )
+            ->count();
 
+    $totalLunas =
+        $all
+            ->where(
+                'status',
+                'lunas'
+            )
+            ->count();
+
+    $totalTelat =
+        $all
+            ->where(
+                'status',
+                'telat'
+            )
+            ->count();
+
+    return view(
+
+        'admin.tagihan.index',
+
+        compact(
+
+            'items',
+
+            'totalTagihan',
+
+            'totalMenunggu',
+
+            'totalLunas',
+
+            'totalTelat'
+
+        )
+
+    );
+}
+
+/*
+|--------------------------------------------------------------------------
+| DETAIL TAGIHAN PENGHUNI
+|--------------------------------------------------------------------------
+*/
+
+public function detail(
+    Request $r,
+    $userId
+)
+{
+    $kostId = $r->user()->kost->id;
+
+    $items = Tagihan::with([
+
+        'user',
+        'kamar',
+        'hargaKamar.periode',
+        'pembayaran',
+
+    ])
+    ->where('id_user', $userId)
+    ->whereHas('kamar', function ($q)
+    use ($kostId) {
+
+        $q->where(
+            'id_kost',
+            $kostId
         );
-    }
+
+    })
+    ->latest()
+    ->get();
+
+    abort_if(
+        $items->isEmpty(),
+        404
+    );
+
+    $user =
+        $items->first()->user;
+
+    return view(
+
+        'admin.tagihan.detail',
+
+        compact(
+
+            'items',
+            'user'
+
+        )
+
+    );
+}
 
     /*
     |--------------------------------------------------------------------------

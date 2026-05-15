@@ -243,6 +243,11 @@ Route::middleware([
         [TagihanController::class, 'adminIndex']
     )->name('tagihan.index');
 
+    Route::get(
+    '/tagihan/{user}/detail',
+    [TagihanController::class, 'detail']
+)->name('tagihan.detail');
+
     Route::post(
         '/tagihan/{tagihan}/validasi',
         [TagihanController::class, 'validasiBukti']

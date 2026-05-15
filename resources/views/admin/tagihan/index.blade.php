@@ -1,315 +1,331 @@
-{{-- ========================================================= --}}
-{{-- resources/views/admin/tagihan/index.blade.php --}}
-{{-- ========================================================= --}}
-
 @extends('layouts.admin')
 
 @section('content')
 
-<div class="flex items-center justify-between mb-8">
+{{-- ========================================================= --}}
+{{-- HEADER --}}
+{{-- ========================================================= --}}
+<div class="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-5 mb-8">
 
     <div>
 
         <h1 class="text-3xl font-bold text-[#0F0937]">
-           Pembayaran
+
+            Pembayaran
+
         </h1>
 
         <p class="text-gray-500 mt-2">
-            Validasi pembayaran penghuni kost anda!
+
+            Monitor tagihan dan pembayaran penghuni kost.
+
         </p>
-
-    </div>
-
-    {{-- BUTTON --}}
-    <div class="flex gap-3">
-
-        {{-- PERIODE PENAGIHAN --}}
-        <a
-            href="{{ route('admin.periode.index') }}"
-            class="bg-[#6C8B6B] hover:bg-[#5B765A] text-white px-5 py-3 rounded-xl font-semibold transition"
-        >
-
-            Kelola Periode Penagihan
-
-        </a>
 
     </div>
 
 </div>
 
-<div class="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden">
+{{-- ========================================================= --}}
+{{-- MONITORING --}}
+{{-- ========================================================= --}}
+<div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-5 mb-8">
 
-    <div class="overflow-x-auto">
+    {{-- TOTAL --}}
+    <a
+        href="?filter=tagihan"
+        class="bg-white rounded-3xl p-6
+               border border-gray-100 shadow-sm
+               hover:shadow-md transition block"
+    >
 
-        <table class="w-full">
+        <p class="text-sm text-gray-500 mb-2">
 
-            <thead class="bg-[#F8F5F0]">
+            Total Tagihan
 
-                <tr>
+        </p>
 
-                    <th class="px-6 py-4 text-left text-sm font-semibold text-gray-600">
-                        Penghuni
-                    </th>
+        <h2 class="text-3xl font-bold text-[#0F0937]">
 
-                    <th class="px-6 py-4 text-left text-sm font-semibold text-gray-600">
-                        No Kamar
-                    </th>
+            {{ $totalTagihan }}
 
-                    <th class="px-6 py-4 text-left text-sm font-semibold text-gray-600">
-                        Periode
-                    </th>
+        </h2>
 
-                    <th class="px-6 py-4 text-left text-sm font-semibold text-gray-600">
-                        Status
-                    </th>
+    </a>
 
-                    <th class="px-6 py-4 text-left text-sm font-semibold text-gray-600">
-                        Bukti
-                    </th>
+    {{-- MENUNGGU --}}
+    <a
+        href="?filter=menunggu"
+        class="bg-yellow-50 rounded-3xl p-6
+               border border-yellow-100 shadow-sm
+               hover:shadow-md transition block"
+    >
 
-                    <th class="px-6 py-4 text-left text-sm font-semibold text-gray-600">
-                        Aksi
-                    </th>
+        <p class="text-sm text-yellow-700 mb-2">
 
-                </tr>
+            Menunggu Verifikasi
 
-            </thead>
+        </p>
 
-            <tbody class="divide-y divide-gray-100">
+        <h2 class="text-3xl font-bold text-yellow-800">
 
-                @forelse($items as $i)
+            {{ $totalMenunggu }}
 
-                <tr class="hover:bg-gray-50">
+        </h2>
 
-                    {{-- PENGHUNI --}}
-                    <td class="px-6 py-5">
+    </a>
 
-                        <div class="font-semibold text-[#0F0937]">
+    {{-- LUNAS --}}
+    <a
+        href="?filter=lunas"
+        class="bg-green-50 rounded-3xl p-6
+               border border-green-100 shadow-sm
+               hover:shadow-md transition block"
+    >
 
-                            {{ $i->user?->nama }}
+        <p class="text-sm text-green-700 mb-2">
 
-                        </div>
+            Sudah Lunas
 
-                    </td>
+        </p>
 
-                    {{-- KAMAR --}}
-                    <td class="px-6 py-5">
+        <h2 class="text-3xl font-bold text-green-800">
 
-                        <div class="font-medium text-[#0F0937]">
+            {{ $totalLunas }}
 
-                            {{ $i->kamar?->nomor_kamar }}
+        </h2>
 
-                        </div>
+    </a>
 
-                    </td>
+    {{-- TELAT --}}
+    <a
+        href="?filter=telat"
+        class="bg-red-50 rounded-3xl p-6
+               border border-red-100 shadow-sm
+               hover:shadow-md transition block"
+    >
 
-                    {{-- PERIODE --}}
-                    <td class="px-6 py-5">
+        <p class="text-sm text-red-700 mb-2">
 
-                        <div class="text-sm text-gray-700">
+            Telat Bayar
 
-                            {{ $i->tanggal_mulai->format('d/m/Y') }}
+        </p>
 
-                        </div>
+        <h2 class="text-3xl font-bold text-red-800">
 
-                        <div class="text-sm text-gray-500">
+            {{ $totalTelat }}
 
-                            sampai
+        </h2>
 
-                        </div>
+    </a>
 
-                        <div class="text-sm text-gray-700">
+</div>
 
-                            {{ $i->tanggal_selesai->format('d/m/Y') }}
+{{-- ========================================================= --}}
+{{-- TABLE --}}
+{{-- ========================================================= --}}
+<div
+    class="bg-white rounded-3xl shadow-sm
+           border border-gray-100 overflow-hidden"
+>
 
-                        </div>
+    <table class="w-full">
 
-                    </td>
+        <thead class="bg-[#F8F5F0]">
 
-                    {{-- STATUS --}}
-                    <td class="px-6 py-5">
+            <tr>
 
-                        @if(
-                            $i->status === 'pending' &&
-                            $i->status_bukti === 'belum_upload'
-                        )
+                <th class="px-6 py-4 text-left text-sm font-semibold text-gray-600">
 
-                        <span class="px-3 py-1 rounded-full bg-gray-100 text-gray-700 text-xs font-semibold">
+                    Penghuni
 
-                            Belum Bayar
+                </th>
 
-                        </span>
+                <th class="px-6 py-4 text-left text-sm font-semibold text-gray-600">
 
-                        @elseif(
-                            $i->status === 'pending' &&
-                            $i->status_bukti === 'menunggu'
-                        )
+                    Total Tagihan
 
-                        <span class="px-3 py-1 rounded-full bg-yellow-100 text-yellow-700 text-xs font-semibold">
+                </th>
 
-                            Menunggu Verifikasi
+                <th class="px-6 py-4 text-left text-sm font-semibold text-gray-600">
 
-                        </span>
+                    Status
 
-                        @elseif(
-                            $i->status === 'pending' &&
-                            $i->status_bukti === 'ditolak'
-                        )
+                </th>
 
-                        <span class="px-3 py-1 rounded-full bg-red-100 text-red-700 text-xs font-semibold">
+                <th class="px-6 py-4 text-left text-sm font-semibold text-gray-600">
 
-                            Ditolak
+                    Detail
 
-                        </span>
+                </th>
 
-                        @elseif(
-                            $i->status === 'lunas'
-                        )
+            </tr>
 
-                        <span class="px-3 py-1 rounded-full bg-green-100 text-green-700 text-xs font-semibold">
+        </thead>
 
-                            Lunas
+        <tbody class="divide-y divide-gray-100">
 
-                        </span>
+            @forelse($items as $userId => $tagihans)
 
-                        @elseif(
-                            $i->status === 'telat'
-                        )
+            @php
 
-                        <span class="px-3 py-1 rounded-full bg-red-100 text-red-700 text-xs font-semibold">
+                $user =
+                    $tagihans->first()->user;
 
-                            Telat
+                $jumlahTagihan =
+                    $tagihans->count();
 
-                        </span>
+                $belumBayar =
+    $tagihans
+        ->where('status', 'pending')
+        ->where(
+            'status_bukti',
+            'belum_upload'
+        )
+        ->count();
+        
+                $menunggu =
+                    $tagihans
+                        ->where('status_bukti', 'menunggu')
+                        ->count();
 
-                        @endif
+                $telat =
+                    $tagihans
+                        ->where('status', 'telat')
+                        ->count();
 
-                    </td>
+            @endphp
 
-                    {{-- BUKTI --}}
-                    <td class="px-6 py-5">
+            <tr class="hover:bg-gray-50">
 
-                        @if($i->bukti_bayar)
+                {{-- PENGHUNI --}}
+                <td class="px-6 py-5">
 
-                        <a
-                            href="{{ asset('storage/'.$i->bukti_bayar) }}"
-                            target="_blank"
-                            class="inline-block bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-xl text-sm font-semibold transition"
+                    <div class="font-semibold text-[#0F0937]">
+
+                        {{ $user?->nama }}
+
+                    </div>
+
+                    <div class="text-sm text-gray-500 mt-1">
+
+                        {{ $user?->username }}
+
+                    </div>
+
+                </td>
+
+                {{-- TOTAL --}}
+                <td class="px-6 py-5">
+
+                    <div class="text-3xl font-bold text-[#0F0937]">
+
+                        {{ $jumlahTagihan }}
+
+                    </div>
+
+                    <div class="text-sm text-gray-500 mt-1">
+
+                        Total Tagihan
+
+                    </div>
+
+                </td>
+
+                {{-- STATUS --}}
+                <td class="px-6 py-5">
+
+                    <div class="flex flex-wrap gap-2">
+
+                        @if($belumBayar > 0)
+
+                        <div
+                            class="px-3 py-1 rounded-full
+                                   bg-gray-100 text-gray-700
+                                   text-xs font-semibold"
                         >
 
-                            Lihat Bukti
-
-                        </a>
-
-                        @else
-
-                        <span class="text-sm text-gray-400">
-                            Belum Upload
-                        </span>
-
-                        @endif
-
-                    </td>
-
-                    {{-- AKSI --}}
-                    <td class="px-6 py-5">
-
-                        @if($i->status_bukti === 'menunggu')
-
-                        <div class="flex flex-wrap gap-2">
-
-                            {{-- VALIDASI --}}
-                            <form
-                                method="POST"
-                                action="{{ route('admin.tagihan.validasi', $i) }}"
-                            >
-
-                                @csrf
-
-                                <button
-                                    type="submit"
-                                    class="bg-green-500 hover:bg-green-600 text-white px-4 py-2 rounded-xl text-sm font-semibold transition"
-                                >
-
-                                    Validasi
-
-                                </button>
-
-                            </form>
-
-                            {{-- TOLAK --}}
-                            <form
-                                method="POST"
-                                action="{{ route('admin.tagihan.tolak', $i) }}"
-                            >
-
-                                @csrf
-
-                                <button
-                                    type="submit"
-                                    class="bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded-xl text-sm font-semibold transition"
-                                >
-
-                                    Tolak
-
-                                </button>
-
-                            </form>
+                            {{ $belumBayar }}
+                            belum bayar
 
                         </div>
 
-                        @elseif($i->status === 'lunas')
+                        @endif
 
-                        <span class="text-sm text-green-600 font-semibold">
+                        @if($menunggu > 0)
 
-                            Sudah Lunas
+                        <div
+                            class="px-3 py-1 rounded-full
+                                   bg-yellow-100 text-yellow-700
+                                   text-xs font-semibold"
+                        >
 
-                        </span>
+                            {{ $menunggu }}
+                            menunggu
 
-                        @elseif($i->status_bukti === 'ditolak')
-
-                        <span class="text-sm text-red-500 font-semibold">
-
-                            Menunggu Upload Ulang
-
-                        </span>
-
-                        @else
-
-                        <span class="text-sm text-gray-400">
-
-                            Tidak Ada Aksi
-
-                        </span>
+                        </div>
 
                         @endif
 
-                    </td>
+                        @if($telat > 0)
 
-                </tr>
+                        <div
+                            class="px-3 py-1 rounded-full
+                                   bg-red-100 text-red-700
+                                   text-xs font-semibold"
+                        >
 
-                @empty
+                            {{ $telat }}
+                            telat
 
-                <tr>
+                        </div>
 
-                    <td
-                        colspan="6"
-                        class="px-6 py-10 text-center text-gray-500"
+                        @endif
+
+                    </div>
+
+                </td>
+
+                {{-- DETAIL --}}
+                <td class="px-6 py-5">
+
+                    <a
+                        href="{{ route('admin.tagihan.detail', $userId) }}"
+                        class="inline-flex items-center
+                               bg-[#6C8B6B]
+                               hover:bg-[#5B765A]
+                               text-white px-5 py-3
+                               rounded-2xl text-sm
+                               font-semibold transition"
                     >
 
-                        Belum ada data tagihan
+                        Lihat Detail
 
-                    </td>
+                    </a>
 
-                </tr>
+                </td>
 
-                @endforelse
+            </tr>
 
-            </tbody>
+            @empty
 
-        </table>
+            <tr>
 
-    </div>
+                <td
+                    colspan="4"
+                    class="px-6 py-12 text-center text-gray-500"
+                >
+
+                    Belum ada data pembayaran.
+
+                </td>
+
+            </tr>
+
+            @endforelse
+
+        </tbody>
+
+    </table>
 
 </div>
 
