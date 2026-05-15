@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Fasilitas;
 use App\Models\KamarKost;
 use Illuminate\Http\Request;
+use Illuminate\Validation\Rule;
 
 class KamarController extends Controller
 {
@@ -13,7 +14,10 @@ class KamarController extends Controller
     | VALIDASI KEPEMILIKAN KAMAR
     |--------------------------------------------------------------------------
     */
-    private function owned(KamarKost $kamar, Request $r)
+    private function owned(
+        KamarKost $kamar,
+        Request $r
+    )
     {
         abort_if(
             $kamar->id_kost !== $r->user()->kost->id,
@@ -61,9 +65,29 @@ class KamarController extends Controller
     {
         $d = $r->validate([
 
-            'nama_kamar'   => 'nullable',
+            /*
+            |--------------------------------------------------------------------------
+            | DATA KAMAR
+            |--------------------------------------------------------------------------
+            */
 
-            'nomor_kamar'  => 'required',
+            'nama_kamar' => 'nullable',
+
+            'nomor_kamar' => [
+
+                'required',
+
+                Rule::unique('kamar_kosts')
+                    ->where(function ($q) use ($r) {
+
+                        return $q->where(
+                            'id_kost',
+                            $r->user()->kost->id
+                        );
+
+                    }),
+
+            ],
 
             'ukuran_kamar' => 'nullable',
 
@@ -73,9 +97,10 @@ class KamarController extends Controller
             |--------------------------------------------------------------------------
             */
 
-            'foto_kamar'   => 'nullable|array',
+            'foto_kamar' => 'nullable|array',
 
             'foto_kamar.*' => 'image|max:2048',
+
         ]);
 
         /*
@@ -84,18 +109,18 @@ class KamarController extends Controller
         |--------------------------------------------------------------------------
         */
 
+        $fotoPaths = [];
+
         if ($r->hasFile('foto_kamar'))
         {
-            $fotoPaths = [];
-
             foreach ($r->file('foto_kamar') as $foto)
             {
                 $fotoPaths[] =
                     $foto->store('kamar', 'public');
             }
-
-            $d['foto_kamar'] = $fotoPaths;
         }
+
+        $d['foto_kamar'] = $fotoPaths;
 
         /*
         |--------------------------------------------------------------------------
@@ -105,14 +130,14 @@ class KamarController extends Controller
 
         $d['id_kost'] =
             $r->user()->kost->id;
-        
-        /*
-|--------------------------------------------------------------------------
-| DEFAULT STATUS
-|--------------------------------------------------------------------------
-*/
 
-$d['status'] = 'kosong';
+        /*
+        |--------------------------------------------------------------------------
+        | DEFAULT STATUS
+        |--------------------------------------------------------------------------
+        */
+
+        $d['status'] = 'kosong';
 
         /*
         |--------------------------------------------------------------------------
@@ -135,7 +160,10 @@ $d['status'] = 'kosong';
     | FORM EDIT
     |--------------------------------------------------------------------------
     */
-    public function edit(Request $r, KamarKost $kamar)
+    public function edit(
+        Request $r,
+        KamarKost $kamar
+    )
     {
         $this->owned($kamar, $r);
 
@@ -160,9 +188,33 @@ $d['status'] = 'kosong';
 
         $d = $r->validate([
 
-            'nama_kamar'   => 'nullable',
+            /*
+            |--------------------------------------------------------------------------
+            | DATA KAMAR
+            |--------------------------------------------------------------------------
+            */
 
-            'nomor_kamar'  => 'required',
+            'nama_kamar' => 'nullable',
+
+            'nomor_kamar' => [
+
+                'required',
+
+                Rule::unique('kamar_kosts')
+                    ->ignore(
+                        $kamar->id_kamar,
+                        'id_kamar'
+                    )
+                    ->where(function ($q) use ($r) {
+
+                        return $q->where(
+                            'id_kost',
+                            $r->user()->kost->id
+                        );
+
+                    }),
+
+            ],
 
             'ukuran_kamar' => 'nullable',
 
@@ -172,7 +224,7 @@ $d['status'] = 'kosong';
             |--------------------------------------------------------------------------
             */
 
-            'foto_kamar'   => 'nullable|array',
+            'foto_kamar' => 'nullable|array',
 
             'foto_kamar.*' => 'image|max:2048',
 
@@ -180,22 +232,70 @@ $d['status'] = 'kosong';
 
         /*
         |--------------------------------------------------------------------------
-        | UPLOAD MULTIPLE FOTO
+        | FOTO LAMA
+        |--------------------------------------------------------------------------
+        */
+
+        $oldPhotos = $kamar->foto_kamar ?? [];
+
+        /*
+        |--------------------------------------------------------------------------
+        | FOTO YANG DIHAPUS
+        |--------------------------------------------------------------------------
+        */
+
+        $deletedPhotos = json_decode(
+
+            $r->deleted_old_images,
+
+            true
+
+        ) ?? [];
+
+        /*
+        |--------------------------------------------------------------------------
+        | FILTER FOTO LAMA
+        |--------------------------------------------------------------------------
+        */
+
+        if (count($deletedPhotos))
+        {
+            $oldPhotos = array_values(
+
+                array_filter(
+
+                    $oldPhotos,
+
+                    fn ($foto) =>
+                        !in_array($foto, $deletedPhotos)
+
+                )
+
+            );
+        }
+
+        /*
+        |--------------------------------------------------------------------------
+        | UPLOAD FOTO BARU
         |--------------------------------------------------------------------------
         */
 
         if ($r->hasFile('foto_kamar'))
         {
-            $fotoPaths = [];
-
             foreach ($r->file('foto_kamar') as $foto)
             {
-                $fotoPaths[] =
+                $oldPhotos[] =
                     $foto->store('kamar', 'public');
             }
-
-            $d['foto_kamar'] = $fotoPaths;
         }
+
+        /*
+        |--------------------------------------------------------------------------
+        | SAVE FOTO
+        |--------------------------------------------------------------------------
+        */
+
+        $d['foto_kamar'] = $oldPhotos;
 
         /*
         |--------------------------------------------------------------------------
@@ -219,41 +319,41 @@ $d['status'] = 'kosong';
     |--------------------------------------------------------------------------
     */
     public function destroy(
-    Request $r,
-    KamarKost $kamar
-)
-{
-    $this->owned($kamar, $r);
+        Request $r,
+        KamarKost $kamar
+    )
+    {
+        $this->owned($kamar, $r);
 
-    /*
-    |--------------------------------------------------------------------------
-    | HAPUS RELASI FASILITAS
-    |--------------------------------------------------------------------------
-    */
+        /*
+        |--------------------------------------------------------------------------
+        | HAPUS RELASI FASILITAS
+        |--------------------------------------------------------------------------
+        */
 
-    $kamar->fasilitas()->detach();
+        $kamar->fasilitas()->detach();
 
-    /*
-    |--------------------------------------------------------------------------
-    | HAPUS HARGA KAMAR
-    |--------------------------------------------------------------------------
-    */
+        /*
+        |--------------------------------------------------------------------------
+        | HAPUS HARGA KAMAR
+        |--------------------------------------------------------------------------
+        */
 
-    $kamar->hargaKamars()->delete();
+        $kamar->hargaKamars()->delete();
 
-    /*
-    |--------------------------------------------------------------------------
-    | HAPUS KAMAR
-    |--------------------------------------------------------------------------
-    */
+        /*
+        |--------------------------------------------------------------------------
+        | HAPUS KAMAR
+        |--------------------------------------------------------------------------
+        */
 
-    $kamar->delete();
+        $kamar->delete();
 
-    return back()->with(
-        'success',
-        'Kamar berhasil dihapus.'
-    );
-}
+        return back()->with(
+            'success',
+            'Kamar berhasil dihapus.'
+        );
+    }
 
     /*
     |--------------------------------------------------------------------------

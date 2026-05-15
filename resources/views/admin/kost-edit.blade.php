@@ -249,52 +249,77 @@
             class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 mt-6"
         ></div>
 
-        {{-- FOTO LAMA --}}
-        @if($kost->foto_kost)
+       {{-- FOTO LAMA --}}
+@if($kost->foto_kost)
 
-        <div class="mt-10">
+<div class="mt-10">
 
-            <p class="text-sm font-semibold text-[#0F0937] mb-4">
+    <p class="text-sm font-semibold text-[#0F0937] mb-4">
 
-                Foto Saat Ini
+        Foto Saat Ini
 
-            </p>
+    </p>
 
-            <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+    <div
+        id="old-photo-container"
+        class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4"
+    >
 
-                @foreach($kost->foto_kost as $foto)
+        @foreach($kost->foto_kost as $index => $foto)
 
-                <div class="relative">
+        <div class="relative old-photo-item">
 
-                    <img
-                        src="{{ asset('storage/' . $foto) }}"
-                        class="w-full h-40 object-cover rounded-2xl border border-gray-200"
-                    >
+            <img
+                src="{{ asset('storage/' . $foto) }}"
+                class="w-full h-40 object-cover rounded-2xl border border-gray-200"
+            >
 
-                    @if($loop->first)
+            {{-- FOTO UTAMA --}}
+            @if($loop->first)
 
-                    <div
-                        class="absolute top-2 left-2
-                               bg-[#6C8B6B] text-white
-                               text-[10px] px-2 py-1 rounded-full"
-                    >
+            <div
+                class="absolute top-2 left-2
+                       bg-[#6C8B6B] text-white
+                       text-[10px] px-2 py-1 rounded-full"
+            >
 
-                        Foto Utama
-
-                    </div>
-
-                    @endif
-
-                </div>
-
-                @endforeach
+                Foto Utama
 
             </div>
 
+            @endif
+
+            {{-- BUTTON HAPUS --}}
+            <button
+                type="button"
+                onclick="removeOldImage(this, '{{ $foto }}')"
+                class="absolute top-2 right-2
+                       bg-red-500 hover:bg-red-600
+                       text-white rounded-full
+                       w-8 h-8 flex items-center justify-center
+                       shadow-lg transition"
+            >
+
+                ✕
+
+            </button>
+
         </div>
 
-        @endif
+        @endforeach
 
+    </div>
+
+    {{-- INPUT HIDDEN --}}
+    <input
+        type="hidden"
+        name="deleted_old_images"
+        id="deleted_old_images"
+    >
+
+</div>
+
+@endif
     </div>
 
 </div>
@@ -465,6 +490,48 @@
             reader.readAsDataURL(file);
 
         });
+    }
+
+</script>
+<script>
+
+    /*
+    |--------------------------------------------------------------------------
+    | DELETE FOTO LAMA
+    |--------------------------------------------------------------------------
+    */
+
+    let deletedOldImages = [];
+
+    function removeOldImage(button, imagePath)
+    {
+        /*
+        |--------------------------------------------------------------------------
+        | HAPUS CARD FOTO
+        |--------------------------------------------------------------------------
+        */
+
+        button.parentElement.remove();
+
+        /*
+        |--------------------------------------------------------------------------
+        | SIMPAN PATH FOTO
+        |--------------------------------------------------------------------------
+        */
+
+        deletedOldImages.push(imagePath);
+
+        /*
+        |--------------------------------------------------------------------------
+        | UPDATE INPUT HIDDEN
+        |--------------------------------------------------------------------------
+        */
+
+        document.getElementById(
+            'deleted_old_images'
+        ).value = JSON.stringify(
+            deletedOldImages
+        );
     }
 
 </script>

@@ -120,17 +120,15 @@ class AdminKostController extends Controller
 
             $fotos = [];
 
-            if ($request->hasFile('foto_kost')) {
-
-                foreach ($request->file('foto_kost') as $file) {
-
+            if ($request->hasFile('foto_kost'))
+            {
+                foreach ($request->file('foto_kost') as $file)
+                {
                     $fotos[] = $file->store(
                         'kost',
                         'public'
                     );
-
                 }
-
             }
 
             /*
@@ -182,35 +180,42 @@ class AdminKostController extends Controller
 
     /*
     |--------------------------------------------------------------------------
+    | HALAMAN INFORMASI KOST
+    |--------------------------------------------------------------------------
+    */
+
+    public function index(Request $request)
+    {
+        return view('admin.kost.index', [
+
+            'kost' => $request->user()->kost
+
+        ]);
+    }
+
+    /*
+    |--------------------------------------------------------------------------
     | FORM EDIT KOST
     |--------------------------------------------------------------------------
     */
 
     public function editKost(Request $request)
-{
-    return view('admin.kost-edit', [
+    {
+        return view('admin.kost-edit', [
 
-        'kost' => $request->user()->kost,
+            'kost' => $request->user()->kost,
 
-        /*
-        |--------------------------------------------------------------------------
-        | MASTER FASILITAS
-        |--------------------------------------------------------------------------
-        */
+            /*
+            |--------------------------------------------------------------------------
+            | MASTER FASILITAS
+            |--------------------------------------------------------------------------
+            */
 
-        'fasilitas' => Fasilitas::all(),
+            'fasilitas' => Fasilitas::all(),
 
-    ]);
-}
+        ]);
+    }
 
-public function index(Request $request)
-{
-    return view('admin.kost.index', [
-
-        'kost' => $request->user()->kost
-
-    ]);
-}
     /*
     |--------------------------------------------------------------------------
     | UPDATE KOST
@@ -221,11 +226,28 @@ public function index(Request $request)
     {
         $data = $request->validate([
 
+            /*
+            |--------------------------------------------------------------------------
+            | DATA KOST
+            |--------------------------------------------------------------------------
+            */
+
             'nama_kost' => 'required',
+
             'no_hp' => 'required',
+
             'alamat' => 'required',
+
             'deskripsi' => 'nullable',
+
+            /*
+            |--------------------------------------------------------------------------
+            | FASILITAS
+            |--------------------------------------------------------------------------
+            */
+
             'fasilitas' => 'nullable|array',
+
             'fasilitas.*' => 'exists:fasilitas,id_fasilitas',
 
             /*
@@ -252,63 +274,108 @@ public function index(Request $request)
 
         /*
         |--------------------------------------------------------------------------
-        | UPLOAD MULTIPLE FOTO
+        | FOTO LAMA
         |--------------------------------------------------------------------------
         */
 
-        if ($request->hasFile('foto_kost')) {
+        $oldPhotos = $kost->foto_kost ?? [];
 
-            $fotos = [];
+        /*
+        |--------------------------------------------------------------------------
+        | FOTO YANG DIHAPUS
+        |--------------------------------------------------------------------------
+        */
 
-            foreach ($request->file('foto_kost') as $file) {
+        $deletedPhotos = json_decode(
 
-                $fotos[] = $file->store(
-                    'kost',
-                    'public'
-                );
+            $request->deleted_old_images,
 
-            }
+            true
 
-            $data['foto_kost'] = $fotos;
+        ) ?? [];
+
+        /*
+        |--------------------------------------------------------------------------
+        | FILTER FOTO LAMA
+        |--------------------------------------------------------------------------
+        */
+
+        if (count($deletedPhotos))
+        {
+            $oldPhotos = array_values(
+
+                array_filter(
+
+                    $oldPhotos,
+
+                    fn ($foto) =>
+                        !in_array($foto, $deletedPhotos)
+
+                )
+
+            );
         }
 
         /*
         |--------------------------------------------------------------------------
-        | UPDATE DATA
+        | UPLOAD FOTO BARU
+        |--------------------------------------------------------------------------
+        */
+
+        if ($request->hasFile('foto_kost'))
+        {
+            foreach ($request->file('foto_kost') as $foto)
+            {
+                $oldPhotos[] =
+                    $foto->store('kost', 'public');
+            }
+        }
+
+        /*
+        |--------------------------------------------------------------------------
+        | SAVE FOTO
+        |--------------------------------------------------------------------------
+        */
+
+        $data['foto_kost'] = $oldPhotos;
+
+        /*
+        |--------------------------------------------------------------------------
+        | UPDATE DATA KOST
         |--------------------------------------------------------------------------
         */
 
         $kost->update($data);
 
-/*
-|--------------------------------------------------------------------------
-| UPDATE NO HP USER
-|--------------------------------------------------------------------------
-*/
+        /*
+        |--------------------------------------------------------------------------
+        | UPDATE NO HP USER
+        |--------------------------------------------------------------------------
+        */
 
-$request->user()->update([
+        $request->user()->update([
 
-    'no_hp' => $request->no_hp
+            'no_hp' => $request->no_hp
 
-]);
+        ]);
 
         /*
-|--------------------------------------------------------------------------
-| SYNC FASILITAS
-|--------------------------------------------------------------------------
-*/
+        |--------------------------------------------------------------------------
+        | SYNC FASILITAS
+        |--------------------------------------------------------------------------
+        */
 
-$kost->fasilitas()->sync(
+        $kost->fasilitas()->sync(
 
-    $request->fasilitas ?? []
+            $request->fasilitas ?? []
 
-);
+        );
 
-       return redirect()
-    ->route('admin.kost.index')
-    ->with(
-        'success',
-        'Informasi kost berhasil diperbarui.'
-    );
+        return redirect()
+            ->route('admin.kost.index')
+            ->with(
+                'success',
+                'Informasi kost berhasil diperbarui.'
+            );
     }
 }
