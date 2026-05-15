@@ -582,16 +582,16 @@
 @section('content')
 
 @php
-$fotoUtama = ($kost->foto_kost && count($kost->foto_kost) > 0)
-? Storage::url($kost->foto_kost[0])
-: 'https://images.unsplash.com/photo-1555854877-bab0e564b8d5?w=800&q=80';
-
 $galeri = $kost->foto_kost ?? [];
+$fotoUtama = count($galeri) > 0 ? Storage::url($galeri[0]) : null;
+
 $kamarKosong = $kost->kamars->where('status', 'kosong')->count();
-$hargaMulai = $kost->kamars
-->flatMap(fn($k) => $k->hargaKamars)
-->where('isactive', true)
-->min('harga');
+$hargaAktif = $kost->kamars->flatMap(fn($k) => $k->hargaKamars->where('isactive', true));
+$hargaMulai = $hargaAktif->min('harga');
+$hargaMax = $hargaAktif->max('harga');
+
+$noHp = $kost->user?->no_hp;
+$noWa = $noHp ? '62' . ltrim(preg_replace('/[^0-9]/', '', $noHp), '0') : null;
 @endphp
 
 <div class="detail-wrap">
@@ -609,7 +609,16 @@ $hargaMulai = $kost->kamars
             {{-- GALERI --}}
             <div class="galeri-grid">
                 <div class="galeri-main">
+                    @if($fotoUtama)
                     <img src="{{ $fotoUtama }}" alt="{{ $kost->nama_kost }}" onclick="bukaModal('{{ $fotoUtama }}')">
+                    @else
+                    <div
+                        style="width:100%;height:320px;background:#D5E0D6;border-radius:20px;display:flex;align-items:center;justify-content:center;">
+                        <svg style="width:56px;height:56px;fill:#A8C0AA;" viewBox="0 0 24 24">
+                            <path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z" />
+                        </svg>
+                    </div>
+                    @endif
                 </div>
                 <div class="galeri-side">
                     @php $galeriSide = array_slice($galeri, 1, 2); @endphp
@@ -674,7 +683,6 @@ $hargaMulai = $kost->kamars
             </div>
             @endif
 
-            {{-- LOKASI --}}
             @if($kost->lokasi)
             <div class="section-box">
                 <div class="section-title">Lokasi</div>
@@ -684,6 +692,12 @@ $hargaMulai = $kost->kamars
                             d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5S10.62 6.5 12 6.5 14.5 7.62 14.5 9 13.38 11.5 12 11.5z" />
                     </svg>
                     {{ $kost->lokasi }}
+                </div>
+                <div style="border-radius:14px;overflow:hidden;height:220px;margin-top:8px;">
+                    <iframe src="https://maps.google.com/maps?q={{ urlencode($kost->lokasi) }}&output=embed"
+                        width="100%" height="220" style="border:0;display:block;" allowfullscreen loading="lazy"
+                        referrerpolicy="no-referrer-when-downgrade">
+                    </iframe>
                 </div>
             </div>
             @endif

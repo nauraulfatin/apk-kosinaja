@@ -47,7 +47,7 @@ class Fasilitas extends Model
 
             Kost::class,
 
-            'kost_fasilitas',
+            'fasilitas_kost',
 
             'id_fasilitas',
 

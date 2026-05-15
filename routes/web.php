@@ -10,8 +10,23 @@ use App\Http\Controllers\PeriodePenagihanController;
 use App\Http\Controllers\SuperAdminController;
 use App\Http\Controllers\TagihanController;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\HomeController;
 
-Route::get('/', fn () => redirect()->route('login'));
+// Beranda
+Route::get('/', [HomeController::class, 'index'])->name('home');
+
+// Halaman statis
+Route::get('/tentang', [HomeController::class, 'tentang'])->name('tentang');
+Route::get('/hubungi', [HomeController::class, 'hubungi'])->name('hubungi');
+
+// Katalog
+Route::get('/katalog', [HomeController::class, 'katalog'])->name('katalog');
+
+// Detail
+Route::get('/katalog/{id}', [HomeController::class, 'detailKost'])->name('detailKost');
+Route::get('/kamar/{id}', [HomeController::class, 'detailKamar'])->name('detailKamar');
+
+//Route::get('/', fn () => redirect()->route('login'));
 
 Route::get('/login', [AuthController::class, 'showLogin'])->name('login');
 Route::post('/login', [AuthController::class, 'login'])->name('login.post');
@@ -33,6 +48,7 @@ Route::middleware('auth')->group(function () {
     )->name('password.force.store');
 
 });
+
 
 /*
 |--------------------------------------------------------------------------

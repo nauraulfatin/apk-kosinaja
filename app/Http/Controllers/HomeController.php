@@ -16,8 +16,9 @@ class HomeController extends Controller
     public function index()
     {
         $kostTerbaru = Kost::with([
-                            'kamars.fasilitas',
-                            'kamars.hargaKamars'
+                            'kamars.hargaKamars',
+                            'fasilitas',
+                            'user'
                         ])
                         ->latest()
                         ->take(6)
@@ -49,11 +50,19 @@ class HomeController extends Controller
     {
         $query = Kost::with([
             'kamars.fasilitas',
-            'kamars.hargaKamars'
+            'kamars.hargaKamars',
+            'fasilitas',
+            'user'
         ]);
 
         if ($request->filled('search')) {
             $query->where('nama_kost', 'like', '%' . $request->search . '%');
+        }
+
+        if ($request->filled('fasilitas')) {
+            $query->whereHas('fasilitas', function ($q) use ($request) {
+                $q->where('nama_fasilitas', $request->fasilitas);
+            });
         }
 
         $kost = $query->latest()->paginate(9);
@@ -68,7 +77,9 @@ class HomeController extends Controller
     {
         $kost = Kost::with([
                     'kamars.fasilitas',
-                    'kamars.hargaKamars'
+                    'kamars.hargaKamars',
+                    'fasilitas',
+                    'user'
                 ])->findOrFail($id);
 
         return view('katalog.detail-kost', compact('kost'));
@@ -81,7 +92,11 @@ class HomeController extends Controller
     {
         $kamar = KamarKost::with([
                     'fasilitas',
-                    'hargaKamars'
+                    'hargaKamars',
+                    'kost.fasilitas',
+                    'kost.kamars.fasilitas',
+                    'kost.kamars.hargaKamars',
+                    'kost.user'
                 ])->findOrFail($id);
 
         return view('katalog.detail-kamar', compact('kamar'));

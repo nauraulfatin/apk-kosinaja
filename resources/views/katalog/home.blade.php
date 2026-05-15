@@ -988,32 +988,54 @@
             @forelse($kostTerbaru as $kost)
 
             @php
-            $hargaMin = $kost->kamars
-            ->flatMap(fn($kamar) => $kamar->hargaKamars)
-            ->min('harga');
+            $hargaAktif = $kost->kamars
+            ->flatMap(fn($kamar) => $kamar->hargaKamars->where('isactive', true));
 
-            $fasilitasKamar = $kost->kamars->first()?->fasilitas ?? collect();
+            $hargaMin = $hargaAktif->min('harga');
+            $hargaMax = $hargaAktif->max('harga');
+
+            $fasilitasKost = $kost->fasilitas ?? collect();
+
+            $noHp = $kost->user?->no_hp;
+            $noWa = $noHp ? '62' . ltrim(preg_replace('/[^0-9]/', '', $noHp), '0') : null;
             @endphp
 
             <div class="kos-card">
 
                 <div class="kos-thumb">
-                    @if($kost->foto_utama)
-                    <img src="{{ Storage::url($kost->foto_utama) }}" alt="{{ $kost->nama_kost }}">
+                    @if($kost->foto_kost && count($kost->foto_kost) > 0)
+                    <img src="{{ Storage::url($kost->foto_kost[0]) }}" alt="{{ $kost->nama_kost }}">
                     @else
-                    <img src="https://images.unsplash.com/photo-1555854877-bab0e564b8d5?w=800&q=80"
-                        alt="{{ $kost->nama_kost }}">
+                    <div
+                        style="width:100%;height:100%;background:#D5E0D6;display:flex;align-items:center;justify-content:center;">
+                        <svg xmlns="http://www.w3.org/2000/svg" style="width:48px;height:48px;fill:#A8C0AA;"
+                            viewBox="0 0 24 24">
+                            <path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z" />
+                        </svg>
+                    </div>
                     @endif
                 </div>
 
                 <div class="kos-body">
                     <div class="kos-name">{{ $kost->nama_kost }}</div>
-                    <div class="kos-loc">📍 {{ $kost->kota ?? $kost->alamat }}</div>
+                    <div class="kos-loc">📍 {{ $kost->alamat }}</div>
+
+                    @if($kost->lokasi)
+                    <div style="margin-bottom:10px;border-radius:10px;overflow:hidden;height:120px;">
+                        <iframe src="https://maps.google.com/maps?q={{ urlencode($kost->lokasi) }}&output=embed"
+                            width="100%" height="120" style="border:0;display:block;" allowfullscreen loading="lazy"
+                            referrerpolicy="no-referrer-when-downgrade">
+                        </iframe>
+                    </div>
+                    @endif
 
                     <div class="kos-divider"></div>
 
                     <div class="kos-price">
-                        @if($hargaMin)
+                        @if($hargaMin && $hargaMax && $hargaMin != $hargaMax)
+                        Rp {{ number_format($hargaMin, 0, ',', '.') }}
+                        <span>– Rp {{ number_format($hargaMax, 0, ',', '.') }} / bulan</span>
+                        @elseif($hargaMin)
                         Rp {{ number_format($hargaMin, 0, ',', '.') }}
                         <span>/ bulan</span>
                         @else
@@ -1021,13 +1043,13 @@
                         @endif
                     </div>
 
-                    @if($fasilitasKamar->count() > 0)
+                    @if($fasilitasKost->count() > 0)
                     <div class="kos-tags">
-                        @foreach($fasilitasKamar->take(4) as $fasilitas)
+                        @foreach($fasilitasKost->take(4) as $fasilitas)
                         <span class="kos-tag">{{ $fasilitas->nama_fasilitas }}</span>
                         @endforeach
-                        @if($fasilitasKamar->count() > 4)
-                        <span class="kos-tag">+{{ $fasilitasKamar->count() - 4 }}</span>
+                        @if($fasilitasKost->count() > 4)
+                        <span class="kos-tag">+{{ $fasilitasKost->count() - 4 }}</span>
                         @endif
                     </div>
                     @endif
@@ -1037,9 +1059,8 @@
                             Lihat Detail
                         </a>
 
-                        @if(!empty($kost->no_telepon))
-                        <a href="https://wa.me/62{{ ltrim(preg_replace('/[^0-9]/', '', $kost->no_telepon), '0') }}"
-                            class="btn-hubungi" target="_blank">
+                        @if($noWa)
+                        <a href="https://wa.me/{{ $noWa }}" class="btn-hubungi" target="_blank">
                             Hubungi
                         </a>
                         @else
