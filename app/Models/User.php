@@ -16,4 +16,5 @@ class User extends Authenticatable
 
     public function kost() { return $this->hasOne(Kost::class, 'id_user'); }
     public function tagihans() { return $this->hasMany(Tagihan::class, 'id_user'); }
+    public function aduan() { return $this->hasMany(Aduan::class, 'id_user');}
 }

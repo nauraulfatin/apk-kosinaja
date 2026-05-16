@@ -9,6 +9,17 @@ use App\Http\Controllers\PenghuniController;
 use App\Http\Controllers\PeriodePenagihanController;
 use App\Http\Controllers\SuperAdminController;
 use App\Http\Controllers\TagihanController;
+use App\Http\Controllers\AturanKosController;
+
+/*
+|--------------------------------------------------------------------------
+| TAMBAHAN CONTROLLER ADUAN
+|--------------------------------------------------------------------------
+*/
+
+use App\Http\Controllers\Admin\AduanAdminController;
+use App\Http\Controllers\Penghuni\AduanPenghuniController;
+
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\HomeController;
 
@@ -258,6 +269,38 @@ Route::middleware([
         [TagihanController::class, 'tolakBukti']
     )->name('tagihan.tolak');
 
+    /*
+    |--------------------------------------------------------------------------
+    | ATURAN KOS
+    |--------------------------------------------------------------------------
+    */
+
+    Route::resource(
+        '/aturan',
+        AturanKosController::class
+    )->except(['show']);
+
+    /*
+    |--------------------------------------------------------------------------
+    | ADUAN KOS
+    |--------------------------------------------------------------------------
+    */
+
+    Route::get(
+        '/aduan',
+        [AduanAdminController::class, 'index']
+    )->name('aduan.index');
+
+    Route::get(
+        '/aduan/{id}',
+        [AduanAdminController::class, 'show']
+    )->name('aduan.show');
+
+    Route::put(
+        '/aduan/{id}',
+        [AduanAdminController::class, 'update']
+    )->name('aduan.update');
+
 });
 
 /*
@@ -349,5 +392,37 @@ Route::middleware([
         '/profil',
         [PenghuniController::class, 'updateProfil']
     )->name('profil.update');
+
+    /*
+    |--------------------------------------------------------------------------
+    | ATURAN KOS
+    |--------------------------------------------------------------------------
+    */
+
+    Route::get(
+        '/aturan',
+        [AturanKosController::class, 'penghuniIndex']
+    )->name('aturan.index');
+
+    /*
+    |--------------------------------------------------------------------------
+    | ADUAN KOS
+    |--------------------------------------------------------------------------
+    */
+
+    Route::get(
+        '/aduan',
+        [AduanPenghuniController::class, 'index']
+    )->name('aduan.index');
+
+    Route::get(
+        '/aduan/create',
+        [AduanPenghuniController::class, 'create']
+    )->name('aduan.create');
+
+    Route::post(
+        '/aduan',
+        [AduanPenghuniController::class, 'store']
+    )->name('aduan.store');
 
 });
