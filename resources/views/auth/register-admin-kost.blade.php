@@ -2,54 +2,191 @@
 
 @section('content')
 
-<div class="min-h-screen flex bg-[#F8F5F0]">
+<div class="h-screen bg-[#F8F5F0] flex overflow-hidden">
 
     {{-- ========================================================= --}}
-    {{-- LEFT FORM --}}
+    {{-- LEFT IMAGE --}}
     {{-- ========================================================= --}}
     <div
-        class="w-full lg:w-1/2
-               flex items-center justify-center
-               px-6 py-10 lg:px-16"
+        class="hidden lg:block lg:w-[42%]
+               relative overflow-hidden
+               h-screen sticky top-0"
     >
 
-        <div class="w-full max-w-2xl">
+        {{-- IMAGE --}}
+        <img
+            src="{{ asset('foto-pintu.png') }}"
+            alt="Register"
+            class="absolute inset-0 w-full h-full object-cover"
+        >
+
+        {{-- OVERLAY --}}
+        <div
+            class="absolute inset-0
+                   bg-gradient-to-t
+                   from-black/80
+                   via-black/20
+                   to-transparent"
+        ></div>
+
+        {{-- CONTENT --}}
+        <div
+            class="absolute inset-0 z-10
+                   flex flex-col justify-between
+                   p-10"
+        >
 
             {{-- LOGO --}}
-            <div class="flex items-center gap-3 mb-10">
+            <div class="flex items-center gap-3">
 
                 <img
                     src="{{ asset('logo.png') }}"
-                    class="w-12 h-12 object-contain"
+                    class="w-11 h-11 object-contain"
                 >
 
-                <div>
+                <h1 class="text-3xl font-bold text-white">
+                    KosinAja!
+                </h1>
 
-                    <h1 class="text-2xl font-bold text-[#0F0937]">
-                        KosinAja!
-                    </h1>
+            </div>
 
-                    <p class="text-sm text-gray-500">
-                        Sistem Manajemen Kost
-                    </p>
+            {{-- TEXT --}}
+            <div>
+
+                <h2
+                    class="text-5xl font-bold text-white
+                           leading-[1.15]"
+                >
+
+                    Kelola Kost
+                    <br>
+
+                    <span class="text-[#D6E5D6]">
+
+                        Lebih Mudah,
+
+                    </span>
+
+                    <br>
+
+                    Semua Dalam
+                    Satu Tempat.
+
+                </h2>
+
+                <p
+                    class="text-white/80 text-lg
+                           leading-relaxed mt-6
+                           max-w-md"
+                >
+
+                    Pantau pembayaran,
+                    penghuni, kamar,
+                    dan operasional kost
+                    dengan lebih praktis
+                    dan efisien.
+
+                </p>
+
+                {{-- CARD --}}
+                <div
+                    class="mt-10 bg-white/10
+                           backdrop-blur-md
+                           border border-white/20
+                           rounded-3xl p-5
+                           max-w-sm"
+                >
+
+                    <div class="flex items-start gap-4">
+
+                        {{-- ICON --}}
+                        <div
+                            class="w-14 h-14 rounded-2xl
+                                   bg-[#D6E5D6]/20
+                                   flex items-center justify-center
+                                   text-white"
+                        >
+
+                            <svg
+                                xmlns="http://www.w3.org/2000/svg"
+                                class="w-7 h-7"
+                                fill="none"
+                                viewBox="0 0 24 24"
+                                stroke="currentColor"
+                            >
+
+                                <path
+                                    stroke-linecap="round"
+                                    stroke-linejoin="round"
+                                    stroke-width="2"
+                                    d="M12 11c0-1.657 1.343-3 3-3s3 1.343 3 3v2a3 3 0 11-6 0v-2zm0 0V9a5 5 0 0110 0v2m-10 0H6a2 2 0 00-2 2v5a2 2 0 002 2h12a2 2 0 002-2v-5a2 2 0 00-2-2h-2"
+                                />
+
+                            </svg>
+
+                        </div>
+
+                        {{-- TEXT --}}
+                        <div>
+
+                            <h3 class="text-white font-semibold text-lg">
+
+                                Aman & Terpercaya
+
+                            </h3>
+
+                            <p
+                                class="text-white/70 text-sm
+                                       mt-1 leading-relaxed"
+                            >
+
+                                Data kost dan penghuni
+                                tersimpan dengan aman.
+
+                            </p>
+
+                        </div>
+
+                    </div>
 
                 </div>
 
             </div>
 
-            {{-- TITLE --}}
-            <div class="mb-8">
+        </div>
 
-                <h2 class="text-3xl font-bold text-[#0F0937]">
+    </div>
 
-                    Daftar Admin Kost 👋
+    {{-- ========================================================= --}}
+    {{-- RIGHT FORM --}}
+    {{-- ========================================================= --}}
+    <div
+        class="w-full lg:w-[58%]
+               h-screen overflow-y-auto
+               flex items-start justify-center
+               px-6 py-10"
+    >
 
-                </h2>
+        <div
+            class="w-full max-w-4xl
+                   bg-white rounded-[32px]
+                   border border-gray-100
+                   shadow-sm p-8 lg:p-12"
+        >
 
-                <p class="text-gray-500 mt-2 leading-relaxed">
+            {{-- HEADER --}}
+            <div class="mb-10">
 
-                    Mulai kelola kost anda dengan lebih
-                    praktis dan modern bersama KosinAja.
+                <h1 class="text-4xl font-bold text-[#0F0937]">
+
+                    Daftar Admin Kost
+
+                </h1>
+
+                <p class="text-gray-500 mt-3 text-base">
+
+                    Buat akun baru untuk mulai
+                    mengelola kost anda.
 
                 </p>
 
@@ -59,8 +196,8 @@
             @if($errors->any())
 
             <div
-                class="mb-6 bg-red-50 border border-red-200
-                       text-red-700 rounded-2xl px-5 py-4"
+                class="mb-8 bg-red-50 border border-red-200
+                       rounded-2xl px-5 py-4 text-red-700"
             >
 
                 <ul class="space-y-1 text-sm">
@@ -80,87 +217,53 @@
             @endif
 
             {{-- FORM --}}
-            <form
-                method="POST"
-                enctype="multipart/form-data"
-                class="space-y-8"
-            >
+            <form method="POST">
 
                 @csrf
 
                 {{-- ========================================================= --}}
                 {{-- DATA ADMIN --}}
                 {{-- ========================================================= --}}
-                <div>
+                <div class="mb-10">
 
-                    <h3 class="text-lg font-semibold text-[#0F0937] mb-5">
+                    <div class="flex items-center gap-3 mb-5">
 
-                        Data Admin
+                        <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            class="w-5 h-5 text-[#6C8B6B]"
+                            fill="none"
+                            viewBox="0 0 24 24"
+                            stroke="currentColor"
+                        >
 
-                    </h3>
+                            <path
+                                stroke-linecap="round"
+                                stroke-linejoin="round"
+                                stroke-width="2"
+                                d="M5.121 17.804A13.937 13.937 0 0112 16c2.5 0 4.847.655 6.879 1.804M15 11a3 3 0 11-6 0 3 3 0 016 0z"
+                            />
+
+                        </svg>
+
+                        <h2
+                            class="text-2xl font-semibold
+                                   text-[#4F6B4F]"
+                        >
+
+                            Data Admin
+
+                        </h2>
+
+                    </div>
 
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
 
-                        {{-- USERNAME --}}
+                       {{-- NAMA --}}
                         <div>
 
                             <label
                                 class="block text-sm font-medium
-                                       text-gray-700 mb-2"
-                            >
-
-                                Username
-
-                            </label>
-
-                            <input
-                                type="text"
-                                name="username"
-                                value="{{ old('username') }}"
-                                placeholder="Masukkan username"
-                                class="w-full rounded-2xl
-                                       border border-gray-200
-                                       bg-white px-5 py-4
-                                       focus:outline-none
-                                       focus:ring-2
-                                       focus:ring-[#6C8B6B]"
-                            >
-
-                        </div>
-
-                        {{-- NIK --}}
-                        <div>
-
-                            <label
-                                class="block text-sm font-medium
-                                       text-gray-700 mb-2"
-                            >
-
-                                NIK
-
-                            </label>
-
-                            <input
-                                type="text"
-                                name="nik"
-                                value="{{ old('nik') }}"
-                                placeholder="Masukkan NIK"
-                                class="w-full rounded-2xl
-                                       border border-gray-200
-                                       bg-white px-5 py-4
-                                       focus:outline-none
-                                       focus:ring-2
-                                       focus:ring-[#6C8B6B]"
-                            >
-
-                        </div>
-
-                        {{-- NAMA --}}
-                        <div>
-
-                            <label
-                                class="block text-sm font-medium
-                                       text-gray-700 mb-2"
+                                       text-gray-600 mb-2"
                             >
 
                                 Nama Lengkap
@@ -170,24 +273,63 @@
                             <input
                                 type="text"
                                 name="nama"
-                                value="{{ old('nama') }}"
                                 placeholder="Masukkan nama lengkap"
-                                class="w-full rounded-2xl
-                                       border border-gray-200
-                                       bg-white px-5 py-4
-                                       focus:outline-none
-                                       focus:ring-2
-                                       focus:ring-[#6C8B6B]"
+                                value="{{ old('nama') }}"
+                                class="w-full rounded-2xl border border-gray-200 px-5 py-4 focus:ring-2 focus:ring-[#6C8B6B]"
                             >
 
                         </div>
 
-                        {{-- HP --}}
+                        {{-- NIK --}}
                         <div>
 
                             <label
                                 class="block text-sm font-medium
-                                       text-gray-700 mb-2"
+                                       text-gray-600 mb-2"
+                            >
+
+                                NIK
+
+                            </label>
+
+                            <input
+                                type="text"
+                                name="nik"
+                                placeholder="Masukkan NIK"
+                                value="{{ old('nik') }}"
+                                class="w-full rounded-2xl border border-gray-200 px-5 py-4 focus:ring-2 focus:ring-[#6C8B6B]"
+                            >
+
+                        </div>
+
+                          {{-- USERNAME --}}
+                        <div>
+
+                            <label
+                                class="block text-sm font-medium
+                                       text-gray-600 mb-2"
+                            >
+
+                                Username
+
+                            </label>
+
+                            <input
+                                type="text"
+                                name="username"
+                                placeholder="Masukkan email anda"
+                                value="{{ old('username') }}"
+                                class="w-full rounded-2xl border border-gray-200 px-5 py-4 focus:ring-2 focus:ring-[#6C8B6B]"
+                            >
+
+                        </div>
+
+                        {{-- NO HP --}}
+                        <div>
+
+                            <label
+                                class="block text-sm font-medium
+                                       text-gray-600 mb-2"
                             >
 
                                 Nomor WhatsApp
@@ -197,41 +339,19 @@
                             <input
                                 type="text"
                                 name="no_hp"
-                                value="{{ old('no_hp') }}"
                                 placeholder="08xxxxxxxxxx"
-                                class="w-full rounded-2xl
-                                       border border-gray-200
-                                       bg-white px-5 py-4
-                                       focus:outline-none
-                                       focus:ring-2
-                                       focus:ring-[#6C8B6B]"
+                                value="{{ old('no_hp') }}"
+                                class="w-full rounded-2xl border border-gray-200 px-5 py-4 focus:ring-2 focus:ring-[#6C8B6B]"
                             >
 
                         </div>
-
-                    </div>
-
-                </div>
-
-                {{-- ========================================================= --}}
-                {{-- PASSWORD --}}
-                {{-- ========================================================= --}}
-                <div>
-
-                    <h3 class="text-lg font-semibold text-[#0F0937] mb-5">
-
-                        Keamanan Akun
-
-                    </h3>
-
-                    <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
 
                         {{-- PASSWORD --}}
                         <div>
 
                             <label
                                 class="block text-sm font-medium
-                                       text-gray-700 mb-2"
+                                       text-gray-600 mb-2"
                             >
 
                                 Password
@@ -245,20 +365,13 @@
                                     type="password"
                                     name="password"
                                     placeholder="Masukkan password"
-                                    class="w-full rounded-2xl
-                                           border border-gray-200
-                                           bg-white px-5 py-4 pr-14
-                                           focus:outline-none
-                                           focus:ring-2
-                                           focus:ring-[#6C8B6B]"
+                                    class="w-full rounded-2xl border border-gray-200 px-5 py-4 pr-14 focus:ring-2 focus:ring-[#6C8B6B]"
                                 >
 
                                 <button
                                     type="button"
-                                    onclick="togglePassword('password', this)"
-                                    class="absolute right-4 top-1/2
-                                           -translate-y-1/2
-                                           text-gray-400 hover:text-gray-600"
+                                    onclick="togglePassword('password')"
+                                    class="absolute right-5 top-1/2 -translate-y-1/2 text-gray-400"
                                 >
 
                                     <svg
@@ -294,12 +407,12 @@
 
                         </div>
 
-                        {{-- CONFIRM --}}
+                        {{-- KONFIRMASI --}}
                         <div>
 
                             <label
                                 class="block text-sm font-medium
-                                       text-gray-700 mb-2"
+                                       text-gray-600 mb-2"
                             >
 
                                 Konfirmasi Password
@@ -312,21 +425,14 @@
                                     id="password_confirmation"
                                     type="password"
                                     name="password_confirmation"
-                                    placeholder="Konfirmasi password"
-                                    class="w-full rounded-2xl
-                                           border border-gray-200
-                                           bg-white px-5 py-4 pr-14
-                                           focus:outline-none
-                                           focus:ring-2
-                                           focus:ring-[#6C8B6B]"
+                                    placeholder="Ulangi password"
+                                    class="w-full rounded-2xl border border-gray-200 px-5 py-4 pr-14 focus:ring-2 focus:ring-[#6C8B6B]"
                                 >
 
                                 <button
                                     type="button"
-                                    onclick="togglePassword('password_confirmation', this)"
-                                    class="absolute right-4 top-1/2
-                                           -translate-y-1/2
-                                           text-gray-400 hover:text-gray-600"
+                                    onclick="togglePassword('password_confirmation')"
+                                    class="absolute right-5 top-1/2 -translate-y-1/2 text-gray-400"
                                 >
 
                                     <svg
@@ -369,39 +475,49 @@
                 {{-- ========================================================= --}}
                 {{-- DATA KOST --}}
                 {{-- ========================================================= --}}
-                <div>
+                <div class="mb-10">
 
-                    <h3 class="text-lg font-semibold text-[#0F0937] mb-5">
+                    <div class="flex items-center gap-3 mb-5">
 
-                        Data Kost
+                        <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            class="w-5 h-5 text-[#6C8B6B]"
+                            fill="none"
+                            viewBox="0 0 24 24"
+                            stroke="currentColor"
+                        >
 
-                    </h3>
+                            <path
+                                stroke-linecap="round"
+                                stroke-linejoin="round"
+                                stroke-width="2"
+                                d="M3 10l9-7 9 7v10a2 2 0 01-2 2H5a2 2 0 01-2-2V10z"
+                            />
+
+                        </svg>
+
+                        <h2
+                            class="text-2xl font-semibold
+                                   text-[#4F6B4F]"
+                        >
+
+                            Data Kost
+
+                        </h2>
+
+                    </div>
 
                     <div class="space-y-5">
 
                         {{-- NAMA KOST --}}
                         <div>
 
-                            <label
-                                class="block text-sm font-medium
-                                       text-gray-700 mb-2"
-                            >
-
-                                Nama Kost
-
-                            </label>
-
                             <input
                                 type="text"
                                 name="nama_kost"
-                                value="{{ old('nama_kost') }}"
                                 placeholder="Masukkan nama kost"
-                                class="w-full rounded-2xl
-                                       border border-gray-200
-                                       bg-white px-5 py-4
-                                       focus:outline-none
-                                       focus:ring-2
-                                       focus:ring-[#6C8B6B]"
+                                value="{{ old('nama_kost') }}"
+                                class="w-full rounded-2xl border border-gray-200 px-5 py-4 focus:ring-2 focus:ring-[#6C8B6B]"
                             >
 
                         </div>
@@ -409,25 +525,11 @@
                         {{-- ALAMAT --}}
                         <div>
 
-                            <label
-                                class="block text-sm font-medium
-                                       text-gray-700 mb-2"
-                            >
-
-                                Alamat Kost
-
-                            </label>
-
                             <textarea
                                 name="alamat"
                                 rows="4"
                                 placeholder="Masukkan alamat lengkap kost"
-                                class="w-full rounded-2xl
-                                       border border-gray-200
-                                       bg-white px-5 py-4
-                                       focus:outline-none
-                                       focus:ring-2
-                                       focus:ring-[#6C8B6B]"
+                                class="w-full rounded-2xl border border-gray-200 px-5 py-4 focus:ring-2 focus:ring-[#6C8B6B]"
                             >{{ old('alamat') }}</textarea>
 
                         </div>
@@ -442,7 +544,8 @@
                     class="w-full bg-[#6C8B6B]
                            hover:bg-[#5B765A]
                            text-white font-semibold
-                           py-4 rounded-2xl transition"
+                           py-5 rounded-2xl
+                           text-lg transition"
                 >
 
                     Daftar Sekarang
@@ -450,19 +553,18 @@
                 </button>
 
                 {{-- LOGIN --}}
-                <div class="text-center">
+                <div class="text-center mt-6">
 
-                    <p class="text-sm text-gray-500">
+                    <p class="text-gray-500">
 
                         Sudah punya akun?
 
                         <a
                             href="{{ route('login') }}"
-                            class="text-[#6C8B6B]
-                                   font-semibold hover:underline"
+                            class="text-[#6C8B6B] font-semibold hover:underline"
                         >
 
-                            Masuk
+                            Masuk di sini
 
                         </a>
 
@@ -471,77 +573,6 @@
                 </div>
 
             </form>
-
-        </div>
-
-    </div>
-
-    {{-- ========================================================= --}}
-    {{-- RIGHT IMAGE --}}
-    {{-- ========================================================= --}}
-    <div class="hidden lg:block lg:w-1/2 relative overflow-hidden">
-
-        <img
-            src="{{ asset('pintu-login.png') }}"
-            alt="KosinAja"
-            class="absolute inset-0 w-full h-full
-       object-cover object-center"
-        >
-
-        {{-- OVERLAY --}}
-        <div
-            class="absolute inset-0 bg-gradient-to-t
-                   from-black/70 via-black/20 to-transparent"
-        ></div>
-
-        {{-- TEXT --}}
-        <div
-            class="absolute inset-0 z-10
-                   flex flex-col justify-end
-                   p-14"
-        >
-
-            <div
-                class="inline-flex items-center gap-2
-                       bg-white/15 backdrop-blur-md
-                       border border-white/20
-                       px-4 py-2 rounded-full
-                       text-white text-sm font-medium
-                       w-fit mb-6"
-            >
-
-                Kelola Kost Jadi Lebih Praktis
-
-            </div>
-
-            <h1
-                class="text-5xl font-bold text-white
-                       leading-[1.15] max-w-xl"
-            >
-
-                Mulai Perjalanan
-                <br>
-
-                <span class="text-[#D6E5D6]">
-
-                    Digitalisasi
-
-                </span>
-
-                Kost Anda
-
-            </h1>
-
-            <p
-                class="text-white/80 mt-6 text-lg
-                       leading-relaxed max-w-lg"
-            >
-
-                Pantau penghuni, pembayaran,
-                kamar, dan seluruh operasional
-                kost dalam satu platform modern.
-
-            </p>
 
         </div>
 
@@ -566,5 +597,99 @@ function togglePassword(id)
 }
 
 </script>
+
+{{-- ========================================================= --}}
+{{-- SUCCESS MODAL --}}
+{{-- ========================================================= --}}
+@if(session('register_success'))
+
+<div
+    id="successModal"
+    class="fixed inset-0 z-50
+           flex items-center justify-center
+           bg-black/50 backdrop-blur-sm"
+>
+
+    <div
+        class="bg-white rounded-3xl
+               max-w-md w-full mx-4
+               p-8 text-center
+               animate-[fadeIn_.2s_ease]"
+    >
+
+        {{-- ICON --}}
+        <div
+            class="w-20 h-20 mx-auto
+                   rounded-full
+                   bg-green-100
+                   flex items-center justify-center"
+        >
+
+            <svg
+                xmlns="http://www.w3.org/2000/svg"
+                class="w-10 h-10 text-green-600"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+            >
+
+                <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    stroke-width="2"
+                    d="M5 13l4 4L19 7"
+                />
+
+            </svg>
+
+        </div>
+
+        {{-- TITLE --}}
+        <h2
+            class="text-2xl font-bold
+                   text-[#0F0937] mt-6"
+        >
+
+            Pendaftaran Berhasil
+
+        </h2>
+
+        {{-- DESC --}}
+        <p
+            class="text-gray-500
+                   leading-relaxed mt-3"
+        >
+
+            Pendaftaran anda berhasil
+            dan sedang menunggu
+            persetujuan superadmin.
+
+            <br><br>
+
+            Hubungi kami untuk konfirmasi.
+
+        </p>
+
+        {{-- BUTTON --}}
+        <a
+            href="{{ route('home') }}"
+            class="mt-7 inline-flex
+                   items-center justify-center
+                   bg-[#6C8B6B]
+                   hover:bg-[#5B765A]
+                   text-white font-semibold
+                   px-6 py-3 rounded-2xl
+                   transition"
+        >
+
+            OK
+
+        </a>
+
+    </div>
+
+</div>
+
+@endif
 
 @endsection

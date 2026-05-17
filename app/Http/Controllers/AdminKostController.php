@@ -156,11 +156,16 @@ class AdminKostController extends Controller
         });
 
         return redirect()
-            ->route('login')
-            ->with(
-                'success',
-                'Pendaftaran berhasil. Tunggu validasi super admin.'
-            );
+
+    ->route('admin-kost.register')
+
+    ->with(
+
+        'register_success',
+
+        true
+
+    );
     }
 
     /*
