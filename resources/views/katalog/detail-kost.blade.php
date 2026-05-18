@@ -35,9 +35,7 @@
     align-items: start;
 }
 
-/* ====== KOLOM KIRI ====== */
-
-/* GALERI */
+/* ====== GALERI (layout asli) ====== */
 .galeri-grid {
     display: grid;
     grid-template-columns: 1fr 180px;
@@ -192,19 +190,7 @@
     gap: 10px;
 }
 
-.fasilitas-chip {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    padding: 10px 16px;
-    background: #F0F5F1;
-    border-radius: 12px;
-    font-size: 0.82rem;
-    color: #2a4a2c;
-    font-weight: 600;
-    border: 1px solid #E0EBE2;
-    transition: background .2s, transform .2s;
-}
+
 
 .fasilitas-chip:hover {
     background: #E2EDE3;
@@ -216,24 +202,6 @@
     height: 16px;
     fill: #6C8B6B;
     flex-shrink: 0;
-}
-
-/* LOKASI */
-.lokasi-alamat {
-    display: flex;
-    align-items: flex-start;
-    gap: 8px;
-    font-size: 0.88rem;
-    color: #4a5e4c;
-    margin-bottom: 12px;
-}
-
-.lokasi-alamat svg {
-    width: 15px;
-    height: 15px;
-    fill: #6C8B6B;
-    flex-shrink: 0;
-    margin-top: 2px;
 }
 
 /* DAFTAR KAMAR */
@@ -347,6 +315,30 @@
     transform: translateY(-1px);
 }
 
+/* LOKASI */
+.lokasi-alamat {
+    display: flex;
+    align-items: flex-start;
+    gap: 8px;
+    font-size: 0.88rem;
+    color: #4a5e4c;
+    margin-bottom: 14px;
+}
+
+.lokasi-alamat svg {
+    width: 15px;
+    height: 15px;
+    fill: #6C8B6B;
+    flex-shrink: 0;
+    margin-top: 2px;
+}
+
+.lokasi-map-wrap {
+    border-radius: 14px;
+    overflow: hidden;
+    border: 1px solid #E8EFE9;
+}
+
 /* SEMUA FOTO */
 .foto-grid {
     display: grid;
@@ -368,7 +360,7 @@
     opacity: .9;
 }
 
-/* ====== KOLOM KANAN (STICKY CARD) ====== */
+/* ====== KOLOM KANAN ====== */
 .sticky-card {
     position: sticky;
     top: 104px;
@@ -380,10 +372,10 @@
 /* HARGA CARD */
 .harga-card {
     background: #fff;
-    border: 1px solid #E8EFE9;
-    border-radius: 20px;
+    border: 1px solid #e5e7eb;
+    border-radius: 32px;
     padding: 24px;
-    box-shadow: 0 2px 12px rgba(26, 47, 36, 0.06);
+    box-shadow: 0 1px 4px rgba(0, 0, 0, .04);
 }
 
 .harga-label {
@@ -428,70 +420,178 @@
     font-weight: 700;
 }
 
-.btn-wa-full {
+/* PEMILIK CARD — style sesuai register page */
+.pemilik-card {
+    background: #fff;
+    border: 1px solid #e5e7eb;
+    border-radius: 32px;
+    padding: 24px;
+    box-shadow: 0 1px 4px rgba(0, 0, 0, .04);
+}
+
+.pemilik-card-title {
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    font-weight: 700;
+    font-size: 1rem;
+    color: #0F0937;
+    margin-bottom: 16px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.pemilik-card-title svg {
+    width: 18px;
+    height: 18px;
+    color: #6C8B6B;
+    flex-shrink: 0;
+}
+
+.pemilik-avatar-row {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    margin-bottom: 20px;
+}
+
+.pemilik-avatar {
+    width: 52px;
+    height: 52px;
+    border-radius: 50%;
+    background: #D6E5D6;
     display: flex;
     align-items: center;
     justify-content: center;
-    gap: 10px;
-    width: 100%;
-    padding: 14px;
-    border-radius: 14px;
-    background: #6C8B6B;
-    color: #fff;
+    flex-shrink: 0;
+}
+
+.pemilik-nama {
     font-family: 'Plus Jakarta Sans', sans-serif;
     font-weight: 700;
     font-size: 0.95rem;
-    text-decoration: none;
-    margin-top: 16px;
-    transition: background .2s, transform .2s;
-    box-shadow: 0 6px 20px rgba(108, 139, 107, .25);
+    color: #0F0937;
 }
 
-.btn-wa-full:hover {
-    background: #5a7a59;
-    transform: translateY(-2px);
+.pemilik-username {
+    font-size: 0.78rem;
+    color: #6C8B6B;
+    font-weight: 600;
+    margin-top: 2px;
 }
 
-.btn-wa-full svg {
-    width: 20px;
-    height: 20px;
-    fill: #fff;
+.pemilik-sejak {
+    font-size: 0.75rem;
+    color: #9ca3af;
+    margin-top: 2px;
+}
+
+/* Info row dalam pemilik card — mirip field register */
+.pemilik-info-row {
+    border: 1px solid #e5e7eb;
+    border-radius: 16px;
+    padding: 12px 16px;
+    margin-bottom: 10px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.pemilik-info-row svg {
+    width: 16px;
+    height: 16px;
     flex-shrink: 0;
+    color: #6C8B6B;
 }
 
-.btn-telp-full {
+.pemilik-info-label {
+    font-size: 0.72rem;
+    color: #9ca3af;
+    font-weight: 500;
+    display: block;
+    margin-bottom: 1px;
+}
+
+.pemilik-info-value {
+    font-size: 0.85rem;
+    color: #374151;
+    font-weight: 600;
+}
+
+.pemilik-divider {
+    height: 1px;
+    background: #f3f4f6;
+    margin: 16px 0;
+}
+
+.pemilik-kontak-title {
+    font-size: 0.82rem;
+    font-weight: 700;
+    color: #4F6B4F;
+    margin-bottom: 10px;
+}
+
+/* Tombol kontak */
+.btn-pemilik {
     display: flex;
     align-items: center;
     justify-content: center;
     gap: 10px;
     width: 100%;
-    padding: 12px;
-    border-radius: 14px;
-    background: #F0F5F1;
-    color: #1F3A2C;
-    font-family: 'Plus Jakarta Sans', sans-serif;
-    font-weight: 700;
-    font-size: 0.9rem;
     text-decoration: none;
-    margin-top: 10px;
-    border: 1px solid #E0EBE2;
-    transition: background .2s;
+    font-weight: 600;
+    font-size: 0.88rem;
+    border-radius: 16px;
+    padding: 14px;
+    margin-bottom: 10px;
+    transition: background .2s, transform .15s;
 }
 
-.btn-telp-full:hover {
-    background: #E2EDE3;
+.btn-pemilik:last-child {
+    margin-bottom: 0;
 }
 
-.btn-telp-full svg {
+.btn-pemilik:hover {
+    transform: translateY(-1px);
+}
+
+.btn-pemilik svg {
     width: 18px;
     height: 18px;
-    fill: #6C8B6B;
     flex-shrink: 0;
 }
 
+.btn-pemilik-wa {
+    background: #6C8B6B;
+    color: #fff;
+}
+
+.btn-pemilik-wa:hover {
+    background: #5B765A;
+}
+
+.btn-pemilik-telp {
+    background: #F8F5F0;
+    color: #374151;
+    border: 1px solid #e5e7eb;
+}
+
+.btn-pemilik-telp:hover {
+    background: #f0ede8;
+}
+
+.btn-pemilik-email {
+    background: #F8F5F0;
+    color: #374151;
+    border: 1px solid #e5e7eb;
+}
+
+.btn-pemilik-email:hover {
+    background: #f0ede8;
+}
+
 .hubungi-note {
-    font-size: 0.75rem;
-    color: #8a9e8c;
+    font-size: 0.73rem;
+    color: #9ca3af;
     text-align: center;
     margin-top: 12px;
 }
@@ -512,8 +612,8 @@
 }
 
 .modal-foto img {
-    max-width: 90vw;
-    max-height: 90vh;
+    max-width: 88vw;
+    max-height: 88vh;
     border-radius: 16px;
     object-fit: contain;
 }
@@ -523,7 +623,6 @@
     top: 20px;
     right: 24px;
     color: white;
-    font-size: 1.8rem;
     cursor: pointer;
     background: rgba(255, 255, 255, .15);
     border: none;
@@ -533,11 +632,63 @@
     display: flex;
     align-items: center;
     justify-content: center;
+    font-size: 1.2rem;
     transition: background .2s;
+    z-index: 1001;
 }
 
 .modal-close:hover {
-    background: rgba(255, 255, 255, .25);
+    background: rgba(255, 255, 255, .28);
+}
+
+.modal-nav {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    background: rgba(255, 255, 255, .15);
+    border: none;
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: background .2s;
+    z-index: 1001;
+}
+
+.modal-nav:hover {
+    background: rgba(255, 255, 255, .28);
+}
+
+.modal-nav svg {
+    width: 22px;
+    height: 22px;
+    fill: white;
+}
+
+.modal-prev {
+    left: 20px;
+}
+
+.modal-next {
+    right: 20px;
+}
+
+.modal-counter {
+    position: absolute;
+    bottom: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: rgba(0, 0, 0, .5);
+    color: #fff;
+    font-size: 0.8rem;
+    font-weight: 700;
+    padding: 5px 16px;
+    border-radius: 999px;
+    pointer-events: none;
+    z-index: 1001;
 }
 
 /* RESPONSIVE */
@@ -583,20 +734,20 @@
 
 @php
 $galeri = $kost->foto_kost ?? [];
-$fotoUtama = count($galeri) > 0 ? Storage::url($galeri[0]) : null;
-
+$fotoUtama = count($galeri) > 0 ? ('storage/' . $galeri[0]) : null;
 $kamarKosong = $kost->kamars->where('status', 'kosong')->count();
 $hargaAktif = $kost->kamars->flatMap(fn($k) => $k->hargaKamars->where('isactive', true));
 $hargaMulai = $hargaAktif->min('harga');
-$hargaMax = $hargaAktif->max('harga');
 
-$noHp = $kost->user?->no_hp;
-$noWa = $noHp ? '62' . ltrim(preg_replace('/[^0-9]/', '', $noHp), '0') : null;
+$pemilik = $kost->user;
+$noHpRaw = $pemilik?->no_hp ?? null;
+$noWa = $noHpRaw ? '62' . ltrim(preg_replace('/[^0-9]/', '', $noHpRaw), '0') : null;
+$pesanWa = urlencode('Halo, saya tertarik dengan kost ' . $kost->nama_kost . '. Apakah masih ada kamar yang tersedia?');
+$galeriUrls = array_map(fn($f) => asset('storage/' . $f), $galeri); // asset() ok di Blade @php
 @endphp
 
 <div class="detail-wrap">
 
-    {{-- BREADCRUMB --}}
     <div class="breadcrumb">
         <a href="{{ route('home') }}">Beranda</a> › Detail Kost
     </div>
@@ -607,36 +758,39 @@ $noWa = $noHp ? '62' . ltrim(preg_replace('/[^0-9]/', '', $noHp), '0') : null;
         <div>
 
             {{-- GALERI --}}
-            <div class="galeri-grid">
-                <div class="galeri-main">
-                    @if($fotoUtama)
-                    <img src="{{ $fotoUtama }}" alt="{{ $kost->nama_kost }}" onclick="bukaModal('{{ $fotoUtama }}')">
-                    @else
-                    <div
-                        style="width:100%;height:320px;background:#D5E0D6;border-radius:20px;display:flex;align-items:center;justify-content:center;">
-                        <svg style="width:56px;height:56px;fill:#A8C0AA;" viewBox="0 0 24 24">
-                            <path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z" />
-                        </svg>
+            <div class="section-box" style="padding: 16px;">
+                <div class="galeri-grid">
+                    <div class="galeri-main">
+                        @if($fotoUtama)
+                        <img src="{{ asset($fotoUtama) }}" alt="{{ $kost->nama_kost }}" onclick="bukaModal(0)">
+                        @else
+                        <div style="width:100%;height:320px;background:#D5E0D6;border-radius:20px;
+                                    display:flex;align-items:center;justify-content:center;">
+                            <svg style="width:56px;height:56px;fill:#A8C0AA;" viewBox="0 0 24 24">
+                                <path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z" />
+                            </svg>
+                        </div>
+                        @endif
                     </div>
-                    @endif
-                </div>
-                <div class="galeri-side">
-                    @php $galeriSide = array_slice($galeri, 1, 2); @endphp
-                    @forelse($galeriSide as $foto)
-                    <img src="{{ Storage::url($foto) }}" alt="Foto" onclick="bukaModal('{{ Storage::url($foto) }}')">
-                    @empty
-                    <div style="height:98px;background:#F0F5F1;border-radius:14px;"></div>
-                    <div style="height:98px;background:#F0F5F1;border-radius:14px;"></div>
-                    @endforelse
 
-                    @if(count($galeri) > 3)
-                    <div class="galeri-more" onclick="bukaModal('{{ Storage::url($galeri[3]) }}')">
-                        <img src="{{ Storage::url($galeri[3]) }}" alt="Foto">
-                        <span>+{{ count($galeri) - 3 }} Foto</span>
+                    <div class="galeri-side">
+                        @php $galeriSide = array_slice($galeri, 1, 2); @endphp
+                        @forelse($galeriSide as $idx => $foto)
+                        <img src="{{ asset('storage/' . $foto) }}" alt="Foto" onclick="bukaModal({{ $idx + 1 }})">
+                        @empty
+                        <div style="height:98px;background:#F0F5F1;border-radius:14px;"></div>
+                        <div style="height:98px;background:#F0F5F1;border-radius:14px;"></div>
+                        @endforelse
+
+                        @if(count($galeri) > 3)
+                        <div class="galeri-more" onclick="bukaModal(3)">
+                            <img src="{{ asset('storage/' . $galeri[3]) }}" alt="Foto">
+                            <span>+{{ count($galeri) - 3 }} Foto</span>
+                        </div>
+                        @else
+                        <div style="height:98px;background:#F0F5F1;border-radius:14px;"></div>
+                        @endif
                     </div>
-                    @else
-                    <div style="height:98px;background:#F0F5F1;border-radius:14px;"></div>
-                    @endif
                 </div>
             </div>
 
@@ -666,42 +820,6 @@ $noWa = $noHp ? '62' . ltrim(preg_replace('/[^0-9]/', '', $noHp), '0') : null;
                 </div>
             </div>
 
-            {{-- FASILITAS UMUM --}}
-            @if($kost->fasilitas && $kost->fasilitas->count() > 0)
-            <div class="section-box">
-                <div class="section-title">Fasilitas Umum</div>
-                <div class="fasilitas-grid">
-                    @foreach($kost->fasilitas as $f)
-                    <div class="fasilitas-chip">
-                        <svg viewBox="0 0 24 24">
-                            <path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41L9 16.17z" />
-                        </svg>
-                        {{ $f->nama_fasilitas }}
-                    </div>
-                    @endforeach
-                </div>
-            </div>
-            @endif
-
-            @if($kost->lokasi)
-            <div class="section-box">
-                <div class="section-title">Lokasi</div>
-                <div class="lokasi-alamat">
-                    <svg viewBox="0 0 24 24">
-                        <path
-                            d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5S10.62 6.5 12 6.5 14.5 7.62 14.5 9 13.38 11.5 12 11.5z" />
-                    </svg>
-                    {{ $kost->lokasi }}
-                </div>
-                <div style="border-radius:14px;overflow:hidden;height:220px;margin-top:8px;">
-                    <iframe src="https://maps.google.com/maps?q={{ urlencode($kost->lokasi) }}&output=embed"
-                        width="100%" height="220" style="border:0;display:block;" allowfullscreen loading="lazy"
-                        referrerpolicy="no-referrer-when-downgrade">
-                    </iframe>
-                </div>
-            </div>
-            @endif
-
             {{-- DAFTAR KAMAR --}}
             <div class="section-box">
                 <div class="section-title">Daftar Kamar</div>
@@ -710,14 +828,13 @@ $noWa = $noHp ? '62' . ltrim(preg_replace('/[^0-9]/', '', $noHp), '0') : null;
                 @forelse($kost->kamars as $kamar)
                 @php
                 $fotoKamar = ($kamar->foto_kamar && count($kamar->foto_kamar) > 0)
-                ? Storage::url($kamar->foto_kamar[0])
-                : null;
+                ? ('storage/' . $kamar->foto_kamar[0]) : null;
                 $hargaKamar = $kamar->hargaKamars->where('isactive', true)->first();
                 @endphp
                 <div class="kamar-item">
 
                     @if($fotoKamar)
-                    <img src="{{ $fotoKamar }}" alt="{{ $kamar->nama_kamar }}" class="kamar-foto">
+                    <img src="{{ asset($fotoKamar) }}" alt="{{ $kamar->nama_kamar }}" class="kamar-foto">
                     @else
                     <div class="kamar-foto"
                         style="display:flex;align-items:center;justify-content:center;background:#F0F5F1;">
@@ -731,9 +848,7 @@ $noWa = $noHp ? '62' . ltrim(preg_replace('/[^0-9]/', '', $noHp), '0') : null;
                     <div class="kamar-info">
                         <div class="kamar-nama">
                             {{ $kamar->nama_kamar }}
-                            @if($kamar->nomor_kamar)
-                            - No. {{ $kamar->nomor_kamar }}
-                            @endif
+                            @if($kamar->nomor_kamar) - No. {{ $kamar->nomor_kamar }} @endif
                         </div>
                         @if($kamar->fasilitas && $kamar->fasilitas->count() > 0)
                         <div class="kamar-fasilitas">
@@ -777,22 +892,30 @@ $noWa = $noHp ? '62' . ltrim(preg_replace('/[^0-9]/', '', $noHp), '0') : null;
                 @endforelse
             </div>
 
-            {{-- SEMUA FOTO --}}
-            @if(count($galeri) > 1)
-            <div id="semua-foto" class="section-box">
-                <div class="section-title">Semua Foto</div>
-                <div class="foto-grid">
-                    @foreach($galeri as $foto)
-                    <img src="{{ Storage::url($foto) }}" onclick="bukaModal('{{ Storage::url($foto) }}')">
-                    @endforeach
+            {{-- LOKASI --}}
+            @if($kost->lokasi)
+            <div class="section-box">
+                <div class="section-title">Lokasi Kost</div>
+                <div class="lokasi-alamat">
+                    <svg viewBox="0 0 24 24">
+                        <path
+                            d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5S10.62 6.5 12 6.5 14.5 7.62 14.5 9 13.38 11.5 12 11.5z" />
+                    </svg>
+                    {{ $kost->alamat }}
+                </div>
+                <div class="lokasi-map-wrap">
+                    <iframe src="{{ $kost->lokasi }}" width="100%" height="300" style="border:0;display:block;"
+                        allowfullscreen loading="lazy" referrerpolicy="no-referrer-when-downgrade">
+                    </iframe>
                 </div>
             </div>
             @endif
 
+
         </div>
         {{-- akhir kolom kiri --}}
 
-        {{-- ===== KOLOM KANAN (STICKY) ===== --}}
+        {{-- ===== KOLOM KANAN ===== --}}
         <div class="sticky-card">
 
             {{-- HARGA CARD --}}
@@ -806,9 +929,7 @@ $noWa = $noHp ? '62' . ltrim(preg_replace('/[^0-9]/', '', $noHp), '0') : null;
                     <span style="font-size:1rem;">Hubungi Kami</span>
                     @endif
                 </div>
-
                 <div class="harga-divider"></div>
-
                 <div class="harga-info-row">
                     <span>Kamar Tersedia</span>
                     <strong>{{ $kamarKosong }} Kamar</strong>
@@ -817,159 +938,177 @@ $noWa = $noHp ? '62' . ltrim(preg_replace('/[^0-9]/', '', $noHp), '0') : null;
                     <span>Lokasi</span>
                     <strong>{{ Str::limit($kost->alamat, 30) }}</strong>
                 </div>
-
-                @if($kost->user && $kost->user->no_telepon)
-                @php
-                $noWa = '62' . ltrim(preg_replace('/[^0-9]/', '', $kost->user->no_telepon), '0');
-                @endphp
-                <a href="https://wa.me/{{ $noWa }}?text=Halo,%20saya%20tertarik%20dengan%20{{ urlencode($kost->nama_kost) }}"
-                    target="_blank" class="btn-wa-full">
-                    <svg viewBox="0 0 24 24">
-                        <path
-                            d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z" />
-                    </svg>
-                    Chat via WhatsApp
-                </a>
-
-                <a href="tel:{{ $kost->user->no_telepon }}" class="btn-telp-full">
-                    <svg viewBox="0 0 24 24">
-                        <path
-                            d="M6.62 10.79c1.44 2.83 3.76 5.14 6.59 6.59l2.2-2.2c.27-.27.67-.36 1.02-.24 1.12.37 2.33.57 3.57.57.55 0 1 .45 1 1V20c0 .55-.45 1-1 1-9.39 0-17-7.61-17-17 0-.55.45-1 1-1h3.5c.55 0 1 .45 1 1 0 1.25.2 2.45.57 3.57.11.35.03.74-.25 1.02l-2.2 2.2z" />
-                    </svg>
-                    {{ $kost->user->no_telepon }}
-                </a>
-
-                <p class="hubungi-note">⏱ Biasanya membalas dalam beberapa menit</p>
-                @else
-                <p class="hubungi-note" style="margin-top:16px;">
-                    Hubungi kami melalui halaman
-                    <a href="{{ route('hubungi') }}" style="color:#6C8B6B;font-weight:700;">Hubungi</a>
-                </p>
-                @endif
             </div>
 
             {{-- PEMILIK CARD --}}
-            <div
-                style="background:#fff;border:1px solid #E8EFE9;border-radius:20px;padding:20px;box-shadow:0 2px 12px rgba(26,47,36,.05);">
+            @if($pemilik)
+            <div class="pemilik-card">
 
-                <p
-                    style="font-family:'Plus Jakarta Sans',sans-serif;font-weight:800;font-size:1rem;color:#1F3A2C;margin-bottom:16px;">
+                {{-- Judul --}}
+                <p class="pemilik-card-title">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M5.121 17.804A13.937 13.937 0 0112 16c2.5 0 4.847.655 6.879 1.804M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
+                    </svg>
                     Pemilik Kost
                 </p>
 
-                {{-- Avatar + Nama --}}
-                <div style="display:flex;align-items:center;gap:16px;margin-bottom:20px;">
-                    <div
-                        style="width:56px;height:56px;border-radius:50%;background:#D6E5D6;display:flex;align-items:center;justify-content:center;flex-shrink:0;">
-                        <svg style="width:32px;height:32px;" fill="#6C8B6B" viewBox="0 0 24 24">
+                {{-- Avatar + nama --}}
+                <div class="pemilik-avatar-row">
+                    <div class="pemilik-avatar">
+                        <svg style="width:28px;height:28px;" fill="#6C8B6B" viewBox="0 0 24 24">
                             <path
                                 d="M12 12c2.7 0 4.8-2.1 4.8-4.8S14.7 2.4 12 2.4 7.2 4.5 7.2 7.2 9.3 12 12 12zm0 2.4c-3.2 0-9.6 1.6-9.6 4.8v2.4h19.2v-2.4c0-3.2-6.4-4.8-9.6-4.8z" />
                         </svg>
                     </div>
                     <div>
-                        <div
-                            style="font-family:'Plus Jakarta Sans',sans-serif;font-weight:700;font-size:0.95rem;color:#1F3A2C;">
-                            {{ $kost->user->name }}
-                        </div>
-                        <div style="font-size:12px;color:#8a9e8c;margin-top:2px;">
-                            Bergabung sejak {{ $kost->user->created_at->format('Y') }}
-                        </div>
+                        <div class="pemilik-nama">{{ $pemilik->nama ?? $pemilik->username }}</div>
+                        @if($pemilik->username)
+                        <div class="pemilik-username">@{{ $pemilik->username }}</div>
+                        @endif
+                        <div class="pemilik-sejak">Bergabung sejak {{ $pemilik->created_at->format('Y') }}</div>
                     </div>
                 </div>
 
-                {{-- Responsif Box --}}
-                <div
-                    style="background:#F5FAF5;border:1px solid #E0EBE2;border-radius:12px;padding:16px;margin-bottom:20px;">
-                    <p
-                        style="font-family:'Plus Jakarta Sans',sans-serif;font-weight:700;font-size:0.82rem;color:#1F3A2C;margin-bottom:12px;">
-                        Responsif
-                    </p>
-                    <div style="display:flex;align-items:center;gap:8px;margin-bottom:10px;">
-                        <svg style="width:16px;height:16px;flex-shrink:0;" fill="none" stroke="#6C8B6B" stroke-width="2"
-                            viewBox="0 0 24 24">
-                            <circle cx="12" cy="12" r="10" />
-                            <path stroke-linecap="round" d="M12 6v6l4 2" />
-                        </svg>
-                        <div>
-                            <span style="font-size:12px;color:#4a5e4c;font-weight:600;">Waktu respon
-                                rata-rata</span><br>
-                            <span style="font-size:11px;color:#6C8B6B;font-weight:700;">30 Menit</span>
-                        </div>
-                    </div>
-                    <div style="display:flex;align-items:center;gap:8px;">
-                        <svg style="width:16px;height:16px;flex-shrink:0;" fill="#6C8B6B" viewBox="0 0 24 24">
-                            <path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41L9 16.17z" />
-                        </svg>
-                        <span style="font-size:12px;color:#4a5e4c;font-weight:600;">98% chat dibalas</span>
+                {{-- No HP — style field register --}}
+                @if($noHpRaw)
+                <div class="pemilik-info-row">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z" />
+                    </svg>
+                    <div>
+                        <span class="pemilik-info-label">Nomor WhatsApp</span>
+                        <span class="pemilik-info-value">{{ $noHpRaw }}</span>
                     </div>
                 </div>
+                @endif
 
-                <div style="height:1px;background:#F0F5F1;margin-bottom:16px;"></div>
+                {{-- Email --}}
+                @if(!empty($pemilik->email))
+                <div class="pemilik-info-row">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+                    </svg>
+                    <div>
+                        <span class="pemilik-info-label">Email</span>
+                        <span class="pemilik-info-value">{{ $pemilik->email }}</span>
+                    </div>
+                </div>
+                @endif
 
-                <p
-                    style="font-family:'Plus Jakarta Sans',sans-serif;font-weight:700;font-size:0.82rem;color:#1F3A2C;margin-bottom:12px;">
-                    Hubungi Langsung
-                </p>
+                <div class="pemilik-divider"></div>
+
+                <p class="pemilik-kontak-title">Hubungi Langsung</p>
 
                 {{-- Tombol WA --}}
-                @if($kost->user && $kost->user->no_telepon)
-                @php
-                $noWaCard = '62' . ltrim(preg_replace('/[^0-9]/', '', $kost->user->no_telepon), '0');
-                @endphp
-                <a href="https://wa.me/{{ $noWaCard }}?text=Halo,%20saya%20tertarik%20dengan%20{{ urlencode($kost->nama_kost) }}"
-                    target="_blank"
-                    style="display:flex;align-items:center;justify-content:center;gap:10px;width:100%;text-decoration:none;font-weight:700;font-size:0.85rem;color:#fff;border-radius:12px;padding:12px;background:#6C8B6B;margin-bottom:10px;transition:background .2s;"
-                    onmouseover="this.style.background='#5a7a59'" onmouseout="this.style.background='#6C8B6B'">
-                    <svg style="width:20px;height:20px;flex-shrink:0;" fill="white" viewBox="0 0 24 24">
+                @if($noWa)
+                <a href="https://wa.me/{{ $noWa }}?text={{ $pesanWa }}" target="_blank"
+                    class="btn-pemilik btn-pemilik-wa">
+                    <svg fill="white" viewBox="0 0 24 24">
                         <path
                             d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z" />
                     </svg>
-                    Chat Whatsapp
+                    Chat WhatsApp
                 </a>
+
+                {{-- Tombol Telepon --}}
+                <a href="tel:{{ $noHpRaw }}" class="btn-pemilik btn-pemilik-telp">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="#6C8B6B">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z" />
+                    </svg>
+                    {{ $noHpRaw }}
+                </a>
+                @else
+                <p style="font-size:0.8rem;color:#9ca3af;text-align:center;">Nomor tidak tersedia</p>
                 @endif
 
                 {{-- Tombol Email --}}
-                @if($kost->user && $kost->user->email)
-                <a href="mailto:{{ $kost->user->email }}"
-                    style="display:flex;align-items:center;justify-content:center;gap:10px;width:100%;text-decoration:none;font-weight:700;font-size:0.85rem;color:#fff;border-radius:12px;padding:12px;background:#6C8B6B;transition:background .2s;"
-                    onmouseover="this.style.background='#5a7a59'" onmouseout="this.style.background='#6C8B6B'">
-                    <svg style="width:20px;height:20px;flex-shrink:0;" fill="white" viewBox="0 0 24 24">
-                        <path
-                            d="M20 4H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z" />
+                @if(!empty($pemilik->email))
+                <a href="mailto:{{ $pemilik->email }}" class="btn-pemilik btn-pemilik-email">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="#6C8B6B">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
                     </svg>
                     Kirim Email
                 </a>
                 @endif
 
+                <p class="hubungi-note">⏱ Biasanya membalas dalam beberapa menit</p>
+
             </div>
-            {{-- akhir pemilik card --}}
+            @endif
 
         </div>
         {{-- akhir kolom kanan --}}
 
     </div>
-    {{-- akhir detail-layout --}}
 
     {{-- MODAL FOTO --}}
-    <div class="modal-foto" id="modalFoto" onclick="tutupModal()">
+    <div class="modal-foto" id="modalFoto">
         <button class="modal-close" onclick="tutupModal()">✕</button>
-        <img id="modalImg" src="" alt="Foto">
+
+        @if(count($galeri) > 1)
+        <button class="modal-nav modal-prev" onclick="modalNav(-1)">
+            <svg viewBox="0 0 24 24">
+                <path d="M15.41 16.59L10.83 12l4.58-4.59L14 6l-6 6 6 6z" />
+            </svg>
+        </button>
+        <button class="modal-nav modal-next" onclick="modalNav(1)">
+            <svg viewBox="0 0 24 24">
+                <path d="M8.59 16.59L13.17 12 8.59 7.41 10 6l6 6-6 6z" />
+            </svg>
+        </button>
+        <div class="modal-counter" id="modalCounter">1 / {{ count($galeri) }}</div>
+        @endif
+
+        <img id="modalImg" src="" alt="Foto" onclick="event.stopPropagation()">
     </div>
-
-    <script>
-    function bukaModal(src) {
-        document.getElementById('modalImg').src = src;
-        document.getElementById('modalFoto').classList.add('active');
-    }
-
-    function tutupModal() {
-        document.getElementById('modalFoto').classList.remove('active');
-    }
-    document.addEventListener('keydown', e => {
-        if (e.key === 'Escape') tutupModal();
-    });
-    </script>
 
 </div>
 
 @endsection
+
+@push('scripts')
+<script>
+const galeriUrls = @json($galeriUrls);
+let modalIndex = 0;
+
+function bukaModal(idx) {
+    modalIndex = idx;
+    updateModal();
+    document.getElementById('modalFoto').classList.add('active');
+    document.body.style.overflow = 'hidden';
+}
+
+function tutupModal() {
+    document.getElementById('modalFoto').classList.remove('active');
+    document.body.style.overflow = '';
+}
+
+function modalNav(dir) {
+    if (!galeriUrls.length) return;
+    modalIndex = (modalIndex + dir + galeriUrls.length) % galeriUrls.length;
+    updateModal();
+}
+
+function updateModal() {
+    document.getElementById('modalImg').src = galeriUrls[modalIndex];
+    const counter = document.getElementById('modalCounter');
+    if (counter) counter.textContent = `${modalIndex + 1} / ${galeriUrls.length}`;
+}
+
+document.getElementById('modalFoto').addEventListener('click', function(e) {
+    if (e.target === this) tutupModal();
+});
+
+document.addEventListener('keydown', e => {
+    if (!document.getElementById('modalFoto').classList.contains('active')) return;
+    if (e.key === 'Escape') tutupModal();
+    if (e.key === 'ArrowRight') modalNav(1);
+    if (e.key === 'ArrowLeft') modalNav(-1);
+});
+</script>
+@endpush

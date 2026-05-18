@@ -4,8 +4,8 @@
 
 @php
 
-    $periode =
-        $tagihanAktif->first()?->hargaKamar?->periode;
+$periode =
+$tagihanAktif->first()?->hargaKamar?->periode;
 
 @endphp
 
@@ -28,30 +28,19 @@
 
     @if($periode)
 
-    <div
-        class="mt-4 inline-flex items-center
+    <div class="mt-4 inline-flex items-center
                gap-2 bg-white border border-gray-200
-               px-5 py-3 rounded-2xl"
-    >
+               px-5 py-3 rounded-2xl">
 
-        <svg xmlns="http://www.w3.org/2000/svg"
-             class="w-5 h-5 text-[#6C8B6B]"
-             fill="none"
-             viewBox="0 0 24 24"
-             stroke="currentColor">
+        <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 text-[#6C8B6B]" fill="none" viewBox="0 0 24 24"
+            stroke="currentColor">
 
-            <path
-                stroke-linecap="round"
-                stroke-linejoin="round"
-                stroke-width="2"
-                d="M8 7V3m8 4V3m-9 8h10m-11 9h12a2 2 0 002-2V7a2 2 0 00-2-2H6a2 2 0 00-2 2v11a2 2 0 002 2z"
-            />
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                d="M8 7V3m8 4V3m-9 8h10m-11 9h12a2 2 0 002-2V7a2 2 0 00-2-2H6a2 2 0 00-2 2v11a2 2 0 002 2z" />
 
         </svg>
 
-        <span
-            class="text-sm font-semibold text-[#0F0937]"
-        >
+        <span class="text-sm font-semibold text-[#0F0937]">
 
             Pembayaran setiap
             {{ $periode->jumlah_interval }}
@@ -68,10 +57,8 @@
 {{-- ========================================================= --}}
 {{-- TABLE --}}
 {{-- ========================================================= --}}
-<div
-    class="bg-white rounded-3xl shadow-sm
-           border border-gray-100 overflow-hidden"
->
+<div class="bg-white rounded-3xl shadow-sm
+           border border-gray-100 overflow-hidden">
 
     <div class="overflow-x-auto">
 
@@ -147,9 +134,7 @@
                     {{-- HARGA --}}
                     <td class="px-6 py-4 min-w-[180px]">
 
-                        <div
-                            class="text-2xl font-bold text-[#0F0937]"
-                        >
+                        <div class="text-2xl font-bold text-[#0F0937]">
 
                             Rp
                             {{ number_format($i->hargaKamar?->harga,0,',','.') }}
@@ -173,45 +158,39 @@
                     <td class="px-6 py-4 min-w-[170px]">
 
                         @if(
-                            $i->status === 'pending' &&
-                            $i->status_bukti === 'belum_upload'
+                        $i->status === 'pending' &&
+                        $i->status_bukti === 'belum_upload'
                         )
 
-                        <span
-                            class="px-3 py-1.5 rounded-full
+                        <span class="px-3 py-1.5 rounded-full
                                    bg-gray-100 text-gray-700
-                                   text-sm font-semibold"
-                        >
+                                   text-sm font-semibold">
 
                             Belum Bayar
 
                         </span>
 
                         @elseif(
-                            $i->status === 'pending' &&
-                            $i->status_bukti === 'menunggu'
+                        $i->status === 'pending' &&
+                        $i->status_bukti === 'menunggu'
                         )
 
-                        <span
-                            class="px-3 py-1.5 rounded-full
+                        <span class="px-3 py-1.5 rounded-full
                                    bg-yellow-100 text-yellow-700
-                                   text-sm font-semibold"
-                        >
+                                   text-sm font-semibold">
 
                             Menunggu Verifikasi
 
                         </span>
 
                         @elseif(
-                            $i->status === 'pending' &&
-                            $i->status_bukti === 'ditolak'
+                        $i->status === 'pending' &&
+                        $i->status_bukti === 'ditolak'
                         )
 
-                        <span
-                            class="px-3 py-1.5 rounded-full
+                        <span class="px-3 py-1.5 rounded-full
                                    bg-red-100 text-red-700
-                                   text-sm font-semibold"
-                        >
+                                   text-sm font-semibold">
 
                             Ditolak
 
@@ -219,11 +198,9 @@
 
                         @elseif($i->status === 'lunas')
 
-                        <span
-                            class="px-3 py-1.5 rounded-full
+                        <span class="px-3 py-1.5 rounded-full
                                    bg-green-100 text-green-700
-                                   text-sm font-semibold"
-                        >
+                                   text-sm font-semibold">
 
                             Lunas
 
@@ -231,11 +208,9 @@
 
                         @elseif($i->status === 'telat')
 
-                        <span
-                            class="px-3 py-1.5 rounded-full
+                        <span class="px-3 py-1.5 rounded-full
                                    bg-red-100 text-red-700
-                                   text-sm font-semibold"
-                        >
+                                   text-sm font-semibold">
 
                             Telat
 
@@ -250,18 +225,14 @@
 
                         {{-- SUDAH UPLOAD --}}
                         @if(
-                            $i->pembayaran &&
-                            $i->status_bukti !== 'ditolak'
+                        $i->pembayaran &&
+                        $i->status_bukti !== 'ditolak'
                         )
 
-                        <div
-                            class="bg-[#F8F5F0]
-                                   rounded-2xl p-4"
-                        >
+                        <div class="bg-[#F8F5F0]
+                                   rounded-2xl p-4">
 
-                            <p
-                                class="text-sm text-gray-600 mb-4"
-                            >
+                            <p class="text-sm text-gray-600 mb-4">
 
                                 Bukti pembayaran sudah diupload.
 
@@ -270,33 +241,24 @@
                             {{-- PREVIEW --}}
                             <div class="relative group w-fit">
 
-                                <img
-                                    src="{{ asset('storage/' . $i->pembayaran->bukti_bayar) }}"
-                                    class="w-32 h-32 object-cover rounded-2xl
-                                           border border-gray-200 cursor-pointer"
-                                    onclick="
+                                <img src="{{ asset('storage/' . $i->pembayaran->bukti_bayar) }}" class="w-32 h-32 object-cover rounded-2xl
+                                           border border-gray-200 cursor-pointer" onclick="
                                         document.getElementById(
                                             'modal-{{ $i->id_tagihan }}'
                                         ).classList.remove('hidden')
-                                    "
-                                >
+                                    ">
 
-                                <div
-                                    class="absolute inset-0 bg-black/40
+                                <div class="absolute inset-0 bg-black/40
                                            rounded-2xl opacity-0
                                            group-hover:opacity-100
                                            transition flex items-center
-                                           justify-center cursor-pointer"
-                                    onclick="
+                                           justify-center cursor-pointer" onclick="
                                         document.getElementById(
                                             'modal-{{ $i->id_tagihan }}'
                                         ).classList.remove('hidden')
-                                    "
-                                >
+                                    ">
 
-                                    <span
-                                        class="text-white text-sm font-semibold"
-                                    >
+                                    <span class="text-white text-sm font-semibold">
 
                                         Preview
 
@@ -309,40 +271,30 @@
                         </div>
 
                         {{-- MODAL --}}
-                        <div
-                            id="modal-{{ $i->id_tagihan }}"
-                            class="fixed inset-0 bg-black/70
+                        <div id="modal-{{ $i->id_tagihan }}" class="fixed inset-0 bg-black/70
                                    hidden z-50 flex items-center
-                                   justify-center p-6"
-                        >
+                                   justify-center p-6">
 
                             <div class="relative">
 
                                 {{-- CLOSE --}}
-                                <button
-                                    type="button"
-                                    onclick="
+                                <button type="button" onclick="
                                         document.getElementById(
                                             'modal-{{ $i->id_tagihan }}'
                                         ).classList.add('hidden')
-                                    "
-                                    class="absolute -top-4 -right-4
+                                    " class="absolute -top-4 -right-4
                                            w-10 h-10 rounded-full
                                            bg-white text-black
                                            flex items-center
-                                           justify-center shadow-lg"
-                                >
+                                           justify-center shadow-lg">
 
                                     ✕
 
                                 </button>
 
                                 {{-- IMAGE --}}
-                                <img
-                                    src="{{ asset('storage/' . $i->pembayaran->bukti_bayar) }}"
-                                    class="max-w-[90vw] max-h-[85vh]
-                                           rounded-3xl shadow-2xl"
-                                >
+                                <img src="{{ asset('storage/' . $i->pembayaran->bukti_bayar) }}" class="max-w-[90vw] max-h-[85vh]
+                                           rounded-3xl shadow-2xl">
 
                             </div>
 
@@ -351,59 +303,41 @@
                         @else
 
                         {{-- FORM --}}
-                        <form
-                            method="POST"
-                            enctype="multipart/form-data"
-                            action="{{ route('penghuni.pembayaran.store') }}"
-                            class="space-y-3"
-                        >
+                        <form method="POST" enctype="multipart/form-data"
+                            action="{{ route('penghuni.pembayaran.store') }}" class="space-y-3">
 
                             @csrf
 
-                            <input
-                                type="hidden"
-                                name="id_tagihan"
-                                value="{{ $i->id_tagihan }}"
-                            >
+                            <input type="hidden" name="id_tagihan" value="{{ $i->id_tagihan }}">
 
                             {{-- INPUT --}}
                             <div>
 
-                                <label
-                                    for="bukti-{{ $i->id_tagihan }}"
-                                    class="border-2 border-dashed
+                                <label for="bukti-{{ $i->id_tagihan }}" class="border-2 border-dashed
                                            border-gray-300
                                            rounded-2xl p-4
                                            flex flex-col items-center
                                            justify-center cursor-pointer
                                            hover:border-[#6C8B6B]
-                                           transition relative"
-                                >
+                                           transition relative">
 
                                     {{-- PREVIEW --}}
-                                    <div
-                                        class="preview-wrapper hidden w-full"
-                                    >
+                                    <div class="preview-wrapper hidden w-full">
 
                                         <div class="relative w-fit mx-auto">
 
-                                            <img
-                                                class="preview-image
+                                            <img class="preview-image
                                                        w-28 h-28 object-cover
-                                                       rounded-2xl border border-gray-200"
-                                            >
+                                                       rounded-2xl border border-gray-200">
 
                                             {{-- REMOVE --}}
-                                            <button
-                                                type="button"
-                                                class="remove-image
+                                            <button type="button" class="remove-image
                                                        absolute -top-2 -right-2
                                                        w-7 h-7 rounded-full
                                                        bg-red-500 text-white
                                                        flex items-center
                                                        justify-center
-                                                       text-sm shadow-lg"
-                                            >
+                                                       text-sm shadow-lg">
 
                                                 ✕
 
@@ -416,17 +350,13 @@
                                     {{-- PLACEHOLDER --}}
                                     <div class="upload-placeholder text-center">
 
-                                        <p
-                                            class="font-semibold text-[#0F0937]"
-                                        >
+                                        <p class="font-semibold text-[#0F0937]">
 
                                             Upload bukti pembayaran
 
                                         </p>
 
-                                        <p
-                                            class="text-sm text-gray-400 mt-1"
-                                        >
+                                        <p class="text-sm text-gray-400 mt-1">
 
                                             JPG, PNG, JPEG
 
@@ -435,27 +365,18 @@
                                     </div>
 
                                     {{-- INPUT --}}
-                                    <input
-                                        id="bukti-{{ $i->id_tagihan }}"
-                                        type="file"
-                                        name="bukti_bayar"
-                                        accept="image/*"
-                                        class="hidden payment-input"
-                                        required
-                                    >
+                                    <input id="bukti-{{ $i->id_tagihan }}" type="file" name="bukti_bayar"
+                                        accept="image/*" class="hidden payment-input" required>
 
                                 </label>
 
                             </div>
 
                             {{-- BUTTON --}}
-                            <button
-                                type="submit"
-                                class="w-full bg-[#6C8B6B]
+                            <button type="submit" class="w-full bg-[#6C8B6B]
                                        hover:bg-[#5B765A]
                                        text-white py-3 rounded-2xl
-                                       font-semibold transition"
-                            >
+                                       font-semibold transition">
 
                                 Bayar Sekarang
 
@@ -473,10 +394,7 @@
 
                 <tr>
 
-                    <td
-                        colspan="5"
-                        class="px-6 py-10 text-center text-gray-500"
-                    >
+                    <td colspan="5" class="px-6 py-10 text-center text-gray-500">
 
                         Belum ada tagihan.
 
@@ -498,48 +416,47 @@
 {{-- PREVIEW --}}
 {{-- ========================================================= --}}
 <script>
-
 document.querySelectorAll('.payment-input')
-.forEach(input => {
+    .forEach(input => {
 
-    input.addEventListener('change', function(e){
+        input.addEventListener('change', function(e) {
 
-        const file = e.target.files[0];
+            const file = e.target.files[0];
 
-        if(!file) return;
+            if (!file) return;
 
-        const wrapper =
-            this.closest('label');
+            const wrapper =
+                this.closest('label');
 
-        const previewWrapper =
-            wrapper.querySelector('.preview-wrapper');
+            const previewWrapper =
+                wrapper.querySelector('.preview-wrapper');
 
-        const previewImage =
-            wrapper.querySelector('.preview-image');
+            const previewImage =
+                wrapper.querySelector('.preview-image');
 
-        const placeholder =
-            wrapper.querySelector('.upload-placeholder');
+            const placeholder =
+                wrapper.querySelector('.upload-placeholder');
 
-        const reader = new FileReader();
+            const reader = new FileReader();
 
-        reader.onload = function(ev){
+            reader.onload = function(ev) {
 
-            previewImage.src = ev.target.result;
+                previewImage.src = ev.target.result;
 
-            previewImage.dataset.full =
-                ev.target.result;
+                previewImage.dataset.full =
+                    ev.target.result;
 
-            previewWrapper.classList.remove('hidden');
+                previewWrapper.classList.remove('hidden');
 
-            placeholder.classList.add('hidden');
+                placeholder.classList.add('hidden');
 
-        }
+            }
 
-        reader.readAsDataURL(file);
+            reader.readAsDataURL(file);
+
+        });
 
     });
-
-});
 
 /*
 |--------------------------------------------------------------------------
@@ -548,35 +465,35 @@ document.querySelectorAll('.payment-input')
 */
 
 document.querySelectorAll('.remove-image')
-.forEach(btn => {
+    .forEach(btn => {
 
-    btn.addEventListener('click', function(e){
+        btn.addEventListener('click', function(e) {
 
-        e.preventDefault();
+            e.preventDefault();
 
-        e.stopPropagation();
+            e.stopPropagation();
 
-        const wrapper =
-            this.closest('label');
+            const wrapper =
+                this.closest('label');
 
-        const input =
-            wrapper.querySelector('.payment-input');
+            const input =
+                wrapper.querySelector('.payment-input');
 
-        const previewWrapper =
-            wrapper.querySelector('.preview-wrapper');
+            const previewWrapper =
+                wrapper.querySelector('.preview-wrapper');
 
-        const placeholder =
-            wrapper.querySelector('.upload-placeholder');
+            const placeholder =
+                wrapper.querySelector('.upload-placeholder');
 
-        input.value = '';
+            input.value = '';
 
-        previewWrapper.classList.add('hidden');
+            previewWrapper.classList.add('hidden');
 
-        placeholder.classList.remove('hidden');
+            placeholder.classList.remove('hidden');
+
+        });
 
     });
-
-});
 
 /*
 |--------------------------------------------------------------------------
@@ -585,32 +502,32 @@ document.querySelectorAll('.remove-image')
 */
 
 document.querySelectorAll('.preview-image')
-.forEach(img => {
+    .forEach(img => {
 
-    img.addEventListener('click', function(e){
+        img.addEventListener('click', function(e) {
 
-        e.preventDefault();
+            e.preventDefault();
 
-        e.stopPropagation();
+            e.stopPropagation();
 
-        const src =
-            this.dataset.full;
+            const src =
+                this.dataset.full;
 
-        if(!src) return;
+            if (!src) return;
 
-        /*
-        |--------------------------------------------------------------------------
-        | MODAL
-        |--------------------------------------------------------------------------
-        */
+            /*
+            |--------------------------------------------------------------------------
+            | MODAL
+            |--------------------------------------------------------------------------
+            */
 
-        const modal =
-            document.createElement('div');
+            const modal =
+                document.createElement('div');
 
-        modal.className =
-            'fixed inset-0 bg-black/80 z-50 flex items-center justify-center p-6';
+            modal.className =
+                'fixed inset-0 bg-black/80 z-50 flex items-center justify-center p-6';
 
-        modal.innerHTML = `
+            modal.innerHTML = `
 
             <div class="relative">
 
@@ -635,35 +552,34 @@ document.querySelectorAll('.preview-image')
 
         `;
 
-        /*
-        |--------------------------------------------------------------------------
-        | CLOSE
-        |--------------------------------------------------------------------------
-        */
+            /*
+            |--------------------------------------------------------------------------
+            | CLOSE
+            |--------------------------------------------------------------------------
+            */
 
-        modal.querySelector('button')
-        .addEventListener('click', () => {
+            modal.querySelector('button')
+                .addEventListener('click', () => {
 
-            modal.remove();
+                    modal.remove();
+
+                });
+
+            modal.addEventListener('click', function(ev) {
+
+                if (ev.target === modal) {
+
+                    modal.remove();
+
+                }
+
+            });
+
+            document.body.appendChild(modal);
 
         });
-
-        modal.addEventListener('click', function(ev){
-
-            if(ev.target === modal){
-
-                modal.remove();
-
-            }
-
-        });
-
-        document.body.appendChild(modal);
 
     });
-
-});
-
 </script>
 
 @endsection

@@ -26,7 +26,7 @@ class Fasilitas extends Model
 
             KamarKost::class,
 
-            'fasilitas_kamar',
+            'fasilitas_kamars',
 
             'id_fasilitas',
 

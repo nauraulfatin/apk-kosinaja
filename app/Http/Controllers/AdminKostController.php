@@ -48,6 +48,8 @@ class AdminKostController extends Controller
 
             'no_hp' => 'required',
 
+            'g-recaptcha-response' => 'required|captcha',
+
             /*
             |--------------------------------------------------------------------------
             | DATA KOST
