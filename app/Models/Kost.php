@@ -3,12 +3,14 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Str;
 
 class Kost extends Model
 {
     protected $fillable = [
 
         'nama_kost',
+        'kode_undangan',
 
         'alamat',
 
@@ -81,5 +83,38 @@ public function fasilitas()
         'id_fasilitas'
 
     );
+}
+
+/*
+|--------------------------------------------------------------------------
+| AUTO GENERATE KODE UNDANGAN
+|--------------------------------------------------------------------------
+*/
+
+protected static function booted()
+{
+    static::creating(function ($kost) {
+
+        do {
+
+            $kode = strtoupper(
+
+                Str::random(8)
+
+            );
+
+        } while (
+
+            self::where(
+                'kode_undangan',
+                $kode
+            )->exists()
+
+        );
+
+        $kost->kode_undangan =
+            $kode;
+
+    });
 }
 }

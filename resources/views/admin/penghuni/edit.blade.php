@@ -1,7 +1,3 @@
-{{-- ========================================================= --}}
-{{-- resources/views/admin/penghuni/edit.blade.php --}}
-{{-- ========================================================= --}}
-
 @extends('layouts.admin')
 
 @section('content')
@@ -9,11 +5,15 @@
 <div class="mb-8">
 
     <h1 class="text-3xl font-bold text-[#0F0937]">
+
         Edit Penghuni
+
     </h1>
 
     <p class="text-gray-500 mt-2">
+
         Perbarui data penghuni kost.
+
     </p>
 
 </div>
@@ -33,7 +33,9 @@
         <div>
 
             <label class="block text-sm font-medium text-gray-700 mb-2">
+
                 Nama Penghuni
+
             </label>
 
             <input
@@ -43,13 +45,23 @@
                 class="w-full border border-gray-300 rounded-xl px-4 py-3 focus:ring-[#6C8B6B] focus:border-[#6C8B6B]"
             >
 
+            @error('nama')
+
+                <p class="text-red-500 text-sm mt-2">
+                    {{ $message }}
+                </p>
+
+            @enderror
+
         </div>
 
         {{-- NO HP --}}
         <div>
 
             <label class="block text-sm font-medium text-gray-700 mb-2">
+
                 Nomor HP
+
             </label>
 
             <input
@@ -59,41 +71,13 @@
                 class="w-full border border-gray-300 rounded-xl px-4 py-3 focus:ring-[#6C8B6B] focus:border-[#6C8B6B]"
             >
 
-        </div>
+            @error('no_hp')
 
-        {{-- PASSWORD --}}
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <p class="text-red-500 text-sm mt-2">
+                    {{ $message }}
+                </p>
 
-            {{-- PASSWORD BARU --}}
-            <div>
-
-                <label class="block text-sm font-medium text-gray-700 mb-2">
-                    Password Baru
-                </label>
-
-                <input
-                    type="password"
-                    name="password"
-                    placeholder="Kosongkan jika tidak diganti"
-                    class="w-full border border-gray-300 rounded-xl px-4 py-3 focus:ring-[#6C8B6B] focus:border-[#6C8B6B]"
-                >
-
-            </div>
-
-            {{-- KONFIRMASI --}}
-            <div>
-
-                <label class="block text-sm font-medium text-gray-700 mb-2">
-                    Konfirmasi Password
-                </label>
-
-                <input
-                    type="password"
-                    name="password_confirmation"
-                    class="w-full border border-gray-300 rounded-xl px-4 py-3 focus:ring-[#6C8B6B] focus:border-[#6C8B6B]"
-                >
-
-            </div>
+            @enderror
 
         </div>
 

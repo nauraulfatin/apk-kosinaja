@@ -1,7 +1,3 @@
-{{-- ========================================================= --}}
-{{-- resources/views/admin/penghuni/index.blade.php --}}
-{{-- ========================================================= --}}
-
 @extends('layouts.admin')
 
 @section('content')
@@ -11,17 +7,23 @@
     <div>
 
         <h1 class="text-3xl font-bold text-[#0F0937]">
+
             Data Penghuni
+
         </h1>
 
         <p class="text-gray-500 mt-2">
-            Kelola daftar penghuni kost anda!
+
+            Kelola daftar penghuni kost anda.
+
         </p>
 
     </div>
 
-    <a href="{{ route('admin.penghuni.create') }}"
-       class="bg-[#6C8B6B] hover:bg-[#5B765A] text-white px-5 py-3 rounded-xl font-semibold transition">
+    <a
+        href="{{ route('admin.penghuni.create') }}"
+        class="bg-[#6C8B6B] hover:bg-[#5B765A] text-white px-5 py-3 rounded-xl font-semibold transition"
+    >
 
         Tambah Penghuni
 
@@ -48,7 +50,15 @@
                     </th>
 
                     <th class="px-6 py-4 text-left text-sm font-semibold text-gray-600">
-                        No HP
+                        Kamar Aktif
+                    </th>
+
+                    <th class="px-6 py-4 text-left text-sm font-semibold text-gray-600">
+                        Tanggal Masuk
+                    </th>
+
+                    <th class="px-6 py-4 text-left text-sm font-semibold text-gray-600">
+                        Status
                     </th>
 
                     <th class="px-6 py-4 text-left text-sm font-semibold text-gray-600">
@@ -63,69 +73,144 @@
 
                 @forelse($items as $i)
 
-                <tr class="hover:bg-gray-50">
+                    @php
 
-                    <td class="px-6 py-4">
-                        {{ $i->nama }}
-                    </td>
+                        $hunian = $i->riwayatHunian
+                            ->where('status', 'aktif')
+                            ->first();
 
-                    <td class="px-6 py-4">
-                        {{ $i->username }}
-                    </td>
+                    @endphp
 
-                    <td class="px-6 py-4">
-                        {{ $i->no_hp }}
-                    </td>
+                    <tr class="hover:bg-gray-50">
 
-                    <td class="px-6 py-4">
+                        {{-- NAMA --}}
+                        <td class="px-6 py-4">
 
-                        <div class="flex gap-2">
+                            <div class="font-semibold text-gray-800">
 
-                            <a href="{{ route('admin.penghuni.edit', $i) }}"
-                               class="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-lg text-sm">
+                                {{ $i->nama }}
 
-                                Edit
+                            </div>
 
-                            </a>
+                        </td>
 
-                            <form
-                                method="POST"
-                                action="{{ route('admin.penghuni.destroy', $i) }}"
-                                onsubmit="return confirm('Hapus penghuni ini?')"
-                            >
+                        {{-- USERNAME --}}
+                        <td class="px-6 py-4 text-gray-600">
 
-                                @csrf
-                                @method('DELETE')
+                            {{ $i->username }}
 
-                                <button
-                                    class="bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded-lg text-sm">
+                        </td>
 
-                                    Hapus
+                        {{-- KAMAR --}}
+                        <td class="px-6 py-4 text-gray-600">
 
-                                </button>
+                            @if($hunian)
 
-                            </form>
+                                {{ $hunian->kamar->nama_kamar }}
+                                -
+                                {{ $hunian->kamar->nomor_kamar }}
 
-                        </div>
+                            @else
 
-                    </td>
+                                -
 
-                </tr>
+                            @endif
+
+                        </td>
+
+                        {{-- TANGGAL MASUK --}}
+                        <td class="px-6 py-4 text-gray-600">
+
+                            @if($hunian)
+
+                                {{ $hunian->tanggal_masuk->format('d M Y') }}
+
+                            @else
+
+                                -
+
+                            @endif
+
+                        </td>
+
+                        {{-- STATUS --}}
+                        <td class="px-6 py-4">
+
+                            @if($hunian?->status == 'aktif')
+
+                                <span class="bg-green-100 text-green-700 px-3 py-1 rounded-full text-xs font-semibold">
+
+                                    Aktif
+
+                                </span>
+
+                            @else
+
+                                <span class="bg-red-100 text-red-700 px-3 py-1 rounded-full text-xs font-semibold">
+
+                                    Nonaktif
+
+                                </span>
+
+                            @endif
+
+                        </td>
+
+                        {{-- AKSI --}}
+                        <td class="px-6 py-4">
+
+                            <div class="flex gap-2">
+
+                                {{-- EDIT --}}
+                                <a
+                                    href="{{ route('admin.penghuni.edit', $i) }}"
+                                    class="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-lg text-sm"
+                                >
+
+                                    Edit
+
+                                </a>
+
+                                {{-- NONAKTIFKAN --}}
+                                <form
+                                    method="POST"
+                                    action="{{ route('admin.penghuni.destroy', $i) }}"
+                                    onsubmit="return confirm('Nonaktifkan penghuni ini?')"
+                                >
+
+                                    @csrf
+                                    @method('DELETE')
+
+                                    <button
+                                        class="bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded-lg text-sm"
+                                    >
+
+                                        Nonaktifkan
+
+                                    </button>
+
+                                </form>
+
+                            </div>
+
+                        </td>
+
+                    </tr>
 
                 @empty
 
-                <tr>
+                    <tr>
 
-                    <td
-                        colspan="4"
-                        class="px-6 py-10 text-center text-gray-500"
-                    >
+                        <td
+                            colspan="6"
+                            class="px-6 py-10 text-center text-gray-500"
+                        >
 
-                        Belum ada data penghuni
+                            Belum ada data penghuni
 
-                    </td>
+                        </td>
 
-                </tr>
+                    </tr>
 
                 @endforelse
 

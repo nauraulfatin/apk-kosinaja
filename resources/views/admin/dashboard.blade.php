@@ -43,6 +43,45 @@
 
     </div>
 
+    {{-- KODE UNDANGAN --}}
+<div class="bg-white rounded-2xl p-6 shadow-sm border border-gray-100">
+
+    <div class="flex items-center justify-between gap-4">
+
+        <div>
+
+            <p class="text-sm text-gray-500">
+
+                Kode Undangan
+
+            </p>
+
+            <h2
+                id="kodeUndangan"
+                class="text-2xl font-bold text-[#0F0937] mt-2 tracking-widest"
+            >
+
+                {{ $kost?->kode_undangan ?? '-' }}
+
+            </h2>
+
+        </div>
+
+        {{-- BUTTON COPY --}}
+        <button
+            type="button"
+            onclick="copyKodeUndangan()"
+            class="bg-[#6C8B6B] hover:bg-[#5B765A] text-white px-4 py-2 rounded-xl text-sm font-semibold transition"
+        >
+
+            Copy
+
+        </button>
+
+    </div>
+
+</div>
+
     {{-- TOTAL KAMAR --}}
     <div class="bg-white rounded-2xl p-6 shadow-sm border border-gray-100">
 
@@ -286,4 +325,24 @@
 
 </div>
 
+<script>
+
+function copyKodeUndangan()
+{
+    const kode = document
+        .getElementById(
+            'kodeUndangan'
+        )
+        .innerText;
+
+    navigator.clipboard.writeText(
+        kode
+    );
+
+    alert(
+        'Kode undangan berhasil disalin!'
+    );
+}
+
+</script>
 @endsection

@@ -143,14 +143,14 @@
 
                 <h1 class="text-4xl font-bold text-[#0F0937]">
 
-                    Daftar Admin Kost
+                    Daftar Akun
 
                 </h1>
 
                 <p class="text-gray-500 mt-3 text-base">
 
                     Buat akun baru untuk mulai
-                    mengelola kost anda.
+                    menjelajahi KosinAJa!
 
                 </p>
 
@@ -184,6 +184,69 @@
 
                 @csrf
 
+{{-- ========================================================= --}}
+{{-- PILIH ROLE --}}
+{{-- ========================================================= --}}
+<div class="mb-10">
+
+    <div class="flex items-center gap-3 mb-5">
+
+        <svg xmlns="http://www.w3.org/2000/svg"
+             class="w-5 h-5 text-[#6C8B6B]"
+             fill="none"
+             viewBox="0 0 24 24"
+             stroke="currentColor">
+
+            <path stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M5.121 17.804A13.937 13.937 0 0112 16
+                     c2.5 0 4.847.655 6.879 1.804" />
+
+        </svg>
+
+        <h2 class="text-2xl font-semibold text-[#4F6B4F]">
+
+            Daftar Sebagai
+
+        </h2>
+
+    </div>
+
+    <select
+        name="role"
+        id="roleSelect"
+        class="w-full rounded-2xl border border-gray-200 px-5 py-4 focus:ring-2 focus:ring-[#6C8B6B]"
+    >
+
+        <option value="">
+
+            -- Pilih Role --
+
+        </option>
+
+        <option
+            value="admin"
+            @selected(old('role') == 'admin')
+        >
+
+            Admin Kost
+
+        </option>
+
+        <option
+            value="penghuni"
+            @selected(old('role') == 'penghuni')
+        >
+
+            Pencari Kost
+
+        </option>
+
+    </select>
+
+</div>
+
                 {{-- ========================================================= --}}
                 {{-- DATA ADMIN --}}
                 {{-- ========================================================= --}}
@@ -202,7 +265,7 @@
                         <h2 class="text-2xl font-semibold
                                    text-[#4F6B4F]">
 
-                            Data Admin
+                            Data Akun
 
                         </h2>
 
@@ -353,7 +416,10 @@
                 {{-- ========================================================= --}}
                 {{-- DATA KOST --}}
                 {{-- ========================================================= --}}
-                <div class="mb-10">
+                <div
+    id="kostFields"
+    class="mb-10"
+>
 
                     <div class="flex items-center gap-3 mb-5">
 
@@ -526,5 +592,40 @@ function togglePassword(id) {
 </div>
 
 @endif
+<script>
 
+const roleSelect =
+    document.getElementById(
+        'roleSelect'
+    );
+
+const kostFields =
+    document.getElementById(
+        'kostFields'
+    );
+
+function toggleKostFields()
+{
+    if (
+        roleSelect.value === 'admin'
+    )
+    {
+        kostFields.style.display =
+            'block';
+    }
+    else
+    {
+        kostFields.style.display =
+            'none';
+    }
+}
+
+roleSelect.addEventListener(
+    'change',
+    toggleKostFields
+);
+
+toggleKostFields();
+
+</script>
 @endsection
