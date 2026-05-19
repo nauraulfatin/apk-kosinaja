@@ -94,51 +94,204 @@
 
             </ul>
 
-            {{-- ACTION --}}
-            <div class="flex items-center gap-4">
+       {{-- ACTION --}}
+<div class="flex items-center gap-4">
 
-                @auth
+    @auth
 
-                <span class="hidden md:block text-[15px] text-[#526453] font-medium">
-                    Halo, {{ auth()->user()->name }}
-                </span>
+        {{-- PROFILE DROPDOWN --}}
+        <div class="relative group">
 
-                @if(auth()->user()->role == 'super_admin')
-                <a href="{{ route('superadmin.dashboard') }}" class="px-6 py-3 rounded-2xl border border-[#6C8B6B] text-[#6C8B6B]
-                                  font-semibold hover:bg-[#6C8B6B] hover:text-white transition-all duration-200">
-                    Dashboard
+            <button
+                class="flex items-center gap-3"
+            >
+
+                {{-- FOTO --}}
+                <div class="w-11 h-11 rounded-full
+                            overflow-hidden border-2
+                            border-[#6C8B6B]">
+
+                    <img
+                        src="https://ui-avatars.com/api/?name={{ auth()->user()->nama }}"
+                        class="w-full h-full object-cover"
+                    >
+
+                </div>
+
+                {{-- NAMA --}}
+                <div class="hidden md:block text-left">
+
+                    <p class="text-sm text-gray-400">
+
+                        Halo,
+
+                    </p>
+
+                    <h4 class="font-semibold text-[#1B2B1D]">
+
+                        {{ auth()->user()->nama }}
+
+                    </h4>
+
+                </div>
+
+                {{-- ICON --}}
+                <svg xmlns="http://www.w3.org/2000/svg"
+                     class="w-4 h-4 text-gray-500"
+                     fill="none"
+                     viewBox="0 0 24 24"
+                     stroke="currentColor">
+
+                    <path stroke-linecap="round"
+                          stroke-linejoin="round"
+                          stroke-width="2"
+                          d="M19 9l-7 7-7-7" />
+
+                </svg>
+
+            </button>
+
+            {{-- DROPDOWN --}}
+            <div class="absolute right-0 mt-4
+                        w-64 bg-white rounded-2xl
+                        shadow-xl border border-gray-100
+                        opacity-0 invisible
+                        group-hover:opacity-100
+                        group-hover:visible
+                        transition-all duration-200
+                        overflow-hidden z-50">
+
+                {{-- PROFILE --}}
+                <a
+                    href="{{ route('profil.index') }}"
+                    class="flex items-center gap-3
+                           px-5 py-4 hover:bg-gray-50
+                           transition"
+                >
+
+                    👤
+
+                    <span class="font-medium">
+
+                        Profil Saya
+
+                    </span>
+
                 </a>
-                @elseif(auth()->user()->role == 'admin')
-                <a href="{{ route('admin.dashboard') }}" class="px-6 py-3 rounded-2xl border border-[#6C8B6B] text-[#6C8B6B]
-                                  font-semibold hover:bg-[#6C8B6B] hover:text-white transition-all duration-200">
-                    Dashboard
-                </a>
+
+                {{-- DASHBOARD ADMIN --}}
+                @if(auth()->user()->role == 'admin kost')
+
+                    <a
+                        href="{{ route('admin.dashboard') }}"
+                        class="flex items-center gap-3
+                               px-5 py-4 hover:bg-gray-50
+                               transition"
+                    >
+
+                        🏠
+
+                        <span class="font-medium">
+
+                            Dashboard Admin
+
+                        </span>
+
+                    </a>
+
                 @endif
 
-                <form method="POST" action="{{ route('logout') }}">
+                {{-- DASHBOARD PENGHUNI --}}
+                @if(
+                    auth()->user()->role == 'penghuni kost'
+                )
+
+                    <a
+                        href="{{ route('profil.index') }}"
+                        class="flex items-center gap-3
+                               px-5 py-4 hover:bg-gray-50
+                               transition"
+                    >
+
+                        🏡
+
+                        <span class="font-medium">
+
+                            Kost Saya
+
+                        </span>
+
+                    </a>
+
+                @endif
+
+                {{-- LOGOUT --}}
+                <form
+                    method="POST"
+                    action="{{ route('logout') }}"
+                >
+
                     @csrf
-                    <button type="submit" class="px-6 py-3 rounded-2xl bg-[#6C8B6B] hover:bg-[#587357]
-                                       text-white font-semibold transition-all duration-200">
-                        Logout
+
+                    <button
+                        type="submit"
+                        class="w-full text-left
+                               flex items-center gap-3
+                               px-5 py-4 hover:bg-red-50
+                               text-red-500 transition"
+                    >
+
+                        🚪
+
+                        <span class="font-medium">
+
+                            Logout
+
+                        </span>
+
                     </button>
+
                 </form>
 
-                @else
-
-                <a href="{{ route('login') }}" class="px-6 py-3 rounded-2xl border border-[#6C8B6B] text-[#6C8B6B]
-                              font-semibold hover:bg-[#6C8B6B] hover:text-white transition-all duration-200">
-                    Masuk
-                </a>
-
-                <button onclick="bukaModal()" class="px-6 py-3 rounded-2xl bg-[#6C8B6B] hover:bg-[#587357]
-                       text-white font-semibold transition-all duration-200">
-                    Daftar
-                </button>
-
-                @endauth
-
-
             </div>
+
+        </div>
+
+    @else
+
+        {{-- MASUK --}}
+        <a
+            href="{{ route('login') }}"
+            class="px-6 py-3 rounded-2xl
+                   border border-[#6C8B6B]
+                   text-[#6C8B6B]
+                   font-semibold
+                   hover:bg-[#6C8B6B]
+                   hover:text-white
+                   transition-all duration-200"
+        >
+
+            Masuk
+
+        </a>
+
+        {{-- DAFTAR --}}
+        <button
+            onclick="bukaModal()"
+            class="px-6 py-3 rounded-2xl
+                   bg-[#6C8B6B]
+                   hover:bg-[#587357]
+                   text-white font-semibold
+                   transition-all duration-200"
+        >
+
+            Daftar
+
+        </button>
+
+    @endauth
+
+</div>
 
         </div>
 
@@ -269,51 +422,6 @@
     </footer>
 
     @include('auth.pilih-role')
-    {{-- ACTION --}}
-    <div class="flex items-center gap-4">
-
-        @auth
-
-        <span class="hidden md:block text-[15px] text-[#526453] font-medium">
-            Halo, {{ auth()->user()->name }}
-        </span>
-
-        @if(auth()->user()->role == 'super_admin')
-        <a href="{{ route('superadmin.dashboard') }}" class="px-6 py-3 rounded-2xl border border-[#6C8B6B] text-[#6C8B6B]
-                      font-semibold hover:bg-[#6C8B6B] hover:text-white transition-all duration-200">
-            Dashboard
-        </a>
-        @elseif(auth()->user()->role == 'admin')
-        <a href="{{ route('admin.dashboard') }}" class="px-6 py-3 rounded-2xl border border-[#6C8B6B] text-[#6C8B6B]
-                      font-semibold hover:bg-[#6C8B6B] hover:text-white transition-all duration-200">
-            Dashboard
-        </a>
-        @endif
-
-        <form method="POST" action="{{ route('logout') }}">
-            @csrf
-            <button type="submit" class="px-6 py-3 rounded-2xl bg-[#6C8B6B] hover:bg-[#587357]
-                               text-white font-semibold transition-all duration-200">
-                Logout
-            </button>
-        </form>
-
-        @else
-
-        {{-- MASUK --}}
-        <a href="{{ route('login') }}" class="px-6 py-3 rounded-2xl border border-[#6C8B6B] text-[#6C8B6B]
-                  font-semibold hover:bg-[#6C8B6B] hover:text-white transition-all duration-200">
-            Masuk
-        </a>
-
-        {{-- DAFTAR — buka pop-up pilih role --}}
-        <button onclick="bukaModal()" class="px-6 py-3 rounded-2xl bg-[#6C8B6B] hover:bg-[#587357]
-                   text-white font-semibold transition-all duration-200">
-            Daftar
-        </button>
-
-        @endauth
-
     </div>
 
 </body>

@@ -131,10 +131,17 @@ class AuthController extends Controller
 
             'penghuni kost'
 
-                => redirect()->route(
-                    'penghuni.dashboard'
-                ),
+    => $user->riwayatHunian()
+            ->where('status', 'aktif')
+            ->exists()
 
+        ? redirect()->route(
+            'penghuni.dashboard'
+        )
+
+        : redirect()->route(
+            'home'
+        ),
             default
 
                 => redirect('/'),

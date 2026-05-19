@@ -443,5 +443,18 @@ Route::middleware([
         [AduanPenghuniController::class, 'store']
     )->name('aduan.store');
 
-    
+});
+Route::middleware('auth')->group(function () {
+
+    Route::get(
+        '/profil',
+        function () {
+
+            return view(
+                'profil.index'
+            );
+
+        }
+    )->name('profil.index');
+
 });
