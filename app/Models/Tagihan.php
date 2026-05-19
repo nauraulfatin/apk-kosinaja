@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use App\Models\Pembayaran;
 
 class Tagihan extends Model
 {
@@ -61,7 +62,7 @@ class Tagihan extends Model
         );
     }
 
-    public function pembayarans()
+    public function pembayaran()
 {
     return $this->hasMany(
         Pembayaran::class,
