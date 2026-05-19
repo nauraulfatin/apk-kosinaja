@@ -10,6 +10,7 @@ use App\Http\Controllers\PeriodePenagihanController;
 use App\Http\Controllers\SuperAdminController;
 use App\Http\Controllers\TagihanController;
 use App\Http\Controllers\AturanKosController;
+use App\Http\Controllers\ProfilPenghuniController;
 use App\Http\Controllers\PengajuanSewaController;
 
 /*
