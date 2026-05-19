@@ -596,6 +596,95 @@
     margin-top: 12px;
 }
 
+/* =====================
+   FORM AJUKAN SEWA
+   ===================== */
+
+.booking-card {
+    background: #fff;
+    border: 1px solid #e5e7eb;
+    border-radius: 32px;
+    padding: 24px;
+    box-shadow: 0 1px 4px rgba(0, 0, 0, .04);
+}
+
+.booking-title {
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    font-size: 1rem;
+    font-weight: 800;
+    color: #1F3A2C;
+    margin-bottom: 18px;
+}
+
+.booking-group {
+    margin-bottom: 16px;
+}
+
+.booking-label {
+    display: block;
+    font-size: 0.82rem;
+    font-weight: 700;
+    color: #374151;
+    margin-bottom: 8px;
+}
+
+.booking-input,
+.booking-select {
+    width: 100%;
+    border: 1px solid #d1d5db;
+    border-radius: 14px;
+    padding: 13px 14px;
+    font-size: 0.88rem;
+    background: #fff;
+    color: #1F2937;
+    transition: .2s;
+}
+
+.booking-input:focus,
+.booking-select:focus {
+    outline: none;
+    border-color: #6C8B6B;
+    box-shadow: 0 0 0 4px rgba(108, 139, 107, .12);
+}
+
+.booking-button {
+    width: 100%;
+    border: none;
+    border-radius: 16px;
+    background: #6C8B6B;
+    color: white;
+    font-weight: 700;
+    font-size: 0.9rem;
+    padding: 14px;
+    cursor: pointer;
+    transition: .2s;
+}
+
+.booking-button:hover {
+    background: #5A7A59;
+    transform: translateY(-1px);
+}
+
+.booking-alert {
+    background: #FEF2F2;
+    color: #B91C1C;
+    border: 1px solid #FECACA;
+    padding: 12px 14px;
+    border-radius: 14px;
+    font-size: 0.82rem;
+    margin-bottom: 16px;
+}
+
+.booking-success {
+    background: #ECFDF5;
+    color: #166534;
+    border: 1px solid #BBF7D0;
+    padding: 12px 14px;
+    border-radius: 14px;
+    font-size: 0.82rem;
+    margin-bottom: 16px;
+}
+
 /* MODAL */
 .modal-foto {
     display: none;
@@ -939,6 +1028,141 @@ $galeriUrls = array_map(fn($f) => asset('storage/' . $f), $galeri); // asset() o
                     <strong>{{ Str::limit($kost->alamat, 30) }}</strong>
                 </div>
             </div>
+
+            {{-- FORM AJUKAN SEWA --}}
+{{-- FORM AJUKAN SEWA --}}
+<div class="booking-card">
+
+    <div class="booking-title">
+        Ajukan Sewa
+    </div>
+
+    {{-- SUCCESS --}}
+    @if(session('success'))
+
+        <div class="booking-success">
+            {{ session('success') }}
+        </div>
+
+    @endif
+
+    {{-- ERROR --}}
+    @if($errors->any())
+
+        <div class="booking-alert">
+            {{ $errors->first() }}
+        </div>
+
+    @endif
+
+    <form
+        action="{{ route('penghuni.pengajuan.store') }}"
+        method="POST"
+    >
+
+        @csrf
+
+        {{-- PILIH KAMAR --}}
+        <div class="booking-group">
+
+            <label class="booking-label">
+                Pilih Kamar
+            </label>
+
+            <select
+                name="id_kamar"
+                class="booking-select"
+                id="kamarSelect"
+                required
+            >
+
+                <option value="">
+                    -- Pilih Kamar --
+                </option>
+
+                @foreach($kost->kamars as $kamar)
+
+                    <option
+                        value="{{ $kamar->id_kamar }}"
+                    >
+
+                        {{ $kamar->nama_kamar }}
+
+                    </option>
+
+                @endforeach
+
+            </select>
+
+        </div>
+
+        {{-- PILIH PERIODE --}}
+        <div class="booking-group">
+
+            <label class="booking-label">
+                Pilih Periode Sewa
+            </label>
+
+            <select
+                name="id_harga_kamar"
+                class="booking-select"
+                id="hargaSelect"
+                required
+            >
+
+                <option value="">
+                    -- Pilih Periode --
+                </option>
+
+            </select>
+
+        </div>
+
+        {{-- TANGGAL MASUK --}}
+        <div class="booking-group">
+
+            <label class="booking-label">
+                Tanggal Masuk
+            </label>
+
+            <input
+                type="date"
+                name="tanggal_masuk"
+                class="booking-input"
+                required
+            >
+
+        </div>
+
+        {{-- TANGGAL KELUAR --}}
+        <div class="booking-group">
+
+            <label class="booking-label">
+                Tanggal Keluar
+            </label>
+
+            <input
+                type="date"
+                name="tanggal_keluar"
+                class="booking-input"
+                required
+            >
+
+        </div>
+
+        {{-- BUTTON --}}
+        <button
+            type="submit"
+            class="booking-button"
+        >
+
+            Ajukan Sewa
+
+        </button>
+
+    </form>
+
+</div>
 
             {{-- PEMILIK CARD --}}
             @if($pemilik)

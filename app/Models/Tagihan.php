@@ -61,14 +61,14 @@ class Tagihan extends Model
         );
     }
 
-    public function pembayaran()
-    {
-        return $this->hasOne(
-            Pembayaran::class,
-            'id_tagihan',
-            'id_tagihan'
-        );
-    }
+    public function pembayarans()
+{
+    return $this->hasMany(
+        Pembayaran::class,
+        'id_tagihan',
+        'id_tagihan'
+    );
+}
 
     public function validator()
     {

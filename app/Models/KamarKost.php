@@ -6,4 +6,13 @@ class KamarKost extends Model { protected $table='kamar_kosts'; protected $prima
     'foto_kamar' => 'array',
 
 ];
-public function kost(){return $this->belongsTo(Kost::class,'id_kost');} public function fasilitas(){return $this->belongsToMany(Fasilitas::class,'fasilitas_kamars','id_kamar','id_fasilitas');} public function hargaKamars(){return $this->hasMany(HargaKamar::class,'id_kamar');} }
+public function kost(){return $this->belongsTo(Kost::class,'id_kost');} public function fasilitas(){return $this->belongsToMany(Fasilitas::class,'fasilitas_kamars','id_kamar','id_fasilitas');} public function hargaKamars(){return $this->hasMany(HargaKamar::class,'id_kamar');}
+public function pengajuanSewas()
+{
+    return $this->hasMany(
+        PengajuanSewa::class,
+        'id_kamar',
+        'id_kamar'
+    );
+}
+}

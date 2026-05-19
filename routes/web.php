@@ -10,6 +10,7 @@ use App\Http\Controllers\PeriodePenagihanController;
 use App\Http\Controllers\SuperAdminController;
 use App\Http\Controllers\TagihanController;
 use App\Http\Controllers\AturanKosController;
+use App\Http\Controllers\PengajuanSewaController;
 
 /*
 |--------------------------------------------------------------------------
@@ -426,5 +427,13 @@ Route::middleware([
         '/aduan',
         [AduanPenghuniController::class, 'store']
     )->name('aduan.store');
+
+    Route::post(
+
+    '/pengajuan-sewa',
+
+    [PengajuanSewaController::class, 'store']
+
+)->name('pengajuan.store');
 
 });
