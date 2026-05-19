@@ -35,7 +35,7 @@
     align-items: start;
 }
 
-/* ====== GALERI (layout asli) ====== */
+/* ====== GALERI ====== */
 .galeri-grid {
     display: grid;
     grid-template-columns: 1fr 180px;
@@ -190,7 +190,19 @@
     gap: 10px;
 }
 
-
+.fasilitas-chip {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 10px 16px;
+    background: #F0F5F1;
+    border-radius: 12px;
+    font-size: 0.82rem;
+    color: #2a4a2c;
+    font-weight: 600;
+    border: 1px solid #E0EBE2;
+    transition: background .2s, transform .2s;
+}
 
 .fasilitas-chip:hover {
     background: #E2EDE3;
@@ -339,27 +351,6 @@
     border: 1px solid #E8EFE9;
 }
 
-/* SEMUA FOTO */
-.foto-grid {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 10px;
-}
-
-.foto-grid img {
-    width: 100%;
-    height: 120px;
-    object-fit: cover;
-    border-radius: 12px;
-    cursor: pointer;
-    transition: transform .25s ease, opacity .2s;
-}
-
-.foto-grid img:hover {
-    transform: scale(1.03);
-    opacity: .9;
-}
-
 /* ====== KOLOM KANAN ====== */
 .sticky-card {
     position: sticky;
@@ -420,186 +411,7 @@
     font-weight: 700;
 }
 
-/* PEMILIK CARD — style sesuai register page */
-.pemilik-card {
-    background: #fff;
-    border: 1px solid #e5e7eb;
-    border-radius: 32px;
-    padding: 24px;
-    box-shadow: 0 1px 4px rgba(0, 0, 0, .04);
-}
-
-.pemilik-card-title {
-    font-family: 'Plus Jakarta Sans', sans-serif;
-    font-weight: 700;
-    font-size: 1rem;
-    color: #0F0937;
-    margin-bottom: 16px;
-    display: flex;
-    align-items: center;
-    gap: 8px;
-}
-
-.pemilik-card-title svg {
-    width: 18px;
-    height: 18px;
-    color: #6C8B6B;
-    flex-shrink: 0;
-}
-
-.pemilik-avatar-row {
-    display: flex;
-    align-items: center;
-    gap: 14px;
-    margin-bottom: 20px;
-}
-
-.pemilik-avatar {
-    width: 52px;
-    height: 52px;
-    border-radius: 50%;
-    background: #D6E5D6;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    flex-shrink: 0;
-}
-
-.pemilik-nama {
-    font-family: 'Plus Jakarta Sans', sans-serif;
-    font-weight: 700;
-    font-size: 0.95rem;
-    color: #0F0937;
-}
-
-.pemilik-username {
-    font-size: 0.78rem;
-    color: #6C8B6B;
-    font-weight: 600;
-    margin-top: 2px;
-}
-
-.pemilik-sejak {
-    font-size: 0.75rem;
-    color: #9ca3af;
-    margin-top: 2px;
-}
-
-/* Info row dalam pemilik card — mirip field register */
-.pemilik-info-row {
-    border: 1px solid #e5e7eb;
-    border-radius: 16px;
-    padding: 12px 16px;
-    margin-bottom: 10px;
-    display: flex;
-    align-items: center;
-    gap: 10px;
-}
-
-.pemilik-info-row svg {
-    width: 16px;
-    height: 16px;
-    flex-shrink: 0;
-    color: #6C8B6B;
-}
-
-.pemilik-info-label {
-    font-size: 0.72rem;
-    color: #9ca3af;
-    font-weight: 500;
-    display: block;
-    margin-bottom: 1px;
-}
-
-.pemilik-info-value {
-    font-size: 0.85rem;
-    color: #374151;
-    font-weight: 600;
-}
-
-.pemilik-divider {
-    height: 1px;
-    background: #f3f4f6;
-    margin: 16px 0;
-}
-
-.pemilik-kontak-title {
-    font-size: 0.82rem;
-    font-weight: 700;
-    color: #4F6B4F;
-    margin-bottom: 10px;
-}
-
-/* Tombol kontak */
-.btn-pemilik {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 10px;
-    width: 100%;
-    text-decoration: none;
-    font-weight: 600;
-    font-size: 0.88rem;
-    border-radius: 16px;
-    padding: 14px;
-    margin-bottom: 10px;
-    transition: background .2s, transform .15s;
-}
-
-.btn-pemilik:last-child {
-    margin-bottom: 0;
-}
-
-.btn-pemilik:hover {
-    transform: translateY(-1px);
-}
-
-.btn-pemilik svg {
-    width: 18px;
-    height: 18px;
-    flex-shrink: 0;
-}
-
-.btn-pemilik-wa {
-    background: #6C8B6B;
-    color: #fff;
-}
-
-.btn-pemilik-wa:hover {
-    background: #5B765A;
-}
-
-.btn-pemilik-telp {
-    background: #F8F5F0;
-    color: #374151;
-    border: 1px solid #e5e7eb;
-}
-
-.btn-pemilik-telp:hover {
-    background: #f0ede8;
-}
-
-.btn-pemilik-email {
-    background: #F8F5F0;
-    color: #374151;
-    border: 1px solid #e5e7eb;
-}
-
-.btn-pemilik-email:hover {
-    background: #f0ede8;
-}
-
-.hubungi-note {
-    font-size: 0.73rem;
-    color: #9ca3af;
-    text-align: center;
-    margin-top: 12px;
-}
-
-/* =====================
-   FORM AJUKAN SEWA
-   ===================== */
-
+/* BOOKING CARD */
 .booking-card {
     background: #fff;
     border: 1px solid #e5e7eb;
@@ -685,6 +497,149 @@
     margin-bottom: 16px;
 }
 
+/* PEMILIK CARD */
+.pemilik-card {
+    background: #fff;
+    border: 1px solid #e5e7eb;
+    border-radius: 32px;
+    padding: 24px;
+    box-shadow: 0 1px 4px rgba(0, 0, 0, .04);
+}
+
+.pemilik-card-title {
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    font-weight: 700;
+    font-size: 1rem;
+    color: #0F0937;
+    margin-bottom: 16px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.pemilik-card-title svg {
+    width: 18px;
+    height: 18px;
+    color: #6C8B6B;
+    flex-shrink: 0;
+}
+
+.pemilik-avatar-row {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    margin-bottom: 20px;
+}
+
+.pemilik-avatar {
+    width: 52px;
+    height: 52px;
+    border-radius: 50%;
+    background: #D6E5D6;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+}
+
+.pemilik-nama {
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    font-weight: 700;
+    font-size: 0.95rem;
+    color: #0F0937;
+}
+
+.pemilik-username {
+    font-size: 0.78rem;
+    color: #6C8B6B;
+    font-weight: 600;
+    margin-top: 2px;
+}
+
+.pemilik-sejak {
+    font-size: 0.75rem;
+    color: #9ca3af;
+    margin-top: 2px;
+}
+
+.pemilik-divider {
+    height: 1px;
+    background: #f3f4f6;
+    margin: 16px 0;
+}
+
+.pemilik-kontak-title {
+    font-size: 0.82rem;
+    font-weight: 700;
+    color: #4F6B4F;
+    margin-bottom: 10px;
+}
+
+.btn-pemilik {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    width: 100%;
+    text-decoration: none;
+    font-weight: 600;
+    font-size: 0.88rem;
+    border-radius: 16px;
+    padding: 14px;
+    margin-bottom: 10px;
+    transition: background .2s, transform .15s;
+}
+
+.btn-pemilik:last-child {
+    margin-bottom: 0;
+}
+
+.btn-pemilik:hover {
+    transform: translateY(-1px);
+}
+
+.btn-pemilik svg {
+    width: 18px;
+    height: 18px;
+    flex-shrink: 0;
+}
+
+.btn-pemilik-wa {
+    background: #6C8B6B;
+    color: #fff;
+}
+
+.btn-pemilik-wa:hover {
+    background: #5B765A;
+}
+
+.btn-pemilik-telp {
+    background: #F8F5F0;
+    color: #374151;
+    border: 1px solid #e5e7eb;
+}
+
+.btn-pemilik-telp:hover {
+    background: #f0ede8;
+}
+
+.btn-pemilik-email {
+    background: #F8F5F0;
+    color: #374151;
+    border: 1px solid #e5e7eb;
+}
+
+.btn-pemilik-email:hover {
+    background: #f0ede8;
+}
+
+.hubungi-note {
+    font-size: 0.73rem;
+    color: #9ca3af;
+    text-align: center;
+    margin-top: 12px;
+}
+
 /* MODAL */
 .modal-foto {
     display: none;
@@ -700,11 +655,14 @@
     display: flex;
 }
 
-.modal-foto img {
+#modalImg {
     max-width: 88vw;
     max-height: 88vh;
     border-radius: 16px;
     object-fit: contain;
+    position: relative;
+    z-index: 1000;
+    transition: transform .25s ease, opacity .25s ease;
 }
 
 .modal-close {
@@ -744,7 +702,7 @@
     justify-content: center;
     cursor: pointer;
     transition: background .2s;
-    z-index: 1001;
+    z-index: 2000;
 }
 
 .modal-nav:hover {
@@ -811,10 +769,6 @@
     .kos-title {
         font-size: 1.4rem;
     }
-
-    .foto-grid {
-        grid-template-columns: repeat(2, 1fr);
-    }
 }
 </style>
 @endsection
@@ -823,7 +777,11 @@
 
 @php
 $galeri = $kost->foto_kost ?? [];
-$fotoUtama = count($galeri) > 0 ? ('storage/' . $galeri[0]) : null;
+
+// Storage::url() otomatis generate /storage/kost/xxx.jpg
+$fotoUtama = count($galeri) > 0 ? Storage::url($galeri[0]) : null;
+$galeriUrls = array_map(fn($f) => Storage::url($f), $galeri);
+
 $kamarKosong = $kost->kamars->where('status', 'kosong')->count();
 $hargaAktif = $kost->kamars->flatMap(fn($k) => $k->hargaKamars->where('isactive', true));
 $hargaMulai = $hargaAktif->min('harga');
@@ -832,7 +790,6 @@ $pemilik = $kost->user;
 $noHpRaw = $pemilik?->no_hp ?? null;
 $noWa = $noHpRaw ? '62' . ltrim(preg_replace('/[^0-9]/', '', $noHpRaw), '0') : null;
 $pesanWa = urlencode('Halo, saya tertarik dengan kost ' . $kost->nama_kost . '. Apakah masih ada kamar yang tersedia?');
-$galeriUrls = array_map(fn($f) => asset('storage/' . $f), $galeri); // asset() ok di Blade @php
 @endphp
 
 <div class="detail-wrap">
@@ -847,14 +804,16 @@ $galeriUrls = array_map(fn($f) => asset('storage/' . $f), $galeri); // asset() o
         <div>
 
             {{-- GALERI --}}
-            <div class="section-box" style="padding: 16px;">
+            <div class="section-box" style="padding:16px;">
                 <div class="galeri-grid">
+
+                    {{-- Foto utama --}}
                     <div class="galeri-main">
                         @if($fotoUtama)
-                        <img src="{{ asset($fotoUtama) }}" alt="{{ $kost->nama_kost }}" onclick="bukaModal(0)">
+                        <img src="{{ $fotoUtama }}" alt="{{ $kost->nama_kost }}" onclick="bukaModal(0)">
                         @else
                         <div style="width:100%;height:320px;background:#D5E0D6;border-radius:20px;
-                                    display:flex;align-items:center;justify-content:center;">
+                                        display:flex;align-items:center;justify-content:center;">
                             <svg style="width:56px;height:56px;fill:#A8C0AA;" viewBox="0 0 24 24">
                                 <path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z" />
                             </svg>
@@ -862,24 +821,25 @@ $galeriUrls = array_map(fn($f) => asset('storage/' . $f), $galeri); // asset() o
                         @endif
                     </div>
 
+                    {{-- Foto samping --}}
                     <div class="galeri-side">
                         @php $galeriSide = array_slice($galeri, 1, 2); @endphp
+                        {{-- Foto samping --}}
                         @forelse($galeriSide as $idx => $foto)
-                        <img src="{{ asset('storage/' . $foto) }}" alt="Foto" onclick="bukaModal({{ $idx + 1 }})">
+                        <img src="{{ Storage::url($foto) }}" alt="Foto {{ $idx + 2 }}" data-modal-index="{{ $idx + 1 }}"
+                            onclick="bukaModal(parseInt(this.dataset.modalIndex, 10))">
                         @empty
-                        <div style="height:98px;background:#F0F5F1;border-radius:14px;"></div>
-                        <div style="height:98px;background:#F0F5F1;border-radius:14px;"></div>
+                        ...
                         @endforelse
 
                         @if(count($galeri) > 3)
                         <div class="galeri-more" onclick="bukaModal(3)">
-                            <img src="{{ asset('storage/' . $galeri[3]) }}" alt="Foto">
+                            <img src="{{ Storage::url($galeri[3]) }}" alt="Foto lebih">
                             <span>+{{ count($galeri) - 3 }} Foto</span>
                         </div>
-                        @else
-                        <div style="height:98px;background:#F0F5F1;border-radius:14px;"></div>
                         @endif
                     </div>
+
                 </div>
             </div>
 
@@ -917,13 +877,16 @@ $galeriUrls = array_map(fn($f) => asset('storage/' . $f), $galeri); // asset() o
                 @forelse($kost->kamars as $kamar)
                 @php
                 $fotoKamar = ($kamar->foto_kamar && count($kamar->foto_kamar) > 0)
-                ? ('storage/' . $kamar->foto_kamar[0]) : null;
+                ? asset('storage/' . $kamar->foto_kamar[0])
+                : null;
                 $hargaKamar = $kamar->hargaKamars->where('isactive', true)->first();
                 @endphp
+
                 <div class="kamar-item">
 
+                    {{-- Foto kamar --}}
                     @if($fotoKamar)
-                    <img src="{{ asset($fotoKamar) }}" alt="{{ $kamar->nama_kamar }}" class="kamar-foto">
+                    <img src="{{ $fotoKamar }}" alt="{{ $kamar->nama_kamar }}" class="kamar-foto">
                     @else
                     <div class="kamar-foto"
                         style="display:flex;align-items:center;justify-content:center;background:#F0F5F1;">
@@ -970,7 +933,9 @@ $galeriUrls = array_map(fn($f) => asset('storage/' . $f), $galeri); // asset() o
                             <span class="badge-terisi">Terisi</span>
                             @endif
                         </div>
-                        <a href="{{ route('detailKamar', $kamar->id_kamar) }}" class="btn-detail-kamar">Lihat Detail</a>
+                        <a href="{{ route('detailKamar', $kamar->id_kamar) }}" class="btn-detail-kamar">
+                            Lihat Detail
+                        </a>
                     </div>
 
                 </div>
@@ -1000,7 +965,6 @@ $galeriUrls = array_map(fn($f) => asset('storage/' . $f), $galeri); // asset() o
             </div>
             @endif
 
-
         </div>
         {{-- akhir kolom kiri --}}
 
@@ -1029,145 +993,60 @@ $galeriUrls = array_map(fn($f) => asset('storage/' . $f), $galeri); // asset() o
                 </div>
             </div>
 
-{{-- FORM AJUKAN SEWA --}}
-<div class="booking-card">
+            {{-- FORM AJUKAN SEWA --}}
+            <div class="booking-card">
+                <div class="booking-title">Ajukan Sewa</div>
 
-    <div class="booking-title">
-        Ajukan Sewa
-    </div>
+                @if(session('success'))
+                <div class="booking-success">{{ session('success') }}</div>
+                @endif
 
-    {{-- SUCCESS --}}
-    @if(session('success'))
+                @if($errors->any())
+                <div class="booking-alert">{{ $errors->first() }}</div>
+                @endif
 
-        <div class="booking-success">
-            {{ session('success') }}
-        </div>
+                <form action="{{ route('penghuni.pengajuan.store') }}" method="POST">
+                    @csrf
 
-    @endif
+                    {{-- Pilih Kamar --}}
+                    <div class="booking-group">
+                        <label class="booking-label">Pilih Kamar</label>
+                        <select name="id_kamar" class="booking-select" id="kamarSelect" required>
+                            <option value="">-- Pilih Kamar --</option>
+                            @foreach($kost->kamars as $kamar)
+                            <option value="{{ $kamar->id_kamar }}">{{ $kamar->nama_kamar }}</option>
+                            @endforeach
+                        </select>
+                    </div>
 
-    {{-- ERROR --}}
-    @if($errors->any())
+                    {{-- Pilih Periode --}}
+                    <div class="booking-group">
+                        <label class="booking-label">Pilih Periode Sewa</label>
+                        <select name="id_harga_kamar" class="booking-select" id="hargaSelect" required>
+                            <option value="">-- Pilih Periode --</option>
+                        </select>
+                    </div>
 
-        <div class="booking-alert">
-            {{ $errors->first() }}
-        </div>
+                    {{-- Tanggal Masuk --}}
+                    <div class="booking-group">
+                        <label class="booking-label">Tanggal Masuk</label>
+                        <input type="date" name="tanggal_masuk" class="booking-input" required>
+                    </div>
 
-    @endif
+                    {{-- Tanggal Keluar --}}
+                    <div class="booking-group">
+                        <label class="booking-label">Tanggal Keluar</label>
+                        <input type="date" name="tanggal_keluar" class="booking-input" required>
+                    </div>
 
-    <form
-        action="{{ route('penghuni.pengajuan.store') }}"
-        method="POST"
-    >
-
-        @csrf
-
-        {{-- PILIH KAMAR --}}
-        <div class="booking-group">
-
-            <label class="booking-label">
-                Pilih Kamar
-            </label>
-
-            <select
-                name="id_kamar"
-                class="booking-select"
-                id="kamarSelect"
-                required
-            >
-
-                <option value="">
-                    -- Pilih Kamar --
-                </option>
-
-                @foreach($kost->kamars as $kamar)
-
-                    <option
-                        value="{{ $kamar->id_kamar }}"
-                    >
-
-                        {{ $kamar->nama_kamar }}
-
-                    </option>
-
-                @endforeach
-
-            </select>
-
-        </div>
-
-        {{-- PILIH PERIODE --}}
-        <div class="booking-group">
-
-            <label class="booking-label">
-                Pilih Periode Sewa
-            </label>
-
-            <select
-                name="id_harga_kamar"
-                class="booking-select"
-                id="hargaSelect"
-                required
-            >
-
-                <option value="">
-                    -- Pilih Periode --
-                </option>
-
-            </select>
-
-        </div>
-
-        {{-- TANGGAL MASUK --}}
-        <div class="booking-group">
-
-            <label class="booking-label">
-                Tanggal Masuk
-            </label>
-
-            <input
-                type="date"
-                name="tanggal_masuk"
-                class="booking-input"
-                required
-            >
-
-        </div>
-
-        {{-- TANGGAL KELUAR --}}
-        <div class="booking-group">
-
-            <label class="booking-label">
-                Tanggal Keluar
-            </label>
-
-            <input
-                type="date"
-                name="tanggal_keluar"
-                class="booking-input"
-                required
-            >
-
-        </div>
-
-        {{-- BUTTON --}}
-        <button
-            type="submit"
-            class="booking-button"
-        >
-
-            Ajukan Sewa
-
-        </button>
-
-    </form>
-
-</div>
+                    <button type="submit" class="booking-button">Ajukan Sewa</button>
+                </form>
+            </div>
 
             {{-- PEMILIK CARD --}}
             @if($pemilik)
             <div class="pemilik-card">
 
-                {{-- Judul --}}
                 <p class="pemilik-card-title">
                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
@@ -1176,7 +1055,6 @@ $galeriUrls = array_map(fn($f) => asset('storage/' . $f), $galeri); // asset() o
                     Pemilik Kost
                 </p>
 
-                {{-- Avatar + nama --}}
                 <div class="pemilik-avatar-row">
                     <div class="pemilik-avatar">
                         <svg style="width:28px;height:28px;" fill="#6C8B6B" viewBox="0 0 24 24">
@@ -1187,45 +1065,15 @@ $galeriUrls = array_map(fn($f) => asset('storage/' . $f), $galeri); // asset() o
                     <div>
                         <div class="pemilik-nama">{{ $pemilik->nama ?? $pemilik->username }}</div>
                         @if($pemilik->username)
-                        <div class="pemilik-username">@{{ $pemilik->username }}</div>
+                        <div class="pemilik-username">{{ '@' . $pemilik->username }}</div>
                         @endif
                         <div class="pemilik-sejak">Bergabung sejak {{ $pemilik->created_at->format('Y') }}</div>
                     </div>
                 </div>
 
-                {{-- No HP — style field register --}}
-                @if($noHpRaw)
-                <div class="pemilik-info-row">
-                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                            d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z" />
-                    </svg>
-                    <div>
-                        <span class="pemilik-info-label">Nomor WhatsApp</span>
-                        <span class="pemilik-info-value">{{ $noHpRaw }}</span>
-                    </div>
-                </div>
-                @endif
-
-                {{-- Email --}}
-                @if(!empty($pemilik->email))
-                <div class="pemilik-info-row">
-                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                            d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
-                    </svg>
-                    <div>
-                        <span class="pemilik-info-label">Email</span>
-                        <span class="pemilik-info-value">{{ $pemilik->email }}</span>
-                    </div>
-                </div>
-                @endif
-
                 <div class="pemilik-divider"></div>
-
                 <p class="pemilik-kontak-title">Hubungi Langsung</p>
 
-                {{-- Tombol WA --}}
                 @if($noWa)
                 <a href="https://wa.me/{{ $noWa }}?text={{ $pesanWa }}" target="_blank"
                     class="btn-pemilik btn-pemilik-wa">
@@ -1236,7 +1084,6 @@ $galeriUrls = array_map(fn($f) => asset('storage/' . $f), $galeri); // asset() o
                     Chat WhatsApp
                 </a>
 
-                {{-- Tombol Telepon --}}
                 <a href="tel:{{ $noHpRaw }}" class="btn-pemilik btn-pemilik-telp">
                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="#6C8B6B">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
@@ -1248,7 +1095,6 @@ $galeriUrls = array_map(fn($f) => asset('storage/' . $f), $galeri); // asset() o
                 <p style="font-size:0.8rem;color:#9ca3af;text-align:center;">Nomor tidak tersedia</p>
                 @endif
 
-                {{-- Tombol Email --}}
                 @if(!empty($pemilik->email))
                 <a href="mailto:{{ $pemilik->email }}" class="btn-pemilik btn-pemilik-email">
                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="#6C8B6B">
@@ -1294,90 +1140,72 @@ $galeriUrls = array_map(fn($f) => asset('storage/' . $f), $galeri); // asset() o
 
 @endsection
 
+{{-- ===== DATA HARGA KAMAR ===== --}}
 @php
-
 $hargaKamarJson = [];
-
 foreach ($kost->kamars as $kamar) {
-
-    $hargaKamarJson[$kamar->id_kamar] = [];
-
-    foreach ($kamar->hargaKamars as $harga) {
-
-        $hargaKamarJson[$kamar->id_kamar][] = [
-
-            'id' => $harga->id_harga_kamar,
-
-            'periode' =>
-                $harga->periode->nama_periode ?? '-',
-
-            'harga' =>
-                $harga->harga
-
-        ];
-
-    }
-
+$hargaKamarJson[$kamar->id_kamar] = [];
+foreach ($kamar->hargaKamars as $harga) {
+$hargaKamarJson[$kamar->id_kamar][] = [
+'id' => $harga->id_harga_kamar,
+'periode' => $harga->periode->nama_periode ?? '-',
+'harga' => $harga->harga,
+];
 }
-
+}
 @endphp
 
 @push('scripts')
 
+{{-- Script 1: Kamar & Periode Select --}}
 <script>
+const hargaKamar = JSON.parse('{!! addslashes(json_encode($hargaKamarJson)) !!}');
+const kamarSelect = document.getElementById('kamarSelect');
+const hargaSelect = document.getElementById('hargaSelect');
 
-const hargaKamar = @json($hargaKamarJson);
-
-const kamarSelect =
-    document.getElementById('kamarSelect');
-
-const hargaSelect =
-    document.getElementById('hargaSelect');
-
-kamarSelect.addEventListener(
-    'change',
-    function () {
-
-        const kamarId = this.value;
-
-        hargaSelect.innerHTML = `
-            <option value="">
-                -- Pilih Periode --
-            </option>
-        `;
-
-        if (hargaKamar[kamarId]) {
-
-            hargaKamar[kamarId]
-            .forEach(function (harga) {
-
-                hargaSelect.innerHTML += `
-                    <option value="${harga.id}">
-                        ${harga.periode}
-                        -
-                        Rp ${Number(harga.harga)
-                            .toLocaleString('id-ID')}
-                    </option>
-                `;
-
-            });
-
-        }
-
+kamarSelect.addEventListener('change', function() {
+    const kamarId = this.value;
+    hargaSelect.innerHTML = '<option value="">-- Pilih Periode --</option>';
+    if (hargaKamar[kamarId]) {
+        hargaKamar[kamarId].forEach(function(harga) {
+            hargaSelect.innerHTML += `
+                <option value="${harga.id}">
+                    ${harga.periode} - Rp ${Number(harga.harga).toLocaleString('id-ID')}
+                </option>`;
+        });
     }
-);
-
+});
 </script>
 
+{{-- Script 2: Modal Foto dengan Slide & Swipe --}}
 <script>
-const galeriUrls = @json($galeriUrls);
+const galeriUrls = JSON.parse('{!! addslashes(json_encode($galeriUrls)) !!}');
 let modalIndex = 0;
+let isAnimating = false;
 
 function bukaModal(idx) {
+    if (!galeriUrls.length) return;
     modalIndex = idx;
-    updateModal();
+
+    const img = document.getElementById('modalImg');
+    img.style.transition = 'none';
+    img.style.opacity = '0';
+    img.style.transform = 'translateX(0)';
+    img.src = galeriUrls[modalIndex];
+
     document.getElementById('modalFoto').classList.add('active');
     document.body.style.overflow = 'hidden';
+
+    img.onload = () => {
+        img.style.transition = 'opacity .25s ease';
+        img.style.opacity = '1';
+    };
+    if (img.complete) {
+        img.style.transition = 'opacity .25s ease';
+        img.style.opacity = '1';
+    }
+
+    updateCounter();
 }
 
 function tutupModal() {
@@ -1386,26 +1214,67 @@ function tutupModal() {
 }
 
 function modalNav(dir) {
-    if (!galeriUrls.length) return;
-    modalIndex = (modalIndex + dir + galeriUrls.length) % galeriUrls.length;
-    updateModal();
+    if (!galeriUrls.length || isAnimating) return;
+    isAnimating = true;
+
+    const img = document.getElementById('modalImg');
+
+    // Slide keluar
+    img.style.transition = 'transform .2s ease, opacity .2s ease';
+    img.style.transform = 'translateX(' + (dir > 0 ? '-60px' : '60px') + ')';
+    img.style.opacity = '0';
+
+    setTimeout(() => {
+        modalIndex = (modalIndex + dir + galeriUrls.length) % galeriUrls.length;
+
+        img.style.transition = 'none';
+        img.style.transform = 'translateX(' + (dir > 0 ? '60px' : '-60px') + ')';
+        img.src = galeriUrls[modalIndex];
+
+        // Slide masuk — double rAF agar browser sempat render posisi awal
+        requestAnimationFrame(() => {
+            requestAnimationFrame(() => {
+                img.style.transition = 'transform .25s ease, opacity .25s ease';
+                img.style.transform = 'translateX(0)';
+                img.style.opacity = '1';
+                isAnimating = false;
+            });
+        });
+
+        updateCounter();
+    }, 200);
 }
 
-function updateModal() {
-    document.getElementById('modalImg').src = galeriUrls[modalIndex];
+function updateCounter() {
     const counter = document.getElementById('modalCounter');
-    if (counter) counter.textContent = `${modalIndex + 1} / ${galeriUrls.length}`;
+    if (counter) counter.textContent = (modalIndex + 1) + ' / ' + galeriUrls.length;
 }
 
+// Tutup saat klik background
 document.getElementById('modalFoto').addEventListener('click', function(e) {
     if (e.target === this) tutupModal();
 });
 
+// Keyboard
 document.addEventListener('keydown', e => {
     if (!document.getElementById('modalFoto').classList.contains('active')) return;
     if (e.key === 'Escape') tutupModal();
     if (e.key === 'ArrowRight') modalNav(1);
     if (e.key === 'ArrowLeft') modalNav(-1);
 });
+
+// Swipe touch (mobile)
+let touchStartX = 0;
+const modalEl = document.getElementById('modalFoto');
+modalEl.addEventListener('touchstart', e => {
+    touchStartX = e.touches[0].clientX;
+}, {
+    passive: true
+});
+modalEl.addEventListener('touchend', e => {
+    const diff = touchStartX - e.changedTouches[0].clientX;
+    if (Math.abs(diff) > 50) modalNav(diff > 0 ? 1 : -1);
+});
 </script>
+
 @endpush
