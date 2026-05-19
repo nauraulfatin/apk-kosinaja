@@ -47,6 +47,12 @@ Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 Route::get('/register-admin-kost', [AdminKostController::class, 'create'])->name('admin-kost.register');
 Route::post('/register-admin-kost', [AdminKostController::class, 'store'])->name('admin-kost.register.store');
 
+
+Route::get('/register/penghuni', [PenghuniController::class, 'create'])->name('register.penghuni');
+   Route::post('/register/penghuni', [PenghuniController::class, 'store'])->name('register.penghuni.store');
+   Route::get('/register/admin', [AuthController::class, 'showRegisterAdmin'])->name('register.admin');
+   Route::post('/register/admin', [AuthController::class, 'registerAdmin'])->name('register.admin.store');
+
 Route::middleware('auth')->group(function () {
 
     Route::get(
@@ -428,12 +434,5 @@ Route::middleware([
         [AduanPenghuniController::class, 'store']
     )->name('aduan.store');
 
-    Route::post(
-
-    '/pengajuan-sewa',
-
-    [PengajuanSewaController::class, 'store']
-
-)->name('pengajuan.store');
-
+    
 });

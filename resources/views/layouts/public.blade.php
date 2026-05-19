@@ -130,7 +130,13 @@
                     Masuk
                 </a>
 
+                <button onclick="bukaModal()" class="px-6 py-3 rounded-2xl bg-[#6C8B6B] hover:bg-[#587357]
+                       text-white font-semibold transition-all duration-200">
+                    Daftar
+                </button>
+
                 @endauth
+
 
             </div>
 
@@ -261,6 +267,54 @@
         </div>
 
     </footer>
+
+    @include('auth.pilih-role')
+    {{-- ACTION --}}
+    <div class="flex items-center gap-4">
+
+        @auth
+
+        <span class="hidden md:block text-[15px] text-[#526453] font-medium">
+            Halo, {{ auth()->user()->name }}
+        </span>
+
+        @if(auth()->user()->role == 'super_admin')
+        <a href="{{ route('superadmin.dashboard') }}" class="px-6 py-3 rounded-2xl border border-[#6C8B6B] text-[#6C8B6B]
+                      font-semibold hover:bg-[#6C8B6B] hover:text-white transition-all duration-200">
+            Dashboard
+        </a>
+        @elseif(auth()->user()->role == 'admin')
+        <a href="{{ route('admin.dashboard') }}" class="px-6 py-3 rounded-2xl border border-[#6C8B6B] text-[#6C8B6B]
+                      font-semibold hover:bg-[#6C8B6B] hover:text-white transition-all duration-200">
+            Dashboard
+        </a>
+        @endif
+
+        <form method="POST" action="{{ route('logout') }}">
+            @csrf
+            <button type="submit" class="px-6 py-3 rounded-2xl bg-[#6C8B6B] hover:bg-[#587357]
+                               text-white font-semibold transition-all duration-200">
+                Logout
+            </button>
+        </form>
+
+        @else
+
+        {{-- MASUK --}}
+        <a href="{{ route('login') }}" class="px-6 py-3 rounded-2xl border border-[#6C8B6B] text-[#6C8B6B]
+                  font-semibold hover:bg-[#6C8B6B] hover:text-white transition-all duration-200">
+            Masuk
+        </a>
+
+        {{-- DAFTAR — buka pop-up pilih role --}}
+        <button onclick="bukaModal()" class="px-6 py-3 rounded-2xl bg-[#6C8B6B] hover:bg-[#587357]
+                   text-white font-semibold transition-all duration-200">
+            Daftar
+        </button>
+
+        @endauth
+
+    </div>
 
 </body>
 
