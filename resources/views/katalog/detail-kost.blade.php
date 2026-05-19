@@ -1029,7 +1029,6 @@ $galeriUrls = array_map(fn($f) => asset('storage/' . $f), $galeri); // asset() o
                 </div>
             </div>
 
-            {{-- FORM AJUKAN SEWA --}}
 {{-- FORM AJUKAN SEWA --}}
 <div class="booking-card">
 
@@ -1295,7 +1294,81 @@ $galeriUrls = array_map(fn($f) => asset('storage/' . $f), $galeri); // asset() o
 
 @endsection
 
+@php
+
+$hargaKamarJson = [];
+
+foreach ($kost->kamars as $kamar) {
+
+    $hargaKamarJson[$kamar->id_kamar] = [];
+
+    foreach ($kamar->hargaKamars as $harga) {
+
+        $hargaKamarJson[$kamar->id_kamar][] = [
+
+            'id' => $harga->id_harga_kamar,
+
+            'periode' =>
+                $harga->periode->nama_periode ?? '-',
+
+            'harga' =>
+                $harga->harga
+
+        ];
+
+    }
+
+}
+
+@endphp
+
 @push('scripts')
+
+<script>
+
+const hargaKamar = @json($hargaKamarJson);
+
+const kamarSelect =
+    document.getElementById('kamarSelect');
+
+const hargaSelect =
+    document.getElementById('hargaSelect');
+
+kamarSelect.addEventListener(
+    'change',
+    function () {
+
+        const kamarId = this.value;
+
+        hargaSelect.innerHTML = `
+            <option value="">
+                -- Pilih Periode --
+            </option>
+        `;
+
+        if (hargaKamar[kamarId]) {
+
+            hargaKamar[kamarId]
+            .forEach(function (harga) {
+
+                hargaSelect.innerHTML += `
+                    <option value="${harga.id}">
+                        ${harga.periode}
+                        -
+                        Rp ${Number(harga.harga)
+                            .toLocaleString('id-ID')}
+                    </option>
+                `;
+
+            });
+
+        }
+
+    }
+);
+
+</script>
+
 <script>
 const galeriUrls = @json($galeriUrls);
 let modalIndex = 0;

@@ -98,7 +98,7 @@ public function index()
     {
         $kost = Kost::with([
                     'kamars.fasilitas',
-                    'kamars.hargaKamars',
+                    'kamars.hargaKamars.periode',
                     'fasilitas',
                     'user'
                 ])->findOrFail($id);
