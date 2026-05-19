@@ -4,24 +4,21 @@
 
 <div class="h-screen bg-[#F8F5F0] flex overflow-hidden">
 
-    {{-- ========================================================= --}}
     {{-- LEFT IMAGE --}}
-    {{-- ========================================================= --}}
     <div class="hidden lg:block lg:w-[42%]
                relative overflow-hidden
                h-screen sticky top-0">
 
-        {{-- IMAGE --}}
-        <img src="{{ asset('foto-pintu.png') }}" alt="Register" class="absolute inset-0 w-full h-full object-cover">
+        <img src="{{ asset('foto-pintu.png') }}"
+             alt="Register"
+             class="absolute inset-0 w-full h-full object-cover">
 
-        {{-- OVERLAY --}}
         <div class="absolute inset-0
                    bg-gradient-to-t
                    from-black/80
                    via-black/20
                    to-transparent"></div>
 
-        {{-- CONTENT --}}
         <div class="absolute inset-0 z-10
                    flex flex-col justify-between
                    p-10">
@@ -29,10 +26,13 @@
             {{-- LOGO --}}
             <div class="flex items-center gap-3">
 
-                <img src="{{ asset('logo.png') }}" class="w-11 h-11 object-contain">
+                <img src="{{ asset('logo.png') }}"
+                     class="w-11 h-11 object-contain">
 
                 <h1 class="text-3xl font-bold text-white">
+
                     KosinAja!
+
                 </h1>
 
             </div>
@@ -40,8 +40,7 @@
             {{-- TEXT --}}
             <div>
 
-                <h2 class="text-5xl font-bold text-white
-                           leading-[1.15]">
+                <h2 class="text-5xl font-bold text-white leading-[1.15]">
 
                     Kelola Kost
                     <br>
@@ -54,70 +53,17 @@
 
                     <br>
 
-                    Semua Dalam
-                    Satu Tempat.
+                    Semua Dalam Satu Tempat.
 
                 </h2>
 
-                <p class="text-white/80 text-lg
-                           leading-relaxed mt-6
-                           max-w-md">
+                <p class="text-white/80 text-lg leading-relaxed mt-6 max-w-md">
 
-                    Pantau pembayaran,
-                    penghuni, kamar,
-                    dan operasional kost
-                    dengan lebih praktis
-                    dan efisien.
+                    Kelola penghuni,
+                    kamar, dan pembayaran
+                    dengan lebih praktis.
 
                 </p>
-
-                {{-- CARD --}}
-                <div class="mt-10 bg-white/10
-                           backdrop-blur-md
-                           border border-white/20
-                           rounded-3xl p-5
-                           max-w-sm">
-
-                    <div class="flex items-start gap-4">
-
-                        {{-- ICON --}}
-                        <div class="w-14 h-14 rounded-2xl
-                                   bg-[#D6E5D6]/20
-                                   flex items-center justify-center
-                                   text-white">
-
-                            <svg xmlns="http://www.w3.org/2000/svg" class="w-7 h-7" fill="none" viewBox="0 0 24 24"
-                                stroke="currentColor">
-
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                    d="M12 11c0-1.657 1.343-3 3-3s3 1.343 3 3v2a3 3 0 11-6 0v-2zm0 0V9a5 5 0 0110 0v2m-10 0H6a2 2 0 00-2 2v5a2 2 0 002 2h12a2 2 0 002-2v-5a2 2 0 00-2-2h-2" />
-
-                            </svg>
-
-                        </div>
-
-                        {{-- TEXT --}}
-                        <div>
-
-                            <h3 class="text-white font-semibold text-lg">
-
-                                Aman & Terpercaya
-
-                            </h3>
-
-                            <p class="text-white/70 text-sm
-                                       mt-1 leading-relaxed">
-
-                                Data kost dan penghuni
-                                tersimpan dengan aman.
-
-                            </p>
-
-                        </div>
-
-                    </div>
-
-                </div>
 
             </div>
 
@@ -125,9 +71,7 @@
 
     </div>
 
-    {{-- ========================================================= --}}
-    {{-- RIGHT FORM --}}
-    {{-- ========================================================= --}}
+    {{-- FORM --}}
     <div class="w-full lg:w-[58%]
                h-screen overflow-y-auto
                flex items-start justify-center
@@ -143,14 +87,13 @@
 
                 <h1 class="text-4xl font-bold text-[#0F0937]">
 
-                    Daftar Akun
+                    Daftar Sebagai Admin Kost
 
                 </h1>
 
                 <p class="text-gray-500 mt-3 text-base">
 
-                    Buat akun baru untuk mulai
-                    menjelajahi KosinAJa!
+                    Daftarkan kost anda dan tunggu persetujuan super admin.
 
                 </p>
 
@@ -159,94 +102,30 @@
             {{-- ERROR --}}
             @if($errors->any())
 
-            <div class="mb-8 bg-red-50 border border-red-200
-                       rounded-2xl px-5 py-4 text-red-700">
+                <div class="mb-8 bg-red-50 border border-red-200
+                           rounded-2xl px-5 py-4 text-red-700">
 
-                <ul class="space-y-1 text-sm">
+                    <ul class="space-y-1 text-sm">
 
-                    @foreach($errors->all() as $e)
+                        @foreach($errors->all() as $e)
 
-                    <li>
-                        • {{ $e }}
-                    </li>
+                            <li>• {{ $e }}</li>
 
-                    @endforeach
+                        @endforeach
 
-                </ul>
+                    </ul>
 
-            </div>
+                </div>
 
             @endif
 
             {{-- FORM --}}
-            <script src="https://www.google.com/recaptcha/api.js" async defer></script>
-            <form method="POST">
+            <form
+                method="POST"
+                action="{{ route('register.admin') }}"
+            >
 
                 @csrf
-
-{{-- ========================================================= --}}
-{{-- PILIH ROLE --}}
-{{-- ========================================================= --}}
-<div class="mb-10">
-
-    <div class="flex items-center gap-3 mb-5">
-
-        <svg xmlns="http://www.w3.org/2000/svg"
-             class="w-5 h-5 text-[#6C8B6B]"
-             fill="none"
-             viewBox="0 0 24 24"
-             stroke="currentColor">
-
-            <path stroke-linecap="round"
-                  stroke-linejoin="round"
-                  stroke-width="2"
-                  d="M5.121 17.804A13.937 13.937 0 0112 16
-                     c2.5 0 4.847.655 6.879 1.804" />
-
-        </svg>
-
-        <h2 class="text-2xl font-semibold text-[#4F6B4F]">
-
-            Daftar Sebagai
-
-        </h2>
-
-    </div>
-
-    <select
-        name="role"
-        id="roleSelect"
-        class="w-full rounded-2xl border border-gray-200 px-5 py-4 focus:ring-2 focus:ring-[#6C8B6B]"
-    >
-
-        <option value="">
-
-            -- Pilih Role --
-
-        </option>
-
-        <option
-            value="admin"
-            @selected(old('role') == 'admin')
-        >
-
-            Admin Kost
-
-        </option>
-
-        <option
-            value="penghuni"
-            @selected(old('role') == 'penghuni')
-        >
-
-            Pencari Kost
-
-        </option>
-
-    </select>
-
-</div>
-
                 {{-- ========================================================= --}}
                 {{-- DATA ADMIN --}}
                 {{-- ========================================================= --}}
@@ -592,40 +471,4 @@ function togglePassword(id) {
 </div>
 
 @endif
-<script>
-
-const roleSelect =
-    document.getElementById(
-        'roleSelect'
-    );
-
-const kostFields =
-    document.getElementById(
-        'kostFields'
-    );
-
-function toggleKostFields()
-{
-    if (
-        roleSelect.value === 'admin'
-    )
-    {
-        kostFields.style.display =
-            'block';
-    }
-    else
-    {
-        kostFields.style.display =
-            'none';
-    }
-}
-
-roleSelect.addEventListener(
-    'change',
-    toggleKostFields
-);
-
-toggleKostFields();
-
-</script>
 @endsection

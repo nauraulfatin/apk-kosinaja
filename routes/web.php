@@ -48,8 +48,16 @@ Route::get('/register-admin-kost', [AdminKostController::class, 'create'])->name
 Route::post('/register-admin-kost', [AdminKostController::class, 'store'])->name('admin-kost.register.store');
 
 
-Route::get('/register/penghuni', [PenghuniController::class, 'create'])->name('register.penghuni');
-   Route::post('/register/penghuni', [PenghuniController::class, 'store'])->name('register.penghuni.store');
+Route::get(
+    '/register/penghuni',
+    [AuthController::class,
+    'showRegisterPenghuni']
+)->name('register.penghuni');
+Route::post(
+    '/register/penghuni',
+    [AuthController::class,
+    'registerPenghuni']
+)->name('register.penghuni.store');
    Route::get('/register/admin', [AuthController::class, 'showRegisterAdmin'])->name('register.admin');
    Route::post('/register/admin', [AuthController::class, 'registerAdmin'])->name('register.admin.store');
 

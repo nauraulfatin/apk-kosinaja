@@ -1,228 +1,455 @@
 @extends('layouts.app')
 
-@section('title', 'Daftar sebagai Penghuni — KosinAja!')
-
-@section('styles')
-<style>
-.input-field {
-    width: 100%;
-    padding: 0.75rem 1rem;
-    border: 1.5px solid #dde8dd;
-    border-radius: 0.875rem;
-    background: #ffffff;
-    color: #102313;
-    font-size: 15px;
-    font-family: 'DM Sans', sans-serif;
-    transition: border-color 0.2s, box-shadow 0.2s;
-    outline: none;
-}
-
-.input-field:focus {
-    border-color: #6C8B6B;
-    box-shadow: 0 0 0 3px rgba(108, 139, 107, 0.15);
-}
-
-.input-field::placeholder {
-    color: #9aafa9;
-}
-
-.input-label {
-    display: block;
-    font-size: 13px;
-    font-weight: 600;
-    color: #314233;
-    margin-bottom: 6px;
-    font-family: 'Plus Jakarta Sans', sans-serif;
-}
-
-.error-msg {
-    color: #c0392b;
-    font-size: 12px;
-    margin-top: 4px;
-}
-</style>
-@endsection
-
 @section('content')
 
-<section class="min-h-screen bg-[#FDFBF7] flex items-center justify-center px-4 py-16">
+<div class="h-screen bg-[#F8F5F0] flex overflow-hidden">
 
-    <div class="w-full max-w-md">
+    {{-- ========================================================= --}}
+    {{-- LEFT IMAGE --}}
+    {{-- ========================================================= --}}
+    <div class="hidden lg:block lg:w-[42%]
+                relative overflow-hidden
+                h-screen sticky top-0">
 
-        {{-- CARD --}}
-        <div class="bg-white border border-[#edf1ed] rounded-3xl shadow-sm px-10 py-10">
+        <img
+            src="{{ asset('foto-pintu.png') }}"
+            alt="Register"
+            class="absolute inset-0 w-full h-full object-cover"
+        >
 
-            {{-- HEADER --}}
-            <div class="text-center mb-8">
+        <div class="absolute inset-0
+                    bg-gradient-to-t
+                    from-black/80
+                    via-black/20
+                    to-transparent"></div>
 
-                {{-- Badge peran --}}
-                <div class="inline-flex items-center gap-2 px-4 py-1.5
-                            rounded-full bg-[#edf5ed] border border-[#c7ddc7]
-                            text-[#4a6b4a] text-xs font-semibold mb-5">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24"
-                        stroke="currentColor" stroke-width="2">
-                        <path stroke-linecap="round" stroke-linejoin="round"
-                            d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
-                    </svg>
-                    Penghuni
-                </div>
+        <div class="absolute inset-0 z-10
+                    flex flex-col justify-between
+                    p-10">
 
-                <h1 class="text-2xl font-extrabold text-[#102313] mb-1">
-                    Buat akun penghuni
+            {{-- LOGO --}}
+            <div class="flex items-center gap-3">
+
+                <img
+                    src="{{ asset('logo.png') }}"
+                    class="w-11 h-11 object-contain"
+                >
+
+                <h1 class="text-3xl font-bold text-white">
+
+                    KosinAja!
+
                 </h1>
-                <p class="text-[#526453] text-sm">
-                    Temukan kos impianmu bersama KosinAja!
+
+            </div>
+
+            {{-- TEXT --}}
+            <div>
+
+                <h2 class="text-5xl font-bold
+                           text-white leading-[1.15]">
+
+                    Temukan Kost
+                    <br>
+
+                    <span class="text-[#D6E5D6]">
+
+                        Impianmu,
+
+                    </span>
+
+                    <br>
+
+                    Lebih Mudah.
+
+                </h2>
+
+                <p class="text-white/80 text-lg
+                          leading-relaxed mt-6 max-w-md">
+
+                    Cari kost nyaman,
+                    aman, dan sesuai kebutuhanmu
+                    dengan lebih praktis.
+
                 </p>
 
             </div>
 
-            {{-- FORM --}}
-            <form method="POST" action="{{ route('register.penghuni.store') }}" class="space-y-5">
-                @csrf
-                <input type="hidden" name="role" value="penghuni">
-
-                {{-- Nama Lengkap --}}
-                <div>
-                    <label class="input-label" for="name">Nama Lengkap</label>
-                    <input type="text" id="name" name="name" class="input-field @error('name') border-red-400 @enderror"
-                        placeholder="contoh: Budi Santoso" value="{{ old('name') }}" required autofocus>
-                    @error('name')
-                    <p class="error-msg">{{ $message }}</p>
-                    @enderror
-                </div>
-
-                {{-- Email --}}
-                <div>
-                    <label class="input-label" for="email">Alamat Email</label>
-                    <input type="email" id="email" name="email"
-                        class="input-field @error('email') border-red-400 @enderror" placeholder="email@contoh.com"
-                        value="{{ old('email') }}" required>
-                    @error('email')
-                    <p class="error-msg">{{ $message }}</p>
-                    @enderror
-                </div>
-
-                {{-- Nomor WhatsApp --}}
-                <div>
-                    <label class="input-label" for="phone">Nomor WhatsApp</label>
-                    <div class="flex gap-2">
-                        <span class="flex items-center px-3 rounded-xl border border-[#dde8dd]
-                                     bg-[#f4f8f4] text-[#526453] text-sm font-medium whitespace-nowrap">
-                            +62
-                        </span>
-                        <input type="tel" id="phone" name="phone"
-                            class="input-field @error('phone') border-red-400 @enderror" placeholder="8123456789"
-                            value="{{ old('phone') }}" required>
-                    </div>
-                    @error('phone')
-                    <p class="error-msg">{{ $message }}</p>
-                    @enderror
-                </div>
-
-                {{-- Password --}}
-                <div>
-                    <label class="input-label" for="password">Kata Sandi</label>
-                    <div class="relative">
-                        <input type="password" id="password" name="password"
-                            class="input-field pr-11 @error('password') border-red-400 @enderror"
-                            placeholder="Minimal 8 karakter" required>
-                        <button type="button" onclick="togglePassword('password', this)" class="absolute right-3 top-1/2 -translate-y-1/2
-                                       text-[#9aafa9] hover:text-[#6C8B6B] transition-colors">
-                            <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" fill="none" viewBox="0 0 24 24"
-                                stroke="currentColor" stroke-width="1.8">
-                                <path stroke-linecap="round" stroke-linejoin="round"
-                                    d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
-                                <path stroke-linecap="round" stroke-linejoin="round"
-                                    d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
-                            </svg>
-                        </button>
-                    </div>
-                    @error('password')
-                    <p class="error-msg">{{ $message }}</p>
-                    @enderror
-                </div>
-
-                {{-- Konfirmasi Password --}}
-                <div>
-                    <label class="input-label" for="password_confirmation">Konfirmasi Kata Sandi</label>
-                    <div class="relative">
-                        <input type="password" id="password_confirmation" name="password_confirmation"
-                            class="input-field pr-11" placeholder="Ulangi kata sandi" required>
-                        <button type="button" onclick="togglePassword('password_confirmation', this)" class="absolute right-3 top-1/2 -translate-y-1/2
-                                       text-[#9aafa9] hover:text-[#6C8B6B] transition-colors">
-                            <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" fill="none" viewBox="0 0 24 24"
-                                stroke="currentColor" stroke-width="1.8">
-                                <path stroke-linecap="round" stroke-linejoin="round"
-                                    d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
-                                <path stroke-linecap="round" stroke-linejoin="round"
-                                    d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
-                            </svg>
-                        </button>
-                    </div>
-                </div>
-
-                {{-- Submit --}}
-                <button type="submit" class="w-full py-3.5 rounded-2xl bg-[#6C8B6B] hover:bg-[#587357]
-                               text-white font-bold text-[15px]
-                               transition-all duration-200 shadow-sm hover:shadow-md mt-2">
-                    Daftar Sekarang
-                </button>
-
-            </form>
-
-            {{-- DIVIDER --}}
-            <div class="flex items-center gap-3 my-6">
-                <div class="flex-1 h-px bg-[#edf1ed]"></div>
-                <span class="text-[#9aafa9] text-xs font-medium">atau</span>
-                <div class="flex-1 h-px bg-[#edf1ed]"></div>
-            </div>
-
-            {{-- DAFTAR SEBAGAI ADMIN --}}
-            <a href="{{ route('register.admin') }}" class="w-full flex items-center justify-center gap-2 py-3 rounded-2xl
-                      border-2 border-[#dde8dd] hover:border-[#6C8B6B]
-                      text-[#314233] hover:text-[#6C8B6B]
-                      font-semibold text-[14px] transition-all duration-200">
-                <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="none" viewBox="0 0 24 24"
-                    stroke="currentColor" stroke-width="2">
-                    <path stroke-linecap="round" stroke-linejoin="round"
-                        d="M3 12l9-9 9 9M5 10v9a1 1 0 001 1h4v-5h4v5h4a1 1 0 001-1v-9" />
-                </svg>
-                Daftar sebagai Admin / Owner
-            </a>
-
-            {{-- LOGIN LINK --}}
-            <p class="text-center mt-6 text-[13px] text-[#526453]">
-                Sudah punya akun?
-                <a href="{{ route('login') }}" class="font-bold text-[#6C8B6B] hover:text-[#102313] transition-colors">
-                    Masuk di sini
-                </a>
-            </p>
-
-        </div>
-
-        {{-- BACK LINK --}}
-        <div class="text-center mt-5">
-            <a href="{{ route('home') }}"
-                class="inline-flex items-center gap-1.5 text-sm text-[#7A9A7B] hover:text-[#314233] transition-colors">
-                <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="none" viewBox="0 0 24 24"
-                    stroke="currentColor" stroke-width="2">
-                    <path stroke-linecap="round" stroke-linejoin="round" d="M15 19l-7-7 7-7" />
-                </svg>
-                Kembali ke beranda
-            </a>
         </div>
 
     </div>
 
-</section>
+    {{-- ========================================================= --}}
+    {{-- FORM --}}
+    {{-- ========================================================= --}}
+    <div class="w-full lg:w-[58%]
+                h-screen overflow-y-auto
+                flex items-start justify-center
+                px-6 py-10">
 
+        <div class="w-full max-w-4xl
+                    bg-white rounded-[32px]
+                    border border-gray-100
+                    shadow-sm p-8 lg:p-12">
+
+            {{-- HEADER --}}
+            <div class="mb-10">
+
+                <h1 class="text-4xl font-bold text-[#0F0937]">
+
+                    Daftar Sebagai Penghuni
+
+                </h1>
+
+                <p class="text-gray-500 mt-3 text-base">
+
+                    Buat akun untuk mulai mencari kost.
+
+                </p>
+
+            </div>
+
+            {{-- ERROR --}}
+            @if($errors->any())
+
+                <div class="mb-8
+                            bg-red-50 border border-red-200
+                            rounded-2xl px-5 py-4 text-red-700">
+
+                    <ul class="space-y-1 text-sm">
+
+                        @foreach($errors->all() as $e)
+
+                            <li>• {{ $e }}</li>
+
+                        @endforeach
+
+                    </ul>
+
+                </div>
+
+            @endif
+
+            {{-- FORM --}}
+            <form
+                method="POST"
+                action="{{ route('register.penghuni.store') }}"
+            >
+
+                @csrf
+
+                {{-- ========================================================= --}}
+                {{-- DATA AKUN --}}
+                {{-- ========================================================= --}}
+                <div class="mb-10">
+
+                    <div class="flex items-center gap-3 mb-5">
+
+                        <svg xmlns="http://www.w3.org/2000/svg"
+                             class="w-5 h-5 text-[#6C8B6B]"
+                             fill="none"
+                             viewBox="0 0 24 24"
+                             stroke="currentColor">
+
+                            <path
+                                stroke-linecap="round"
+                                stroke-linejoin="round"
+                                stroke-width="2"
+                                d="M5.121 17.804A13.937 13.937 0 0112 16
+                                   c2.5 0 4.847.655 6.879 1.804
+                                   M15 11a3 3 0 11-6 0
+                                   3 3 0 016 0z"
+                            />
+
+                        </svg>
+
+                        <h2 class="text-2xl font-semibold text-[#4F6B4F]">
+
+                            Data Akun
+
+                        </h2>
+
+                    </div>
+
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
+
+                        {{-- NAMA --}}
+                        <div>
+
+                            <label class="block text-sm font-medium
+                                         text-gray-600 mb-2">
+
+                                Nama Lengkap
+
+                            </label>
+
+                            <input
+                                type="text"
+                                name="nama"
+                                placeholder="Masukkan nama lengkap"
+                                value="{{ old('nama') }}"
+                                class="w-full rounded-2xl border
+                                       border-gray-200 px-5 py-4
+                                       focus:ring-2
+                                       focus:ring-[#6C8B6B]"
+                            >
+
+                        </div>
+
+                        {{-- NIK --}}
+                        <div>
+
+                            <label class="block text-sm font-medium
+                                         text-gray-600 mb-2">
+
+                                NIK
+
+                            </label>
+
+                            <input
+                                type="text"
+                                name="nik"
+                                placeholder="Masukkan NIK"
+                                value="{{ old('nik') }}"
+                                class="w-full rounded-2xl border
+                                       border-gray-200 px-5 py-4
+                                       focus:ring-2
+                                       focus:ring-[#6C8B6B]"
+                            >
+
+                        </div>
+
+                        {{-- USERNAME --}}
+                        <div>
+
+                            <label class="block text-sm font-medium
+                                         text-gray-600 mb-2">
+
+                                Username
+
+                            </label>
+
+                            <input
+                                type="text"
+                                name="username"
+                                placeholder="Masukkan username"
+                                value="{{ old('username') }}"
+                                class="w-full rounded-2xl border
+                                       border-gray-200 px-5 py-4
+                                       focus:ring-2
+                                       focus:ring-[#6C8B6B]"
+                            >
+
+                        </div>
+
+                        {{-- NO HP --}}
+                        <div>
+
+                            <label class="block text-sm font-medium
+                                         text-gray-600 mb-2">
+
+                                Nomor WhatsApp
+
+                            </label>
+
+                            <input
+                                type="text"
+                                name="no_hp"
+                                placeholder="08xxxxxxxxxx"
+                                value="{{ old('no_hp') }}"
+                                class="w-full rounded-2xl border
+                                       border-gray-200 px-5 py-4
+                                       focus:ring-2
+                                       focus:ring-[#6C8B6B]"
+                            >
+
+                        </div>
+
+                        {{-- PASSWORD --}}
+                        <div>
+
+                            <label class="block text-sm font-medium
+                                         text-gray-600 mb-2">
+
+                                Password
+
+                            </label>
+
+                            <div class="relative">
+
+                                <input
+                                    id="password"
+                                    type="password"
+                                    name="password"
+                                    placeholder="Masukkan password"
+                                    class="w-full rounded-2xl border
+                                           border-gray-200 px-5 py-4
+                                           pr-14 focus:ring-2
+                                           focus:ring-[#6C8B6B]"
+                                >
+
+                                <button
+                                    type="button"
+                                    onclick="togglePassword('password')"
+                                    class="absolute right-5 top-1/2
+                                           -translate-y-1/2 text-gray-400"
+                                >
+
+                                    
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" fill="none"
+                                        viewBox="0 0 24 24" stroke="currentColor">
+
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                            d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5
+                                               c4.478 0 8.268 2.943 9.542 7
+                                               -1.274 4.057-5.064 7-9.542 7
+                                               -4.477 0-8.268-2.943-9.542-7z" />
+
+                                    </svg>
+
+                                </button>
+
+                            </div>
+
+                        </div>
+
+                        {{-- KONFIRMASI PASSWORD --}}
+                        <div>
+
+                            <label class="block text-sm font-medium
+                                         text-gray-600 mb-2">
+
+                                Konfirmasi Password
+
+                            </label>
+
+                            <div class="relative">
+
+                                <input
+                                    id="password_confirmation"
+                                    type="password"
+                                    name="password_confirmation"
+                                    placeholder="Ulangi password"
+                                    class="w-full rounded-2xl border
+                                           border-gray-200 px-5 py-4
+                                           pr-14 focus:ring-2
+                                           focus:ring-[#6C8B6B]"
+                                >
+
+                                <button
+                                    type="button"
+                                    onclick="togglePassword('password_confirmation')"
+                                    class="absolute right-5 top-1/2
+                                           -translate-y-1/2 text-gray-400"
+                                >
+
+                                    
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" fill="none"
+                                        viewBox="0 0 24 24" stroke="currentColor">
+
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                            d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5
+                                               c4.478 0 8.268 2.943 9.542 7
+                                               -1.274 4.057-5.064 7-9.542 7
+                                               -4.477 0-8.268-2.943-9.542-7z" />
+
+                                    </svg>
+
+                                </button>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+                {{-- ========================================================= --}}
+                {{-- RECAPTCHA --}}
+                {{-- ========================================================= --}}
+                <div class="mb-6">
+
+                    <div
+                        class="g-recaptcha"
+                        data-sitekey="{{ env('NOCAPTCHA_SITEKEY') }}"
+                    ></div>
+
+                    @if ($errors->has('g-recaptcha-response'))
+
+                        <p class="text-red-500 text-sm mt-2">
+
+                            {{ $errors->first('g-recaptcha-response') }}
+
+                        </p>
+
+                    @endif
+
+                </div>
+
+                {{-- BUTTON --}}
+                <button
+                    type="submit"
+                    class="w-full bg-[#6C8B6B]
+                           hover:bg-[#5B765A]
+                           text-white font-semibold
+                           py-5 rounded-2xl
+                           text-lg transition"
+                >
+
+                    Daftar Sekarang
+
+                </button>
+
+                {{-- LOGIN --}}
+                <div class="text-center mt-6">
+
+                    <p class="text-gray-500">
+
+                        Sudah punya akun?
+
+                        <a
+                            href="{{ route('login') }}"
+                            class="text-[#6C8B6B]
+                                   font-semibold hover:underline"
+                        >
+
+                            Masuk di sini
+
+                        </a>
+
+                    </p>
+
+                </div>
+
+            </form>
+
+        </div>
+
+    </div>
+
+</div>
+
+{{-- ========================================================= --}}
+{{-- SCRIPT --}}
+{{-- ========================================================= --}}
 <script>
-function togglePassword(id, btn) {
-    const input = document.getElementById(id);
-    const isText = input.type === 'text';
-    input.type = isText ? 'password' : 'text';
-    btn.style.opacity = isText ? '1' : '0.7';
+
+function togglePassword(id)
+{
+    const input =
+        document.getElementById(id);
+
+    input.type =
+        input.type === 'password'
+            ? 'text'
+            : 'password';
 }
+
 </script>
 
 @endsection
