@@ -36,24 +36,52 @@ class ProfilPenghuniController extends Controller
     }
 
     /*
-    |--------------------------------------------------------------------------
-    | SUBMIT KODE UNDANGAN
-    |--------------------------------------------------------------------------
-    */
+|--------------------------------------------------------------------------
+| SUBMIT KODE UNDANGAN
+|--------------------------------------------------------------------------
+*/
 
-    public function submitKode(Request $request)
-    {
+public function submitKode(Request $request)
+{
+    try {
+
+        /*
+        |--------------------------------------------------------------------------
+        | VALIDASI
+        |--------------------------------------------------------------------------
+        */
+
         $request->validate([
 
-            'kode_undangan' => 'required'
+            'kode_undangan' => 'required|string'
 
         ]);
 
-        $kost = Kost::where(
+        /*
+        |--------------------------------------------------------------------------
+        | FORMAT KODE
+        |--------------------------------------------------------------------------
+        */
 
-            'kode_undangan',
+        $kode = strtoupper(
 
-            $request->kode_undangan
+            trim(
+                $request->kode_undangan
+            )
+
+        );
+
+        /*
+        |--------------------------------------------------------------------------
+        | CEK KOST
+        |--------------------------------------------------------------------------
+        */
+
+        $kost = Kost::whereRaw(
+
+            'UPPER(TRIM(kode_undangan)) = ?',
+
+            [$kode]
 
         )->first();
 
@@ -63,58 +91,90 @@ class ProfilPenghuniController extends Controller
         |--------------------------------------------------------------------------
         */
 
-        if (!$kost) {
+        if (!$kost)
+        {
+            return response()->json([
 
-            return back()->with(
+                'success' => false,
 
-                'error',
+                'message' => 'Kode tidak ditemukan.'
 
-                'Kode undangan tidak ditemukan'
-
-            );
+            ]);
         }
 
         /*
         |--------------------------------------------------------------------------
-        | AMBIL KAMAR PERTAMA
+        | CEK SUDAH ADA PENGAJUAN
         |--------------------------------------------------------------------------
         */
 
-        $kamar = KamarKost::where(
+        $cek = RiwayatHunian::where(
 
-            'id_kost',
+                'id_user',
 
-            $kost->id
+                Auth::user()->id
 
-        )->first();
+            )
+            ->whereIn('status', [
+
+                'menunggu',
+
+                'aktif'
+
+            ])
+            ->exists();
+
+        if ($cek)
+        {
+            return response()->json([
+
+                'success' => false,
+
+                'message' => 'Kamu sudah punya pengajuan.'
+
+            ]);
+        }
 
         /*
         |--------------------------------------------------------------------------
-        | SIMPAN RIWAYAT HUNIAN
+        | SIMPAN
         |--------------------------------------------------------------------------
         */
 
         RiwayatHunian::create([
 
-            'id_user' => Auth::id(),
+            'id_user' => Auth::user()->id,
 
-            'id_kamar' => $kamar?->id_kamar,
+            'id_kost' => $kost->id,
+
+            'id_kamar' => null,
 
             'tanggal_masuk' => now(),
+
+            'tanggal_keluar' => null,
 
             'status' => 'menunggu'
 
         ]);
 
-        return back()->with(
+        return response()->json([
 
-            'success',
+            'success' => true
 
-            'Kode berhasil dikirim'
+        ]);
 
-        );
+    } catch (\Throwable $e) {
+
+        return response()->json([
+
+            'success' => false,
+
+            'message' => $e->getMessage()
+
+        ], 500);
+
     }
-
+}
     /*
     |--------------------------------------------------------------------------
     | DASHBOARD PENGHUNI

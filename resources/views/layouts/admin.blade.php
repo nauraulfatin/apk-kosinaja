@@ -104,27 +104,51 @@
                     Daftar Kamar
                 </a>
 
-                <a href="{{ route('admin.penghuni.index') }}"
-                   class="{{ $menuClass }} {{ request()->routeIs('admin.penghuni.*') ? $activeClass : $inactiveClass }}">
+                {{-- ========================================================= --}}
+{{-- PENGAJUAN PENGHUNI --}}
+{{-- ========================================================= --}}
+<a
+    href="{{ route('admin.pengajuan.index') }}"
+    class="flex items-center gap-3 px-4 py-3 rounded-xl
+           hover:bg-[#F5F7F5]
+           {{ request()->routeIs('admin.pengajuan.*')
+                ? 'bg-[#E8F0E8] text-[#4F6B4F] font-semibold'
+                : 'text-gray-600'
+           }}"
+>
 
-                    <svg xmlns="http://www.w3.org/2000/svg"
-                         class="h-5 w-5"
-                         fill="none"
-                         viewBox="0 0 24 24"
-                         stroke="currentColor">
+    👥
 
-                        <path
-                            stroke-linecap="round"
-                            stroke-linejoin="round"
-                            stroke-width="2"
-                            d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"
-                        />
+    <span>
 
-                    </svg>
+        Pengajuan Penghuni
 
-                    Penghuni
-                </a>
+    </span>
 
+</a>
+
+{{-- ========================================================= --}}
+{{-- PENGHUNI AKTIF --}}
+{{-- ========================================================= --}}
+<a
+    href="{{ route('admin.penghuni.index') }}"
+    class="flex items-center gap-3 px-4 py-3 rounded-xl
+           hover:bg-[#F5F7F5]
+           {{ request()->routeIs('admin.penghuni.*')
+                ? 'bg-[#E8F0E8] text-[#4F6B4F] font-semibold'
+                : 'text-gray-600'
+           }}"
+>
+
+    🏠
+
+    <span>
+
+        Penghuni Aktif
+
+    </span>
+
+</a>
 
                 <a href="{{ route('admin.tagihan.index') }}"
                    class="{{ $menuClass }} {{ request()->routeIs('admin.pembayaran.*') ? $activeClass : $inactiveClass }}">

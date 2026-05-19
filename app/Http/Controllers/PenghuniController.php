@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\HargaKamar;
 use App\Models\KamarKost;
+use App\Models\Kost;
 use App\Models\RiwayatHunian;
 use App\Models\Tagihan;
 use App\Models\User;

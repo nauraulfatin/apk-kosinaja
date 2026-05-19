@@ -7,6 +7,7 @@ use Illuminate\Support\Str;
 
 class Kost extends Model
 {
+    protected $primaryKey = 'id';
     protected $fillable = [
 
         'nama_kost',

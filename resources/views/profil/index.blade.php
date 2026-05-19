@@ -217,7 +217,16 @@
                      STATE 1 : BELUM PUNYA KOS (empty state)
                      Condition: user tidak punya undangan sama sekali
                      ============================================ --}}
-                @if(!auth()->user()->undangan)
+                @php
+
+    $riwayat = auth()->user()
+        ->riwayatHunian()
+        ->latest()
+        ->first();
+
+@endphp
+
+@if(!$riwayat)
 
                 <div class="flex flex-col items-center justify-center text-center py-16">
 
@@ -254,9 +263,9 @@
                      STATE 2 : MENUNGGU APPROVAL (pending)
                      Condition: punya undangan dengan status 'menunggu'
                      ============================================ --}}
-                @elseif(auth()->user()->undangan->status === 'menunggu')
+                @elseif($riwayat->status === 'menunggu')
 
-                @php $undangan = auth()->user()->undangan; @endphp
+                @php $undangan = $riwayat; @endphp
 
                 {{-- BANNER MENUNGGU APPROVAL --}}
                 <div class="flex items-start gap-4 bg-[#FFFBF0] border border-[#F5E6BB] rounded-[18px] px-6 py-5 mb-8">
@@ -282,7 +291,7 @@
                                 border-b border-[#F0F4F0]">
                         <span class="text-[14px] text-gray-500">Kode Unik</span>
                         <span class="text-[14px] font-semibold text-[#1B2B1D]">
-                            {{ $undangan->kode_unik }}
+                            {{ $undangan->kode_undangan }}
                         </span>
                     </div>
 
@@ -315,9 +324,9 @@
                      STATE 3 : DISETUJUI (approved)
                      Condition: punya undangan dengan status 'disetujui'
                      ============================================ --}}
-                @elseif(auth()->user()->undangan->status === 'disetujui')
+                @elseif($riwayat->status === 'aktif')
 
-                @php $undangan = auth()->user()->undangan; @endphp
+               @php $undangan = $riwayat; @endphp
 
                 {{-- BANNER DISETUJUI --}}
                 <div class="flex items-start gap-4 bg-[#F0FAF0] border border-[#C2E0C2] rounded-[18px] px-6 py-5 mb-8">
@@ -344,7 +353,7 @@
                                 border-b border-[#F0F4F0]">
                         <span class="text-[14px] text-gray-500">Kode Unik</span>
                         <span class="text-[14px] font-semibold text-[#1B2B1D]">
-                            {{ $undangan->kode_unik }}
+                            {{ $undangan->kode_undangan }}
                         </span>
                     </div>
 
@@ -399,7 +408,7 @@
      MODAL : KODE UNIK (8 DIGIT)
      Hanya tampil jika user belum punya undangan
      ========================================================= --}}
-@if(!auth()->user()->undangan)
+@if(!$riwayat)
 <div id="modalKodeUnik" class="hidden fixed inset-0 z-50 flex items-center justify-center
            bg-black/40 backdrop-blur-sm px-4">
     <div class="bg-white rounded-[24px] shadow-xl w-full max-w-lg p-8 relative">
@@ -435,10 +444,25 @@
 
         {{-- INPUT 8 DIGIT --}}
         <div class="flex gap-2 justify-center mb-2">
-            @for ($i = 0; $i < 8; $i++) <input type="text" maxlength="1" inputmode="numeric" pattern="[0-9]" class="kode-unik-input w-[46px] h-[52px] text-center text-[20px]
-                           font-semibold text-[#1B2B1D] border-2 border-[#E2E8E2]
-                           rounded-[12px] focus:border-[#6C8B6B] focus:outline-none
-                           transition-colors duration-200">
+            @for ($i = 0; $i < 8; $i++) <input
+    type="text"
+    maxlength="1"
+
+    class="kode-unik-input
+           uppercase
+           w-[46px] h-[52px]
+           text-center text-[20px]
+
+           font-semibold text-[#1B2B1D]
+           border-2 border-[#E2E8E2]
+
+           rounded-[12px]
+
+           focus:border-[#6C8B6B]
+           focus:outline-none
+
+           transition-colors duration-200"
+>
                 @endfor
         </div>
 
@@ -486,7 +510,7 @@
 {{-- =========================================================
      SCRIPT
      ========================================================= --}}
-@if(!auth()->user()->undangan)
+@if(!$riwayat)
 <script>
 const kodeUnikInputs = document.querySelectorAll('.kode-unik-input');
 const kodeUnikBtn = document.getElementById('btnKirimKode');
@@ -496,28 +520,151 @@ const kodeUnikPesanSukses = document.getElementById('kodeUnikPesanSukses');
 /* ── navigasi antar kotak ── */
 kodeUnikInputs.forEach((el, idx) => {
 
+    /*
+    |--------------------------------------------------------------------------
+    | INPUT
+    |--------------------------------------------------------------------------
+    */
+
     el.addEventListener('input', () => {
-        el.value = el.value.replace(/\D/g, '');
-        if (el.value && idx < kodeUnikInputs.length - 1) kodeUnikInputs[idx + 1].focus();
+
+        /*
+        |--------------------------------------------------------------------------
+        | HANYA HURUF & ANGKA
+        |--------------------------------------------------------------------------
+        */
+
+        el.value = el.value
+            .replace(/[^a-zA-Z0-9]/g, '')
+            .toUpperCase();
+
+        /*
+        |--------------------------------------------------------------------------
+        | AUTO PINDAH
+        |--------------------------------------------------------------------------
+        */
+
+        if (
+            el.value &&
+            idx < kodeUnikInputs.length - 1
+        ) {
+
+            kodeUnikInputs[idx + 1].focus();
+
+        }
+
         resetPesan();
+
         checkFilled();
+
     });
+
+    /*
+    |--------------------------------------------------------------------------
+    | BACKSPACE
+    |--------------------------------------------------------------------------
+    */
 
     el.addEventListener('keydown', e => {
-        if (e.key === 'Backspace' && !el.value && idx > 0) kodeUnikInputs[idx - 1].focus();
+
+        if (
+            e.key === 'Backspace' &&
+            !el.value &&
+            idx > 0
+        ) {
+
+            kodeUnikInputs[idx - 1].focus();
+
+        }
+
     });
 
+    /*
+    |--------------------------------------------------------------------------
+    | PASTE
+    |--------------------------------------------------------------------------
+    */
+
     el.addEventListener('paste', e => {
+
         e.preventDefault();
-        const paste = (e.clipboardData || window.clipboardData)
-            .getData('text').replace(/\D/g, '').slice(0, kodeUnikInputs.length);
+
+        /*
+        |--------------------------------------------------------------------------
+        | AMBIL TEXT
+        |--------------------------------------------------------------------------
+        */
+
+        const paste = (
+                e.clipboardData ||
+                window.clipboardData
+            )
+            .getData('text')
+
+            /*
+            |--------------------------------------------------------------------------
+            | HANYA HURUF & ANGKA
+            |--------------------------------------------------------------------------
+            */
+
+            .replace(/[^a-zA-Z0-9]/g, '')
+
+            /*
+            |--------------------------------------------------------------------------
+            | UPPERCASE
+            |--------------------------------------------------------------------------
+            */
+
+            .toUpperCase()
+
+            /*
+            |--------------------------------------------------------------------------
+            | MAX 8
+            |--------------------------------------------------------------------------
+            */
+
+            .slice(
+                0,
+                kodeUnikInputs.length
+            );
+
+        /*
+        |--------------------------------------------------------------------------
+        | ISI INPUT
+        |--------------------------------------------------------------------------
+        */
+
         [...paste].forEach((char, i) => {
-            if (kodeUnikInputs[i]) kodeUnikInputs[i].value = char;
+
+            if (kodeUnikInputs[i]) {
+
+                kodeUnikInputs[i].value = char;
+
+            }
+
         });
-        (kodeUnikInputs[paste.length] ?? kodeUnikInputs[kodeUnikInputs.length - 1]).focus();
+
+        /*
+        |--------------------------------------------------------------------------
+        | FOCUS
+        |--------------------------------------------------------------------------
+        */
+
+        (
+            kodeUnikInputs[paste.length]
+            ??
+            kodeUnikInputs[
+                kodeUnikInputs.length - 1
+            ]
+
+        ).focus();
+
         resetPesan();
+
         checkFilled();
+
     });
+
 });
 
 /* ── helpers ── */
@@ -571,64 +718,138 @@ function tutupModalKodeUnik() {
 
 /* ── submit ke server ── */
 function submitKodeUnik() {
+     alert('TEST');
+     console.log('MASUK FUNCTION');
     const kode = [...kodeUnikInputs].map(i => i.value).join('');
 
     kodeUnikBtn.disabled = true;
     kodeUnikBtn.textContent = 'Mengirim...';
 
-    fetch('{{ route("penghuni.hubungkan") }}', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-                'X-CSRF-TOKEN': '{{ csrf_token() }}',
-            },
-            body: JSON.stringify({
-                kode
-            }),
-        })
-        .then(res => res.json())
-        .then(data => {
-            kodeUnikBtn.textContent = 'Kirim kode unik';
+    console.log(kode);
+   fetch('/hubungkan-kode', {
 
-            if (data.success) {
-                /* ✅ kode benar — tampilkan pesan sukses lalu reload halaman
-                   agar state berganti ke "Menunggu Approval"             */
-                kodeUnikPesanError.classList.add('hidden');
-                kodeUnikPesanSukses.classList.remove('hidden');
-                kodeUnikPesanSukses.classList.add('flex');
-                kodeUnikInputs.forEach(i => {
-                    i.classList.remove('border-[#E2E8E2]', 'border-red-400');
-                    i.classList.add('border-[#4B8A4B]');
-                    i.disabled = true;
-                });
-                kodeUnikBtn.classList.replace('bg-[#6C8B6B]', 'bg-[#D1DDD1]');
-                kodeUnikBtn.classList.remove('hover:bg-[#587357]');
-                kodeUnikBtn.classList.add('cursor-not-allowed');
+        method: 'POST',
 
-                /* Reload setelah 1.5 detik agar user sempat baca pesan */
-                setTimeout(() => {
-                    window.location.reload();
-                }, 1500);
+        headers: {
 
-            } else {
-                /* ❌ kode salah */
-                kodeUnikPesanSukses.classList.add('hidden');
-                kodeUnikPesanError.classList.remove('hidden');
-                kodeUnikPesanError.classList.add('flex');
-                kodeUnikInputs.forEach(i => {
-                    i.classList.remove('border-[#E2E8E2]', 'border-[#4B8A4B]');
-                    i.classList.add('border-red-400');
-                });
-                checkFilled(); /* aktifkan tombol lagi agar bisa retry */
-            }
-        })
-        .catch(() => {
-            kodeUnikBtn.textContent = 'Kirim kode unik';
+            'Content-Type': 'application/json',
+
+            'X-CSRF-TOKEN': '{{ csrf_token() }}',
+
+        },
+
+        body: JSON.stringify({
+
+            kode_undangan: kode
+
+        }),
+
+    })
+
+    .then(res => res.json())
+
+    .then(data => {
+
+        console.log(data);
+
+        /*
+        |--------------------------------------------------------------------------
+        | SUCCESS
+        |--------------------------------------------------------------------------
+        */
+
+        if (data.success)
+        {
+            /*
+            |--------------------------------------------------------------------------
+            | TAMPIL SUCCESS
+            |--------------------------------------------------------------------------
+            */
+
+            kodeUnikPesanError.classList.add('hidden');
+
+            kodeUnikPesanSukses.classList.remove('hidden');
+
+            kodeUnikPesanSukses.classList.add('flex');
+
+            /*
+            |--------------------------------------------------------------------------
+            | BORDER HIJAU
+            |--------------------------------------------------------------------------
+            */
+
+            kodeUnikInputs.forEach(i => {
+
+                i.classList.remove(
+
+                    'border-[#E2E8E2]',
+                    'border-red-400'
+
+                );
+
+                i.classList.add('border-[#4B8A4B]');
+
+                i.disabled = true;
+
+            });
+
+            /*
+            |--------------------------------------------------------------------------
+            | BUTTON
+            |--------------------------------------------------------------------------
+            */
+
+            kodeUnikBtn.textContent =
+                'Berhasil';
+
+            kodeUnikBtn.disabled = true;
+
+            /*
+            |--------------------------------------------------------------------------
+            | RELOAD
+            |--------------------------------------------------------------------------
+            */
+
+            setTimeout(() => {
+
+                window.location.reload();
+
+            }, 700);
+
+        }
+
+        /*
+        |--------------------------------------------------------------------------
+        | GAGAL
+        |--------------------------------------------------------------------------
+        */
+
+        else
+        {
             kodeUnikPesanSukses.classList.add('hidden');
+
             kodeUnikPesanError.classList.remove('hidden');
+
             kodeUnikPesanError.classList.add('flex');
-            checkFilled();
-        });
+
+            kodeUnikBtn.disabled = false;
+
+            kodeUnikBtn.textContent =
+                'Kirim kode unik';
+        }
+
+    })
+
+    .catch((err) => {
+
+        console.log(err);
+
+        kodeUnikBtn.disabled = false;
+
+        kodeUnikBtn.textContent =
+            'Kirim kode unik';
+
+    });
 }
 </script>
 @endif

@@ -34,6 +34,8 @@ class RiwayatHunian extends Model
 
         'id_user',
 
+        'id_kost',
+
         'id_kamar',
 
         'tanggal_masuk',
@@ -71,6 +73,25 @@ class RiwayatHunian extends Model
             User::class,
 
             'id_user',
+
+            'id'
+
+        );
+    }
+
+    /*
+    |--------------------------------------------------------------------------
+    | KOST
+    |--------------------------------------------------------------------------
+    */
+
+    public function kost()
+    {
+        return $this->belongsTo(
+
+            Kost::class,
+
+            'id_kost',
 
             'id'
 

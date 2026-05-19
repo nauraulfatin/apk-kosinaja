@@ -10,8 +10,8 @@ use App\Http\Controllers\PeriodePenagihanController;
 use App\Http\Controllers\SuperAdminController;
 use App\Http\Controllers\TagihanController;
 use App\Http\Controllers\AturanKosController;
+use App\Http\Controllers\Admin\PengajuanPenghuniController;
 use App\Http\Controllers\ProfilPenghuniController;
-use App\Http\Controllers\PengajuanSewaController;
 
 /*
 |--------------------------------------------------------------------------
@@ -73,7 +73,10 @@ Route::middleware('auth')->group(function () {
         '/ganti-password-awal',
         [AuthController::class, 'forceChangePassword']
     )->name('password.force.store');
-
+Route::post(
+    '/hubungkan-kode',
+    [ProfilPenghuniController::class, 'submitKode']
+)->name('penghuni.hubungkan.kode');
 });
 
 
@@ -196,6 +199,42 @@ Route::middleware([
         '/kost',
         [AdminKostController::class, 'updateKost']
     )->name('kost.update');
+
+     Route::get(
+
+            '/pengajuan-penghuni',
+
+            [PengajuanPenghuniController::class, 'index']
+
+        )->name('pengajuan.index');
+
+        /*
+|--------------------------------------------------------------------------
+| DETAIL PENGAJUAN
+|--------------------------------------------------------------------------
+*/
+
+Route::get(
+
+    '/pengajuan-penghuni/{riwayatHunian}',
+
+    [PengajuanPenghuniController::class, 'show']
+
+)->name('pengajuan.show');
+
+/*
+|--------------------------------------------------------------------------
+| APPROVE PENGAJUAN
+|--------------------------------------------------------------------------
+*/
+
+Route::put(
+
+    '/pengajuan-penghuni/{riwayatHunian}/approve',
+
+    [PengajuanPenghuniController::class, 'approve']
+
+)->name('pengajuan.approve');
 
     /*
     |--------------------------------------------------------------------------

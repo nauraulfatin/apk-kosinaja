@@ -13,7 +13,6 @@ use App\Models\Aduan;
 class User extends Authenticatable
 {
     use HasFactory, Notifiable;
-
     protected $fillable = [
 
         'username',
