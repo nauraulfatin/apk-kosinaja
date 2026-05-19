@@ -993,55 +993,6 @@ $pesanWa = urlencode('Halo, saya tertarik dengan kost ' . $kost->nama_kost . '. 
                 </div>
             </div>
 
-            {{-- FORM AJUKAN SEWA --}}
-            <div class="booking-card">
-                <div class="booking-title">Ajukan Sewa</div>
-
-                @if(session('success'))
-                <div class="booking-success">{{ session('success') }}</div>
-                @endif
-
-                @if($errors->any())
-                <div class="booking-alert">{{ $errors->first() }}</div>
-                @endif
-
-                <form action="{{ route('penghuni.pengajuan.store') }}" method="POST">
-                    @csrf
-
-                    {{-- Pilih Kamar --}}
-                    <div class="booking-group">
-                        <label class="booking-label">Pilih Kamar</label>
-                        <select name="id_kamar" class="booking-select" id="kamarSelect" required>
-                            <option value="">-- Pilih Kamar --</option>
-                            @foreach($kost->kamars as $kamar)
-                            <option value="{{ $kamar->id_kamar }}">{{ $kamar->nama_kamar }}</option>
-                            @endforeach
-                        </select>
-                    </div>
-
-                    {{-- Pilih Periode --}}
-                    <div class="booking-group">
-                        <label class="booking-label">Pilih Periode Sewa</label>
-                        <select name="id_harga_kamar" class="booking-select" id="hargaSelect" required>
-                            <option value="">-- Pilih Periode --</option>
-                        </select>
-                    </div>
-
-                    {{-- Tanggal Masuk --}}
-                    <div class="booking-group">
-                        <label class="booking-label">Tanggal Masuk</label>
-                        <input type="date" name="tanggal_masuk" class="booking-input" required>
-                    </div>
-
-                    {{-- Tanggal Keluar --}}
-                    <div class="booking-group">
-                        <label class="booking-label">Tanggal Keluar</label>
-                        <input type="date" name="tanggal_keluar" class="booking-input" required>
-                    </div>
-
-                    <button type="submit" class="booking-button">Ajukan Sewa</button>
-                </form>
-            </div>
 
             {{-- PEMILIK CARD --}}
             @if($pemilik)

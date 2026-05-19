@@ -457,4 +457,6 @@ Route::middleware('auth')->group(function () {
         }
     )->name('profil.index');
 
+Route::post('/penghuni/hubungkan', [PenghuniController::class, 'hubungkan'])->name('penghuni.hubungkan');
+
 });
