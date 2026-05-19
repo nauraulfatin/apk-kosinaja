@@ -128,18 +128,4 @@ class User extends Authenticatable
             'id_kost'
         );
     }
-
-    /*
-    |--------------------------------------------------------------------------
-    | PENGAJUAN SEWA
-    |--------------------------------------------------------------------------
-    */
-
-    public function pengajuanSewas()
-    {
-        return $this->hasMany(
-            PengajuanSewa::class,
-            'id_user'
-        );
-    }
 }

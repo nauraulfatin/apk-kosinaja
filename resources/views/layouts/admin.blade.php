@@ -125,6 +125,7 @@
                     Penghuni
                 </a>
 
+
                 <a href="{{ route('admin.tagihan.index') }}"
                    class="{{ $menuClass }} {{ request()->routeIs('admin.pembayaran.*') ? $activeClass : $inactiveClass }}">
 
