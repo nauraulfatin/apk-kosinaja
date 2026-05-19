@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 class PeriodePenagihan extends Model
 {
     protected $table = 'periode_penagihans';
-    protected $primaryKey = 'id_penagihan';
+    protected $primaryKey = 'id_periode';
     protected $fillable = ['periode_penagihan', 'jumlah_interval', 'satuan_interval'];
 
     public function getLabelLengkapAttribute(): string
