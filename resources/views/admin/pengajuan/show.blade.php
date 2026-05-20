@@ -139,7 +139,9 @@
                 @csrf
                 @method('PUT')
 
-                {{-- KAMAR --}}
+                {{-- ========================================================= --}}
+                {{-- PILIH KAMAR --}}
+                {{-- ========================================================= --}}
                 <div>
 
                     <label
@@ -154,6 +156,7 @@
 
                     <select
                         name="id_kamar"
+                        id="kamarSelect"
                         required
                         class="w-full border
                                border-gray-300
@@ -174,7 +177,7 @@
 
                                 {{ $k->nomor_kamar }}
                                 -
-                                {{ ucfirst($k->status) }}
+                                {{ ucfirst($k->status_label) }}
 
                             </option>
 
@@ -184,7 +187,9 @@
 
                 </div>
 
+                {{-- ========================================================= --}}
                 {{-- TANGGAL --}}
+                {{-- ========================================================= --}}
                 <div class="grid grid-cols-2 gap-6">
 
                     <div>
@@ -235,7 +240,9 @@
 
                 </div>
 
-                {{-- PERIODE --}}
+                {{-- ========================================================= --}}
+                {{-- HARGA KAMAR --}}
+                {{-- ========================================================= --}}
                 <div>
 
                     <label
@@ -244,12 +251,13 @@
                                mb-2"
                     >
 
-                        Periode Tagihan
+                        Pilih Harga Kamar
 
                     </label>
 
                     <select
-                        name="id_periode"
+                        name="id_harga_kamar"
+                        id="hargaSelect"
                         required
                         class="w-full border
                                border-gray-300
@@ -258,17 +266,22 @@
 
                         <option value="">
 
-                            -- Pilih Periode --
+                            -- Pilih Harga --
 
                         </option>
 
-                        @foreach($periodes as $p)
+                        @foreach($hargaKamars as $h)
 
                             <option
-                                value="{{ $p->periode_penagihan }}"
+                                value="{{ $h->id_harga_kamar }}"
+                                data-kamar="{{ $h->id_kamar }}"
+                                class="harga-option"
+                                hidden
                             >
 
-                                {{ $p->periode }}
+                                Rp {{ number_format($h->harga,0,',','.') }}
+                                /
+                                {{ $h->periode->periode_penagihan }}
 
                             </option>
 
@@ -278,7 +291,9 @@
 
                 </div>
 
+                {{-- ========================================================= --}}
                 {{-- JATUH TEMPO --}}
+                {{-- ========================================================= --}}
                 <div>
 
                     <label
@@ -287,34 +302,70 @@
                                mb-2"
                     >
 
-                        Tanggal Jatuh Tempo
+                        Jatuh Tempo Setelah (Hari)
 
                     </label>
 
                     <input
-                        type="date"
-                        name="jatuh_tempo"
+                        type="number"
+                        name="jatuh_tempo_hari"
+                        min="1"
+                        max="31"
+                        value="5"
                         required
                         class="w-full border
                                border-gray-300
                                rounded-xl px-4 py-3"
                     >
 
+                    <p class="text-sm text-gray-400 mt-2">
+
+                        Contoh:
+                        5 = tagihan jatuh tempo
+                        5 hari setelah periode dimulai
+
+                    </p>
+
                 </div>
 
-                {{-- BUTTON --}}
-                <button
-                    type="submit"
-                    class="bg-[#6C8B6B]
-                           hover:bg-[#5B765A]
-                           text-white px-8 py-4
-                           rounded-xl font-semibold
-                           transition"
-                >
+                {{-- ========================================================= --}}
+                {{-- ACTION --}}
+                {{-- ========================================================= --}}
+                <div class="flex flex-wrap gap-4 pt-4">
 
-                    Approve Penghuni
+                    {{-- APPROVE --}}
+                    <button
+                        type="submit"
+                        name="status"
+                        value="aktif"
+                        class="bg-[#6C8B6B]
+                               hover:bg-[#5B765A]
+                               text-white px-8 py-4
+                               rounded-xl font-semibold
+                               transition"
+                    >
 
-                </button>
+                        Approve Penghuni
+
+                    </button>
+
+                    {{-- ANTRIAN --}}
+                    <button
+                        type="submit"
+                        name="status"
+                        value="antrian"
+                        class="bg-[#E8B44D]
+                               hover:bg-[#D89D28]
+                               text-white px-8 py-4
+                               rounded-xl font-semibold
+                               transition"
+                    >
+
+                        Masukkan Antrian
+
+                    </button>
+
+                </div>
 
             </form>
 
@@ -323,5 +374,65 @@
     </div>
 
 </div>
+
+{{-- ========================================================= --}}
+{{-- FILTER HARGA BERDASARKAN KAMAR --}}
+{{-- ========================================================= --}}
+<script>
+
+    const kamarSelect = document.getElementById(
+        'kamarSelect'
+    );
+
+    const hargaSelect = document.getElementById(
+        'hargaSelect'
+    );
+
+    const hargaOptions = document.querySelectorAll(
+        '.harga-option'
+    );
+
+    kamarSelect.addEventListener(
+
+        'change',
+
+        function ()
+        {
+            const kamarId = this.value;
+
+            /*
+            |--------------------------------------------------------------------------
+            | RESET
+            |--------------------------------------------------------------------------
+            */
+
+            hargaSelect.value = '';
+
+            /*
+            |--------------------------------------------------------------------------
+            | FILTER HARGA
+            |--------------------------------------------------------------------------
+            */
+
+            hargaOptions.forEach(option => {
+
+                if (
+                    option.dataset.kamar === kamarId
+                )
+                {
+                    option.hidden = false;
+                }
+                else
+                {
+                    option.hidden = true;
+                }
+
+            });
+
+        }
+
+    );
+
+</script>
 
 @endsection

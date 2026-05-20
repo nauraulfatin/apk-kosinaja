@@ -1,300 +1,279 @@
 @extends('layouts.penghuni')
-
 @section('content')
-
 @php
 
 $periode =
-$tagihanAktif->first()?->hargaKamar?->periode;
+    $tagihanAktif->first()?->hargaKamar?->periode;
 
 @endphp
 
-{{-- ========================================================= --}}
-{{-- HEADER --}}
-{{-- ========================================================= --}}
 <div class="mb-8">
+    <div class="flex items-center justify-between">
+        <div>
+            <h1 class="text-3xl font-bold text-[#0F0937]">
+                Pembayaran Saya
+            </h1>
+            <p class="text-gray-500 mt-2">
+                Kelola tagihan dan pembayaran kost anda.
+            </p>
+        </div>
 
-    <h1 class="text-3xl font-bold text-[#0F0937]">
+        {{-- BUTTON BAYAR --}}
+        <button
+            onclick="openModal()"
+            class="bg-[#6C8B6B]
+                   hover:bg-[#5B765A]
+                   text-white px-5 py-3
+                   rounded-2xl
+                   font-semibold transition"
+        >
 
-        Pembayaran Saya
+            + Bayar Tagihan
 
-    </h1>
-
-    <p class="text-gray-500 mt-2">
-
-        Lihat tagihan kost dan upload bukti pembayaran.
-
-    </p>
-
-    @if($periode)
-
-    <div class="mt-4 inline-flex items-center
-               gap-2 bg-white border border-gray-200
-               px-5 py-3 rounded-2xl">
-
-        <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 text-[#6C8B6B]" fill="none" viewBox="0 0 24 24"
-            stroke="currentColor">
-
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                d="M8 7V3m8 4V3m-9 8h10m-11 9h12a2 2 0 002-2V7a2 2 0 00-2-2H6a2 2 0 00-2 2v11a2 2 0 002 2z" />
-
-        </svg>
-
-        <span class="text-sm font-semibold text-[#0F0937]">
-
-            Pembayaran setiap
-            {{ $periode->jumlah_interval }}
-            {{ $periode->satuan_interval }}
-
-        </span>
-
+        </button>
     </div>
 
-    @endif
+    {{-- MENU --}}
+    <div
+        class="mt-8 flex items-center
+               gap-10 border-b"
+    >
 
+        <a
+            href="{{ route('penghuni.pembayaran.index') }}"
+            class="pb-4 text-lg font-semibold
+                   border-b-2 border-[#6C8B6B]
+                   text-[#6C8B6B]"
+        >
+            Tagihan
+
+        </a>
+
+        <a
+            href="{{ route('penghuni.riwayat-pembayaran') }}"
+            class="pb-4 text-lg font-semibold
+                   text-gray-400 hover:text-[#6C8B6B]"
+        >
+
+            Riwayat Pembayaran
+
+        </a>
+    </div>
 </div>
 
 {{-- ========================================================= --}}
 {{-- TABLE --}}
 {{-- ========================================================= --}}
-<div class="bg-white rounded-3xl shadow-sm
-           border border-gray-100 overflow-hidden">
-
-    <div class="overflow-x-auto">
-
+<div
+    class="bg-white rounded-3xl
+           shadow-sm border
+           border-gray-100 overflow-hidden"
+>
+   <div class="overflow-x-auto">
         <table class="w-full">
-
             <thead class="bg-[#F8F5F0]">
-
                 <tr>
-
                     <th class="px-6 py-4 text-left text-sm font-semibold text-gray-600">
-
                         Periode
-
                     </th>
-
                     <th class="px-6 py-4 text-left text-sm font-semibold text-gray-600">
-
-                        Harga
-
+                        Tagihan
                     </th>
-
                     <th class="px-6 py-4 text-left text-sm font-semibold text-gray-600">
-
                         Jatuh Tempo
-
                     </th>
-
                     <th class="px-6 py-4 text-left text-sm font-semibold text-gray-600">
-
                         Status
-
                     </th>
-
-                    <th class="px-6 py-4 text-left text-sm font-semibold text-gray-600">
-
-                        Pembayaran
-
-                    </th>
-
                 </tr>
-
             </thead>
-
             <tbody class="divide-y divide-gray-100">
-
                 @forelse($tagihanAktif as $i)
+                @php
 
-                <tr class="align-middle hover:bg-gray-50">
+                    /*
+                    |--------------------------------------------------------------------------
+                    | TOTAL DIBAYAR
+                    |--------------------------------------------------------------------------
+                    */
 
+                    $totalDibayar =
+    $i->pembayaran
+        ->where(
+            'status_validasi',
+            'diterima'
+        )
+        ->sum(
+            'nominal_pembayaran'
+        );
+
+                    /*
+                    |--------------------------------------------------------------------------
+                    | TOTAL TAGIHAN
+                    |--------------------------------------------------------------------------
+                    */
+
+                    $totalTagihan =
+                        $i->hargaKamar?->harga ?? 0;
+
+                    /*
+                    |--------------------------------------------------------------------------
+                    | SISA
+                    |--------------------------------------------------------------------------
+                    */
+
+                    $sisa =
+                        $totalTagihan - $totalDibayar;
+
+                    /*
+                    |--------------------------------------------------------------------------
+                    | ADA MENUNGGU
+                    |--------------------------------------------------------------------------
+                    */
+
+                    $adaMenunggu =
+                        $i->status_label === 'menunggu_verifikasi';
+
+                @endphp
+
+                <tr class="hover:bg-gray-50 align-middle">
+
+                    {{-- ========================================================= --}}
                     {{-- PERIODE --}}
-                    <td class="px-6 py-4 min-w-[200px]">
-
-                        <div class="font-medium text-[#0F0937]">
-
-                            {{ $i->tanggal_mulai->format('d/m/Y') }}
-
+                    {{-- ========================================================= --}}
+                    <td class="px-6 py-5 min-w-[220px]">
+                        <div class="font-semibold text-[#0F0937]">
+                            {{ $i->tanggal_mulai->format('d M Y') }}
                         </div>
+                        <div class="text-sm text-gray-400 my-1">sampai</div>
 
-                        <div class="text-gray-400 text-sm">
+                        <div class="font-semibold text-[#0F0937]">
 
-                            sampai
-
-                        </div>
-
-                        <div class="font-medium text-[#0F0937]">
-
-                            {{ $i->tanggal_selesai->format('d/m/Y') }}
+                            {{ $i->tanggal_selesai->format('d M Y') }}
 
                         </div>
 
                     </td>
 
-                    {{-- HARGA --}}
-                    <td class="px-6 py-4 min-w-[180px]">
+                    {{-- ========================================================= --}}
+                    {{-- TAGIHAN --}}
+                    {{-- ========================================================= --}}
+                    <td class="px-6 py-5 min-w-[260px]">
 
-                        <div class="text-2xl font-bold text-[#0F0937]">
+                        <div class="text-3xl font-bold text-[#0F0937]">
 
                             Rp
-                            {{ number_format($i->hargaKamar?->harga,0,',','.') }}
+                            {{ number_format($totalTagihan,0,',','.') }}
+
+                        </div>
+
+                        <div class="mt-3 text-sm text-gray-500">
+
+                            Sudah dibayar:
+                            Rp
+                            {{ number_format($totalDibayar,0,',','.') }}
+
+                        </div>
+
+                        <div class="mt-1 text-sm font-semibold text-red-500">
+
+                            Sisa:
+                            Rp
+                            {{ number_format($sisa,0,',','.') }}
 
                         </div>
 
                     </td>
 
+                    {{-- ========================================================= --}}
                     {{-- JATUH TEMPO --}}
-                    <td class="px-6 py-4 min-w-[160px]">
+                    {{-- ========================================================= --}}
+                    <td class="px-6 py-5 min-w-[180px]">
 
-                        <div class="font-medium text-[#0F0937]">
+                        <div class="font-semibold text-[#0F0937]">
 
-                            {{ $i->tanggal_jatuh_tempo?->format('d/m/Y') ?? '-' }}
+                            {{ $i->tanggal_jatuh_tempo?->format('d M Y') ?? '-' }}
 
                         </div>
 
                     </td>
 
+                    {{-- ========================================================= --}}
                     {{-- STATUS --}}
-                    <td class="px-6 py-4 min-w-[170px]">
+                    {{-- ========================================================= --}}
+                    <td class="px-6 py-5 min-w-[220px]">
 
-                        @if(
-                        $i->status === 'pending' &&
-                        $i->status_bukti === 'belum_upload'
-                        )
+                        @if($i->status_label === 'lunas')
 
-                        <span class="px-3 py-1.5 rounded-full
-                                   bg-gray-100 text-gray-700
-                                   text-sm font-semibold">
-
-                            Belum Bayar
-
-                        </span>
-
-                        @elseif(
-                        $i->status === 'pending' &&
-                        $i->status_bukti === 'menunggu'
-                        )
-
-                        <span class="px-3 py-1.5 rounded-full
-                                   bg-yellow-100 text-yellow-700
-                                   text-sm font-semibold">
-
-                            Menunggu Verifikasi
-
-                        </span>
-
-                        @elseif(
-                        $i->status === 'pending' &&
-                        $i->status_bukti === 'ditolak'
-                        )
-
-                        <span class="px-3 py-1.5 rounded-full
-                                   bg-red-100 text-red-700
-                                   text-sm font-semibold">
-
-                            Ditolak
-
-                        </span>
-
-                        @elseif($i->status === 'lunas')
-
-                        <span class="px-3 py-1.5 rounded-full
-                                   bg-green-100 text-green-700
-                                   text-sm font-semibold">
+                        <div
+                            class="inline-flex px-4 py-2
+                                   rounded-full
+                                   bg-green-100
+                                   text-green-700
+                                   text-sm font-semibold"
+                        >
 
                             Lunas
 
-                        </span>
+                        </div>
 
-                        @elseif($i->status === 'telat')
+                        @elseif($i->status_label === 'telat')
 
-                        <span class="px-3 py-1.5 rounded-full
-                                   bg-red-100 text-red-700
-                                   text-sm font-semibold">
+                        <div
+                            class="inline-flex px-4 py-2
+                                   rounded-full
+                                   bg-red-100
+                                   text-red-700
+                                   text-sm font-semibold"
+                        >
 
                             Telat
 
-                        </span>
+                        </div>
 
-                        @endif
+                        @elseif($i->status_label === 'menunggu_verifikasi')
 
-                    </td>
+                        <div class="space-y-2">
 
-                    {{-- PEMBAYARAN --}}
-                    <td class="px-6 py-4 min-w-[320px]">
+                            <div
+                                class="inline-flex px-4 py-2
+                                       rounded-full
+                                       bg-yellow-100
+                                       text-yellow-700
+                                       text-sm font-semibold"
+                            >
 
-                        {{-- SUDAH UPLOAD --}}
-                        @if(
-                        $i->pembayaran &&
-                        $i->status_bukti !== 'ditolak'
-                        )
+                                Menunggu Verifikasi
 
-                        <div class="bg-[#F8F5F0]
-                                   rounded-2xl p-4">
+                            </div>
 
-                            <p class="text-sm text-gray-600 mb-4">
+                            <div class="text-xs text-gray-500">
 
-                                Bukti pembayaran sudah diupload.
-
-                            </p>
-
-                            {{-- PREVIEW --}}
-                            <div class="relative group w-fit">
-
-                                <img src="{{ asset('storage/' . $i->pembayaran->bukti_bayar) }}" class="w-32 h-32 object-cover rounded-2xl
-                                           border border-gray-200 cursor-pointer" onclick="
-                                        document.getElementById(
-                                            'modal-{{ $i->id_tagihan }}'
-                                        ).classList.remove('hidden')
-                                    ">
-
-                                <div class="absolute inset-0 bg-black/40
-                                           rounded-2xl opacity-0
-                                           group-hover:opacity-100
-                                           transition flex items-center
-                                           justify-center cursor-pointer" onclick="
-                                        document.getElementById(
-                                            'modal-{{ $i->id_tagihan }}'
-                                        ).classList.remove('hidden')
-                                    ">
-
-                                    <span class="text-white text-sm font-semibold">
-
-                                        Preview
-
-                                    </span>
-
-                                </div>
+                                Pembayaran sedang dicek admin
 
                             </div>
 
                         </div>
 
-                        {{-- MODAL --}}
-                        <div id="modal-{{ $i->id_tagihan }}" class="fixed inset-0 bg-black/70
-                                   hidden z-50 flex items-center
-                                   justify-center p-6">
+                        @elseif($i->status_label === 'ditolak')
 
-                            <div class="relative">
+                        <div class="space-y-2">
 
-                                {{-- CLOSE --}}
-                                <button type="button" onclick="
-                                        document.getElementById(
-                                            'modal-{{ $i->id_tagihan }}'
-                                        ).classList.add('hidden')
-                                    " class="absolute -top-4 -right-4
-                                           w-10 h-10 rounded-full
-                                           bg-white text-black
-                                           flex items-center
-                                           justify-center shadow-lg">
+                            <div
+                                class="inline-flex px-4 py-2
+                                       rounded-full
+                                       bg-red-100
+                                       text-red-700
+                                       text-sm font-semibold"
+                            >
 
-                                    ✕
+                                Pembayaran Ditolak
 
-                                </button>
+                            </div>
 
-                                {{-- IMAGE --}}
-                                <img src="{{ asset('storage/' . $i->pembayaran->bukti_bayar) }}" class="max-w-[90vw] max-h-[85vh]
-                                           rounded-3xl shadow-2xl">
+                            <div class="text-xs text-gray-500">
+
+                                Silahkan upload ulang pembayaran
 
                             </div>
 
@@ -302,87 +281,34 @@ $tagihanAktif->first()?->hargaKamar?->periode;
 
                         @else
 
-                        {{-- FORM --}}
-                        <form method="POST" enctype="multipart/form-data"
-                            action="{{ route('penghuni.pembayaran.store') }}" class="space-y-3">
+                        <div class="space-y-2">
 
-                            @csrf
+                            <div
+                                class="inline-flex px-4 py-2
+                                       rounded-full
+                                       bg-gray-100
+                                       text-gray-700
+                                       text-sm font-semibold"
+                            >
 
-                            <input type="hidden" name="id_tagihan" value="{{ $i->id_tagihan }}">
-
-                            {{-- INPUT --}}
-                            <div>
-
-                                <label for="bukti-{{ $i->id_tagihan }}" class="border-2 border-dashed
-                                           border-gray-300
-                                           rounded-2xl p-4
-                                           flex flex-col items-center
-                                           justify-center cursor-pointer
-                                           hover:border-[#6C8B6B]
-                                           transition relative">
-
-                                    {{-- PREVIEW --}}
-                                    <div class="preview-wrapper hidden w-full">
-
-                                        <div class="relative w-fit mx-auto">
-
-                                            <img class="preview-image
-                                                       w-28 h-28 object-cover
-                                                       rounded-2xl border border-gray-200">
-
-                                            {{-- REMOVE --}}
-                                            <button type="button" class="remove-image
-                                                       absolute -top-2 -right-2
-                                                       w-7 h-7 rounded-full
-                                                       bg-red-500 text-white
-                                                       flex items-center
-                                                       justify-center
-                                                       text-sm shadow-lg">
-
-                                                ✕
-
-                                            </button>
-
-                                        </div>
-
-                                    </div>
-
-                                    {{-- PLACEHOLDER --}}
-                                    <div class="upload-placeholder text-center">
-
-                                        <p class="font-semibold text-[#0F0937]">
-
-                                            Upload bukti pembayaran
-
-                                        </p>
-
-                                        <p class="text-sm text-gray-400 mt-1">
-
-                                            JPG, PNG, JPEG
-
-                                        </p>
-
-                                    </div>
-
-                                    {{-- INPUT --}}
-                                    <input id="bukti-{{ $i->id_tagihan }}" type="file" name="bukti_bayar"
-                                        accept="image/*" class="hidden payment-input" required>
-
-                                </label>
+                                Belum Lunas
 
                             </div>
 
-                            {{-- BUTTON --}}
-                            <button type="submit" class="w-full bg-[#6C8B6B]
-                                       hover:bg-[#5B765A]
-                                       text-white py-3 rounded-2xl
-                                       font-semibold transition">
+                            @if($totalDibayar > 0)
 
-                                Bayar Sekarang
+                            <div
+                                class="text-xs text-[#6C8B6B]
+                                       font-semibold"
+                            >
 
-                            </button>
+                                Pembayaran dicicil
 
-                        </form>
+                            </div>
+
+                            @endif
+
+                        </div>
 
                         @endif
 
@@ -394,7 +320,10 @@ $tagihanAktif->first()?->hargaKamar?->periode;
 
                 <tr>
 
-                    <td colspan="5" class="px-6 py-10 text-center text-gray-500">
+                    <td
+                        colspan="5"
+                        class="px-6 py-10 text-center text-gray-500"
+                    >
 
                         Belum ada tagihan.
 
@@ -413,173 +342,248 @@ $tagihanAktif->first()?->hargaKamar?->periode;
 </div>
 
 {{-- ========================================================= --}}
-{{-- PREVIEW --}}
+{{-- MODAL BAYAR --}}
 {{-- ========================================================= --}}
-<script>
-document.querySelectorAll('.payment-input')
-    .forEach(input => {
+<div
+    id="modal-bayar"
+    class="fixed inset-0 bg-black/40
+           hidden items-center justify-center
+           z-50"
+>
 
-        input.addEventListener('change', function(e) {
+    <div
+        class="bg-white rounded-3xl
+               w-full max-w-xl p-8 relative"
+    >
 
-            const file = e.target.files[0];
+        {{-- CLOSE --}}
+        <button
+            onclick="closeModal()"
+            class="absolute top-5 right-5
+                   text-gray-400 hover:text-black"
+        >
 
-            if (!file) return;
+            ✕
 
-            const wrapper =
-                this.closest('label');
+        </button>
 
-            const previewWrapper =
-                wrapper.querySelector('.preview-wrapper');
+        <h2
+            class="text-2xl font-bold
+                   text-[#0F0937]"
+        >
 
-            const previewImage =
-                wrapper.querySelector('.preview-image');
+            Bayar Tagihan
 
-            const placeholder =
-                wrapper.querySelector('.upload-placeholder');
+        </h2>
 
-            const reader = new FileReader();
+        <p class="text-gray-500 mt-2">
 
-            reader.onload = function(ev) {
+            Upload pembayaran tagihan kost anda.
 
-                previewImage.src = ev.target.result;
+        </p>
 
-                previewImage.dataset.full =
-                    ev.target.result;
+        <form
+            method="POST"
+            enctype="multipart/form-data"
+            action="{{ route('penghuni.pembayaran.store') }}"
+            class="space-y-5 mt-8"
+        >
 
-                previewWrapper.classList.remove('hidden');
+            @csrf
 
-                placeholder.classList.add('hidden');
+            {{-- PILIH TAGIHAN --}}
+            <div>
 
-            }
-
-            reader.readAsDataURL(file);
-
-        });
-
-    });
-
-/*
-|--------------------------------------------------------------------------
-| REMOVE IMAGE
-|--------------------------------------------------------------------------
-*/
-
-document.querySelectorAll('.remove-image')
-    .forEach(btn => {
-
-        btn.addEventListener('click', function(e) {
-
-            e.preventDefault();
-
-            e.stopPropagation();
-
-            const wrapper =
-                this.closest('label');
-
-            const input =
-                wrapper.querySelector('.payment-input');
-
-            const previewWrapper =
-                wrapper.querySelector('.preview-wrapper');
-
-            const placeholder =
-                wrapper.querySelector('.upload-placeholder');
-
-            input.value = '';
-
-            previewWrapper.classList.add('hidden');
-
-            placeholder.classList.remove('hidden');
-
-        });
-
-    });
-
-/*
-|--------------------------------------------------------------------------
-| PREVIEW IMAGE CLICK
-|--------------------------------------------------------------------------
-*/
-
-document.querySelectorAll('.preview-image')
-    .forEach(img => {
-
-        img.addEventListener('click', function(e) {
-
-            e.preventDefault();
-
-            e.stopPropagation();
-
-            const src =
-                this.dataset.full;
-
-            if (!src) return;
-
-            /*
-            |--------------------------------------------------------------------------
-            | MODAL
-            |--------------------------------------------------------------------------
-            */
-
-            const modal =
-                document.createElement('div');
-
-            modal.className =
-                'fixed inset-0 bg-black/80 z-50 flex items-center justify-center p-6';
-
-            modal.innerHTML = `
-
-            <div class="relative">
-
-                <button
-                    class="absolute -top-4 -right-4
-                           w-10 h-10 rounded-full
-                           bg-white text-black
-                           flex items-center justify-center"
+                <label
+                    class="block text-sm
+                           font-medium text-gray-700
+                           mb-2"
                 >
 
-                    ✕
+                    Pilih Tagihan
 
-                </button>
+                </label>
 
-                <img
-                    src="${src}"
-                    class="max-w-[90vw] max-h-[85vh]
-                           rounded-3xl shadow-2xl"
+                <select
+                    name="id_tagihan"
+                    required
+                    class="w-full border
+                           border-gray-300
+                           rounded-2xl px-4 py-3"
+                >
+
+                    <option value="">
+
+                        -- Pilih Tagihan --
+
+                    </option>
+
+                    @foreach($tagihanAktif as $t)
+
+                    @php
+
+                    $dibayar =
+    $t->pembayaran
+        ->where(
+            'status_validasi',
+            'diterima'
+        )
+        ->sum(
+            'nominal_pembayaran'
+        );
+
+                    $sisa =
+                        ($t->hargaKamar?->harga ?? 0)
+                        - $dibayar;
+
+                    @endphp
+
+                    @if(
+    in_array(
+        $t->status,
+        [
+            'pending',
+            'telat',
+            'ditolak',
+            'menunggu_verifikasi'
+        ]
+    )
+)
+
+                    <option
+                        value="{{ $t->id_tagihan }}"
+                    >
+
+                        {{ $t->tanggal_mulai->format('d M Y') }}
+                        -
+                        {{ $t->tanggal_selesai->format('d M Y') }}
+
+                        | Sisa:
+                        Rp {{ number_format($sisa,0,',','.') }}
+
+                    </option>
+
+                    @endif
+
+                    @endforeach
+
+                </select>
+
+            </div>
+
+            {{-- NOMINAL --}}
+            <div>
+
+                <label
+                    class="block text-sm
+                           font-medium text-gray-700
+                           mb-2"
+                >
+
+                    Nominal Pembayaran
+
+                </label>
+
+                <input
+                    type="number"
+                    name="nominal_pembayaran"
+                    required
+                    min="1000"
+                    class="w-full border
+                           border-gray-300
+                           rounded-2xl px-4 py-3"
+                    placeholder="Masukkan nominal"
                 >
 
             </div>
 
-        `;
+            {{-- FILE --}}
+            <div>
 
-            /*
-            |--------------------------------------------------------------------------
-            | CLOSE
-            |--------------------------------------------------------------------------
-            */
+                <label
+                    class="block text-sm
+                           font-medium text-gray-700
+                           mb-2"
+                >
 
-            modal.querySelector('button')
-                .addEventListener('click', () => {
+                    Bukti Pembayaran
 
-                    modal.remove();
+                </label>
 
-                });
+                <input
+                    type="file"
+                    name="bukti_bayar"
+                    required
+                    accept="image/*"
+                    class="w-full border
+                           border-gray-300
+                           rounded-2xl px-4 py-3"
+                >
 
-            modal.addEventListener('click', function(ev) {
+            </div>
 
-                if (ev.target === modal) {
+            {{-- BUTTON --}}
+            <div class="flex gap-3 pt-2">
 
-                    modal.remove();
+                <button
+                    type="button"
+                    onclick="closeModal()"
+                    class="flex-1 border border-gray-300
+                           py-3 rounded-2xl
+                           font-semibold"
+                >
 
-                }
+                    Kembali
 
-            });
+                </button>
 
-            document.body.appendChild(modal);
+                <button
+                    type="submit"
+                    class="flex-1 bg-[#6C8B6B]
+                           hover:bg-[#5B765A]
+                           text-white py-3
+                           rounded-2xl
+                           font-semibold transition"
+                >
 
-        });
+                    Bayar
 
-    });
+                </button>
+
+            </div>
+
+        </form>
+
+    </div>
+
+</div>
+<script>
+
+function openModal()
+{
+    document
+        .getElementById('modal-bayar')
+        .classList
+        .remove('hidden');
+
+    document
+        .getElementById('modal-bayar')
+        .classList
+        .add('flex');
+}
+
+function closeModal()
+{
+    document
+        .getElementById('modal-bayar')
+        .classList
+        .remove('flex');
+
+    document
+        .getElementById('modal-bayar')
+        .classList
+        .add('hidden');
+}
+
 </script>
-
 @endsection

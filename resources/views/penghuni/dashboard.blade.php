@@ -1,165 +1,178 @@
+{{-- ========================================================= --}}
+{{-- resources/views/penghuni/dashboard.blade.php --}}
+{{-- ========================================================= --}}
+
 @extends('layouts.penghuni')
 
 @section('content')
 
-{{-- ========================================================= --}}
-{{-- HEADER --}}
-{{-- ========================================================= --}}
-<div class="mb-8">
+<div class="space-y-8">
 
-    <h1 class="text-4xl font-bold text-[#0F0937]">
+    {{-- ========================================================= --}}
+    {{-- HEADER --}}
+    {{-- ========================================================= --}}
+    <div>
 
-        Dashboard Penghuni
+        <h1 class="text-3xl font-bold text-[#0F0937]">
 
-    </h1>
+            Dashboard Penghuni
 
-    <p class="text-gray-500 mt-3">
+        </h1>
 
-        Informasi kamar dan tagihan kost anda.
+        <p class="text-gray-500 mt-2">
 
-    </p>
-
-</div>
-
-{{-- ========================================================= --}}
-{{-- CARD --}}
-{{-- ========================================================= --}}
-<div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-6 mb-8">
-
-    {{-- KOST --}}
-    <div class="bg-white rounded-3xl p-6 shadow-sm border border-gray-100">
-
-        <p class="text-sm text-gray-500">
-
-            Nama Kost
-
-        </p>
-
-        <h2 class="text-2xl font-bold text-[#0F0937] mt-3">
-
-            {{ $tagihan?->kamar?->kost?->nama_kost ?? '-' }}
-
-        </h2>
-
-    </div>
-
-    {{-- NOMOR KAMAR --}}
-    <div class="bg-white rounded-3xl p-6 shadow-sm border border-gray-100">
-
-        <p class="text-sm text-gray-500">
-
-            Kamar
-
-        </p>
-
-        <h2 class="text-2xl font-bold text-[#0F0937] mt-3">
-
-            {{ $tagihan?->kamar?->nomor_kamar ?? '-' }}
-
-        </h2>
-
-        <p class="text-sm text-gray-400 mt-2">
-
-            {{ $tagihan?->kamar?->nama_kamar ?? 'Tanpa Nama Kamar' }}
+            Informasi kamar, masa kos, dan tagihan anda.
 
         </p>
 
     </div>
 
-    {{-- TOTAL TAGIHAN --}}
-    <div class="bg-white rounded-3xl p-6 shadow-sm border border-gray-100">
+    {{-- ========================================================= --}}
+    {{-- JIKA BELUM AKTIF --}}
+    {{-- ========================================================= --}}
+    @if(!$hunianAktif)
 
-        <p class="text-sm text-gray-500">
+    <div
+        class="bg-white rounded-3xl
+               border border-gray-100
+               shadow-sm p-10"
+    >
 
-            Total Tagihan
+        <div class="text-center">
 
-        </p>
+            <div
+                class="w-24 h-24 mx-auto
+                       rounded-full bg-gray-100
+                       flex items-center justify-center"
+            >
 
-        <h2 class="text-3xl font-bold text-[#0F0937] mt-3">
+                <svg xmlns="http://www.w3.org/2000/svg"
+                     class="w-12 h-12 text-gray-400"
+                     fill="none"
+                     viewBox="0 0 24 24"
+                     stroke="currentColor">
 
-            {{ $jumlahTagihan }}
+                    <path stroke-linecap="round"
+                          stroke-linejoin="round"
+                          stroke-width="2"
+                          d="M3 7l9-4 9 4m-9 13V9m0 11L3 7m9 13l9-13" />
 
-        </h2>
+                </svg>
 
-    </div>
+            </div>
 
-    {{-- BELUM LUNAS --}}
-    <div class="bg-white rounded-3xl p-6 shadow-sm border border-gray-100">
+            <h2 class="text-2xl font-bold text-[#0F0937] mt-6">
 
-        <p class="text-sm text-gray-500">
-
-            Belum Lunas
-
-        </p>
-
-        <h2 class="text-3xl font-bold text-[#0F0937] mt-3">
-
-            {{ $tagihanPending }}
-
-        </h2>
-
-    </div>
-
-</div>
-
-{{-- ========================================================= --}}
-{{-- INFORMASI MASA KOS --}}
-{{-- ========================================================= --}}
-<div class="bg-white rounded-3xl p-8 shadow-sm border border-gray-100 mb-8">
-
-    <div class="flex items-center justify-between mb-6">
-
-        <div>
-
-            <h2 class="text-2xl font-bold text-[#0F0937]">
-
-                Masa Kos
+                Belum Ada Kamar Aktif
 
             </h2>
 
-            <p class="text-gray-500 mt-2">
+            <p class="text-gray-500 mt-3 max-w-xl mx-auto">
 
-                Informasi periode sewa kamar anda.
+                Anda belum memiliki kamar aktif saat ini.
+                Silahkan masukkan kode kost atau tunggu approval admin kost.
 
             </p>
+
+            <div class="mt-8 flex justify-center">
+
+                <a
+                    href="{{ route('kost.saya') }}"
+                    class="bg-[#6C8B6B]
+                           hover:bg-[#5B765A]
+                           text-white px-6 py-3
+                           rounded-2xl font-semibold transition"
+                >
+
+                    Masuk Kost
+
+                </a>
+
+            </div>
 
         </div>
 
     </div>
 
-    @if($tagihan)
+    @else
 
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+    {{-- ========================================================= --}}
+    {{-- INFO KAMAR --}}
+    {{-- ========================================================= --}}
+    <div
+        class="bg-white rounded-3xl
+               border border-gray-100
+               shadow-sm p-10"
+    >
 
-            {{-- MULAI --}}
+        <div class="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-8">
+
             <div>
 
-                <p class="text-sm text-gray-500">
+                <p class="text-gray-500 text-sm">
+
+                    Kamar Aktif
+
+                </p>
+
+                <h2 class="text-5xl font-bold text-[#0F0937] mt-3">
+
+                    {{ $hunianAktif->kamar?->nomor_kamar }}
+
+                </h2>
+
+                <p class="text-gray-500 mt-3 text-lg">
+
+                    {{ $hunianAktif->kamar?->nama_kamar }}
+
+                </p>
+
+            </div>
+
+            <div
+                class="px-5 py-3 rounded-2xl
+                       bg-green-100 text-green-700
+                       font-semibold text-lg w-fit"
+            >
+
+                Penghuni Aktif
+
+            </div>
+
+        </div>
+
+        {{-- ========================================================= --}}
+        {{-- MASA KOS --}}
+        {{-- ========================================================= --}}
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-10 mt-10">
+
+            <div>
+
+                <p class="text-gray-500 text-sm">
 
                     Tanggal Masuk
 
                 </p>
 
-                <h3 class="text-xl font-bold text-[#0F0937] mt-2">
+                <h3 class="text-3xl font-bold text-[#0F0937] mt-3">
 
-                    {{ $tagihan->tanggal_mulai->format('d M Y') }}
+                    {{ $hunianAktif->tanggal_masuk?->format('d M Y') }}
 
                 </h3>
 
             </div>
 
-            {{-- SELESAI --}}
             <div>
 
-                <p class="text-sm text-gray-500">
+                <p class="text-gray-500 text-sm">
 
                     Tanggal Selesai
 
                 </p>
 
-                <h3 class="text-xl font-bold text-[#0F0937] mt-2">
+                <h3 class="text-3xl font-bold text-[#0F0937] mt-3">
 
-                    {{ $tagihan->tanggal_selesai->format('d M Y') }}
+                    {{ $hunianAktif->tanggal_keluar?->format('d M Y') }}
 
                 </h3>
 
@@ -167,95 +180,81 @@
 
         </div>
 
-    @else
-
-        <div class="text-gray-400 py-10 text-center">
-
-            Belum ada data masa kos.
-
-        </div>
-
-    @endif
-
-</div>
-
-{{-- ========================================================= --}}
-{{-- TAGIHAN TERBARU --}}
-{{-- ========================================================= --}}
-<div class="bg-white rounded-3xl p-8 shadow-sm border border-gray-100">
-
-    <div class="flex items-center justify-between mb-6">
-
-        <div>
-
-            <h2 class="text-2xl font-bold text-[#0F0937]">
-
-                Tagihan Terbaru
-
-            </h2>
-
-            <p class="text-gray-500 mt-2">
-
-                Informasi tagihan pembayaran anda.
-
-            </p>
-
-        </div>
-
-        <a
-            href="{{ route('penghuni.pembayaran.index') }}"
-            class="text-[#6C8B6B] font-semibold"
-        >
-
-            Lihat Semua
-
-        </a>
-
     </div>
 
-    @if($tagihan)
-
+    {{-- ========================================================= --}}
+    {{-- TAGIHAN TERBARU --}}
+    {{-- ========================================================= --}}
     <div
-        class="border border-gray-200 rounded-2xl p-6"
+        class="bg-white rounded-3xl
+               border border-gray-100
+               shadow-sm p-10"
     >
 
+        <div class="flex items-center justify-between">
+
+            <div>
+
+                <h2 class="text-3xl font-bold text-[#0F0937]">
+
+                    Tagihan Terbaru
+
+                </h2>
+
+                <p class="text-gray-500 mt-2">
+
+                    Informasi tagihan pembayaran anda.
+
+                </p>
+
+            </div>
+
+            <a
+                href="{{ route('penghuni.pembayaran.index') }}"
+                class="text-[#6C8B6B]
+                       font-semibold text-lg"
+            >
+
+                Lihat Semua
+
+            </a>
+
+        </div>
+
+        @if($tagihanTerbaru)
+
         <div
-            class="flex flex-col lg:flex-row
-                   lg:items-center lg:justify-between gap-6"
+            class="mt-8 rounded-3xl
+                   border border-gray-200
+                   p-8 flex flex-col
+                   lg:flex-row lg:items-center
+                   lg:justify-between gap-8"
         >
 
-            {{-- INFORMASI --}}
             <div>
 
                 {{-- KAMAR --}}
-                <h3
-                    class="text-2xl font-bold text-[#0F0937]"
-                >
+                <h3 class="text-4xl font-bold text-[#0F0937]">
 
                     Kamar
-                    {{ $tagihan->kamar->nomor_kamar }}
+                    {{ $tagihanTerbaru->kamar?->nomor_kamar }}
 
                 </h3>
 
                 {{-- PERIODE --}}
-                <p class="text-gray-500 mt-3">
+                <p class="text-gray-500 mt-4 text-lg">
 
-                    {{ $tagihan->tanggal_mulai->format('d M Y') }}
+                    {{ $tagihanTerbaru->tanggal_mulai?->format('d M Y') }}
                     -
-                    {{ $tagihan->tanggal_selesai->format('d M Y') }}
+                    {{ $tagihanTerbaru->tanggal_selesai?->format('d M Y') }}
 
                 </p>
 
-                {{-- INTERVAL PEMBAYARAN --}}
-                @if(
-                    $tagihan->hargaKamar &&
-                    $tagihan->hargaKamar->periode
-                )
-
+                {{-- PERIODE PEMBAYARAN --}}
                 <div
-                    class="mt-4 inline-flex items-center gap-2
-                           bg-[#F8F5F0]
-                           px-4 py-2 rounded-xl"
+                    class="mt-5 inline-flex items-center
+                           gap-3 bg-[#F8F5F0]
+                           px-5 py-3 rounded-2xl"
                 >
 
                     <svg xmlns="http://www.w3.org/2000/svg"
@@ -264,100 +263,77 @@
                          viewBox="0 0 24 24"
                          stroke="currentColor">
 
-                        <path
-                            stroke-linecap="round"
-                            stroke-linejoin="round"
-                            stroke-width="2"
-                            d="M8 7V3m8 4V3m-9 8h10m-11 9h12a2 2 0 002-2V7a2 2 0 00-2-2H6a2 2 0 00-2 2v11a2 2 0 002 2z"
-                        />
+                        <path stroke-linecap="round"
+                              stroke-linejoin="round"
+                              stroke-width="2"
+                              d="M8 7V3m8 4V3m-9 8h10m-11 9h12a2 2 0 002-2V7a2 2 0 00-2-2H6a2 2 0 00-2 2v11a2 2 0 002 2z" />
 
                     </svg>
 
-                    <span
-                        class="text-sm font-semibold text-[#0F0937]"
-                    >
+                    <span class="font-semibold text-[#0F0937]">
 
                         Pembayaran setiap
-                        {{ $tagihan->hargaKamar->periode->jumlah_interval }}
-                        {{ $tagihan->hargaKamar->periode->satuan_interval }}
+                        {{ $tagihanTerbaru->hargaKamar?->periode?->jumlah_interval }}
+                        {{ $tagihanTerbaru->hargaKamar?->periode?->satuan_interval }}
 
                     </span>
 
                 </div>
 
-                @endif
+                {{-- JATUH TEMPO --}}
+                <div class="mt-5">
+
+                    <span
+                        class="px-4 py-2 rounded-2xl
+                               bg-red-100 text-red-700
+                               text-sm font-semibold"
+                    >
+
+                        Jatuh tempo:
+                        {{ $tagihanTerbaru->tanggal_jatuh_tempo?->format('d M Y') }}
+
+                    </span>
+
+                </div>
 
             </div>
 
             {{-- STATUS --}}
             <div>
 
-                @if(
-                    $tagihan->status === 'pending' &&
-                    $tagihan->status_bukti === 'belum_upload'
-                )
+                @if($tagihanTerbaru->status === 'lunas')
 
                 <span
-                    class="px-4 py-2 rounded-full
-                           bg-gray-100 text-gray-700
-                           text-sm font-semibold"
-                >
-
-                    Belum Bayar
-
-                </span>
-
-                @elseif(
-                    $tagihan->status === 'pending' &&
-                    $tagihan->status_bukti === 'menunggu'
-                )
-
-                <span
-                    class="px-4 py-2 rounded-full
-                           bg-yellow-100 text-yellow-700
-                           text-sm font-semibold"
-                >
-
-                    Menunggu Verifikasi
-
-                </span>
-
-                @elseif(
-                    $tagihan->status === 'pending' &&
-                    $tagihan->status_bukti === 'ditolak'
-                )
-
-                <span
-                    class="px-4 py-2 rounded-full
-                           bg-red-100 text-red-700
-                           text-sm font-semibold"
-                >
-
-                    Ditolak
-
-                </span>
-
-                @elseif($tagihan->status === 'lunas')
-
-                <span
-                    class="px-4 py-2 rounded-full
+                    class="px-6 py-3 rounded-2xl
                            bg-green-100 text-green-700
-                           text-sm font-semibold"
+                           text-lg font-semibold"
                 >
 
                     Lunas
 
                 </span>
 
-                @elseif($tagihan->status === 'telat')
+                @elseif($tagihanTerbaru->status === 'telat')
 
                 <span
-                    class="px-4 py-2 rounded-full
+                    class="px-6 py-3 rounded-2xl
                            bg-red-100 text-red-700
-                           text-sm font-semibold"
+                           text-lg font-semibold"
                 >
 
                     Telat
+
+                </span>
+
+                @else
+
+                <span
+                    class="px-6 py-3 rounded-2xl
+                           bg-gray-100 text-gray-700
+                           text-lg font-semibold"
+                >
+
+                    Belum Bayar
 
                 </span>
 
@@ -367,13 +343,30 @@
 
         </div>
 
-    </div>
+        @else
 
-    @else
+        <div
+            class="mt-8 rounded-3xl
+                   border border-dashed
+                   border-gray-300
+                   p-10 text-center"
+        >
 
-    <div class="text-gray-400 py-10 text-center">
+            <h3 class="text-2xl font-bold text-[#0F0937]">
 
-        Belum ada tagihan.
+                Belum Ada Tagihan
+
+            </h3>
+
+            <p class="text-gray-500 mt-3">
+
+                Tagihan akan muncul otomatis setelah admin mengaktifkan penghuni.
+
+            </p>
+
+        </div>
+
+        @endif
 
     </div>
 

@@ -173,7 +173,7 @@
                         <td class="px-6 py-4">
 
                             <a
-                                href="#"
+                                href="{{ route('admin.pengajuan.show', $i->id_riwayat_hunian) }}"
                                 class="bg-[#6C8B6B]
                                        hover:bg-[#5B765A]
                                        text-white px-5 py-2

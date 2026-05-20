@@ -11,17 +11,27 @@
     <div>
 
         <h1 class="text-3xl font-bold text-[#0F0937]">
-           Daftar Kamar
+
+            Daftar Kamar
+
         </h1>
 
         <p class="text-gray-500 mt-2">
+
             Kelola daftar kamar kost anda
+
         </p>
 
     </div>
 
-    <a href="{{ route('admin.kamar.create') }}"
-       class="bg-[#6C8B6B] hover:bg-[#5B765A] text-white px-5 py-3 rounded-xl font-semibold transition">
+    <a
+        href="{{ route('admin.kamar.create') }}"
+        class="bg-[#6C8B6B]
+               hover:bg-[#5B765A]
+               text-white px-5 py-3
+               rounded-xl font-semibold
+               transition"
+    >
 
         Tambah Kamar
 
@@ -29,7 +39,11 @@
 
 </div>
 
-<div class="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden">
+<div
+    class="bg-white rounded-2xl
+           shadow-sm border
+           border-gray-100 overflow-hidden"
+>
 
     <div class="overflow-x-auto">
 
@@ -39,24 +53,54 @@
 
                 <tr>
 
-                    <th class="px-6 py-4 text-left text-sm font-semibold text-gray-600">
+                    <th
+                        class="px-6 py-4 text-left
+                               text-sm font-semibold
+                               text-gray-600"
+                    >
+
                         Nama Kamar
+
                     </th>
 
-                    <th class="px-6 py-4 text-left text-sm font-semibold text-gray-600">
+                    <th
+                        class="px-6 py-4 text-left
+                               text-sm font-semibold
+                               text-gray-600"
+                    >
+
                         Nomor
+
                     </th>
 
-                    <th class="px-6 py-4 text-left text-sm font-semibold text-gray-600">
+                    <th
+                        class="px-6 py-4 text-left
+                               text-sm font-semibold
+                               text-gray-600"
+                    >
+
                         Ukuran
+
                     </th>
 
-                    <th class="px-6 py-4 text-left text-sm font-semibold text-gray-600">
+                    <th
+                        class="px-6 py-4 text-left
+                               text-sm font-semibold
+                               text-gray-600"
+                    >
+
                         Status
+
                     </th>
 
-                    <th class="px-6 py-4 text-left text-sm font-semibold text-gray-600">
+                    <th
+                        class="px-6 py-4 text-left
+                               text-sm font-semibold
+                               text-gray-600"
+                    >
+
                         Aksi
+
                     </th>
 
                 </tr>
@@ -69,24 +113,39 @@
 
                 <tr class="hover:bg-gray-50">
 
+                    {{-- NAMA --}}
                     <td class="px-6 py-4">
+
                         {{ $i->nama_kamar }}
+
                     </td>
 
+                    {{-- NOMOR --}}
                     <td class="px-6 py-4">
+
                         {{ $i->nomor_kamar }}
+
                     </td>
 
+                    {{-- UKURAN --}}
                     <td class="px-6 py-4">
+
                         {{ $i->ukuran_kamar }}
+
                     </td>
 
+                    {{-- STATUS --}}
                     <td class="px-6 py-4">
 
-                        <span class="px-3 py-1 rounded-full text-xs font-semibold
-                        {{ $i->status == 'kosong'
-                            ? 'bg-green-100 text-green-700'
-                            : 'bg-red-100 text-red-700' }}">
+                        <span
+                            class="px-3 py-1 rounded-full
+                                   text-xs font-semibold
+
+                            {{ $i->status == 'kosong'
+                                ? 'bg-green-100 text-green-700'
+                                : 'bg-red-100 text-red-700'
+                            }}"
+                        >
 
                             {{ ucfirst($i->status) }}
 
@@ -94,31 +153,51 @@
 
                     </td>
 
+                    {{-- AKSI --}}
                     <td class="px-6 py-4">
 
                         <div class="flex flex-wrap gap-2">
 
-                            <a href="{{ route('admin.kamar.edit', $i) }}"
-                               class="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-lg text-sm">
+                            {{-- EDIT --}}
+                            <a
+                                href="{{ route('admin.kamar.edit', $i) }}"
+                                class="bg-blue-500
+                                       hover:bg-blue-600
+                                       text-white px-4 py-2
+                                       rounded-lg text-sm"
+                            >
 
                                 Edit
 
                             </a>
 
-                            <a href="{{ route('admin.kamar.fasilitas.edit', $i) }}"
-                               class="bg-yellow-500 hover:bg-yellow-600 text-white px-4 py-2 rounded-lg text-sm">
+                            {{-- FASILITAS --}}
+                            <a
+                                href="{{ route('admin.kamar.fasilitas.edit', $i) }}"
+                                class="bg-yellow-500
+                                       hover:bg-yellow-600
+                                       text-white px-4 py-2
+                                       rounded-lg text-sm"
+                            >
 
                                 Fasilitas
 
                             </a>
 
-                            <a href="{{ route('admin.kamar.harga.index', $i) }}"
-                               class="bg-[#6C8B6B] hover:bg-[#5B765A] text-white px-4 py-2 rounded-lg text-sm">
+                            {{-- HARGA --}}
+                            <a
+                                href="{{ route('admin.kamar.harga.index', $i) }}"
+                                class="bg-[#6C8B6B]
+                                       hover:bg-[#5B765A]
+                                       text-white px-4 py-2
+                                       rounded-lg text-sm"
+                            >
 
                                 Harga
 
                             </a>
 
+                            {{-- HAPUS --}}
                             <form
                                 method="POST"
                                 action="{{ route('admin.kamar.destroy', $i) }}"
@@ -129,7 +208,11 @@
                                 @method('DELETE')
 
                                 <button
-                                    class="bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded-lg text-sm">
+                                    class="bg-red-500
+                                           hover:bg-red-600
+                                           text-white px-4 py-2
+                                           rounded-lg text-sm"
+                                >
 
                                     Hapus
 
@@ -149,7 +232,8 @@
 
                     <td
                         colspan="5"
-                        class="px-6 py-10 text-center text-gray-500"
+                        class="px-6 py-10
+                               text-center text-gray-500"
                     >
 
                         Belum ada data kamar

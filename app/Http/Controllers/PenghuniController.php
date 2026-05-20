@@ -4,418 +4,276 @@ namespace App\Http\Controllers;
 
 use App\Models\HargaKamar;
 use App\Models\KamarKost;
-use App\Models\Kost;
 use App\Models\RiwayatHunian;
 use App\Models\Tagihan;
-use App\Models\User;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
 
 class PenghuniController extends Controller
 {
+   /*
+|--------------------------------------------------------------------------
+| DASHBOARD PENGHUNI
+|--------------------------------------------------------------------------
+*/
+
+public function dashboard(Request $r)
+{
     /*
     |--------------------------------------------------------------------------
-    | DASHBOARD PENGHUNI
+    | HUNIAN AKTIF
     |--------------------------------------------------------------------------
     */
 
-    public function dashboard(Request $r)
-    {
-        /*
-        |--------------------------------------------------------------------------
-        | TAGIHAN TERBARU
-        |--------------------------------------------------------------------------
-        */
+    $hunianAktif = RiwayatHunian::with([
 
-        $tagihan = Tagihan::with([
+            'kamar.kost'
+
+        ])
+        ->where(
+
+            'id_user',
+
+            $r->user()->id
+
+        )
+        ->where(
+
+            'status',
+
+            'aktif'
+
+        )
+        ->latest()
+        ->first();
+
+    /*
+    |--------------------------------------------------------------------------
+    | TAGIHAN
+    |--------------------------------------------------------------------------
+    */
+
+    $tagihanAktif = Tagihan::with([
 
             'kamar.kost',
 
             'hargaKamar.periode',
 
-            'pembayarans'
+            'pembayaran'
 
         ])
-        ->where('id_user', $r->user()->id)
-        ->latest('tanggal_mulai')
-        ->first();
-
-        /*
-        |--------------------------------------------------------------------------
-        | TOTAL TAGIHAN
-        |--------------------------------------------------------------------------
-        */
-
-        $jumlahTagihan = Tagihan::where(
+        ->where(
 
             'id_user',
-            $r->user()->id
 
-        )->count();
-
-        /*
-        |--------------------------------------------------------------------------
-        | TAGIHAN BELUM LUNAS
-        |--------------------------------------------------------------------------
-        */
-
-        $tagihanPending = Tagihan::where(
-
-            'id_user',
             $r->user()->id
 
         )
-        ->where('status', 'pending')
-        ->count();
-
-        return view('penghuni.dashboard', [
-
-            'tagihan' => $tagihan,
-
-            'jumlahTagihan' => $jumlahTagihan,
-
-            'tagihanPending' => $tagihanPending,
-
-        ]);
-    }
+        ->latest('tanggal_mulai')
+        ->get();
 
     /*
     |--------------------------------------------------------------------------
-    | DATA PENGHUNI
+    | TAGIHAN TERBARU
     |--------------------------------------------------------------------------
     */
 
-    public function index(Request $r)
+    $tagihanTerbaru =
+
+        $tagihanAktif
+            ->sortByDesc('tanggal_mulai')
+            ->first();
+
+    /*
+    |--------------------------------------------------------------------------
+    | TOTAL
+    |--------------------------------------------------------------------------
+    */
+
+    $jumlahTagihan =
+
+        $tagihanAktif->count();
+
+    $tagihanPending =
+
+        $tagihanAktif
+            ->whereIn('status', [
+
+                'pending',
+                'telat',
+                'ditolak',
+                'menunggu_verifikasi'
+
+            ])
+            ->count();
+
+    return view(
+
+        'penghuni.dashboard',
+
+        [
+
+            'hunianAktif' =>
+
+                $hunianAktif,
+
+            'tagihanAktif' =>
+
+                $tagihanAktif,
+
+            'tagihanTerbaru' =>
+
+                $tagihanTerbaru,
+
+            'jumlahTagihan' =>
+
+                $jumlahTagihan,
+
+            'tagihanPending' =>
+
+                $tagihanPending,
+
+        ]
+
+    );
+}
+
+    /*
+    |--------------------------------------------------------------------------
+    | PENGHUNI AKTIF
+    |--------------------------------------------------------------------------
+    */
+
+    public function aktif(Request $r)
     {
         $kostId = $r->user()->kost->id;
 
-        $items = User::where(
-                'role',
-                'penghuni'
-            )
-            ->whereHas(
-                'riwayatHunian.kamar',
-                fn($q) =>
-                    $q->where(
-                        'id_kost',
-                        $kostId
-                    )
-            )
-            ->with([
-                'riwayatHunian.kamar'
+        $items = RiwayatHunian::with([
+
+                'user',
+                'kamar'
+
             ])
-            ->distinct()
+            ->where(
+
+                'status',
+
+                'aktif'
+
+            )
+            ->whereHas('kamar', function ($q) use ($kostId) {
+
+                $q->where(
+
+                    'id_kost',
+
+                    $kostId
+
+                );
+
+            })
+            ->latest()
             ->get();
 
         return view(
-            'admin.penghuni.index',
+
+            'admin.penghuni.aktif',
+
             compact('items')
+
         );
     }
 
     /*
     |--------------------------------------------------------------------------
-    | FORM TAMBAH PENGHUNI
+    | PENGHUNI ANTRIAN
     |--------------------------------------------------------------------------
     */
 
-    public function create(Request $r)
+    public function antrian(Request $r)
     {
-        /*
-        |--------------------------------------------------------------------------
-        | USER PENGHUNI
-        |--------------------------------------------------------------------------
-        */
+        $kostId = $r->user()->kost->id;
 
-        $users = User::where(
-                'role',
-                'penghuni'
-            )
-            ->get();
+        $items = RiwayatHunian::with([
 
-        /*
-        |--------------------------------------------------------------------------
-        | KAMAR
-        |--------------------------------------------------------------------------
-        */
-
-        $kamars = KamarKost::where(
-                'id_kost',
-                $r->user()->kost->id
-            )
-            ->with([
-
-                'hargaKamars' => fn($q) =>
-
-                    $q->where(
-                        'isactive',
-                        true
-                    )->with('periode')
+                'user',
+                'kamar'
 
             ])
+            ->where(
+
+                'status',
+
+                'antrian'
+
+            )
+            ->whereHas('kamar', function ($q) use ($kostId) {
+
+                $q->where(
+
+                    'id_kost',
+
+                    $kostId
+
+                );
+
+            })
+            ->latest()
             ->get();
 
         return view(
-            'admin.penghuni.form',
-            [
 
-                'item' => new RiwayatHunian,
+            'admin.penghuni.antrian',
 
-                'users' => $users,
+            compact('items')
 
-                'kamars' => $kamars
-
-            ]
         );
     }
 
     /*
     |--------------------------------------------------------------------------
-    | SIMPAN PENGHUNI
+    | PENGHUNI NONAKTIF
     |--------------------------------------------------------------------------
     */
 
-    public function store(Request $r)
+    public function nonaktif(Request $r)
     {
-        $d = $r->validate([
+        $kostId = $r->user()->kost->id;
 
-            'id_user' =>
-                'required|exists:users,id',
+        $items = RiwayatHunian::with([
 
-            'id_kamar' =>
-                'required|exists:kamar_kosts,id_kamar',
+                'user',
+                'kamar'
 
-            'id_harga_kamar' =>
-                'required|exists:harga_kamars,id_harga_kamar',
+            ])
+            ->where(
 
-            'tanggal_mulai' =>
-                'required|date',
+                'status',
 
-            'tanggal_selesai' =>
-                'required|date|after_or_equal:tanggal_mulai',
+                'nonaktif'
 
-            'tanggal_jatuh_tempo' =>
-                'required|date'
-
-        ]);
-
-        /*
-        |--------------------------------------------------------------------------
-        | USER
-        |--------------------------------------------------------------------------
-        */
-
-        $user = User::findOrFail(
-            $d['id_user']
-        );
-
-        /*
-        |--------------------------------------------------------------------------
-        | KAMAR
-        |--------------------------------------------------------------------------
-        */
-
-        $kamar = KamarKost::findOrFail(
-            $d['id_kamar']
-        );
-
-        /*
-        |--------------------------------------------------------------------------
-        | VALIDASI KOST
-        |--------------------------------------------------------------------------
-        */
-
-        abort_if(
-
-            $kamar->id_kost !==
-            $r->user()->kost->id,
-
-            403
-
-        );
-
-        /*
-        |--------------------------------------------------------------------------
-        | HARGA KAMAR
-        |--------------------------------------------------------------------------
-        */
-
-        $harga = HargaKamar::with(
-                'periode'
             )
-            ->findOrFail(
-                $d['id_harga_kamar']
-            );
+            ->whereHas('kamar', function ($q) use ($kostId) {
 
-        abort_if(
+                $q->where(
 
-            $harga->id_kamar !==
-            $kamar->id_kamar ||
+                    'id_kost',
 
-            !$harga->isactive,
+                    $kostId
 
-            403
+                );
 
-        );
-
-        DB::transaction(function () use (
-
-            $d,
-
-            $user,
-
-            $kamar,
-
-            $harga
-
-        ) {
-
-            /*
-            |--------------------------------------------------------------------------
-            | RIWAYAT HUNIAN
-            |--------------------------------------------------------------------------
-            */
-
-            RiwayatHunian::create([
-
-                'id_user' =>
-                    $user->id,
-
-                'id_kamar' =>
-                    $kamar->id_kamar,
-
-                'tanggal_masuk' =>
-                    $d['tanggal_mulai'],
-
-                'tanggal_keluar' =>
-                    $d['tanggal_selesai'],
-
-                'status' =>
-                    'aktif'
-
-            ]);
-
-            /*
-            |--------------------------------------------------------------------------
-            | GENERATE TAGIHAN
-            |--------------------------------------------------------------------------
-            */
-
-            foreach (
-
-                $this->makeTagihanPeriods(
-
-                    $d['tanggal_mulai'],
-
-                    $d['tanggal_selesai'],
-
-                    $harga->periode
-                        ->jumlah_interval,
-
-                    $harga->periode
-                        ->satuan_interval
-
-                )
-
-                as $row
-
-            ) {
-
-                Tagihan::create([
-
-                    'id_kamar' =>
-                        $kamar->id_kamar,
-
-                    'id_user' =>
-                        $user->id,
-
-                    'id_harga_kamar' =>
-                        $harga->id_harga_kamar,
-
-                    'tanggal_mulai' =>
-                        $row[0],
-
-                    'tanggal_selesai' =>
-                        $row[1],
-
-                    'tanggal_jatuh_tempo' =>
-                        $d['tanggal_jatuh_tempo'],
-
-                    'status' =>
-                        'pending',
-
-                ]);
-            }
-
-        });
-
-        return redirect()
-            ->route('admin.penghuni.index')
-            ->with(
-
-                'success',
-
-                'Penghuni berhasil ditambahkan.'
-
-            );
-    }
-
-    /*
-    |--------------------------------------------------------------------------
-    | EDIT PENGHUNI
-    |--------------------------------------------------------------------------
-    */
-
-    public function edit(User $penghuni)
-    {
-        abort_if(
-            $penghuni->role !== 'penghuni',
-            404
-        );
+            })
+            ->latest()
+            ->get();
 
         return view(
-            'admin.penghuni.edit',
-            [
-                'item' => $penghuni
-            ]
+
+            'admin.penghuni.nonaktif',
+
+            compact('items')
+
         );
-    }
-
-    /*
-    |--------------------------------------------------------------------------
-    | UPDATE PENGHUNI
-    |--------------------------------------------------------------------------
-    */
-
-    public function update(
-        Request $r,
-        User $penghuni
-    ) {
-
-        abort_if(
-            $penghuni->role !== 'penghuni',
-            404
-        );
-
-        $d = $r->validate([
-
-            'nama' => 'required',
-
-            'no_hp' => 'required',
-
-        ]);
-
-        $penghuni->update($d);
-
-        return redirect()
-            ->route(
-                'admin.penghuni.index'
-            )
-            ->with(
-                'success',
-                'Penghuni berhasil diperbarui.'
-            );
     }
 
     /*
@@ -424,27 +282,21 @@ class PenghuniController extends Controller
     |--------------------------------------------------------------------------
     */
 
-    public function destroy(User $penghuni)
+    public function nonaktifkan(
+        RiwayatHunian $riwayatHunian
+    )
     {
-        abort_if(
-            $penghuni->role !== 'penghuni',
-            404
-        );
-
         /*
         |--------------------------------------------------------------------------
-        | NONAKTIFKAN RIWAYAT HUNIAN
+        | UPDATE RIWAYAT
         |--------------------------------------------------------------------------
         */
 
-        RiwayatHunian::where(
+        $riwayatHunian->update([
 
-            'id_user',
-            $penghuni->id
+            'status' => 'nonaktif',
 
-        )->update([
-
-            'status' => 'nonaktif'
+            'tanggal_keluar' => now(),
 
         ]);
 
@@ -459,93 +311,370 @@ class PenghuniController extends Controller
 
     /*
     |--------------------------------------------------------------------------
-    | GENERATE PERIODE TAGIHAN
+    | FORM AKTIFKAN
     |--------------------------------------------------------------------------
     */
 
-    private function makeTagihanPeriods(
-        string $start,
-        string $end,
-        int $jumlahInterval,
-        string $satuanInterval
-    ): array {
+   public function formAktifkan(
+    RiwayatHunian $riwayatHunian
+)
+{
+    /*
+    |--------------------------------------------------------------------------
+    | SEMUA KAMAR
+    |--------------------------------------------------------------------------
+    */
 
-        $current = Carbon::parse($start)
-            ->startOfDay();
+    $kamars = KamarKost::with([
 
-        $finish = Carbon::parse($end)
-            ->startOfDay();
+            'riwayatHunian.user'
 
-        $rows = [];
+        ])
+        ->where(
 
-        while ($current <= $finish) {
+            'id_kost',
 
-            $periodEnd = match (
+            auth()->user()
+                ->kost
+                ->id
 
-                $satuanInterval
+        )
+        ->get();
 
-            ) {
+    /*
+    |--------------------------------------------------------------------------
+    | HARGA KAMAR
+    |--------------------------------------------------------------------------
+    */
 
-                'hari' =>
+    $hargaKamars = HargaKamar::with([
 
-                    $current->copy()
-                        ->addDays(
-                            $jumlahInterval
-                        )
-                        ->subDay(),
+            'periode',
+            'kamar'
 
-                'minggu' =>
+        ])
+        ->where(
 
-                    $current->copy()
-                        ->addWeeks(
-                            $jumlahInterval
-                        )
-                        ->subDay(),
+            'isactive',
 
-                'bulan' =>
+            true
 
-                    $current->copy()
-                        ->addMonthsNoOverflow(
-                            $jumlahInterval
-                        )
-                        ->subDay(),
+        )
+        ->get();
 
-                'tahun' =>
+    return view(
 
-                    $current->copy()
-                        ->addYears(
-                            $jumlahInterval
-                        )
-                        ->subDay(),
+        'admin.penghuni.aktifkan',
 
-                default =>
+        compact(
 
-                    throw new \InvalidArgumentException(
+            'riwayatHunian',
+            'kamars',
+            'hargaKamars'
 
-                        'Satuan periode tidak valid.'
+        )
 
-                    ),
-            };
+    );
+}
 
-            if ($periodEnd > $finish) {
+    /*
+    |--------------------------------------------------------------------------
+    | AKTIFKAN PENGHUNI
+    |--------------------------------------------------------------------------
+    */
 
-                $periodEnd = $finish->copy();
+    public function aktifkan(
+        Request $r,
+        RiwayatHunian $riwayatHunian
+    )
+    {
+        /*
+        |--------------------------------------------------------------------------
+        | VALIDASI
+        |--------------------------------------------------------------------------
+        */
 
-            }
+        $data = $r->validate([
 
-            $rows[] = [
+            'id_kamar' =>
 
-                $current->toDateString(),
+                'required|exists:kamar_kosts,id_kamar',
 
-                $periodEnd->toDateString()
+            'tanggal_masuk' =>
 
-            ];
+                'required|date',
 
-            $current = $periodEnd
-                ->copy()
-                ->addDay();
+            'tanggal_keluar' =>
+
+                'required|date|after:tanggal_masuk',
+
+            'id_harga_kamar' =>
+
+                'required|exists:harga_kamars,id_harga_kamar',
+
+            'jatuh_tempo_hari' =>
+
+    'required|integer|min:1|max:31',
+
+        ]);
+
+        /*
+        |--------------------------------------------------------------------------
+        | UPDATE RIWAYAT
+        |--------------------------------------------------------------------------
+        */
+
+        $riwayatHunian->update([
+
+            'id_kamar' =>
+
+                $data['id_kamar'],
+
+            'tanggal_masuk' =>
+
+                $data['tanggal_masuk'],
+
+            'tanggal_keluar' =>
+
+                $data['tanggal_keluar'],
+
+            'status' => 'aktif',
+
+        ]);
+
+        /*
+        |--------------------------------------------------------------------------
+        | HARGA KAMAR
+        |--------------------------------------------------------------------------
+        */
+
+        $hargaKamar = HargaKamar::with(
+
+                'periode'
+
+            )
+            ->findOrFail(
+
+                $data['id_harga_kamar']
+
+            );
+
+            /*
+|--------------------------------------------------------------------------
+| HAPUS TAGIHAN LAMA
+|--------------------------------------------------------------------------
+*/
+
+Tagihan::where(
+
+    'id_user',
+
+    $riwayatHunian->id_user
+
+)->delete();
+
+        /*
+        |--------------------------------------------------------------------------
+        | GENERATE TAGIHAN
+        |--------------------------------------------------------------------------
+        */
+
+        foreach (
+
+            $this->makeTagihanPeriods(
+
+                $data['tanggal_masuk'],
+
+                $data['tanggal_keluar'],
+
+                $hargaKamar
+                    ->periode
+                    ->jumlah_interval,
+
+                $hargaKamar
+                    ->periode
+                    ->satuan_interval
+
+            )
+
+            as $row
+
+        ) {
+
+            Tagihan::create([
+
+                'id_kamar' =>
+
+                    $data['id_kamar'],
+
+                'id_user' =>
+
+                    $riwayatHunian->id_user,
+
+                'id_harga_kamar' =>
+
+                    $hargaKamar->id_harga_kamar,
+
+                'tanggal_mulai' =>
+
+                    $row[0],
+
+                'tanggal_selesai' =>
+
+                    $row[1],
+
+                'tanggal_jatuh_tempo' =>
+
+    Carbon::parse(
+
+        $row[0]
+
+    )->addDays(
+
+       (int) $data['jatuh_tempo_hari']
+
+    ),
+
+                'status' =>
+
+                    'pending',
+
+            ]);
         }
 
-        return $rows;
+        return redirect()
+            ->route(
+
+                'admin.penghuni.aktif'
+
+            )
+            ->with(
+
+                'success',
+
+                'Penghuni berhasil diaktifkan.'
+
+            );
     }
+
+   /*
+|--------------------------------------------------------------------------
+| GENERATE PERIODE TAGIHAN
+|--------------------------------------------------------------------------
+*/
+
+private function makeTagihanPeriods(
+    string $start,
+    string $end,
+    int $jumlahInterval,
+    string $satuanInterval
+): array {
+
+    $current = Carbon::parse($start)
+        ->startOfDay();
+
+    $finish = Carbon::parse($end)
+        ->startOfDay();
+
+    $rows = [];
+
+    /*
+    |--------------------------------------------------------------------------
+    | LOOP PERIODE
+    |--------------------------------------------------------------------------
+    */
+
+    while ($current < $finish)
+    {
+        /*
+        |--------------------------------------------------------------------------
+        | HITUNG AKHIR PERIODE
+        |--------------------------------------------------------------------------
+        */
+
+        $periodEnd = match (
+
+            $satuanInterval
+
+        ) {
+
+            'hari' =>
+
+                $current->copy()
+                    ->addDays(
+                        $jumlahInterval
+                    )
+                    ->subDay(),
+
+            'minggu' =>
+
+                $current->copy()
+                    ->addWeeks(
+                        $jumlahInterval
+                    )
+                    ->subDay(),
+
+            'bulan' =>
+
+                $current->copy()
+                    ->addMonthsNoOverflow(
+                        $jumlahInterval
+                    )
+                    ->subDay(),
+
+            'tahun' =>
+
+                $current->copy()
+                    ->addYears(
+                        $jumlahInterval
+                    )
+                    ->subDay(),
+
+            default =>
+
+                throw new \InvalidArgumentException(
+
+                    'Satuan periode tidak valid.'
+
+                ),
+        };
+
+        /*
+        |--------------------------------------------------------------------------
+        | JIKA LEWAT TANGGAL KELUAR
+        |--------------------------------------------------------------------------
+        */
+
+        if ($periodEnd > $finish)
+        {
+            $periodEnd = $finish->copy();
+        }
+
+        /*
+        |--------------------------------------------------------------------------
+        | SIMPAN PERIODE
+        |--------------------------------------------------------------------------
+        */
+
+        $rows[] = [
+
+            $current->toDateString(),
+
+            $periodEnd->toDateString()
+
+        ];
+
+        /*
+        |--------------------------------------------------------------------------
+        | NEXT PERIODE
+        |--------------------------------------------------------------------------
+        */
+
+        $current = $periodEnd
+            ->copy()
+            ->addDay();
+    }
+
+    return $rows;
+}
 }

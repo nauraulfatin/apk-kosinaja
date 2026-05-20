@@ -321,7 +321,128 @@
                 </button>
 
                 {{-- ============================================
-                     STATE 3 : DISETUJUI (approved)
+     STATE 3 : ANTRIAN
+     Condition: kamar masih penuh
+     ============================================ --}}
+@elseif($riwayat->status === 'antrian')
+
+@php $undangan = $riwayat; @endphp
+
+{{-- BANNER ANTRIAN --}}
+<div class="flex items-start gap-4 bg-[#FFF8ED]
+            border border-[#FFD8A8]
+            rounded-[18px] px-6 py-5 mb-8">
+
+    <div class="shrink-0 mt-0.5">
+
+        <svg xmlns="http://www.w3.org/2000/svg"
+             class="w-7 h-7 text-[#D97706]"
+             fill="none"
+             viewBox="0 0 24 24"
+             stroke="currentColor"
+             stroke-width="1.8">
+
+            <path stroke-linecap="round"
+                  stroke-linejoin="round"
+                  d="M8 7V3m8 4V3m-9 8h10m-11 9h12a2 2 0 002-2V7a2 2 0 00-2-2H6a2 2 0 00-2 2v11a2 2 0 002 2z" />
+
+        </svg>
+
+    </div>
+
+    <div>
+
+        <p class="text-[15px] font-bold text-[#B45309]">
+
+            Masuk Daftar Tunggu
+
+        </p>
+
+        <p class="text-[13px] text-[#C46B14]
+                  mt-1 leading-6">
+
+            Kamar masih ditempati penghuni lain.
+            Kamu sudah masuk daftar tunggu dan
+            dapat mulai masuk pada tanggal:
+
+            <span class="font-bold">
+
+                {{ \Carbon\Carbon::parse($undangan->tanggal_masuk)->translatedFormat('d F Y') }}
+
+            </span>
+
+        </p>
+
+    </div>
+
+</div>
+
+{{-- DETAIL --}}
+<div class="space-y-5">
+
+    <div class="flex items-center justify-between py-4
+                border-b border-[#F0F4F0]">
+
+        <span class="text-[14px] text-gray-500">
+            Nama Kost
+        </span>
+
+        <span class="text-[14px] font-semibold text-[#1B2B1D]">
+
+            {{ $undangan->kost->nama_kost ?? '-' }}
+
+        </span>
+
+    </div>
+
+    <div class="flex items-center justify-between py-4
+                border-b border-[#F0F4F0]">
+
+        <span class="text-[14px] text-gray-500">
+            Jadwal Masuk
+        </span>
+
+        <span class="text-[14px] font-semibold text-[#1B2B1D]">
+
+            {{ \Carbon\Carbon::parse($undangan->tanggal_masuk)->translatedFormat('d M Y') }}
+
+        </span>
+
+    </div>
+
+    <div class="flex items-center justify-between py-4">
+
+        <span class="text-[14px] text-gray-500">
+            Status
+        </span>
+
+        <span class="inline-flex items-center gap-1.5
+                     px-3 py-1.5 rounded-xl
+                     bg-[#FFF1E0]
+                     text-[#B45309]
+                     text-[13px] font-semibold">
+
+            Dalam Antrian
+
+        </span>
+
+    </div>
+
+</div>
+
+{{-- BUTTON DISABLED --}}
+<button disabled
+        class="mt-8 w-full py-4 rounded-2xl
+               bg-[#E7D3B7]
+               text-white font-semibold
+               text-[15px] cursor-not-allowed">
+
+    Menunggu Kamar Tersedia
+
+</button>
+
+                {{-- ============================================
+                     STATE 4 : DISETUJUI (approved)
                      Condition: punya undangan dengan status 'disetujui'
                      ============================================ --}}
                 @elseif($riwayat->status === 'aktif')
@@ -392,7 +513,57 @@
                     Lihat Dashboard
 
                 </a>
+{{-- ============================================
+     STATE 5 : NONAKTIF
+     ============================================ --}}
+@elseif($riwayat->status === 'nonaktif')
 
+<div class="flex flex-col items-center justify-center text-center py-14">
+
+    {{-- IMAGE --}}
+    <img
+        src="{{ asset('empty-kos.png') }}"
+        alt="Nonaktif"
+        class="w-[230px] h-auto object-contain"
+    >
+
+    {{-- TITLE --}}
+    <h3 class="text-[28px] font-bold text-[#1B2B1D]
+               leading-[1.4] mt-8 max-w-lg">
+
+        Saat ini kamu belum
+        menempati kost
+
+    </h3>
+
+    {{-- DESC --}}
+    <p class="text-gray-500 leading-7 text-[15px]
+              max-w-md mt-4">
+
+        Kamu sudah keluar dari kost sebelumnya.
+        Jika ingin masuk kembali atau bergabung
+        ke kost lain, silakan masukkan kode unik
+        dari pemilik kost.
+
+    </p>
+
+    {{-- BUTTON --}}
+    <button
+        onclick="bukaModalKodeUnik()"
+        class="mt-8 px-8 py-4
+               rounded-2xl
+               bg-[#6C8B6B]
+               hover:bg-[#587357]
+               text-white font-semibold
+               text-[15px]
+               transition-all duration-300"
+    >
+
+        Masukkan Kode Kost
+
+    </button>
+
+</div>
                 @endif
 
             </div>
@@ -408,7 +579,7 @@
      MODAL : KODE UNIK (8 DIGIT)
      Hanya tampil jika user belum punya undangan
      ========================================================= --}}
-@if(!$riwayat)
+@if(!$riwayat || $riwayat->status === 'nonaktif')
 <div id="modalKodeUnik" class="hidden fixed inset-0 z-50 flex items-center justify-center
            bg-black/40 backdrop-blur-sm px-4">
     <div class="bg-white rounded-[24px] shadow-xl w-full max-w-lg p-8 relative">
@@ -510,7 +681,7 @@
 {{-- =========================================================
      SCRIPT
      ========================================================= --}}
-@if(!$riwayat)
+@if(!$riwayat || $riwayat->status === 'nonaktif')
 <script>
 const kodeUnikInputs = document.querySelectorAll('.kode-unik-input');
 const kodeUnikBtn = document.getElementById('btnKirimKode');

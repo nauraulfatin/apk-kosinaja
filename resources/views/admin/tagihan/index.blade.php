@@ -2,9 +2,6 @@
 
 @section('content')
 
-{{-- ========================================================= --}}
-{{-- HEADER --}}
-{{-- ========================================================= --}}
 <div class="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-5 mb-8">
 
     <div>
@@ -26,39 +23,12 @@
 </div>
 
 {{-- ========================================================= --}}
-{{-- MONITORING --}}
+{{-- SUMMARY --}}
 {{-- ========================================================= --}}
-<div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-5 mb-8">
-
-    {{-- TOTAL --}}
-    <a
-        href="?filter=tagihan"
-        class="bg-white rounded-3xl p-6
-               border border-gray-100 shadow-sm
-               hover:shadow-md transition block"
-    >
-
-        <p class="text-sm text-gray-500 mb-2">
-
-            Total Tagihan
-
-        </p>
-
-        <h2 class="text-3xl font-bold text-[#0F0937]">
-
-            {{ $totalTagihan }}
-
-        </h2>
-
-    </a>
+<div class="grid grid-cols-1 md:grid-cols-3 gap-5 mb-8">
 
     {{-- MENUNGGU --}}
-    <a
-        href="?filter=menunggu"
-        class="bg-yellow-50 rounded-3xl p-6
-               border border-yellow-100 shadow-sm
-               hover:shadow-md transition block"
-    >
+    <div class="bg-yellow-50 rounded-3xl p-6 border border-yellow-100 shadow-sm">
 
         <p class="text-sm text-yellow-700 mb-2">
 
@@ -72,15 +42,10 @@
 
         </h2>
 
-    </a>
+    </div>
 
     {{-- LUNAS --}}
-    <a
-        href="?filter=lunas"
-        class="bg-green-50 rounded-3xl p-6
-               border border-green-100 shadow-sm
-               hover:shadow-md transition block"
-    >
+    <div class="bg-green-50 rounded-3xl p-6 border border-green-100 shadow-sm">
 
         <p class="text-sm text-green-700 mb-2">
 
@@ -94,15 +59,10 @@
 
         </h2>
 
-    </a>
+    </div>
 
     {{-- TELAT --}}
-    <a
-        href="?filter=telat"
-        class="bg-red-50 rounded-3xl p-6
-               border border-red-100 shadow-sm
-               hover:shadow-md transition block"
-    >
+    <div class="bg-red-50 rounded-3xl p-6 border border-red-100 shadow-sm">
 
         <p class="text-sm text-red-700 mb-2">
 
@@ -116,216 +76,296 @@
 
         </h2>
 
-    </a>
+    </div>
 
 </div>
 
 {{-- ========================================================= --}}
 {{-- TABLE --}}
 {{-- ========================================================= --}}
-<div
-    class="bg-white rounded-3xl shadow-sm
-           border border-gray-100 overflow-hidden"
->
+<div class="bg-white rounded-3xl shadow-sm border border-gray-100 overflow-hidden">
 
-    <table class="w-full">
+    <div class="overflow-x-auto">
 
-        <thead class="bg-[#F8F5F0]">
+        <table class="w-full">
 
-            <tr>
+            <thead class="bg-[#F8F5F0]">
 
-                <th class="px-6 py-4 text-left text-sm font-semibold text-gray-600">
+                <tr>
 
-                    Penghuni
+                    <th class="px-6 py-4 text-left text-sm font-semibold text-gray-600">
 
-                </th>
+                        Penghuni
 
-                <th class="px-6 py-4 text-left text-sm font-semibold text-gray-600">
+                    </th>
 
-                    Total Tagihan
-
-                </th>
-
-                <th class="px-6 py-4 text-left text-sm font-semibold text-gray-600">
-
-                    Status
-
-                </th>
-
-                <th class="px-6 py-4 text-left text-sm font-semibold text-gray-600">
-
-                    Detail
-
-                </th>
-
-            </tr>
-
-        </thead>
-
-        <tbody class="divide-y divide-gray-100">
-
-            @forelse($items as $userId => $tagihans)
-
-            @php
-
-                $user =
-                    $tagihans->first()->user;
-
-                $jumlahTagihan =
-                    $tagihans->count();
-
-                $belumBayar =
-    $tagihans
-        ->where('status', 'pending')
-        ->where(
-            'status_bukti',
-            'belum_upload'
-        )
-        ->count();
-        
-                $menunggu =
-                    $tagihans
-                        ->where('status_bukti', 'menunggu')
-                        ->count();
-
-                $telat =
-                    $tagihans
-                        ->where('status', 'telat')
-                        ->count();
-
-            @endphp
-
-            <tr class="hover:bg-gray-50">
-
-                {{-- PENGHUNI --}}
-                <td class="px-6 py-5">
-
-                    <div class="font-semibold text-[#0F0937]">
-
-                        {{ $user?->nama }}
-
-                    </div>
-
-                    <div class="text-sm text-gray-500 mt-1">
-
-                        {{ $user?->username }}
-
-                    </div>
-
-                </td>
-
-                {{-- TOTAL --}}
-                <td class="px-6 py-5">
-
-                    <div class="text-3xl font-bold text-[#0F0937]">
-
-                        {{ $jumlahTagihan }}
-
-                    </div>
-
-                    <div class="text-sm text-gray-500 mt-1">
+                    <th class="px-6 py-4 text-left text-sm font-semibold text-gray-600">
 
                         Total Tagihan
 
-                    </div>
+                    </th>
 
-                </td>
+                    <th class="px-6 py-4 text-left text-sm font-semibold text-gray-600">
 
-                {{-- STATUS --}}
-                <td class="px-6 py-5">
+                        Status
 
-                    <div class="flex flex-wrap gap-2">
+                    </th>
 
-                        @if($belumBayar > 0)
+                    <th class="px-6 py-4 text-left text-sm font-semibold text-gray-600">
 
-                        <div
-                            class="px-3 py-1 rounded-full
-                                   bg-gray-100 text-gray-700
-                                   text-xs font-semibold"
-                        >
+                        Detail
 
-                            {{ $belumBayar }}
-                            belum bayar
+                    </th>
+
+                </tr>
+
+            </thead>
+
+            <tbody class="divide-y divide-gray-100">
+
+                @forelse($items as $userId => $tagihans)
+
+                @php
+
+                    $user =
+                        $tagihans->first()->user;
+
+                    /*
+                    |--------------------------------------------------------------------------
+                    | TOTAL TAGIHAN
+                    |--------------------------------------------------------------------------
+                    */
+
+                    $jumlahTagihan =
+                        $tagihans->count();
+
+                    /*
+                    |--------------------------------------------------------------------------
+                    | MENUNGGU
+                    |--------------------------------------------------------------------------
+                    */
+
+                    $menunggu =
+                        $tagihans
+                            ->filter(function($t){
+
+                                return
+                                    $t->status_label
+                                    === 'menunggu_verifikasi';
+
+                            })
+                            ->count();
+
+                    /*
+                    |--------------------------------------------------------------------------
+                    | TELAT
+                    |--------------------------------------------------------------------------
+                    */
+
+                    $telat =
+                        $tagihans
+                            ->filter(function($t){
+
+                                return
+                                    $t->status_label
+                                    === 'telat';
+
+                            })
+                            ->count();
+
+                    /*
+                    |--------------------------------------------------------------------------
+                    | BELUM LUNAS
+                    |--------------------------------------------------------------------------
+                    */
+
+                    $belumLunas =
+                        $tagihans
+                            ->filter(function($t){
+
+                                return
+                                    $t->status_label
+                                    !== 'lunas';
+
+                            })
+                            ->count();
+
+                    /*
+                    |--------------------------------------------------------------------------
+                    | TOTAL NOMINAL BELUM LUNAS
+                    |--------------------------------------------------------------------------
+                    */
+
+                    $totalBelumLunas =
+                        $tagihans
+                            ->sum(function($t){
+
+                                return
+                                    $t->sisa_tagihan;
+
+                            });
+
+                @endphp
+
+                <tr class="hover:bg-gray-50">
+
+                    {{-- ========================================================= --}}
+                    {{-- USER --}}
+                    {{-- ========================================================= --}}
+                    <td class="px-6 py-5">
+
+                        <div class="font-semibold text-[#0F0937]">
+
+                            {{ $user?->nama }}
 
                         </div>
 
-                        @endif
+                        <div class="text-sm text-gray-500 mt-1">
 
-                        @if($menunggu > 0)
-
-                        <div
-                            class="px-3 py-1 rounded-full
-                                   bg-yellow-100 text-yellow-700
-                                   text-xs font-semibold"
-                        >
-
-                            {{ $menunggu }}
-                            menunggu
+                            {{ $user?->username }}
 
                         </div>
 
-                        @endif
+                    </td>
 
-                        @if($telat > 0)
+                    {{-- ========================================================= --}}
+                    {{-- TOTAL TAGIHAN --}}
+                    {{-- ========================================================= --}}
+                    <td class="px-6 py-5">
 
-                        <div
-                            class="px-3 py-1 rounded-full
-                                   bg-red-100 text-red-700
-                                   text-xs font-semibold"
-                        >
+                        <div class="text-3xl font-bold text-[#0F0937]">
 
-                            {{ $telat }}
-                            telat
+                            {{ $jumlahTagihan }}
 
                         </div>
 
-                        @endif
+                        <div class="text-sm text-gray-500 mt-1">
 
-                    </div>
+                            Periode tagihan
 
-                </td>
+                        </div>
 
-                {{-- DETAIL --}}
-                <td class="px-6 py-5">
+                    </td>
 
-                    <a
-                        href="{{ route('admin.tagihan.detail', $userId) }}"
-                        class="inline-flex items-center
-                               bg-[#6C8B6B]
-                               hover:bg-[#5B765A]
-                               text-white px-5 py-3
-                               rounded-2xl text-sm
-                               font-semibold transition"
+                    {{-- ========================================================= --}}
+                    {{-- STATUS --}}
+                    {{-- ========================================================= --}}
+                    <td class="px-6 py-5">
+
+                        <div class="flex flex-wrap gap-2">
+
+                            @if($belumLunas > 0)
+
+                            <div
+                                class="px-3 py-1 rounded-full
+                                       bg-gray-100 text-gray-700
+                                       text-xs font-semibold"
+                            >
+
+                                {{ $belumLunas }}
+                                belum lunas
+
+                            </div>
+
+                            @endif
+
+                            @if($menunggu > 0)
+
+                            <div
+                                class="px-3 py-1 rounded-full
+                                       bg-yellow-100 text-yellow-700
+                                       text-xs font-semibold"
+                            >
+
+                                {{ $menunggu }}
+                                menunggu
+
+                            </div>
+
+                            @endif
+
+                            @if($telat > 0)
+
+                            <div
+                                class="px-3 py-1 rounded-full
+                                       bg-red-100 text-red-700
+                                       text-xs font-semibold"
+                            >
+
+                                {{ $telat }}
+                                telat
+
+                            </div>
+
+                            @endif
+
+                            @if(
+                                $belumLunas === 0
+                                &&
+                                $jumlahTagihan > 0
+                            )
+
+                            <div
+                                class="px-3 py-1 rounded-full
+                                       bg-green-100 text-green-700
+                                       text-xs font-semibold"
+                            >
+
+                                Semua lunas
+
+                            </div>
+
+                            @endif
+
+                        </div>
+
+                    </td>
+
+                    {{-- ========================================================= --}}
+                    {{-- BUTTON --}}
+                    {{-- ========================================================= --}}
+                    <td class="px-6 py-5">
+
+                        <a
+                            href="{{ route('admin.tagihan.detail', $userId) }}"
+                            class="inline-flex items-center
+                                   bg-[#6C8B6B]
+                                   hover:bg-[#5B765A]
+                                   text-white px-5 py-3
+                                   rounded-2xl text-sm
+                                   font-semibold transition"
+                        >
+
+                            Lihat Detail
+
+                        </a>
+
+                    </td>
+
+                </tr>
+
+                @empty
+
+                <tr>
+
+                    <td
+                        colspan="4"
+                        class="px-6 py-12 text-center text-gray-500"
                     >
 
-                        Lihat Detail
+                        Belum ada data pembayaran.
 
-                    </a>
+                    </td>
 
-                </td>
+                </tr>
 
-            </tr>
+                @endforelse
 
-            @empty
+            </tbody>
 
-            <tr>
+        </table>
 
-                <td
-                    colspan="4"
-                    class="px-6 py-12 text-center text-gray-500"
-                >
-
-                    Belum ada data pembayaran.
-
-                </td>
-
-            </tr>
-
-            @endforelse
-
-        </tbody>
-
-    </table>
+    </div>
 
 </div>
 

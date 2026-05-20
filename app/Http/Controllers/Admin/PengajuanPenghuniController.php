@@ -3,10 +3,13 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use Illuminate\Http\Request;
+
 use App\Models\RiwayatHunian;
 use App\Models\KamarKost;
-use App\Models\PeriodePenagihan;
+use App\Models\HargaKamar;
 use App\Models\Tagihan;
+
 use Carbon\Carbon;
 
 class PengajuanPenghuniController extends Controller
@@ -19,24 +22,12 @@ class PengajuanPenghuniController extends Controller
 
     public function index()
     {
-        /*
-        |--------------------------------------------------------------------------
-        | KOST ADMIN LOGIN
-        |--------------------------------------------------------------------------
-        */
-
         $kost = auth()->user()->kost;
-
-        /*
-        |--------------------------------------------------------------------------
-        | AMBIL PENGAJUAN
-        |--------------------------------------------------------------------------
-        */
 
         $items = RiwayatHunian::with([
 
                 'user',
-                'kamar'
+                'kost'
 
             ])
             ->where(
@@ -46,28 +37,15 @@ class PengajuanPenghuniController extends Controller
                 'menunggu'
 
             )
-            ->whereHas(
+            ->where(
 
-                'kamar',
+                'id_kost',
 
-                function ($q) use ($kost) {
-
-                    $q->where(
-                        'id_kost',
-                        $kost->id_kost
-                    );
-
-                }
+                $kost->id
 
             )
             ->latest()
             ->get();
-
-        /*
-        |--------------------------------------------------------------------------
-        | VIEW
-        |--------------------------------------------------------------------------
-        */
 
         return view(
 
@@ -79,260 +57,400 @@ class PengajuanPenghuniController extends Controller
     }
 
     /*
-|--------------------------------------------------------------------------
-| SHOW
-|--------------------------------------------------------------------------
-*/
-
-public function show(
-    RiwayatHunian $riwayatHunian
-)
-{
-    /*
     |--------------------------------------------------------------------------
-    | KAMAR KOST
+    | SHOW
     |--------------------------------------------------------------------------
     */
 
-    $kamars = KamarKost::where(
-
-            'id_kost',
-
-            auth()->user()
-                ->kost
-                ->id_kost
-
-        )
-        ->get();
-
-    /*
-    |--------------------------------------------------------------------------
-    | PERIODE
-    |--------------------------------------------------------------------------
-    */
-
-    $periodes = PeriodePenagihan::all();
-
-    /*
-    |--------------------------------------------------------------------------
-    | VIEW
-    |--------------------------------------------------------------------------
-    */
-
-    return view(
-
-        'admin.pengajuan.show',
-
-        compact(
-
-            'riwayatHunian',
-            'kamars',
-            'periodes'
-
-        )
-
-    );
-}
-/*
-|--------------------------------------------------------------------------
-| APPROVE
-|--------------------------------------------------------------------------
-*/
-
-public function approve(
-    Request $request,
-    RiwayatHunian $riwayatHunian
-)
-{
-    /*
-    |--------------------------------------------------------------------------
-    | VALIDASI
-    |--------------------------------------------------------------------------
-    */
-
-    $data = $request->validate([
-
-        'id_kamar' =>
-
-            'required|exists:kamar_kosts,id_kamar',
-
-        'tanggal_masuk' =>
-
-            'required|date',
-
-        'tanggal_keluar' =>
-
-            'required|date|after:tanggal_masuk',
-
-        'id_periode' =>
-
-            'required|exists:periode_penagihans,id_periode',
-
-        'jatuh_tempo' =>
-
-            'required|date',
-
-    ]);
-
-    /*
-    |--------------------------------------------------------------------------
-    | UPDATE RIWAYAT HUNIAN
-    |--------------------------------------------------------------------------
-    */
-
-    $riwayatHunian->update([
-
-        'id_kamar' =>
-
-            $data['id_kamar'],
-
-        'tanggal_masuk' =>
-
-            $data['tanggal_masuk'],
-
-        'tanggal_keluar' =>
-
-            $data['tanggal_keluar'],
-
-        'status' =>
-
-            'aktif',
-
-    ]);
-
-    /*
-    |--------------------------------------------------------------------------
-    | UPDATE STATUS KAMAR
-    |--------------------------------------------------------------------------
-    */
-
-    $kamar = KamarKost::findOrFail(
-        $data['id_kamar']
-    );
-
-    $kamar->update([
-
-        'status' => 'terisi'
-
-    ]);
-
-    /*
-    |--------------------------------------------------------------------------
-    | AMBIL HARGA KAMAR AKTIF
-    |--------------------------------------------------------------------------
-    */
-
-    $hargaKamar = HargaKamar::where(
-
-            'id_kamar',
-
-            $data['id_kamar']
-
-        )
-        ->where(
-
-            'id_periode',
-
-            $data['id_periode']
-
-        )
-        ->first();
-
-    /*
-    |--------------------------------------------------------------------------
-    | CEK HARGA
-    |--------------------------------------------------------------------------
-    */
-
-    if (!$hargaKamar)
+    public function show(
+        RiwayatHunian $riwayatHunian
+    )
     {
-        return back()->with(
+        /*
+        |--------------------------------------------------------------------------
+        | KAMAR
+        |--------------------------------------------------------------------------
+        */
 
-            'error',
+        $kamars = KamarKost::with([
 
-            'Harga kamar untuk periode ini belum tersedia.'
+                'riwayatHunian.user'
+
+            ])
+            ->where(
+
+                'id_kost',
+
+                auth()->user()
+                    ->kost
+                    ->id
+
+            )
+            ->get();
+
+        /*
+        |--------------------------------------------------------------------------
+        | HARGA KAMAR
+        |--------------------------------------------------------------------------
+        */
+
+        $hargaKamars = HargaKamar::with([
+
+                'periode',
+                'kamar'
+
+            ])
+            ->where(
+
+                'isactive',
+
+                true
+
+            )
+            ->get();
+
+        return view(
+
+            'admin.pengajuan.show',
+
+            compact(
+
+                'riwayatHunian',
+                'kamars',
+                'hargaKamars'
+
+            )
 
         );
     }
 
     /*
     |--------------------------------------------------------------------------
-    | GENERATE TAGIHAN PERTAMA
+    | APPROVE / ANTRIAN
     |--------------------------------------------------------------------------
     */
 
-    Tagihan::create([
-
-        'id_kamar' =>
-
-            $data['id_kamar'],
-
-        'id_user' =>
-
-            $riwayatHunian->id_user,
-
-        'id_harga_kamar' =>
-
-            $hargaKamar->id_harga_kamar,
-
+    public function approve(
+        Request $request,
+        RiwayatHunian $riwayatHunian
+    )
+    {
         /*
         |--------------------------------------------------------------------------
-        | DURASI
+        | VALIDASI
         |--------------------------------------------------------------------------
         */
 
-        'durasi' => 1,
+        $data = $request->validate([
+
+            'id_kamar' =>
+
+                'required|exists:kamar_kosts,id_kamar',
+
+            'tanggal_masuk' =>
+
+                'required|date',
+
+            'tanggal_keluar' =>
+
+                'required|date|after:tanggal_masuk',
+
+            'id_harga_kamar' =>
+
+                'required|exists:harga_kamars,id_harga_kamar',
+
+            'jatuh_tempo_hari' =>
+
+                'required|integer|min:1|max:31',
+
+            'status' =>
+
+                'required|in:aktif,antrian',
+
+        ]);
 
         /*
         |--------------------------------------------------------------------------
-        | PERIODE TAGIHAN
+        | UPDATE RIWAYAT
         |--------------------------------------------------------------------------
         */
 
-        'tanggal_mulai' =>
+        $riwayatHunian->update([
 
-            $data['tanggal_masuk'],
+            'id_kost' =>
 
-        'tanggal_selesai' =>
+                auth()->user()
+                    ->kost
+                    ->id,
 
-            Carbon::parse(
-                $data['tanggal_masuk']
-            )->addMonth(),
+            'id_kamar' =>
+
+                $data['id_kamar'],
+
+            'tanggal_masuk' =>
+
+                $data['tanggal_masuk'],
+
+            'tanggal_keluar' =>
+
+                $data['tanggal_keluar'],
+
+            'status' =>
+
+                $data['status'],
+
+        ]);
 
         /*
         |--------------------------------------------------------------------------
-        | JATUH TEMPO
+        | JIKA ANTRIAN
         |--------------------------------------------------------------------------
         */
 
-        'jatuh_tempo' =>
+        if ($data['status'] === 'antrian')
+        {
+            return redirect()
+                ->route('admin.pengajuan.index')
+                ->with(
 
-            $data['jatuh_tempo'],
+                    'success',
+
+                    'Penghuni berhasil dimasukkan ke daftar antrian.'
+
+                );
+        }
 
         /*
         |--------------------------------------------------------------------------
-        | STATUS
+        | HARGA KAMAR
         |--------------------------------------------------------------------------
         */
 
-        'status' => 'pending',
+        $hargaKamar = HargaKamar::with(
 
-    ]);
+                'periode'
+
+            )
+            ->findOrFail(
+
+                $data['id_harga_kamar']
+
+            );
+
+        /*
+        |--------------------------------------------------------------------------
+        | HAPUS TAGIHAN LAMA
+        |--------------------------------------------------------------------------
+        */
+
+        Tagihan::where(
+
+            'id_user',
+
+            $riwayatHunian->id_user
+
+        )->delete();
+
+        /*
+        |--------------------------------------------------------------------------
+        | GENERATE TAGIHAN
+        |--------------------------------------------------------------------------
+        */
+
+        foreach (
+
+            $this->makeTagihanPeriods(
+
+                $data['tanggal_masuk'],
+
+                $data['tanggal_keluar'],
+
+                $hargaKamar
+                    ->periode
+                    ->jumlah_interval,
+
+                $hargaKamar
+                    ->periode
+                    ->satuan_interval
+
+            )
+
+            as $row
+
+        ) {
+
+            Tagihan::create([
+
+                'id_kamar' =>
+
+                    $data['id_kamar'],
+
+                'id_user' =>
+
+                    $riwayatHunian->id_user,
+
+                'id_harga_kamar' =>
+
+                    $hargaKamar
+                        ->id_harga_kamar,
+
+                'tanggal_mulai' =>
+
+                    $row[0],
+
+                'tanggal_selesai' =>
+
+                    $row[1],
+
+                /*
+                |--------------------------------------------------------------------------
+                | JATUH TEMPO
+                |--------------------------------------------------------------------------
+                */
+
+                'tanggal_jatuh_tempo' =>
+
+                    Carbon::parse(
+
+                        $row[0]
+
+                    )->addDays(
+
+                        (int)
+                        $data['jatuh_tempo_hari']
+
+                    ),
+
+                /*
+                |--------------------------------------------------------------------------
+                | STATUS
+                |--------------------------------------------------------------------------
+                */
+
+                'status' =>
+
+                    'pending',
+
+            ]);
+        }
+
+        return redirect()
+            ->route('admin.pengajuan.index')
+            ->with(
+
+                'success',
+
+                'Penghuni berhasil diapprove.'
+
+            );
+    }
 
     /*
     |--------------------------------------------------------------------------
-    | REDIRECT
+    | GENERATE PERIODE TAGIHAN
     |--------------------------------------------------------------------------
     */
 
-    return redirect()
-        ->route('admin.pengajuan.index')
-        ->with(
+    private function makeTagihanPeriods(
+        string $start,
+        string $end,
+        int $jumlahInterval,
+        string $satuanInterval
+    ): array {
 
-            'success',
+        $current = Carbon::parse($start)
+            ->startOfDay();
 
-            'Penghuni berhasil diapprove.'
+        $finish = Carbon::parse($end)
+            ->startOfDay();
 
-        );
-}
+        $rows = [];
+
+        while ($current < $finish)
+        {
+            $periodEnd = match (
+
+                $satuanInterval
+
+            ) {
+
+                'hari' =>
+
+                    $current->copy()
+                        ->addDays(
+                            $jumlahInterval
+                        )
+                        ->subDay(),
+
+                'minggu' =>
+
+                    $current->copy()
+                        ->addWeeks(
+                            $jumlahInterval
+                        )
+                        ->subDay(),
+
+                'bulan' =>
+
+                    $current->copy()
+                        ->addMonthsNoOverflow(
+                            $jumlahInterval
+                        )
+                        ->subDay(),
+
+                'tahun' =>
+
+                    $current->copy()
+                        ->addYears(
+                            $jumlahInterval
+                        )
+                        ->subDay(),
+
+                default =>
+
+                    throw new \InvalidArgumentException(
+
+                        'Satuan periode tidak valid.'
+
+                    ),
+            };
+
+            /*
+            |--------------------------------------------------------------------------
+            | BATASI TANGGAL KELUAR
+            |--------------------------------------------------------------------------
+            */
+
+            if ($periodEnd > $finish)
+            {
+                $periodEnd = $finish->copy();
+            }
+
+            /*
+            |--------------------------------------------------------------------------
+            | SIMPAN
+            |--------------------------------------------------------------------------
+            */
+
+            $rows[] = [
+
+                $current->toDateString(),
+
+                $periodEnd->toDateString()
+
+            ];
+
+            /*
+            |--------------------------------------------------------------------------
+            | NEXT
+            |--------------------------------------------------------------------------
+            */
+
+            $current = $periodEnd
+                ->copy()
+                ->addDay();
+        }
+
+        return $rows;
+    }
 }

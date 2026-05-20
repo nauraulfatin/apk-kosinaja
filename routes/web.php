@@ -287,17 +287,89 @@ Route::put(
     ->except(['show'])
     ->names('kamar.harga');
 
-    /*
-    |--------------------------------------------------------------------------
-    | PENGHUNI
-    |--------------------------------------------------------------------------
-    */
+   /*
+|--------------------------------------------------------------------------
+| PENGHUNI AKTIF
+|--------------------------------------------------------------------------
+*/
 
-    Route::resource(
-        '/penghuni',
-        PenghuniController::class
-    )->except(['show']);
+Route::get(
 
+    '/penghuni/aktif',
+
+    [PenghuniController::class, 'aktif']
+
+)->name('penghuni.aktif');
+
+/*
+|--------------------------------------------------------------------------
+| PENGHUNI ANTRIAN
+|--------------------------------------------------------------------------
+*/
+
+Route::get(
+
+    '/penghuni/antrian',
+
+    [PenghuniController::class, 'antrian']
+
+)->name('penghuni.antrian');
+
+/*
+|--------------------------------------------------------------------------
+| PENGHUNI NONAKTIF
+|--------------------------------------------------------------------------
+*/
+
+Route::get(
+
+    '/penghuni/nonaktif',
+
+    [PenghuniController::class, 'nonaktif']
+
+)->name('penghuni.nonaktif');
+
+/*
+|--------------------------------------------------------------------------
+| NONAKTIFKAN PENGHUNI
+|--------------------------------------------------------------------------
+*/
+
+Route::put(
+
+    '/penghuni/{riwayatHunian}/nonaktifkan',
+
+    [PenghuniController::class, 'nonaktifkan']
+
+)->name('penghuni.nonaktifkan');
+
+/*
+|--------------------------------------------------------------------------
+| FORM AKTIFKAN PENGHUNI
+|--------------------------------------------------------------------------
+*/
+
+Route::get(
+
+    '/penghuni/{riwayatHunian}/aktifkan',
+
+    [PenghuniController::class, 'formAktifkan']
+
+)->name('penghuni.formAktifkan');
+
+/*
+|--------------------------------------------------------------------------
+| AKTIFKAN PENGHUNI
+|--------------------------------------------------------------------------
+*/
+
+Route::put(
+
+    '/penghuni/{riwayatHunian}/aktifkan',
+
+    [PenghuniController::class, 'aktifkan']
+
+)->name('penghuni.aktifkan');
     /*
     |--------------------------------------------------------------------------
     | TAGIHAN & PEMBAYARAN
@@ -315,14 +387,14 @@ Route::put(
 )->name('tagihan.detail');
 
     Route::post(
-        '/tagihan/{tagihan}/validasi',
-        [TagihanController::class, 'validasiBukti']
-    )->name('tagihan.validasi');
+    '/tagihan/{pembayaran}/validasi',
+    [TagihanController::class, 'validasiBukti']
+)->name('tagihan.validasi');
 
-    Route::post(
-        '/tagihan/{tagihan}/tolak',
-        [TagihanController::class, 'tolakBukti']
-    )->name('tagihan.tolak');
+Route::post(
+    '/tagihan/{pembayaran}/tolak',
+    [TagihanController::class, 'tolakBukti']
+)->name('tagihan.tolak');
 
     /*
     |--------------------------------------------------------------------------
@@ -404,6 +476,10 @@ Route::middleware([
         '/pembayaran',
         [TagihanController::class, 'storePembayaran']
     )->name('pembayaran.store');
+    Route::get(
+    '/riwayat-pembayaran',
+    [TagihanController::class, 'riwayatPembayaran']
+)->name('riwayat-pembayaran');
 
     
 
@@ -483,19 +559,17 @@ Route::middleware([
     )->name('aduan.store');
 
 });
-Route::middleware('auth')->group(function () {
 
-    Route::get(
-        '/profil',
-        function () {
+Route::get(
 
-            return view(
-                'profil.index'
-            );
+    '/profil',
 
-        }
-    )->name('profil.index');
+    function () {
 
-Route::post('/penghuni/hubungkan', [PenghuniController::class, 'hubungkan'])->name('penghuni.hubungkan');
+        return view(
+            'profil.index'
+        );
 
-});
+    }
+
+)->name('profil.index');
