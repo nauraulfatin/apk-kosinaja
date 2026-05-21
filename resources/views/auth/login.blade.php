@@ -427,15 +427,16 @@
 
                         Belum punya akun?
 
-                        <a
-                            href="{{ route('admin-kost.register') }}"
-                            class="text-[#6C8B6B]
-                                   font-semibold hover:underline"
-                        >
+                       <button
+    type="button"
+    onclick="bukaModal()"
+    class="text-[#6C8B6B]
+           font-semibold hover:underline"
+>
 
-                            Daftar Sekarang
+    Daftar Sekarang
 
-                        </a>
+</button>
 
                     </p>
 

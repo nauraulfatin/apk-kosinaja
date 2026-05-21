@@ -7,104 +7,55 @@
     {{-- ========================================================= --}}
     {{-- LEFT IMAGE --}}
     {{-- ========================================================= --}}
-    <div class="hidden lg:block lg:w-[42%]
-                relative overflow-hidden
-                h-screen sticky top-0">
+    <div class="hidden lg:block lg:w-[42%]  relative overflow-hidden  h-screen sticky top-0">
 
-        <img
-            src="{{ asset('foto-pintu.png') }}"
-            alt="Register"
-            class="absolute inset-0 w-full h-full object-cover"
-        >
+        <img src="{{ asset('foto-pintu.png') }}"  alt="Register" class="absolute inset-0 w-full h-full object-cover" >
 
-        <div class="absolute inset-0
-                    bg-gradient-to-t
-                    from-black/80
-                    via-black/20
-                    to-transparent"></div>
+        <div class="absolute inset-0 bg-gradient-to-t  from-black/80 via-black/20 to-transparent"></div>
 
-        <div class="absolute inset-0 z-10
-                    flex flex-col justify-between
-                    p-10">
+        <div class="absolute inset-0 z-10 flex flex-col justify-between p-10">
 
             {{-- LOGO --}}
             <div class="flex items-center gap-3">
+                <img src="{{ asset('logo.png') }}"  class="w-11 h-11 object-contain" >
 
-                <img
-                    src="{{ asset('logo.png') }}"
-                    class="w-11 h-11 object-contain"
-                >
-
-                <h1 class="text-3xl font-bold text-white">
-
-                    KosinAja!
-
-                </h1>
-
+                <h1 class="text-3xl font-bold text-white"> KosinAja! </h1>
             </div>
 
             {{-- TEXT --}}
             <div>
-
-                <h2 class="text-5xl font-bold
-                           text-white leading-[1.15]">
-
+                <h2 class="text-5xl font-bold text-white leading-[1.15]">
                     Temukan Kost
                     <br>
-
                     <span class="text-[#D6E5D6]">
-
                         Impianmu,
-
                     </span>
-
                     <br>
-
                     Lebih Mudah.
-
                 </h2>
 
-                <p class="text-white/80 text-lg
-                          leading-relaxed mt-6 max-w-md">
-
+                <p class="text-white/80 text-lg leading-relaxed mt-6 max-w-md">
                     Cari kost nyaman,
                     aman, dan sesuai kebutuhanmu
                     dengan lebih praktis.
-
                 </p>
-
             </div>
-
         </div>
-
     </div>
 
     {{-- ========================================================= --}}
     {{-- FORM --}}
     {{-- ========================================================= --}}
-    <div class="w-full lg:w-[58%]
-                h-screen overflow-y-auto
-                flex items-start justify-center
-                px-6 py-10">
+    <div class="w-full lg:w-[58%]  h-screen overflow-y-auto flex items-start justify-center  px-6 py-10">
 
-        <div class="w-full max-w-4xl
-                    bg-white rounded-[32px]
-                    border border-gray-100
-                    shadow-sm p-8 lg:p-12">
+        <div class="w-full max-w-4xl bg-white rounded-[32px]  border border-gray-100 shadow-sm p-8 lg:p-12">
 
             {{-- HEADER --}}
             <div class="mb-10">
-
-                <h1 class="text-4xl font-bold text-[#0F0937]">
-
-                    Daftar Sebagai Penghuni
-
-                </h1>
+                <h1 class="text-4xl font-bold text-[#0F0937]">  Daftar Sebagai Penghuni </h1>
 
                 <p class="text-gray-500 mt-3 text-base">
-
                     Buat akun untuk mulai mencari kost.
-
                 </p>
 
             </div>
@@ -112,29 +63,18 @@
             {{-- ERROR --}}
             @if($errors->any())
 
-                <div class="mb-8
-                            bg-red-50 border border-red-200
-                            rounded-2xl px-5 py-4 text-red-700">
-
+                <div class="mb-8 bg-red-50 border border-red-200  rounded-2xl px-5 py-4 text-red-700">
                     <ul class="space-y-1 text-sm">
-
                         @foreach($errors->all() as $e)
-
                             <li>• {{ $e }}</li>
-
                         @endforeach
-
                     </ul>
-
                 </div>
 
             @endif
 
             {{-- FORM --}}
-            <form
-                method="POST"
-                action="{{ route('register.penghuni.store') }}"
-            >
+            <form method="POST"  action="{{ route('register.penghuni.store') }}" >
 
                 @csrf
 
@@ -162,13 +102,7 @@
                             />
 
                         </svg>
-
-                        <h2 class="text-2xl font-semibold text-[#4F6B4F]">
-
-                            Data Akun
-
-                        </h2>
-
+                        <h2 class="text-2xl font-semibold text-[#4F6B4F]"> Data Akun </h2>
                     </div>
 
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
@@ -176,11 +110,8 @@
                         {{-- NAMA --}}
                         <div>
 
-                            <label class="block text-sm font-medium
-                                         text-gray-600 mb-2">
-
+                            <label class="block text-sm font-medium text-gray-600 mb-2">
                                 Nama Lengkap
-
                             </label>
 
                             <input
@@ -193,17 +124,13 @@
                                        focus:ring-2
                                        focus:ring-[#6C8B6B]"
                             >
-
                         </div>
 
                         {{-- NIK --}}
                         <div>
 
-                            <label class="block text-sm font-medium
-                                         text-gray-600 mb-2">
-
+                            <label class="block text-sm font-medium text-gray-600 mb-2">
                                 NIK
-
                             </label>
 
                             <input
@@ -221,12 +148,8 @@
 
                         {{-- USERNAME --}}
                         <div>
-
-                            <label class="block text-sm font-medium
-                                         text-gray-600 mb-2">
-
+                            <label class="block text-sm font-medium  text-gray-600 mb-2">
                                 Username
-
                             </label>
 
                             <input
@@ -239,17 +162,12 @@
                                        focus:ring-2
                                        focus:ring-[#6C8B6B]"
                             >
-
                         </div>
 
                         {{-- NO HP --}}
                         <div>
-
-                            <label class="block text-sm font-medium
-                                         text-gray-600 mb-2">
-
+                            <label class="block text-sm font-medium  text-gray-600 mb-2">
                                 Nomor WhatsApp
-
                             </label>
 
                             <input
@@ -262,21 +180,15 @@
                                        focus:ring-2
                                        focus:ring-[#6C8B6B]"
                             >
-
                         </div>
 
                         {{-- PASSWORD --}}
                         <div>
-
-                            <label class="block text-sm font-medium
-                                         text-gray-600 mb-2">
-
+                            <label class="block text-sm font-medium text-gray-600 mb-2">
                                 Password
-
                             </label>
 
                             <div class="relative">
-
                                 <input
                                     id="password"
                                     type="password"
@@ -299,8 +211,7 @@
                                     <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" fill="none"
                                         viewBox="0 0 24 24" stroke="currentColor">
 
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                            d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
 
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5
                                                c4.478 0 8.268 2.943 9.542 7
@@ -308,25 +219,18 @@
                                                -4.477 0-8.268-2.943-9.542-7z" />
 
                                     </svg>
-
                                 </button>
-
                             </div>
-
                         </div>
 
                         {{-- KONFIRMASI PASSWORD --}}
                         <div>
 
-                            <label class="block text-sm font-medium
-                                         text-gray-600 mb-2">
-
+                            <label class="block text-sm font-medium text-gray-600 mb-2">
                                 Konfirmasi Password
-
                             </label>
 
                             <div class="relative">
-
                                 <input
                                     id="password_confirmation"
                                     type="password"
@@ -344,13 +248,11 @@
                                     class="absolute right-5 top-1/2
                                            -translate-y-1/2 text-gray-400"
                                 >
-
                                     
                                     <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" fill="none"
                                         viewBox="0 0 24 24" stroke="currentColor">
 
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                            d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
 
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5
                                                c4.478 0 8.268 2.943 9.542 7
@@ -358,15 +260,10 @@
                                                -4.477 0-8.268-2.943-9.542-7z" />
 
                                     </svg>
-
                                 </button>
-
                             </div>
-
                         </div>
-
                     </div>
-
                 </div>
 
                 {{-- ========================================================= --}}
@@ -375,20 +272,15 @@
                 <div class="mb-6">
 
                     <div
-                        class="g-recaptcha"
-                        data-sitekey="{{ env('NOCAPTCHA_SITEKEY') }}"
+                        class="g-recaptcha" data-sitekey="{{ env('NOCAPTCHA_SITEKEY') }}"
                     ></div>
 
                     @if ($errors->has('g-recaptcha-response'))
-
                         <p class="text-red-500 text-sm mt-2">
-
                             {{ $errors->first('g-recaptcha-response') }}
-
                         </p>
 
                     @endif
-
                 </div>
 
                 {{-- BUTTON --}}
@@ -400,38 +292,24 @@
                            py-5 rounded-2xl
                            text-lg transition"
                 >
-
                     Daftar Sekarang
-
                 </button>
 
                 {{-- LOGIN --}}
                 <div class="text-center mt-6">
-
                     <p class="text-gray-500">
-
                         Sudah punya akun?
-
                         <a
                             href="{{ route('login') }}"
-                            class="text-[#6C8B6B]
-                                   font-semibold hover:underline"
+                            class="text-[#6C8B6B] font-semibold hover:underline"
                         >
-
                             Masuk di sini
-
                         </a>
-
                     </p>
-
                 </div>
-
             </form>
-
         </div>
-
     </div>
-
 </div>
 
 {{-- ========================================================= --}}
@@ -449,7 +327,5 @@ function togglePassword(id)
             ? 'text'
             : 'password';
 }
-
 </script>
-
 @endsection

@@ -69,11 +69,7 @@ class KamarKost extends Model
         );
     }
 
-    /*
-    |--------------------------------------------------------------------------
-    | RELASI HARGA KAMAR
-    |--------------------------------------------------------------------------
-    */
+    //relasi harga
 
     public function hargaKamars()
     {
@@ -86,11 +82,7 @@ class KamarKost extends Model
         );
     }
 
-    /*
-    |--------------------------------------------------------------------------
-    | RELASI RIWAYAT HUNIAN
-    |--------------------------------------------------------------------------
-    */
+    //relasi riwayat hunian
 
     public function riwayatHunian()
     {
@@ -105,11 +97,7 @@ class KamarKost extends Model
         );
     }
 
-    /*
-    |--------------------------------------------------------------------------
-    | STATUS OTOMATIS
-    |--------------------------------------------------------------------------
-    */
+    //status otomatis
 
     public function getStatusLabelAttribute()
 {
