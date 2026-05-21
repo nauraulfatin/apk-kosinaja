@@ -4,7 +4,7 @@
 
 @section('content')
 
-<div class="max-w-7xl mx-auto px-6 lg:px-8 py-10">
+<div class="max-w-8xl mx-auto px-6 lg:px-8 py-10">
 
     {{-- ========================================================= --}}
     {{-- BREADCRUMB --}}
@@ -31,7 +31,7 @@
         {{-- ========================================================= --}}
         {{-- LEFT : DATA DIRI --}}
         {{-- ========================================================= --}}
-        <div class="w-full lg:w-[320px] shrink-0">
+        <div class="w-full lg:w-[400px] shrink-0">
 
             <div class="bg-white rounded-[28px]
                         border border-[#EEF2EE]
@@ -125,45 +125,6 @@
                         </div>
                     </div>
 
-                    {{-- JENIS KELAMIN --}}
-                    @if(auth()->user()->jenis_kelamin)
-                    <div class="flex gap-4 items-start">
-                        <div class="text-[#6C8B6B] mt-[2px] shrink-0">
-                            <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" fill="none" viewBox="0 0 24 24"
-                                stroke="currentColor" stroke-width="1.8">
-                                <path stroke-linecap="round" stroke-linejoin="round"
-                                    d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
-                            </svg>
-                        </div>
-                        <div>
-                            <p class="text-[12px] text-gray-400">Jenis Kelamin</p>
-                            <h4 class="text-[14px] font-semibold text-[#1B2B1D] mt-0.5 leading-6">
-                                {{ auth()->user()->jenis_kelamin }}
-                            </h4>
-                        </div>
-                    </div>
-                    @endif
-
-                    {{-- ASAL DAERAH --}}
-                    @if(auth()->user()->asal_daerah)
-                    <div class="flex gap-4 items-start">
-                        <div class="text-[#6C8B6B] mt-[2px] shrink-0">
-                            <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" fill="none" viewBox="0 0 24 24"
-                                stroke="currentColor" stroke-width="1.8">
-                                <path stroke-linecap="round" stroke-linejoin="round"
-                                    d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
-                                <path stroke-linecap="round" stroke-linejoin="round"
-                                    d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
-                            </svg>
-                        </div>
-                        <div>
-                            <p class="text-[12px] text-gray-400">Asal Daerah</p>
-                            <h4 class="text-[14px] font-semibold text-[#1B2B1D] mt-0.5 leading-6">
-                                {{ auth()->user()->asal_daerah }}
-                            </h4>
-                        </div>
-                    </div>
-                    @endif
 
                     {{-- STATUS --}}
                     <div class="flex gap-4 items-start">
@@ -219,14 +180,14 @@
                      ============================================ --}}
                 @php
 
-    $riwayat = auth()->user()
-        ->riwayatHunian()
-        ->latest()
-        ->first();
+                $riwayat = auth()->user()
+                ->riwayatHunian()
+                ->latest()
+                ->first();
 
-@endphp
+                @endphp
 
-@if(!$riwayat)
+                @if(!$riwayat)
 
                 <div class="flex flex-col items-center justify-center text-center py-16">
 
@@ -324,122 +285,116 @@
      STATE 3 : ANTRIAN
      Condition: kamar masih penuh
      ============================================ --}}
-@elseif($riwayat->status === 'antrian')
+                @elseif($riwayat->status === 'antrian')
 
-@php $undangan = $riwayat; @endphp
+                @php $undangan = $riwayat; @endphp
 
-{{-- BANNER ANTRIAN --}}
-<div class="flex items-start gap-4 bg-[#FFF8ED]
+                {{-- BANNER ANTRIAN --}}
+                <div class="flex items-start gap-4 bg-[#FFF8ED]
             border border-[#FFD8A8]
             rounded-[18px] px-6 py-5 mb-8">
 
-    <div class="shrink-0 mt-0.5">
+                    <div class="shrink-0 mt-0.5">
 
-        <svg xmlns="http://www.w3.org/2000/svg"
-             class="w-7 h-7 text-[#D97706]"
-             fill="none"
-             viewBox="0 0 24 24"
-             stroke="currentColor"
-             stroke-width="1.8">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="w-7 h-7 text-[#D97706]" fill="none"
+                            viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8">
 
-            <path stroke-linecap="round"
-                  stroke-linejoin="round"
-                  d="M8 7V3m8 4V3m-9 8h10m-11 9h12a2 2 0 002-2V7a2 2 0 00-2-2H6a2 2 0 00-2 2v11a2 2 0 002 2z" />
+                            <path stroke-linecap="round" stroke-linejoin="round"
+                                d="M8 7V3m8 4V3m-9 8h10m-11 9h12a2 2 0 002-2V7a2 2 0 00-2-2H6a2 2 0 00-2 2v11a2 2 0 002 2z" />
 
-        </svg>
+                        </svg>
 
-    </div>
+                    </div>
 
-    <div>
+                    <div>
 
-        <p class="text-[15px] font-bold text-[#B45309]">
+                        <p class="text-[15px] font-bold text-[#B45309]">
 
-            Masuk Daftar Tunggu
+                            Masuk Daftar Tunggu
 
-        </p>
+                        </p>
 
-        <p class="text-[13px] text-[#C46B14]
+                        <p class="text-[13px] text-[#C46B14]
                   mt-1 leading-6">
 
-            Kamar masih ditempati penghuni lain.
-            Kamu sudah masuk daftar tunggu dan
-            dapat mulai masuk pada tanggal:
+                            Kamar masih ditempati penghuni lain.
+                            Kamu sudah masuk daftar tunggu dan
+                            dapat mulai masuk pada tanggal:
 
-            <span class="font-bold">
+                            <span class="font-bold">
 
-                {{ \Carbon\Carbon::parse($undangan->tanggal_masuk)->translatedFormat('d F Y') }}
+                                {{ \Carbon\Carbon::parse($undangan->tanggal_masuk)->translatedFormat('d F Y') }}
 
-            </span>
+                            </span>
 
-        </p>
+                        </p>
 
-    </div>
+                    </div>
 
-</div>
+                </div>
 
-{{-- DETAIL --}}
-<div class="space-y-5">
+                {{-- DETAIL --}}
+                <div class="space-y-5">
 
-    <div class="flex items-center justify-between py-4
+                    <div class="flex items-center justify-between py-4
                 border-b border-[#F0F4F0]">
 
-        <span class="text-[14px] text-gray-500">
-            Nama Kost
-        </span>
+                        <span class="text-[14px] text-gray-500">
+                            Nama Kost
+                        </span>
 
-        <span class="text-[14px] font-semibold text-[#1B2B1D]">
+                        <span class="text-[14px] font-semibold text-[#1B2B1D]">
 
-            {{ $undangan->kost->nama_kost ?? '-' }}
+                            {{ $undangan->kost->nama_kost ?? '-' }}
 
-        </span>
+                        </span>
 
-    </div>
+                    </div>
 
-    <div class="flex items-center justify-between py-4
+                    <div class="flex items-center justify-between py-4
                 border-b border-[#F0F4F0]">
 
-        <span class="text-[14px] text-gray-500">
-            Jadwal Masuk
-        </span>
+                        <span class="text-[14px] text-gray-500">
+                            Jadwal Masuk
+                        </span>
 
-        <span class="text-[14px] font-semibold text-[#1B2B1D]">
+                        <span class="text-[14px] font-semibold text-[#1B2B1D]">
 
-            {{ \Carbon\Carbon::parse($undangan->tanggal_masuk)->translatedFormat('d M Y') }}
+                            {{ \Carbon\Carbon::parse($undangan->tanggal_masuk)->translatedFormat('d M Y') }}
 
-        </span>
+                        </span>
 
-    </div>
+                    </div>
 
-    <div class="flex items-center justify-between py-4">
+                    <div class="flex items-center justify-between py-4">
 
-        <span class="text-[14px] text-gray-500">
-            Status
-        </span>
+                        <span class="text-[14px] text-gray-500">
+                            Status
+                        </span>
 
-        <span class="inline-flex items-center gap-1.5
+                        <span class="inline-flex items-center gap-1.5
                      px-3 py-1.5 rounded-xl
                      bg-[#FFF1E0]
                      text-[#B45309]
                      text-[13px] font-semibold">
 
-            Dalam Antrian
+                            Dalam Antrian
 
-        </span>
+                        </span>
 
-    </div>
+                    </div>
 
-</div>
+                </div>
 
-{{-- BUTTON DISABLED --}}
-<button disabled
-        class="mt-8 w-full py-4 rounded-2xl
+                {{-- BUTTON DISABLED --}}
+                <button disabled class="mt-8 w-full py-4 rounded-2xl
                bg-[#E7D3B7]
                text-white font-semibold
                text-[15px] cursor-not-allowed">
 
-    Menunggu Kamar Tersedia
+                    Menunggu Kamar Tersedia
 
-</button>
+                </button>
 
                 {{-- ============================================
                      STATE 4 : DISETUJUI (approved)
@@ -447,7 +402,7 @@
                      ============================================ --}}
                 @elseif($riwayat->status === 'aktif')
 
-               @php $undangan = $riwayat; @endphp
+                @php $undangan = $riwayat; @endphp
 
                 {{-- BANNER DISETUJUI --}}
                 <div class="flex items-start gap-4 bg-[#F0FAF0] border border-[#C2E0C2] rounded-[18px] px-6 py-5 mb-8">
@@ -513,57 +468,50 @@
                     Lihat Dashboard
 
                 </a>
-{{-- ============================================
+                {{-- ============================================
      STATE 5 : NONAKTIF
      ============================================ --}}
-@elseif($riwayat->status === 'nonaktif')
+                @elseif($riwayat->status === 'nonaktif')
 
-<div class="flex flex-col items-center justify-center text-center py-14">
+                <div class="flex flex-col items-center justify-center text-center py-14">
 
-    {{-- IMAGE --}}
-    <img
-        src="{{ asset('empty-kos.png') }}"
-        alt="Nonaktif"
-        class="w-[230px] h-auto object-contain"
-    >
+                    {{-- IMAGE --}}
+                    <img src="{{ asset('empty-kos.png') }}" alt="Nonaktif" class="w-[230px] h-auto object-contain">
 
-    {{-- TITLE --}}
-    <h3 class="text-[28px] font-bold text-[#1B2B1D]
+                    {{-- TITLE --}}
+                    <h3 class="text-[28px] font-bold text-[#1B2B1D]
                leading-[1.4] mt-8 max-w-lg">
 
-        Saat ini kamu belum
-        menempati kost
+                        Saat ini kamu belum
+                        menempati kost
 
-    </h3>
+                    </h3>
 
-    {{-- DESC --}}
-    <p class="text-gray-500 leading-7 text-[15px]
+                    {{-- DESC --}}
+                    <p class="text-gray-500 leading-7 text-[15px]
               max-w-md mt-4">
 
-        Kamu sudah keluar dari kost sebelumnya.
-        Jika ingin masuk kembali atau bergabung
-        ke kost lain, silakan masukkan kode unik
-        dari pemilik kost.
+                        Kamu sudah keluar dari kost sebelumnya.
+                        Jika ingin masuk kembali atau bergabung
+                        ke kost lain, silakan masukkan kode unik
+                        dari pemilik kost.
 
-    </p>
+                    </p>
 
-    {{-- BUTTON --}}
-    <button
-        onclick="bukaModalKodeUnik()"
-        class="mt-8 px-8 py-4
+                    {{-- BUTTON --}}
+                    <button onclick="bukaModalKodeUnik()" class="mt-8 px-8 py-4
                rounded-2xl
                bg-[#6C8B6B]
                hover:bg-[#587357]
                text-white font-semibold
                text-[15px]
-               transition-all duration-300"
-    >
+               transition-all duration-300">
 
-        Masukkan Kode Kost
+                        Masukkan Kode Kost
 
-    </button>
+                    </button>
 
-</div>
+                </div>
                 @endif
 
             </div>
@@ -615,11 +563,7 @@
 
         {{-- INPUT 8 DIGIT --}}
         <div class="flex gap-2 justify-center mb-2">
-            @for ($i = 0; $i < 8; $i++) <input
-    type="text"
-    maxlength="1"
-
-    class="kode-unik-input
+            @for ($i = 0; $i < 8; $i++) <input type="text" maxlength="1" class="kode-unik-input
            uppercase
            w-[46px] h-[52px]
            text-center text-[20px]
@@ -632,8 +576,7 @@
            focus:border-[#6C8B6B]
            focus:outline-none
 
-           transition-colors duration-200"
->
+           transition-colors duration-200">
                 @endfor
         </div>
 
@@ -822,8 +765,7 @@ kodeUnikInputs.forEach((el, idx) => {
         */
 
         (
-            kodeUnikInputs[paste.length]
-            ??
+            kodeUnikInputs[paste.length] ??
             kodeUnikInputs[
                 kodeUnikInputs.length - 1
             ]
@@ -889,138 +831,135 @@ function tutupModalKodeUnik() {
 
 /* ── submit ke server ── */
 function submitKodeUnik() {
-     alert('TEST');
-     console.log('MASUK FUNCTION');
+    alert('TEST');
+    console.log('MASUK FUNCTION');
     const kode = [...kodeUnikInputs].map(i => i.value).join('');
 
     kodeUnikBtn.disabled = true;
     kodeUnikBtn.textContent = 'Mengirim...';
 
     console.log(kode);
-   fetch('/hubungkan-kode', {
+    fetch('/hubungkan-kode', {
 
-        method: 'POST',
+            method: 'POST',
 
-        headers: {
+            headers: {
 
-            'Content-Type': 'application/json',
+                'Content-Type': 'application/json',
 
-            'X-CSRF-TOKEN': '{{ csrf_token() }}',
+                'X-CSRF-TOKEN': '{{ csrf_token() }}',
 
-        },
+            },
 
-        body: JSON.stringify({
+            body: JSON.stringify({
 
-            kode_undangan: kode
+                kode_undangan: kode
 
-        }),
+            }),
 
-    })
+        })
 
-    .then(res => res.json())
+        .then(res => res.json())
 
-    .then(data => {
+        .then(data => {
 
-        console.log(data);
-
-        /*
-        |--------------------------------------------------------------------------
-        | SUCCESS
-        |--------------------------------------------------------------------------
-        */
-
-        if (data.success)
-        {
-            /*
-            |--------------------------------------------------------------------------
-            | TAMPIL SUCCESS
-            |--------------------------------------------------------------------------
-            */
-
-            kodeUnikPesanError.classList.add('hidden');
-
-            kodeUnikPesanSukses.classList.remove('hidden');
-
-            kodeUnikPesanSukses.classList.add('flex');
+            console.log(data);
 
             /*
             |--------------------------------------------------------------------------
-            | BORDER HIJAU
+            | SUCCESS
             |--------------------------------------------------------------------------
             */
 
-            kodeUnikInputs.forEach(i => {
+            if (data.success) {
+                /*
+                |--------------------------------------------------------------------------
+                | TAMPIL SUCCESS
+                |--------------------------------------------------------------------------
+                */
 
-                i.classList.remove(
+                kodeUnikPesanError.classList.add('hidden');
 
-                    'border-[#E2E8E2]',
-                    'border-red-400'
+                kodeUnikPesanSukses.classList.remove('hidden');
 
-                );
+                kodeUnikPesanSukses.classList.add('flex');
 
-                i.classList.add('border-[#4B8A4B]');
+                /*
+                |--------------------------------------------------------------------------
+                | BORDER HIJAU
+                |--------------------------------------------------------------------------
+                */
 
-                i.disabled = true;
+                kodeUnikInputs.forEach(i => {
 
-            });
+                    i.classList.remove(
+
+                        'border-[#E2E8E2]',
+                        'border-red-400'
+
+                    );
+
+                    i.classList.add('border-[#4B8A4B]');
+
+                    i.disabled = true;
+
+                });
+
+                /*
+                |--------------------------------------------------------------------------
+                | BUTTON
+                |--------------------------------------------------------------------------
+                */
+
+                kodeUnikBtn.textContent =
+                    'Berhasil';
+
+                kodeUnikBtn.disabled = true;
+
+                /*
+                |--------------------------------------------------------------------------
+                | RELOAD
+                |--------------------------------------------------------------------------
+                */
+
+                setTimeout(() => {
+
+                    window.location.reload();
+
+                }, 700);
+
+            }
 
             /*
             |--------------------------------------------------------------------------
-            | BUTTON
+            | GAGAL
             |--------------------------------------------------------------------------
             */
+            else {
+                kodeUnikPesanSukses.classList.add('hidden');
 
-            kodeUnikBtn.textContent =
-                'Berhasil';
+                kodeUnikPesanError.classList.remove('hidden');
 
-            kodeUnikBtn.disabled = true;
+                kodeUnikPesanError.classList.add('flex');
 
-            /*
-            |--------------------------------------------------------------------------
-            | RELOAD
-            |--------------------------------------------------------------------------
-            */
+                kodeUnikBtn.disabled = false;
 
-            setTimeout(() => {
+                kodeUnikBtn.textContent =
+                    'Kirim kode unik';
+            }
 
-                window.location.reload();
+        })
 
-            }, 700);
+        .catch((err) => {
 
-        }
-
-        /*
-        |--------------------------------------------------------------------------
-        | GAGAL
-        |--------------------------------------------------------------------------
-        */
-
-        else
-        {
-            kodeUnikPesanSukses.classList.add('hidden');
-
-            kodeUnikPesanError.classList.remove('hidden');
-
-            kodeUnikPesanError.classList.add('flex');
+            console.log(err);
 
             kodeUnikBtn.disabled = false;
 
             kodeUnikBtn.textContent =
                 'Kirim kode unik';
-        }
 
-    })
-
-    .catch((err) => {
-
-        console.log(err);
-
-        kodeUnikBtn.disabled = false;
-
-        kodeUnikBtn.textContent =
-            'Kirim kode unik';
-
-    });
+        });
 }
 </script>
 @endif

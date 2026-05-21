@@ -94,65 +94,55 @@
 
             </ul>
 
-       {{-- ACTION --}}
-<div class="flex items-center gap-4">
+            {{-- ACTION --}}
+            <div class="flex items-center gap-4">
 
-    @auth
+                @auth
 
-        {{-- PROFILE DROPDOWN --}}
-        <div class="relative group">
+                {{-- PROFILE DROPDOWN --}}
+                <div class="relative group">
 
-            <button
-                class="flex items-center gap-3"
-            >
+                    <button class="flex items-center gap-3">
 
-                {{-- FOTO --}}
-                <div class="w-11 h-11 rounded-full
+                        {{-- FOTO --}}
+                        <div class="w-11 h-11 rounded-full
                             overflow-hidden border-2
                             border-[#6C8B6B]">
 
-                    <img
-                        src="https://ui-avatars.com/api/?name={{ auth()->user()->nama }}"
-                        class="w-full h-full object-cover"
-                    >
+                            <img src="https://ui-avatars.com/api/?name={{ auth()->user()->nama }}"
+                                class="w-full h-full object-cover">
 
-                </div>
+                        </div>
 
-                {{-- NAMA --}}
-                <div class="hidden md:block text-left">
+                        {{-- NAMA --}}
+                        <div class="hidden md:block text-left">
 
-                    <p class="text-sm text-gray-400">
+                            <p class="text-sm text-gray-400">
 
-                        Halo,
+                                Halo,
 
-                    </p>
+                            </p>
 
-                    <h4 class="font-semibold text-[#1B2B1D]">
+                            <h4 class="font-semibold text-[#1B2B1D]">
 
-                        {{ auth()->user()->nama }}
+                                {{ auth()->user()->nama }}
 
-                    </h4>
+                            </h4>
 
-                </div>
+                        </div>
 
-                {{-- ICON --}}
-                <svg xmlns="http://www.w3.org/2000/svg"
-                     class="w-4 h-4 text-gray-500"
-                     fill="none"
-                     viewBox="0 0 24 24"
-                     stroke="currentColor">
+                        {{-- ICON --}}
+                        <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 text-gray-500" fill="none"
+                            viewBox="0 0 24 24" stroke="currentColor">
 
-                    <path stroke-linecap="round"
-                          stroke-linejoin="round"
-                          stroke-width="2"
-                          d="M19 9l-7 7-7-7" />
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
 
-                </svg>
+                        </svg>
 
-            </button>
+                    </button>
 
-            {{-- DROPDOWN --}}
-            <div class="absolute right-0 mt-4
+                    {{-- DROPDOWN --}}
+                    <div class="absolute right-0 mt-4
                         w-64 bg-white rounded-2xl
                         shadow-xl border border-gray-100
                         opacity-0 invisible
@@ -161,137 +151,97 @@
                         transition-all duration-200
                         overflow-hidden z-50">
 
-                {{-- PROFILE --}}
-                <a
-                    href="{{ route('profil.index') }}"
-                    class="flex items-center gap-3
+                        {{-- PROFILE --}}
+                        <a href="{{ route('profil.index') }}" class="flex items-center gap-3
                            px-5 py-4 hover:bg-gray-50
-                           transition"
-                >
+                           transition">
 
-                    👤
 
-                    <span class="font-medium">
 
-                        Profil Saya
+                            <span class="font-medium">
 
-                    </span>
+                                Profil Saya
 
-                </a>
+                            </span>
 
-                {{-- DASHBOARD ADMIN --}}
-                @if(auth()->user()->role == 'admin kost')
+                        </a>
 
-                    <a
-                        href="{{ route('admin.dashboard') }}"
-                        class="flex items-center gap-3
+                        {{-- DASHBOARD ADMIN --}}
+                        @if(auth()->user()->role == 'admin kost')
+
+                        <a href="{{ route('admin.dashboard') }}" class="flex items-center gap-3
                                px-5 py-4 hover:bg-gray-50
-                               transition"
-                    >
+                               transition">
 
-                        🏠
 
-                        <span class="font-medium">
 
-                            Dashboard Admin
+                            <span class="font-medium">
 
-                        </span>
+                                Dashboard Admin
 
-                    </a>
+                            </span>
 
-                @endif
+                        </a>
 
-                {{-- DASHBOARD PENGHUNI --}}
-                @if(
-                    auth()->user()->role == 'penghuni kost'
-                )
+                        @endif
 
-                    <a
-                        href="{{ route('profil.index') }}"
-                        class="flex items-center gap-3
-                               px-5 py-4 hover:bg-gray-50
-                               transition"
-                    >
 
-                        🏡
 
-                        <span class="font-medium">
+                        {{-- LOGOUT --}}
+                        <form method="POST" action="{{ route('logout') }}">
 
-                            Kost Saya
+                            @csrf
 
-                        </span>
-
-                    </a>
-
-                @endif
-
-                {{-- LOGOUT --}}
-                <form
-                    method="POST"
-                    action="{{ route('logout') }}"
-                >
-
-                    @csrf
-
-                    <button
-                        type="submit"
-                        class="w-full text-left
+                            <button type="submit" class="w-full text-left
                                flex items-center gap-3
                                px-5 py-4 hover:bg-red-50
-                               text-red-500 transition"
-                    >
+                               text-red-500 transition">
 
-                        🚪
 
-                        <span class="font-medium">
 
-                            Logout
+                                <span class="font-medium">
 
-                        </span>
+                                    Logout
 
-                    </button>
+                                </span>
 
-                </form>
+                            </button>
 
-            </div>
+                        </form>
 
-        </div>
+                    </div>
 
-    @else
+                </div>
 
-        {{-- MASUK --}}
-        <a
-            href="{{ route('login') }}"
-            class="px-6 py-3 rounded-2xl
+                @else
+
+                {{-- MASUK --}}
+                <a href="{{ route('login') }}" class="px-6 py-3 rounded-2xl
                    border border-[#6C8B6B]
                    text-[#6C8B6B]
                    font-semibold
                    hover:bg-[#6C8B6B]
                    hover:text-white
-                   transition-all duration-200"
-        >
+                   transition-all duration-200">
 
-            Masuk
+                    Masuk
 
-        </a>
+                </a>
 
-        {{-- DAFTAR --}}
-        <button
-            onclick="bukaModal()"
-            class="px-6 py-3 rounded-2xl
+                {{-- DAFTAR --}}
+                <button onclick="bukaModal()" class="px-6 py-3 rounded-2xl
                    bg-[#6C8B6B]
                    hover:bg-[#587357]
                    text-white font-semibold
-                   transition-all duration-200"
-        >
+                   transition-all duration-200">
 
-            Daftar
+                    Daftar
 
-        </button>
+                </button>
 
-    @endauth
+                @endauth
 
-</div>
+            </div>
 
         </div>
 

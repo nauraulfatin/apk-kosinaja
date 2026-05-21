@@ -82,16 +82,7 @@
                     Saya mencari kos untuk ditempati
                 </span>
 
-                {{-- Checkmark saat hover --}}
-                <div class="absolute top-3 right-3 w-6 h-6 rounded-full
-                            bg-[#6C8B6B] opacity-0 group-hover:opacity-100
-                            flex items-center justify-center
-                            transition-all duration-200 scale-75 group-hover:scale-100">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="w-3.5 h-3.5 text-white" fill="none"
-                        viewBox="0 0 24 24" stroke="currentColor" stroke-width="3">
-                        <path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7" />
-                    </svg>
-                </div>
+
 
             </a>
 
@@ -151,16 +142,7 @@
                     Saya pemilik atau pengelola kos
                 </span>
 
-                {{-- Checkmark saat hover --}}
-                <div class="absolute top-3 right-3 w-6 h-6 rounded-full
-                            bg-[#6C8B6B] opacity-0 group-hover:opacity-100
-                            flex items-center justify-center
-                            transition-all duration-200 scale-75 group-hover:scale-100">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="w-3.5 h-3.5 text-white" fill="none"
-                        viewBox="0 0 24 24" stroke="currentColor" stroke-width="3">
-                        <path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7" />
-                    </svg>
-                </div>
+
 
             </a>
 
