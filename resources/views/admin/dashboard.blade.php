@@ -124,27 +124,6 @@
 
     </div>
 
-    {{-- PEMBAYARAN MENUNGGU --}}
-    <div class="bg-white rounded-2xl p-6 shadow-sm border border-gray-100">
-
-        <div class="flex items-center justify-between">
-
-            <div>
-
-                <p class="text-sm text-gray-500">
-                    Menunggu Verifikasi
-                </p>
-
-                <h2 class="text-3xl font-bold text-[#0F0937] mt-2">
-                    {{ $pendingPembayaran ?? 0 }}
-                </h2>
-
-            </div>
-
-        </div>
-
-    </div>
-
 </div>
 
 {{-- ========================================================= --}}
@@ -183,19 +162,19 @@
             <div>
 
                 <h3 class="font-semibold text-[#0F0937]">
-                    {{ $item->user?->nama }}
+                    {{ $item->tagihan?->user?->nama }}
                 </h3>
 
                 <p class="text-sm text-gray-500 mt-1">
 
                     Kamar
-                    {{ $item->kamar?->nomor_kamar }}
+                    {{ $item->tagihan?->kamar?->nomor_kamar }}
 
                 </p>
 
                 <p class="text-xs text-gray-400 mt-1">
 
-                    {{ $item->pembayaran?->tanggal_bayar?->format('d M Y') ?? '-' }}
+                    {{ $item->tanggal_bayar?->format('d M Y') ?? '-' }}
 
                 </p>
 
@@ -207,11 +186,11 @@
                 <h3 class="font-bold text-[#0F0937]">
 
                     Rp
-                    {{ number_format($item->hargaKamar?->harga ?? 0,0,',','.') }}
+                    {{ number_format($item->nominal_pembayaran ?? 0,0,',','.') }}
 
                 </h3>
 
-                @if($item->status_bukti === 'menunggu')
+                @if($item->status_validasi === 'menunggu')
 
                 <span
                     class="inline-flex mt-2 px-3 py-1

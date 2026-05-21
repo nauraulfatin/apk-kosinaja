@@ -35,7 +35,7 @@
     <div
         class="bg-white rounded-3xl
                border border-gray-100
-               shadow-sm p-10"
+               shadow-sm p-6"
     >
 
         <div class="text-center">
@@ -102,7 +102,7 @@
     <div
         class="bg-white rounded-3xl
                border border-gray-100
-               shadow-sm p-10"
+               shadow-sm p-6"
     >
 
         <div class="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-8">
@@ -115,7 +115,7 @@
 
                 </p>
 
-                <h2 class="text-5xl font-bold text-[#0F0937] mt-3">
+                <h2 class="text-3xl font-bold text-[#0F0937] mt-3">
 
                     {{ $hunianAktif->kamar?->nomor_kamar }}
 
@@ -144,7 +144,7 @@
         {{-- ========================================================= --}}
         {{-- MASA KOS --}}
         {{-- ========================================================= --}}
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-10 mt-10">
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mt-10">
 
             <div>
 
@@ -154,7 +154,7 @@
 
                 </p>
 
-                <h3 class="text-3xl font-bold text-[#0F0937] mt-3">
+                <h3 class="text-2xl font-bold text-[#0F0937] mt-3">
 
                     {{ $hunianAktif->tanggal_masuk?->format('d M Y') }}
 
@@ -170,7 +170,7 @@
 
                 </p>
 
-                <h3 class="text-3xl font-bold text-[#0F0937] mt-3">
+                <h3 class="text-2xl font-bold text-[#0F0937] mt-3">
 
                     {{ $hunianAktif->tanggal_keluar?->format('d M Y') }}
 
@@ -188,14 +188,14 @@
     <div
         class="bg-white rounded-3xl
                border border-gray-100
-               shadow-sm p-10"
+               shadow-sm p-6"
     >
 
         <div class="flex items-center justify-between">
 
             <div>
 
-                <h2 class="text-3xl font-bold text-[#0F0937]">
+                <h2 class="text-2xl font-bold text-[#0F0937]">
 
                     Tagihan Terbaru
 
@@ -234,7 +234,7 @@
             <div>
 
                 {{-- KAMAR --}}
-                <h3 class="text-4xl font-bold text-[#0F0937]">
+                <h3 class="text-2xl font-bold text-[#0F0937]">
 
                     Kamar
                     {{ $tagihanTerbaru->kamar?->nomor_kamar }}
@@ -349,7 +349,7 @@
             class="mt-8 rounded-3xl
                    border border-dashed
                    border-gray-300
-                   p-10 text-center"
+                   p-16 text-center"
         >
 
             <h3 class="text-2xl font-bold text-[#0F0937]">

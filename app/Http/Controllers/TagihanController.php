@@ -6,6 +6,7 @@ use App\Models\Pembayaran;
 use App\Models\Tagihan;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
+use Barryvdh\DomPDF\Facade\Pdf;
 use Carbon\Carbon;
 
 class TagihanController extends Controller
@@ -364,47 +365,76 @@ $totalDibayar =
 
             )->get();
 
-        $totalTagihan =
-            $all
-                ->where('status', 'pending')
-                ->count();
+       $totalMenunggu =
 
-        $totalMenunggu =
-            $all
-                ->where('status', 'menunggu_verifikasi')
-                ->count();
+    $all
+        ->filter(function($t){
 
-        $totalLunas =
-            $all
-                ->where('status', 'lunas')
-                ->count();
+            return
+                $t->status_label
+                === 'menunggu_verifikasi';
 
-        $totalTelat =
-            $all
-                ->where('status', 'telat')
-                ->count();
+        })
+        ->count();
+
+$totalLunas =
+
+    $all
+        ->filter(function($t){
+
+            return
+                $t->status_label
+                === 'lunas';
+
+        })
+        ->count();
+
+$totalTelat =
+
+    $all
+        ->filter(function($t){
+
+            return
+                $t->status_label
+                === 'telat';
+
+        })
+        ->count();
+
+        /*
+|--------------------------------------------------------------------------
+| RIWAYAT
+|--------------------------------------------------------------------------
+*/
+
+$bulan = $r->get('bulan', now()->format('Y-m'));
+[$tahun, $bln] = explode('-', $bulan);
+
+$riwayat = Pembayaran::with(['tagihan.user', 'tagihan.kamar.kost'])
+    ->whereMonth('tanggal_bayar', $bln)
+    ->whereYear('tanggal_bayar', $tahun)
+    ->where('status_validasi', 'diterima')
+    ->latest('tanggal_bayar')
+    ->get();
+
+$totalNominalRiwayat = $riwayat->sum('nominal_pembayaran');
+
+
 
         return view(
-
-            'admin.tagihan.index',
-
-            compact(
-
-                'items',
-
-                'totalTagihan',
-
-                'totalMenunggu',
-
-                'totalLunas',
-
-                'totalTelat'
-
-            )
-
-        );
+    'admin.tagihan.index',
+    compact(
+        'items',
+        'totalMenunggu',
+        'totalLunas',
+        'totalTelat',
+        'riwayat',           // tambah
+        'totalNominalRiwayat', // tambah
+        'bulan',             // tambah
+    )
+);
     }
-
+    
     /*
     |--------------------------------------------------------------------------
     | DETAIL
@@ -666,4 +696,59 @@ public function riwayatPembayaran(Request $r)
 
     );
 }
+
+public function riwayat(Request $r)
+{
+    $kostId = $r->user()->kost->id;
+
+    $bulan = $r->get('bulan', now()->format('Y-m'));
+    [$tahun, $bln] = explode('-', $bulan);
+
+    $riwayat = Pembayaran::with(['tagihan.user', 'tagihan.kamar.kost'])
+        ->whereHas('tagihan.kamar', function ($q) use ($kostId) {
+            $q->where('id_kost', $kostId);
+        })
+        ->whereMonth('tanggal_bayar', $bln)
+        ->whereYear('tanggal_bayar', $tahun)
+        ->where('status_validasi', 'diterima')
+        ->latest('tanggal_bayar')
+        ->get();
+
+    $totalNominalRiwayat = $riwayat->sum('nominal_pembayaran');
+
+    return view('admin.tagihan.riwayat', compact(
+        'riwayat',
+        'totalNominalRiwayat',
+        'bulan',
+    ));
+}
+// ── EXPORT PDF ───────────────────────────────────────────────
+public function exportPdf(Request $r)
+{
+    $bulan = $r->get('bulan', now()->format('Y-m'));
+
+    [$tahun, $bln] = explode('-', $bulan);
+
+    $pembayaran = Pembayaran::with([
+            'tagihan.user',
+            'tagihan.kamar.kost',
+        ])
+        ->whereMonth('tanggal_bayar', $bln)
+        ->whereYear('tanggal_bayar', $tahun)
+        ->where('status_validasi', 'diterima')
+        ->latest('tanggal_bayar')
+        ->get();
+
+    $totalNominal = $pembayaran->sum('nominal_pembayaran');
+
+    $pdf = Pdf::loadView('admin.tagihan.pdf', compact(
+            'pembayaran',
+            'totalNominal',
+            'bulan',
+        ))
+        ->setPaper('a4', 'landscape');
+
+    return $pdf->download('laporan-pembayaran-' . $bulan . '.pdf');
+}
+
 }

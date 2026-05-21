@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Fasilitas;
 use App\Models\Kost;
 use App\Models\User;
+use App\Models\Pembayaran;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
@@ -218,15 +219,17 @@ class AdminKostController extends Controller
     ->distinct()
     ->count();
 
-    /*
-    |--------------------------------------------------------------------------
-    | PEMBAYARAN PENDING
-    |--------------------------------------------------------------------------
-    */
+//pe,bayaran pending
+$pendingPembayaran = Pembayaran::where(
 
-    $pendingPembayaran = \App\Models\Tagihan::whereHas(
+        'status_validasi',
 
-        'kamar',
+        'menunggu'
+
+    )
+    ->whereHas(
+
+        'tagihan.kamar',
 
         function($q) use ($kost){
 
@@ -238,10 +241,6 @@ class AdminKostController extends Controller
         }
 
     )
-    ->where(
-        'status_bukti',
-        'menunggu'
-    )
     ->count();
 
     /*
@@ -250,24 +249,33 @@ class AdminKostController extends Controller
     |--------------------------------------------------------------------------
     */
 
-    $pembayaranTerbaru = \App\Models\Tagihan::with([
+ $pembayaranTerbaru = Pembayaran::with([
 
-        'user',
-        'pembayaran',
+        'tagihan.user',
+        'tagihan.kamar',
+        'tagihan.hargaKamar',
 
     ])
-    ->whereHas('kamar', function($q)
-    use ($kost){
-
-        $q->where(
-            'id_kost',
-            $kost->id
-        );
-
-    })
     ->where(
-        'status_bukti',
+
+        'status_validasi',
+
         'menunggu'
+
+    )
+    ->whereHas(
+
+        'tagihan.kamar',
+
+        function($q) use ($kost){
+
+            $q->where(
+                'id_kost',
+                $kost->id
+            );
+
+        }
+
     )
     ->latest()
     ->take(5)

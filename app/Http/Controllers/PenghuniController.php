@@ -47,42 +47,34 @@ public function dashboard(Request $r)
         ->latest()
         ->first();
 
-    /*
-    |--------------------------------------------------------------------------
-    | TAGIHAN
-    |--------------------------------------------------------------------------
-    */
+        //tagihan
+$tagihanAktif = Tagihan::with([
 
-    $tagihanAktif = Tagihan::with([
+        'kamar.kost',
+        'hargaKamar.periode',
+        'pembayaran'
 
-            'kamar.kost',
+    ])
+    ->where(
+        'id_user',
+        $r->user()->id
+    )
+    ->get();
 
-            'hargaKamar.periode',
+$tagihanTerbaru =
 
-            'pembayaran'
+    $tagihanAktif
 
-        ])
-        ->where(
+        ->filter(function ($t) {
 
-            'id_user',
+            return $t->status_label !== 'lunas';
 
-            $r->user()->id
+        })
 
-        )
-        ->latest('tanggal_mulai')
-        ->get();
+        ->sortBy('tanggal_mulai')
 
-    /*
-    |--------------------------------------------------------------------------
-    | TAGIHAN TERBARU
-    |--------------------------------------------------------------------------
-    */
+        ->first();
 
-    $tagihanTerbaru =
-
-        $tagihanAktif
-            ->sortByDesc('tanggal_mulai')
-            ->first();
 
     /*
     |--------------------------------------------------------------------------

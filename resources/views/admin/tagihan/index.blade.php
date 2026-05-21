@@ -21,6 +21,19 @@
     </div>
 
 </div>
+{{-- TAB NAVIGATION --}}
+<div class="flex gap-2 mb-8">
+    <a href="{{ route('admin.tagihan.index') }}"
+       class="px-6 py-3 rounded-2xl font-semibold text-sm transition
+              bg-[#6C8B6B] text-white">
+        Tagihan
+    </a>
+    <a href="{{ route('admin.tagihan.riwayat') }}"
+       class="px-6 py-3 rounded-2xl font-semibold text-sm transition
+              bg-gray-100 text-gray-600 hover:bg-gray-200">
+        Riwayat Pembayaran
+    </a>
+</div>
 
 {{-- ========================================================= --}}
 {{-- SUMMARY --}}
@@ -189,6 +202,16 @@
 
                             })
                             ->count();
+                    $lunas =
+    $tagihans
+        ->filter(function($t){
+
+            return
+                $t->status_label
+                === 'lunas';
+
+        })
+        ->count();
 
                     /*
                     |--------------------------------------------------------------------------
@@ -248,78 +271,98 @@
                     </td>
 
                     {{-- ========================================================= --}}
-                    {{-- STATUS --}}
-                    {{-- ========================================================= --}}
-                    <td class="px-6 py-5">
+{{-- STATUS --}}
+{{-- ========================================================= --}}
+<td class="px-6 py-5">
 
-                        <div class="flex flex-wrap gap-2">
+    <div class="flex flex-wrap gap-2">
 
-                            @if($belumLunas > 0)
+        {{-- LUNAS --}}
+        @if($lunas > 0)
 
-                            <div
-                                class="px-3 py-1 rounded-full
-                                       bg-gray-100 text-gray-700
-                                       text-xs font-semibold"
-                            >
+        <div
+            class="px-3 py-1 rounded-full
+                   bg-green-100 text-green-700
+                   text-xs font-semibold"
+        >
 
-                                {{ $belumLunas }}
-                                belum lunas
+            {{ $lunas }}
+            lunas
 
-                            </div>
+        </div>
 
-                            @endif
+        @endif
 
-                            @if($menunggu > 0)
+        {{-- BELUM LUNAS --}}
+        @if($belumLunas > 0)
 
-                            <div
-                                class="px-3 py-1 rounded-full
-                                       bg-yellow-100 text-yellow-700
-                                       text-xs font-semibold"
-                            >
+        <div
+            class="px-3 py-1 rounded-full
+                   bg-gray-100 text-gray-700
+                   text-xs font-semibold"
+        >
 
-                                {{ $menunggu }}
-                                menunggu
+            {{ $belumLunas }}
+            belum lunas
 
-                            </div>
+        </div>
 
-                            @endif
+        @endif
 
-                            @if($telat > 0)
+        {{-- MENUNGGU --}}
+        @if($menunggu > 0)
 
-                            <div
-                                class="px-3 py-1 rounded-full
-                                       bg-red-100 text-red-700
-                                       text-xs font-semibold"
-                            >
+        <div
+            class="px-3 py-1 rounded-full
+                   bg-yellow-100 text-yellow-700
+                   text-xs font-semibold"
+        >
 
-                                {{ $telat }}
-                                telat
+            {{ $menunggu }}
+            menunggu
 
-                            </div>
+        </div>
 
-                            @endif
+        @endif
 
-                            @if(
-                                $belumLunas === 0
-                                &&
-                                $jumlahTagihan > 0
-                            )
+        {{-- TELAT --}}
+        @if($telat > 0)
 
-                            <div
-                                class="px-3 py-1 rounded-full
-                                       bg-green-100 text-green-700
-                                       text-xs font-semibold"
-                            >
+        <div
+            class="px-3 py-1 rounded-full
+                   bg-red-100 text-red-700
+                   text-xs font-semibold"
+        >
 
-                                Semua lunas
+            {{ $telat }}
+            telat
 
-                            </div>
+        </div>
 
-                            @endif
+        @endif
 
-                        </div>
+        {{-- SEMUA LUNAS --}}
+        @if(
+            $lunas === $jumlahTagihan
+            &&
+            $jumlahTagihan > 0
+        )
 
-                    </td>
+        <div
+            class="px-3 py-1 rounded-full
+                   bg-emerald-100 text-emerald-700
+                   text-xs font-semibold"
+        >
+
+            Semua lunas
+
+        </div>
+
+        @endif
+
+    </div>
+
+</td>
 
                     {{-- ========================================================= --}}
                     {{-- BUTTON --}}

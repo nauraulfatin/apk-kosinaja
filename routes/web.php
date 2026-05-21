@@ -396,6 +396,13 @@ Route::post(
     [TagihanController::class, 'tolakBukti']
 )->name('tagihan.tolak');
 
+
+    Route::get('tagihan/riwayat', [TagihanController::class, 'riwayat'])
+        ->name('tagihan.riwayat');
+
+    Route::get('tagihan/export-pdf', [TagihanController::class, 'exportPdf'])
+        ->name('tagihan.export-pdf');
+
     /*
     |--------------------------------------------------------------------------
     | ATURAN KOS
@@ -504,27 +511,6 @@ Route::middleware([
         '/aduan',
         'penghuni.aduan.index'
     )->name('aduan.index');
-
-    /*
-    |--------------------------------------------------------------------------
-    | PROFIL
-    |--------------------------------------------------------------------------
-    */
-
-    Route::get(
-        '/profil',
-        [PenghuniController::class, 'profil']
-    )->name('profil.index');
-
-    Route::get(
-        '/profil/edit',
-        [PenghuniController::class, 'editProfil']
-    )->name('profil.edit');
-
-    Route::put(
-        '/profil',
-        [PenghuniController::class, 'updateProfil']
-    )->name('profil.update');
 
     /*
     |--------------------------------------------------------------------------
