@@ -170,6 +170,107 @@ class PengajuanPenghuniController extends Controller
         ]);
 
         /*
+|--------------------------------------------------------------------------
+| CEK BENTROK KAMAR
+|--------------------------------------------------------------------------
+*/
+
+$bentrok = RiwayatHunian::where(
+
+        'id_kamar',
+
+        $data['id_kamar']
+
+    )
+    ->where(
+
+        'status',
+
+        'aktif'
+
+    )
+
+    /*
+    |--------------------------------------------------------------------------
+    | CEK OVERLAP TANGGAL
+    |--------------------------------------------------------------------------
+    */
+
+    ->where(function ($q) use ($data) {
+
+        $q->whereBetween(
+
+            'tanggal_masuk',
+
+            [
+
+                $data['tanggal_masuk'],
+
+                $data['tanggal_keluar']
+
+            ]
+
+        )
+
+        ->orWhereBetween(
+
+            'tanggal_keluar',
+
+            [
+
+                $data['tanggal_masuk'],
+
+                $data['tanggal_keluar']
+
+            ]
+
+        )
+
+        ->orWhere(function ($q2) use ($data) {
+
+            $q2->where(
+
+                    'tanggal_masuk',
+
+                    '<=',
+
+                    $data['tanggal_masuk']
+
+                )
+                ->where(
+
+                    'tanggal_keluar',
+
+                    '>=',
+
+                    $data['tanggal_keluar']
+
+                );
+
+        });
+
+    })
+
+    ->exists();
+
+/*
+|--------------------------------------------------------------------------
+| JIKA BENTROK
+|--------------------------------------------------------------------------
+*/
+
+if ($bentrok)
+{
+    return back()->with(
+
+        'error',
+
+        'Kamar sudah dipakai pada tanggal tersebut. Silahkan pilih tanggal lain.'
+
+    );
+}
+
+        /*
         |--------------------------------------------------------------------------
         | UPDATE RIWAYAT
         |--------------------------------------------------------------------------

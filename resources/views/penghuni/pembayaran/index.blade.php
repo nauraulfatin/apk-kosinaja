@@ -510,17 +510,34 @@ $periode =
 
                 </label>
 
-                <input
-                    type="file"
-                    name="bukti_bayar"
-                    required
-                    accept="image/*"
-                    class="w-full border
-                           border-gray-300
-                           rounded-2xl px-4 py-3"
-                >
+                <label
+    for="bukti_bayar"
+    class="flex items-center px-5 py-4 border border-gray-300 rounded-2xl cursor-pointer hover:border-[#6C8B6B] transition"
+>
 
-            </div>
+    <span
+        class="bg-[#6C8B6B] text-white px-4 py-2 rounded-xl text-sm font-semibold"
+    >
+        Pilih File
+    </span>
+
+    <p
+        id="file-name" class="text-sm text-gray-500 ml-4 truncate"
+    >
+        Belum ada file. Format JPG, JPEG, PNG
+    </p>
+
+</label>
+
+<input
+    type="file"
+    name="bukti_bayar"
+    id="bukti_bayar"
+    accept="image/*"
+    class="hidden"
+>
+
+</div>
 
             {{-- BUTTON --}}
             <div class="flex gap-3 pt-2">
@@ -584,6 +601,20 @@ function closeModal()
         .classList
         .add('hidden');
 }
+
+document
+    .getElementById('bukti_bayar')
+    .addEventListener('change', function () {
+
+        const fileName = this.files.length
+            ? this.files[0].name
+            : 'Belum ada file';
+
+        document
+            .getElementById('file-name')
+            .innerText = fileName;
+
+    });
 
 </script>
 @endsection
