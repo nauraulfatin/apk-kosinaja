@@ -45,14 +45,14 @@
         <div>
 
             <label class="block text-sm font-medium text-gray-700 mb-2">
-                Nama Kamar
+                Nama atau Tipe Kamar
             </label>
 
             <input
                 type="text"
                 name="nama_kamar"
                 value="{{ old('nama_kamar', $item->nama_kamar) }}"
-                placeholder="Opsional, Contoh: Kamar Melati"
+                placeholder="Contoh: Kamar Melati atau Kamar Standar"
                 class="w-full border border-gray-300 rounded-xl px-4 py-3 focus:ring-[#6C8B6B] focus:border-[#6C8B6B]"
             >
 
