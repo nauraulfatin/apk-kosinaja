@@ -295,6 +295,10 @@ Route::middleware([
         PenghuniController::class, 'aktifkan'
     ])->name('penghuni.aktifkan');
 
+    Route::post('/kost/refresh-kode',
+    [AdminKostController::class, 'refreshKode']
+)->name('kost.refresh-kode');
+
     Route::get('/tagihan', [
         TagihanController::class,
         'adminIndex'

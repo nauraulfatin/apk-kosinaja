@@ -217,23 +217,13 @@
                 : $inactiveClass }}"
 >
 
-    <svg xmlns="http://www.w3.org/2000/svg"
-         class="w-5 h-5"
-         fill="none"
-         viewBox="0 0 24 24"
-         stroke="currentColor">
+   <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5"fill="none" viewBox="0 0 24 24" stroke="currentColor">
 
-        <path
-            stroke-linecap="round"
-            stroke-linejoin="round"
-            stroke-width="2"
-            d="M3 10h18M5 10V7a2 2 0 012-2h10a2 2 0 012 2v3m-1 0v7m-12-7v7m-2 0h16"
-        />
+    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"
+    />
 
-    </svg>
-
+</svg>
     Daftar Kamar
-
 </a>
 
 {{-- ========================================================= --}}

@@ -9,6 +9,7 @@ use App\Models\Pembayaran;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Str;
 
 class AdminKostController extends Controller
 {
@@ -510,4 +511,45 @@ $pendingPembayaran = Pembayaran::where(
                 'Informasi kost berhasil diperbarui.'
             );
     }
+    /*
+|--------------------------------------------------------------------------
+| REFRESH KODE UNDANGAN
+|--------------------------------------------------------------------------
+*/
+
+public function refreshKode(Request $request)
+{
+    $kost = $request->user()->kost;
+
+    do {
+
+        $kode = strtoupper(
+
+            Str::random(8)
+
+        );
+
+    } while (
+
+        Kost::where(
+            'kode_undangan',
+            $kode
+        )->exists()
+
+    );
+
+    $kost->update([
+
+        'kode_undangan' => $kode
+
+    ]);
+
+    return back()->with(
+
+        'success',
+
+        'Kode undangan berhasil diperbarui.'
+
+    );
+}
 }
