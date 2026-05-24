@@ -154,7 +154,7 @@
 
                     </svg>
 
-                    Pembayaran
+                    Tagihan
 
                 </a>
 
