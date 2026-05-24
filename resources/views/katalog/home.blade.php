@@ -567,7 +567,7 @@
 
 .fac-grid {
     display: grid;
-    grid-template-columns: repeat(4, 1fr);
+    grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
     gap: 16px;
     margin-top: 36px;
 }
@@ -909,10 +909,6 @@
             <div class="hero-badge">Bingung nyari kos? Yuuk cari di KosinAja!</div>
             <h1>Cari Kos Jadi <em>Lebih Mudah</em> & Nyaman</h1>
             <p>Jelajahi pilihan kos terbaik dan lihat detail lengkap sebelum memilih. Cepat, mudah, dan terpercaya.</p>
-            <div class="hero-search">
-                <input type="text" id="searchInput" placeholder="Cari kos di kota atau daerah...">
-                <button type="button" id="searchBtn">Jelajahi Sekarang</button>
-            </div>
             <div class="hero-trust">
                 <span>✓ Informasi Lengkap</span>
                 <span>✓ Harga Transparan</span>
@@ -1022,9 +1018,8 @@
 
                     @if($kost->lokasi)
                     <div style="margin-bottom:10px;border-radius:10px;overflow:hidden;height:120px;">
-                        <iframe src="https://maps.google.com/maps?q={{ urlencode($kost->lokasi) }}&output=embed"
-                            width="100%" height="120" style="border:0;display:block;" allowfullscreen loading="lazy"
-                            referrerpolicy="no-referrer-when-downgrade">
+                        <iframe src="{{ $kost->lokasi }}" width="100%" height="120" style="border:0;display:block;"
+                            allowfullscreen loading="lazy" referrerpolicy="no-referrer-when-downgrade">
                         </iframe>
                     </div>
                     @endif
@@ -1096,69 +1091,27 @@
         </div>
 
         <div class="fac-grid">
-
+            @forelse($fasilitasPopuler as $nama => $data)
             @php
-            $daftarFasilitas = [
-            'WiFi' => '
-            <path d="M5 12.55a11 11 0 0 1 14 0" />
-            <path d="M1.42 9A16 16 0 0 1 22.58 9" />
-            <path d="M8.53 16.11a6 6 0 0 1 6.95 0" />
-            <circle cx="12" cy="20" r="1" fill="currentColor" stroke="none" />',
-            'AC' => '
-            <rect x="2" y="6" width="20" height="8" rx="2" />
-            <path d="M7 14v4M12 14v4M17 14v4" />
-            <path d="M6 10h.01M10 10h.01M14 10h.01" />',
-            'KM Dalam' => '
-            <path d="M4 6h16v12a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6z" />
-            <path d="M12 6V4" />
-            <path d="M8 10h8" />
-            <circle cx="12" cy="15" r="2" />',
-            'Dapur' => '
-            <path d="M3 11V3h5v8a3 3 0 0 1-6 0z" />
-            <path d="M6 3v8" />
-            <path d="M21 3c-1 4-1 6 0 10H9" />
-            <path d="M9 13v7a1 1 0 0 0 1 1h10a1 1 0 0 0 1-1v-7" />',
-            'CCTV' => '
-            <path d="M23 7l-7 5 7 5V7z" />
-            <rect x="1" y="5" width="15" height="14" rx="2" />',
-            'Laundry' => '
-            <rect x="3" y="3" width="18" height="18" rx="3" />
-            <circle cx="12" cy="13" r="4" />
-            <path d="M8 6h.01M11 6h.01" />',
-            'Parkir' => '
-            <rect x="3" y="3" width="18" height="18" rx="2" />
-            <path d="M9 17V7h4a3 3 0 0 1 0 6H9" />',
-            'Kolam Renang' => '
-            <path d="M2 12h20" />
-            <path d="M2 16c2-2 4-2 6 0s4 2 6 0 4-2 6 0" />
-            <path d="M7 12V7l5-3 5 3v5" />
-            <path d="M11 7h2" />',
-            ];
-            @endphp
-
-            @foreach($daftarFasilitas as $nama => $icon)
-            @php
-            $data = $fasilitasPopuler[$nama] ?? null;
-            $kosCount = $data?->kosts_count ?? 0;
-            $kamCount = $data?->kamars_count ?? 0;
-            $total = $kosCount + $kamCount;
+            $total = ($data->kosts_count ?? 0) + ($data->kamars_count ?? 0);
             @endphp
             <a href="{{ route('katalog', ['fasilitas' => $nama]) }}" class="fac-item">
                 <div class="fac-icon-wrap">
-                    <svg viewBox="0 0 24 24">{!! $icon !!}</svg>
+                    <svg viewBox="0 0 24 24">
+                        <path d="M3 9.5L12 3l9 6.5V20a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V9.5z" />
+                        <path d="M9 21V12h6v9" />
+                    </svg>
                 </div>
                 <span class="fac-name">{{ $nama }}</span>
                 <span class="fac-count">
-                    @if($total > 0)
-                    {{ $total }} tersedia
-                    @else
-                    Belum tersedia
-                    @endif
+                    {{ $total > 0 ? $total . ' tersedia' : 'Belum tersedia' }}
                 </span>
             </a>
-            @endforeach
-
+            @empty
+            <p class="text-gray-400 col-span-4 text-center py-8">Belum ada fasilitas tersedia.</p>
+            @endforelse
         </div>
+
     </div>
 </section>
 
@@ -1250,22 +1203,3 @@
 </div>
 
 @endsection
-
-@push('scripts')
-<script>
-var katalogUrl = "{{ route('katalog') }}";
-
-// Tombol search
-document.getElementById('searchBtn').addEventListener('click', function() {
-    var q = document.getElementById('searchInput').value;
-    window.location.href = katalogUrl + '?search=' + encodeURIComponent(q);
-});
-
-// Enter key
-document.getElementById('searchInput').addEventListener('keydown', function(e) {
-    if (e.key === 'Enter') {
-        window.location.href = katalogUrl + '?search=' + encodeURIComponent(this.value);
-    }
-});
-</script>
-@endpush

@@ -778,7 +778,6 @@
 @php
 $galeri = $kost->foto_kost ?? [];
 
-// Storage::url() otomatis generate /storage/kost/xxx.jpg
 $fotoUtama = count($galeri) > 0 ? Storage::url($galeri[0]) : null;
 $galeriUrls = array_map(fn($f) => Storage::url($f), $galeri);
 
@@ -810,7 +809,7 @@ $pesanWa = urlencode('Halo, saya tertarik dengan kost ' . $kost->nama_kost . '. 
                     {{-- Foto utama --}}
                     <div class="galeri-main">
                         @if($fotoUtama)
-                        <img src="{{ $fotoUtama }}" alt="{{ $kost->nama_kost }}" onclick="bukaModal(0)">
+                        <img src="{{ $fotoUtama }}" alt="{{ $kost->nama_kost }}" onclick="bukaFoto(0)">
                         @else
                         <div style="width:100%;height:320px;background:#D5E0D6;border-radius:20px;
                                         display:flex;align-items:center;justify-content:center;">
@@ -824,16 +823,14 @@ $pesanWa = urlencode('Halo, saya tertarik dengan kost ' . $kost->nama_kost . '. 
                     {{-- Foto samping --}}
                     <div class="galeri-side">
                         @php $galeriSide = array_slice($galeri, 1, 2); @endphp
-                        {{-- Foto samping --}}
                         @forelse($galeriSide as $idx => $foto)
                         <img src="{{ Storage::url($foto) }}" alt="Foto {{ $idx + 2 }}" data-modal-index="{{ $idx + 1 }}"
-                            onclick="bukaModal(parseInt(this.dataset.modalIndex, 10))">
+                            onclick="bukaFoto(parseInt(this.dataset.modalIndex, 10))">
                         @empty
-                        ...
                         @endforelse
 
                         @if(count($galeri) > 3)
-                        <div class="galeri-more" onclick="bukaModal(3)">
+                        <div class="galeri-more" onclick="bukaFoto(3)">
                             <img src="{{ Storage::url($galeri[3]) }}" alt="Foto lebih">
                             <span>+{{ count($galeri) - 3 }} Foto</span>
                         </div>
@@ -993,7 +990,6 @@ $pesanWa = urlencode('Halo, saya tertarik dengan kost ' . $kost->nama_kost . '. 
                 </div>
             </div>
 
-
             {{-- PEMILIK CARD --}}
             @if($pemilik)
             <div class="pemilik-card">
@@ -1068,15 +1064,15 @@ $pesanWa = urlencode('Halo, saya tertarik dengan kost ' . $kost->nama_kost . '. 
 
     {{-- MODAL FOTO --}}
     <div class="modal-foto" id="modalFoto">
-        <button class="modal-close" onclick="tutupModal()">✕</button>
+        <button class="modal-close" onclick="tutupFoto()">✕</button>
 
         @if(count($galeri) > 1)
-        <button class="modal-nav modal-prev" onclick="modalNav(-1)">
+        <button class="modal-nav modal-prev" onclick="fotoNav(-1)">
             <svg viewBox="0 0 24 24">
                 <path d="M15.41 16.59L10.83 12l4.58-4.59L14 6l-6 6 6 6z" />
             </svg>
         </button>
-        <button class="modal-nav modal-next" onclick="modalNav(1)">
+        <button class="modal-nav modal-next" onclick="fotoNav(1)">
             <svg viewBox="0 0 24 24">
                 <path d="M8.59 16.59L13.17 12 8.59 7.41 10 6l6 6-6 6z" />
             </svg>
@@ -1134,7 +1130,7 @@ const galeriUrls = JSON.parse('{!! addslashes(json_encode($galeriUrls)) !!}');
 let modalIndex = 0;
 let isAnimating = false;
 
-function bukaModal(idx) {
+function bukaFoto(idx) {
     if (!galeriUrls.length) return;
     modalIndex = idx;
 
@@ -1159,18 +1155,17 @@ function bukaModal(idx) {
     updateCounter();
 }
 
-function tutupModal() {
+function tutupFoto() {
     document.getElementById('modalFoto').classList.remove('active');
     document.body.style.overflow = '';
 }
 
-function modalNav(dir) {
+function fotoNav(dir) {
     if (!galeriUrls.length || isAnimating) return;
     isAnimating = true;
 
     const img = document.getElementById('modalImg');
 
-    // Slide keluar
     img.style.transition = 'transform .2s ease, opacity .2s ease';
     img.style.transform = 'translateX(' + (dir > 0 ? '-60px' : '60px') + ')';
     img.style.opacity = '0';
@@ -1182,7 +1177,6 @@ function modalNav(dir) {
         img.style.transform = 'translateX(' + (dir > 0 ? '60px' : '-60px') + ')';
         img.src = galeriUrls[modalIndex];
 
-        // Slide masuk — double rAF agar browser sempat render posisi awal
         requestAnimationFrame(() => {
             requestAnimationFrame(() => {
                 img.style.transition = 'transform .25s ease, opacity .25s ease';
@@ -1201,20 +1195,17 @@ function updateCounter() {
     if (counter) counter.textContent = (modalIndex + 1) + ' / ' + galeriUrls.length;
 }
 
-// Tutup saat klik background
 document.getElementById('modalFoto').addEventListener('click', function(e) {
-    if (e.target === this) tutupModal();
+    if (e.target === this) tutupFoto();
 });
 
-// Keyboard
 document.addEventListener('keydown', e => {
     if (!document.getElementById('modalFoto').classList.contains('active')) return;
-    if (e.key === 'Escape') tutupModal();
-    if (e.key === 'ArrowRight') modalNav(1);
-    if (e.key === 'ArrowLeft') modalNav(-1);
+    if (e.key === 'Escape') tutupFoto();
+    if (e.key === 'ArrowRight') fotoNav(1);
+    if (e.key === 'ArrowLeft') fotoNav(-1);
 });
 
-// Swipe touch (mobile)
 let touchStartX = 0;
 const modalEl = document.getElementById('modalFoto');
 modalEl.addEventListener('touchstart', e => {
@@ -1224,7 +1215,7 @@ modalEl.addEventListener('touchstart', e => {
 });
 modalEl.addEventListener('touchend', e => {
     const diff = touchStartX - e.changedTouches[0].clientX;
-    if (Math.abs(diff) > 50) modalNav(diff > 0 ? 1 : -1);
+    if (Math.abs(diff) > 50) fotoNav(diff > 0 ? 1 : -1);
 });
 </script>
 

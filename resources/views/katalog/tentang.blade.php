@@ -34,7 +34,7 @@
     {{-- KISAH --}}
     <div class="bg-white rounded-2xl border border-[#E2EAE3] p-8 grid grid-cols-2 gap-6 items-center">
         <div class="rounded-xl overflow-hidden">
-            <img src="{{ asset('fasilitas.png') }}" alt="Ruangan Kost" class="w-full h-52 object-cover rounded-xl">
+            <img src="{{ asset('fasilitas.png') }}" alt="Ruangan Kost" class="w-full h-92 object-cover rounded-xl">
         </div>
         <div>
             <div
