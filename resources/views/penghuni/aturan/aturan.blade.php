@@ -6,7 +6,7 @@
 
     <div class="bg-white rounded-2xl shadow p-6">
 
-        <h1 class="text-2xl font-bold text-[#5C3B1E] mb-6">
+        <h1 class="text-2xl font-bold text-black mb-6">
             Aturan Kos
         </h1>
 
@@ -14,6 +14,16 @@
 
             <div class="border-b py-4">
 
+                {{-- JUDUL --}}
+                @if(!empty($aturan->judul))
+
+                    <h2 class="font-semibold text-lg text-black mb-2">
+                        {{ $aturan->judul }}
+                    </h2>
+
+                @endif
+
+                {{-- ISI ATURAN --}}
                 <p class="text-gray-700 leading-relaxed">
                     {{ $aturan->isi }}
                 </p>

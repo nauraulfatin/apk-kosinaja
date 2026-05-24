@@ -36,6 +36,10 @@
                     </th>
 
                     <th class="px-4 py-3">
+                        Foto
+                    </th>
+
+                    <th class="px-4 py-3">
                         Tanggal
                     </th>
 
@@ -63,7 +67,28 @@
 
                         {{-- NAMA --}}
                         <td class="px-4 py-4 font-medium text-[#0F0937]">
-                            {{ $item->user->nama }}
+                            {{ $item->nama }}
+                        </td>
+
+                        {{-- FOTO --}}
+                        <td class="px-4 py-4">
+
+                            @if($item->foto_aduan)
+
+                                <img
+                                    src="{{ asset('storage/' . $item->foto_aduan) }}"
+                                    alt="Foto Aduan"
+                                    class="w-24 h-24 object-cover rounded-xl border"
+                                >
+
+                            @else
+
+                                <span class="text-gray-400 text-sm">
+                                    Tidak ada foto
+                                </span>
+
+                            @endif
+
                         </td>
 
                         {{-- TANGGAL --}}
@@ -114,7 +139,7 @@
 
                     <tr>
 
-                        <td colspan="5"
+                        <td colspan="6"
                             class="text-center py-10 text-gray-400">
 
                             Belum ada aduan.

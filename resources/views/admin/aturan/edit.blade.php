@@ -6,11 +6,11 @@
 
     <div class="bg-white rounded-2xl shadow p-6 max-w-3xl mx-auto">
 
-        <h1 class="text-2xl font-bold text-[#5C3B1E] mb-5">
+        <h1 class="text-2xl font-bold text-black mb-5">
             Edit Aturan Kos
         </h1>
 
-        <form action="{{ route('admin.aturan.update', $aturan->id_aturan) }}"
+        <form action="{{ route('admin.aturan.update', $aturan->id) }}"
               method="POST">
 
             @csrf
@@ -18,7 +18,7 @@
 
             <div class="mb-4">
 
-                <label class="block mb-2 font-medium">
+                <label class="block mb-2 font-medium text-black">
                     Isi Aturan
                 </label>
 
@@ -26,13 +26,13 @@
                     name="isi_aturan"
                     rows="5"
                     class="w-full border rounded-xl px-4 py-3"
-                    required>{{ $aturan->isi_aturan }}</textarea>
+                    required>{{ old('isi_aturan', $aturan->isi) }}</textarea>
 
             </div>
 
             <button
                 type="submit"
-                class="bg-[#8B5E3C] hover:bg-[#6f472b] text-white px-5 py-3 rounded-xl">
+                class="bg-[#6E8B74] hover:bg-[#5c7764] text-white px-5 py-3 rounded-xl transition">
 
                 Update
 

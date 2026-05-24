@@ -5,14 +5,11 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
-use App\Models\RiwayatHunian;
-use App\Models\Kost;
-use App\Models\Tagihan;
-use App\Models\Aduan;
 
 class User extends Authenticatable
 {
     use HasFactory, Notifiable;
+
     protected $fillable = [
 
         'username',
@@ -30,6 +27,21 @@ class User extends Authenticatable
         'status',
 
         'must_change_password',
+
+        /*
+        |--------------------------------------------------------------------------
+        | REVISI PENGHUNI
+        |--------------------------------------------------------------------------
+        */
+
+        'id_kost',
+
+        'id_kamar',
+
+        'status_penghuni',
+
+        'created_by',
+
     ];
 
     protected $hidden = [
@@ -90,11 +102,46 @@ class User extends Authenticatable
         );
     }
 
+    /*
+    |--------------------------------------------------------------------------
+    | RELASI RIWAYAT HUNIAN
+    |--------------------------------------------------------------------------
+    */
+
     public function riwayatHunian()
-{
-    return $this->hasMany(
-        RiwayatHunian::class,
-        'id_user'
-    );
-}
+    {
+        return $this->hasMany(
+            RiwayatHunian::class,
+            'id_user'
+        );
+    }
+
+    /*
+    |--------------------------------------------------------------------------
+    | KAMAR AKTIF
+    |--------------------------------------------------------------------------
+    */
+
+    public function kamar()
+    {
+        return $this->belongsTo(
+            KamarKost::class,
+            'id_kamar',
+            'id_kamar'
+        );
+    }
+
+    /*
+    |--------------------------------------------------------------------------
+    | KOST AKTIF
+    |--------------------------------------------------------------------------
+    */
+
+    public function kostAktif()
+    {
+        return $this->belongsTo(
+            Kost::class,
+            'id_kost'
+        );
+    }
 }

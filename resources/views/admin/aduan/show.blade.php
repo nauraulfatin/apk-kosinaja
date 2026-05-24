@@ -19,7 +19,7 @@
         <div class="mb-4">
             <label class="block text-sm font-semibold text-gray-600 mb-1">Nama Penghuni</label>
             <p class="bg-gray-50 border border-gray-200 rounded-xl px-4 py-2 text-gray-800">
-                {{ $aduan->user->nama }}
+                {{ $aduan->nama }}
             </p>
         </div>
 

@@ -12,73 +12,132 @@ use App\Http\Controllers\TagihanController;
 use App\Http\Controllers\AturanKosController;
 use App\Http\Controllers\Admin\PengajuanPenghuniController;
 use App\Http\Controllers\ProfilPenghuniController;
-
-/*
-|--------------------------------------------------------------------------
-| TAMBAHAN CONTROLLER ADUAN
-|--------------------------------------------------------------------------
-*/
-
+use App\Http\Controllers\PengajuanSewaController;
 use App\Http\Controllers\Admin\AduanAdminController;
 use App\Http\Controllers\Penghuni\AduanPenghuniController;
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\HomeController;
 
-// Beranda
+/*
+|--------------------------------------------------------------------------
+| BERANDA
+|--------------------------------------------------------------------------
+*/
+
 Route::get('/', [HomeController::class, 'index'])->name('home');
 
-// Halaman statis
-Route::get('/tentang', [HomeController::class, 'tentang'])->name('tentang');
-Route::get('/hubungi', [HomeController::class, 'hubungi'])->name('hubungi');
+Route::get('/tentang', [
+    HomeController::class,
+    'tentang'
+])->name('tentang');
 
-// Katalog
-Route::get('/katalog', [HomeController::class, 'katalog'])->name('katalog');
+Route::get('/hubungi', [
+    HomeController::class,
+    'hubungi'
+])->name('hubungi');
 
-// Detail
-Route::get('/katalog/{id}', [HomeController::class, 'detailKost'])->name('detailKost');
-Route::get('/kamar/{id}', [HomeController::class, 'detailKamar'])->name('detailKamar');
+/*
+|--------------------------------------------------------------------------
+| KATALOG
+|--------------------------------------------------------------------------
+*/
 
-//Route::get('/', fn () => redirect()->route('login'));
+Route::get('/katalog', [
+    HomeController::class,
+    'katalog'
+])->name('katalog');
 
-Route::get('/login', [AuthController::class, 'showLogin'])->name('login');
-Route::post('/login', [AuthController::class, 'login'])->name('login.post');
-Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
+Route::get('/katalog/{id}', [
+    HomeController::class,
+    'detailKost'
+])->name('detailKost');
 
-Route::get('/register-admin-kost', [AdminKostController::class, 'create'])->name('admin-kost.register');
-Route::post('/register-admin-kost', [AdminKostController::class, 'store'])->name('admin-kost.register.store');
+Route::get('/kamar/{id}', [
+    HomeController::class,
+    'detailKamar'
+])->name('detailKamar');
 
+/*
+|--------------------------------------------------------------------------
+| AUTH
+|--------------------------------------------------------------------------
+*/
 
-Route::get(
-    '/register/penghuni',
-    [AuthController::class,
-    'showRegisterPenghuni']
-)->name('register.penghuni');
-Route::post(
-    '/register/penghuni',
-    [AuthController::class,
-    'registerPenghuni']
-)->name('register.penghuni.store');
-   Route::get('/register/admin', [AuthController::class, 'showRegisterAdmin'])->name('register.admin');
-   Route::post('/register/admin', [AuthController::class, 'registerAdmin'])->name('register.admin.store');
+Route::get('/login', [
+    AuthController::class,
+    'showLogin'
+])->name('login');
+
+Route::post('/login', [
+    AuthController::class,
+    'login'
+])->name('login.post');
+
+Route::post('/logout', [
+    AuthController::class,
+    'logout'
+])->name('logout');
+
+/*
+|--------------------------------------------------------------------------
+| REGISTER
+|--------------------------------------------------------------------------
+*/
+
+Route::get('/register-admin-kost', [
+    AdminKostController::class,
+    'create'
+])->name('admin-kost.register');
+
+Route::post('/register-admin-kost', [
+    AdminKostController::class,
+    'store'
+])->name('admin-kost.register.store');
+
+Route::get('/register/penghuni', [
+    AuthController::class,
+    'showRegisterPenghuni'
+])->name('register.penghuni');
+
+Route::post('/register/penghuni', [
+    AuthController::class,
+    'registerPenghuni'
+])->name('register.penghuni.store');
+
+Route::get('/register/admin', [
+    AuthController::class,
+    'showRegisterAdmin'
+])->name('register.admin');
+
+Route::post('/register/admin', [
+    AuthController::class,
+    'registerAdmin'
+])->name('register.admin.store');
+
+/*
+|--------------------------------------------------------------------------
+| FORCE PASSWORD
+|--------------------------------------------------------------------------
+*/
 
 Route::middleware('auth')->group(function () {
 
-    Route::get(
-        '/ganti-password-awal',
-        [AuthController::class, 'showForceChangePassword']
-    )->name('password.force');
+    Route::get('/ganti-password-awal', [
+        AuthController::class,
+        'showForceChangePassword'
+    ])->name('password.force');
 
-    Route::post(
-        '/ganti-password-awal',
-        [AuthController::class, 'forceChangePassword']
-    )->name('password.force.store');
-Route::post(
-    '/hubungkan-kode',
-    [ProfilPenghuniController::class, 'submitKode']
-)->name('penghuni.hubungkan.kode');
+    Route::post('/ganti-password-awal', [
+        AuthController::class,
+        'forceChangePassword'
+    ])->name('password.force.store');
+
+    Route::post('/hubungkan-kode', [
+        ProfilPenghuniController::class,
+        'submitKode'
+    ])->name('penghuni.hubungkan.kode');
 });
-
 
 /*
 |--------------------------------------------------------------------------
@@ -95,63 +154,48 @@ Route::middleware([
 ->name('superadmin.')
 ->group(function () {
 
-    Route::get(
-        '/dashboard',
-        [SuperAdminController::class, 'dashboard']
-    )->name('dashboard');
+    Route::get('/dashboard', [
+        SuperAdminController::class,
+        'dashboard'
+    ])->name('dashboard');
 
-    Route::post(
-        '/admin-kost/{user}/validasi',
-        [SuperAdminController::class, 'validasiAdmin']
-    )->name('admin.validasi');
+    Route::post('/admin-kost/{user}/validasi', [
+        SuperAdminController::class,
+        'validasiAdmin'
+    ])->name('admin.validasi');
 
-    Route::post(
-        '/admin-kost/{user}/tolak',
-        [SuperAdminController::class, 'tolakAdmin']
-    )->name('admin.tolak');
+    Route::post('/admin-kost/{user}/tolak', [
+        SuperAdminController::class,
+        'tolakAdmin'
+    ])->name('admin.tolak');
 
-    Route::resource(
-        '/fasilitas',
-        FasilitasController::class
-    )->except(['show']);
+    Route::delete('/admin-kost/{user}/hapus', [
+        SuperAdminController::class,
+        'hapusAdmin'
+    ])->name('admin.hapus');
 
-    /*
-|--------------------------------------------------------------------------
-| PENGAJUAN ADMIN KOST
-|--------------------------------------------------------------------------
-*/
+    Route::resource('/fasilitas', FasilitasController::class)
+        ->except(['show']);
 
-Route::get(
-    '/pengajuan',
-    [SuperAdminController::class, 'pengajuan']
-)->name('pengajuan.index');
+    Route::get('/pengajuan', [
+        SuperAdminController::class,
+        'pengajuan'
+    ])->name('pengajuan.index');
 
-Route::get(
-    '/pengajuan/{user}',
-    [SuperAdminController::class, 'detailPengajuan']
-)->name('admin.detail');
+    Route::get('/pengajuan/{user}', [
+        SuperAdminController::class,
+        'detailPengajuan'
+    ])->name('admin.detail');
 
-/*
-|--------------------------------------------------------------------------
-| RIWAYAT PENGAJUAN
-|--------------------------------------------------------------------------
-*/
+    Route::get('/riwayat', [
+        SuperAdminController::class,
+        'riwayat'
+    ])->name('riwayat.index');
 
-Route::get(
-    '/riwayat',
-    [SuperAdminController::class, 'riwayat']
-)->name('riwayat.index');
-
-Route::get(
-    '/riwayat/{user}/edit',
-    [SuperAdminController::class, 'editRiwayat']
-)->name('riwayat.edit');
-
-Route::delete(
-    '/admin-kost/{user}/hapus',
-    [SuperAdminController::class, 'hapusAdmin']
-)->name('admin.hapus');
-
+    Route::get('/riwayat/{user}/edit', [
+        SuperAdminController::class,
+        'editRiwayat'
+    ])->name('riwayat.edit');
 });
 
 /*
@@ -169,272 +213,133 @@ Route::middleware([
 ->name('admin.')
 ->group(function () {
 
-    /*
-    |--------------------------------------------------------------------------
-    | DASHBOARD
-    |--------------------------------------------------------------------------
-    */
-
-    Route::get(
-        '/dashboard',
-        [AdminKostController::class, 'dashboard']
-    )->name('dashboard');
-
-    /*
-    |--------------------------------------------------------------------------
-    | INFORMASI KOST
-    |--------------------------------------------------------------------------
-    */
-    Route::get(
-    '/kost',
-    [AdminKostController::class, 'index']
-)->name('kost.index');
-
-    Route::get(
-        '/kost/edit',
-        [AdminKostController::class, 'editKost']
-    )->name('kost.edit');
-
-    Route::put(
-        '/kost',
-        [AdminKostController::class, 'updateKost']
-    )->name('kost.update');
-
-     Route::get(
-
-            '/pengajuan-penghuni',
-
-            [PengajuanPenghuniController::class, 'index']
-
-        )->name('pengajuan.index');
-
-        /*
-|--------------------------------------------------------------------------
-| DETAIL PENGAJUAN
-|--------------------------------------------------------------------------
-*/
-
-Route::get(
-
-    '/pengajuan-penghuni/{riwayatHunian}',
-
-    [PengajuanPenghuniController::class, 'show']
-
-)->name('pengajuan.show');
-
-/*
-|--------------------------------------------------------------------------
-| APPROVE PENGAJUAN
-|--------------------------------------------------------------------------
-*/
-
-Route::put(
-
-    '/pengajuan-penghuni/{riwayatHunian}/approve',
-
-    [PengajuanPenghuniController::class, 'approve']
-
-)->name('pengajuan.approve');
-
-    /*
-    |--------------------------------------------------------------------------
-    | KAMAR
-    |--------------------------------------------------------------------------
-    */
-
-    Route::resource(
-        '/kamar',
-        KamarController::class
-    )->except(['show']);
-
-    /*
-    |--------------------------------------------------------------------------
-    | FASILITAS KAMAR
-    |--------------------------------------------------------------------------
-    */
-
-    Route::get(
-        '/kamar/{kamar}/fasilitas',
-        [KamarController::class, 'editFasilitas']
-    )->name('kamar.fasilitas.edit');
-
-    Route::put(
-        '/kamar/{kamar}/fasilitas',
-        [KamarController::class, 'updateFasilitas']
-    )->name('kamar.fasilitas.update');
-
-    /*
-    |--------------------------------------------------------------------------
-    | PERIODE PENAGIHAN
-    |--------------------------------------------------------------------------
-    */
-
-    Route::resource(
-        '/periode',
-        PeriodePenagihanController::class
-    )->except(['show']);
-
-    /*
-    |--------------------------------------------------------------------------
-    | HARGA KAMAR
-    |--------------------------------------------------------------------------
-    */
-
-    Route::resource(
-        '/kamar/{kamar}/harga',
-        HargaKamarController::class
-    )
-    ->except(['show'])
-    ->names('kamar.harga');
-
-   /*
-|--------------------------------------------------------------------------
-| PENGHUNI AKTIF
-|--------------------------------------------------------------------------
-*/
-
-Route::get(
-
-    '/penghuni/aktif',
-
-    [PenghuniController::class, 'aktif']
-
-)->name('penghuni.aktif');
-
-/*
-|--------------------------------------------------------------------------
-| PENGHUNI ANTRIAN
-|--------------------------------------------------------------------------
-*/
-
-Route::get(
-
-    '/penghuni/antrian',
-
-    [PenghuniController::class, 'antrian']
-
-)->name('penghuni.antrian');
-
-/*
-|--------------------------------------------------------------------------
-| PENGHUNI NONAKTIF
-|--------------------------------------------------------------------------
-*/
-
-Route::get(
-
-    '/penghuni/nonaktif',
-
-    [PenghuniController::class, 'nonaktif']
-
-)->name('penghuni.nonaktif');
-
-/*
-|--------------------------------------------------------------------------
-| NONAKTIFKAN PENGHUNI
-|--------------------------------------------------------------------------
-*/
-
-Route::put(
-
-    '/penghuni/{riwayatHunian}/nonaktifkan',
-
-    [PenghuniController::class, 'nonaktifkan']
-
-)->name('penghuni.nonaktifkan');
-
-/*
-|--------------------------------------------------------------------------
-| FORM AKTIFKAN PENGHUNI
-|--------------------------------------------------------------------------
-*/
-
-Route::get(
-
-    '/penghuni/{riwayatHunian}/aktifkan',
-
-    [PenghuniController::class, 'formAktifkan']
-
-)->name('penghuni.formAktifkan');
-
-/*
-|--------------------------------------------------------------------------
-| AKTIFKAN PENGHUNI
-|--------------------------------------------------------------------------
-*/
-
-Route::put(
-
-    '/penghuni/{riwayatHunian}/aktifkan',
-
-    [PenghuniController::class, 'aktifkan']
-
-)->name('penghuni.aktifkan');
-    /*
-    |--------------------------------------------------------------------------
-    | TAGIHAN & PEMBAYARAN
-    |--------------------------------------------------------------------------
-    */
-
-    Route::get(
-        '/tagihan',
-        [TagihanController::class, 'adminIndex']
-    )->name('tagihan.index');
-
-    Route::get(
-    '/tagihan/{user}/detail',
-    [TagihanController::class, 'detail']
-)->name('tagihan.detail');
-
-    Route::post(
-    '/tagihan/{pembayaran}/validasi',
-    [TagihanController::class, 'validasiBukti']
-)->name('tagihan.validasi');
-
-Route::post(
-    '/tagihan/{pembayaran}/tolak',
-    [TagihanController::class, 'tolakBukti']
-)->name('tagihan.tolak');
-
-
-    Route::get('tagihan/riwayat', [TagihanController::class, 'riwayat'])
-        ->name('tagihan.riwayat');
-
-    Route::get('tagihan/export-pdf', [TagihanController::class, 'exportPdf'])
-        ->name('tagihan.export-pdf');
-
-    /*
-    |--------------------------------------------------------------------------
-    | ATURAN KOS
-    |--------------------------------------------------------------------------
-    */
-
-    Route::resource(
-        '/aturan',
-        AturanKosController::class
-    )->except(['show']);
-
-    /*
-    |--------------------------------------------------------------------------
-    | ADUAN KOS
-    |--------------------------------------------------------------------------
-    */
-
-    Route::get(
-        '/aduan',
-        [AduanAdminController::class, 'index']
-    )->name('aduan.index');
-
-    Route::get(
-        '/aduan/{id}',
-        [AduanAdminController::class, 'show']
-    )->name('aduan.show');
-
-    Route::put(
-        '/aduan/{id}',
-        [AduanAdminController::class, 'update']
-    )->name('aduan.update');
-
+    Route::get('/dashboard', [
+        AdminKostController::class,
+        'dashboard'
+    ])->name('dashboard');
+
+    Route::get('/kost', [
+        AdminKostController::class,
+        'index'
+    ])->name('kost.index');
+
+    Route::get('/kost/edit', [
+        AdminKostController::class,
+        'editKost'
+    ])->name('kost.edit');
+
+    Route::put('/kost', [
+        AdminKostController::class,
+        'updateKost'
+    ])->name('kost.update');
+
+    Route::get('/pengajuan-penghuni', [
+        PengajuanPenghuniController::class,
+        'index'
+    ])->name('pengajuan.index');
+
+    Route::get('/pengajuan-penghuni/{riwayatHunian}', [
+        PengajuanPenghuniController::class,
+        'show'
+    ])->name('pengajuan.show');
+
+    Route::put('/pengajuan-penghuni/{riwayatHunian}/approve', [
+        PengajuanPenghuniController::class,
+        'approve'
+    ])->name('pengajuan.approve');
+
+    Route::resource('/kamar', KamarController::class)
+        ->except(['show']);
+
+    Route::get('/kamar/{kamar}/fasilitas', [
+        KamarController::class,
+        'editFasilitas'
+    ])->name('kamar.fasilitas.edit');
+
+    Route::put('/kamar/{kamar}/fasilitas', [
+        KamarController::class,
+        'updateFasilitas'
+    ])->name('kamar.fasilitas.update');
+
+    Route::resource('/periode', PeriodePenagihanController::class)
+        ->except(['show']);
+
+    Route::resource('/kamar/{kamar}/harga', HargaKamarController::class)
+        ->except(['show'])
+        ->names('kamar.harga');
+
+    Route::resource('/penghuni', PenghuniController::class)
+        ->except(['show']);
+
+    Route::get('/penghuni/aktif', [
+        PenghuniController::class, 'aktif'
+    ])->name('penghuni.aktif');
+
+    Route::get('/penghuni/antrian', [
+        PenghuniController::class, 'antrian'
+    ])->name('penghuni.antrian');
+
+    Route::get('/penghuni/nonaktif', [
+        PenghuniController::class, 'nonaktif'
+    ])->name('penghuni.nonaktif');
+
+    Route::put('/penghuni/{riwayatHunian}/nonaktifkan', [
+        PenghuniController::class, 'nonaktifkan'
+    ])->name('penghuni.nonaktifkan');
+
+    Route::get('/penghuni/{riwayatHunian}/aktifkan', [
+        PenghuniController::class, 'formAktifkan'
+    ])->name('penghuni.formAktifkan');
+
+    Route::put('/penghuni/{riwayatHunian}/aktifkan', [
+        PenghuniController::class, 'aktifkan'
+    ])->name('penghuni.aktifkan');
+
+    Route::get('/tagihan', [
+        TagihanController::class,
+        'adminIndex'
+    ])->name('tagihan.index');
+
+    Route::get('/tagihan/{user}/detail', [
+        TagihanController::class,
+        'detail'
+    ])->name('tagihan.detail');
+
+    Route::post('/tagihan/{tagihan}/validasi', [
+        TagihanController::class,
+        'validasiBukti'
+    ])->name('tagihan.validasi');
+
+    Route::post('/tagihan/{tagihan}/tolak', [
+        TagihanController::class,
+        'tolakBukti'
+    ])->name('tagihan.tolak');
+
+    Route::get('tagihan/riwayat', [
+        TagihanController::class, 'riwayat'
+    ])->name('tagihan.riwayat');
+
+    Route::get('tagihan/export-pdf', [
+        TagihanController::class, 'exportPdf'
+    ])->name('tagihan.export-pdf');
+
+    Route::resource('/aturan', AturanKosController::class)
+        ->except(['show']);
+
+    Route::get('/aduan', [
+        AduanAdminController::class,
+        'index'
+    ])->name('aduan.index');
+
+    Route::get('/aduan/{id}', [
+        AduanAdminController::class,
+        'show'
+    ])->name('aduan.show');
+
+    Route::put('/aduan/{id}', [
+        AduanAdminController::class,
+        'update'
+    ])->name('aduan.update');
 });
 
 /*
@@ -452,110 +357,80 @@ Route::middleware([
 ->name('penghuni.')
 ->group(function () {
 
-    /*
-    |--------------------------------------------------------------------------
-    | DASHBOARD
-    |--------------------------------------------------------------------------
-    */
+    Route::get('/dashboard', [
+        PenghuniController::class,
+        'dashboard'
+    ])->name('dashboard');
 
-    Route::get(
-        '/dashboard',
-        [PenghuniController::class, 'dashboard']
-    )->name('dashboard');
+    Route::get('/pembayaran', [
+        TagihanController::class,
+        'penghuniIndex'
+    ])->name('pembayaran.index');
 
-    /*
-    |--------------------------------------------------------------------------
-    | PEMBAYARAN
-    |--------------------------------------------------------------------------
-    */
+    Route::get('/pembayaran/create', [
+        TagihanController::class,
+        'createPembayaran'
+    ])->name('pembayaran.create');
 
-    Route::get(
-        '/pembayaran',
-        [TagihanController::class, 'penghuniIndex']
-    )->name('pembayaran.index');
+    Route::post('/pembayaran', [
+        TagihanController::class,
+        'storePembayaran'
+    ])->name('pembayaran.store');
 
-    Route::get(
-        '/pembayaran/create',
-        [TagihanController::class, 'createPembayaran']
-    )->name('pembayaran.create');
+    Route::get('/riwayat-pembayaran', [
+        TagihanController::class, 'riwayatPembayaran'
+    ])->name('riwayat-pembayaran');
 
-    Route::post(
-        '/pembayaran',
-        [TagihanController::class, 'storePembayaran']
-    )->name('pembayaran.store');
-    Route::get(
-    '/riwayat-pembayaran',
-    [TagihanController::class, 'riwayatPembayaran']
-)->name('riwayat-pembayaran');
+    Route::get('/aturan', [
+        AturanKosController::class,
+        'penghuniIndex'
+    ])->name('aturan.index');
 
-    
+    Route::get('/aduan', [
+        AduanPenghuniController::class,
+        'index'
+    ])->name('aduan.index');
 
-    /*
-    |--------------------------------------------------------------------------
-    | ATURAN
-    |--------------------------------------------------------------------------
-    */
+    Route::get('/aduan/create', [
+        AduanPenghuniController::class,
+        'create'
+    ])->name('aduan.create');
 
-    Route::view(
-        '/aturan',
-        'penghuni.aturan.index'
-    )->name('aturan.index');
+    Route::post('/aduan', [
+        AduanPenghuniController::class,
+        'store'
+    ])->name('aduan.store');
 
-    /*
-    |--------------------------------------------------------------------------
-    | ADUAN
-    |--------------------------------------------------------------------------
-    */
+    Route::get('/profil', function () {
+        return view('profil.index');
+    })->name('penghuni.profil.index');
 
-    Route::view(
-        '/aduan',
-        'penghuni.aduan.index'
-    )->name('aduan.index');
+    Route::get('/profil/edit', function () {
+        return view('profil.index');
+    })->name('profil.edit');
 
-    /*
-    |--------------------------------------------------------------------------
-    | ATURAN KOS
-    |--------------------------------------------------------------------------
-    */
+    Route::put('/profil', [
+        PenghuniController::class,
+        'updateProfil'
+    ])->name('profil.update');
 
-    Route::get(
-        '/aturan',
-        [AturanKosController::class, 'penghuniIndex']
-    )->name('aturan.index');
+    Route::post('/pengajuan-sewa', [
+        PengajuanPenghuniController::class,
+        'store'
+    ])->name('pengajuan.store');
 
-    /*
-    |--------------------------------------------------------------------------
-    | ADUAN KOS
-    |--------------------------------------------------------------------------
-    */
-
-    Route::get(
-        '/aduan',
-        [AduanPenghuniController::class, 'index']
-    )->name('aduan.index');
-
-    Route::get(
-        '/aduan/create',
-        [AduanPenghuniController::class, 'create']
-    )->name('aduan.create');
-
-    Route::post(
-        '/aduan',
-        [AduanPenghuniController::class, 'store']
-    )->name('aduan.store');
-
+    Route::post('/penghuni/hubungkan', [
+        PenghuniController::class,
+        'hubungkan'
+    ])->name('penghuni.hubungkan');
 });
 
-Route::get(
+/*
+|--------------------------------------------------------------------------
+| PROFIL (GLOBAL - agar kompatibel dengan route('profil.index'))
+|--------------------------------------------------------------------------
+*/
 
-    '/profil',
-
-    function () {
-
-        return view(
-            'profil.index'
-        );
-
-    }
-
-)->name('profil.index');
+Route::get('/profil', function () {
+    return view('profil.index');
+})->name('profil.index');
