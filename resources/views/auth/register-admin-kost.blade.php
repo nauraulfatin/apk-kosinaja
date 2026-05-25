@@ -6,12 +6,8 @@
     {{-- LEFT IMAGE --}}
     <div class="hidden lg:block lg:w-[42%] relative overflow-hidden h-screen sticky top-0">
 
-        <img src="{{ asset('foto-pintu.png') }}"
-             alt="Register"
-             class="absolute inset-0 w-full h-full object-cover">
-
+        <img src="{{ asset('foto-pintu.png') }}" alt="Register" class="absolute inset-0 w-full h-full object-cover">
         <div class="absolute inset-0 bg-gradient-to-t from-black/80  via-black/20  to-transparent"></div>
-
         <div class="absolute inset-0 z-10 flex flex-col justify-between  p-10">
 
             {{-- LOGO --}}
@@ -102,7 +98,7 @@
                                 Username
                             </label>
 
-                            <input type="text" name="username" placeholder="Masukkan email anda" value="{{ old('username') }}"
+                            <input type="text" name="username" placeholder="Masukkan username anda" value="{{ old('username') }}"
                                 class="w-full rounded-2xl border border-gray-200 px-5 py-4 focus:ring-2 focus:ring-[#6C8B6B]">
                         </div>
 

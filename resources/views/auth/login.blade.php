@@ -229,7 +229,7 @@
 
                     </label>
 
-                    <input type="text" name="username" value="{{ old('username') }}" placeholder="Masukkan email anda"
+                    <input type="text" name="username" value="{{ old('username') }}" placeholder="Masukkan username anda"
                         class="w-full rounded-2xl
                                border border-[#E7E2DA]
                                bg-[#FCFBF8]

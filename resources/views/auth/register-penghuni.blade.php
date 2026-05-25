@@ -155,7 +155,7 @@
                             <input
                                 type="text"
                                 name="username"
-                                placeholder="Masukkan username"
+                                placeholder="Masukkan username anda"
                                 value="{{ old('username') }}"
                                 class="w-full rounded-2xl border
                                        border-gray-200 px-5 py-4
