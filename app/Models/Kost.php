@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Str;
+use App\Models\AturanKos;
 
 class Kost extends Model
 {
@@ -109,5 +110,20 @@ protected static function booted()
             $kode;
 
     });
+}
+
+/*
+|--------------------------------------------------------------------------
+| RELATION ATURAN KOS
+|--------------------------------------------------------------------------
+*/
+
+public function aturanKos()
+{
+    return $this->hasMany(
+        AturanKos::class,
+        'kost_id',
+        'id'
+    );
 }
 }

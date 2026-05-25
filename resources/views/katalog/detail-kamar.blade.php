@@ -920,8 +920,7 @@ $fasIcons = [
                 <div class="galeri-grid">
                     <div class="galeri-main">
                         @if($fotoUtama)
-                        <img src="{{ $fotoUtama }}" alt="{{ $kamar->nama_kamar ?? 'Kamar ' . $kamar->nomor_kamar }}"
-                            onclick="bukaModal(0)">
+                        <img src="{{ $fotoUtama }}" alt="{{ $kamar->nama_kamar ?? 'Kamar ' . $kamar->nomor_kamar }}">
                         @else
                         <div style="width:100%;height:320px;background:#D5E0D6;border-radius:20px;
                                         display:flex;align-items:center;justify-content:center;">
@@ -935,14 +934,14 @@ $fasIcons = [
                     <div class="galeri-side">
                         @php $galeriSide = array_slice($fotoKamarList, 1, 2); @endphp
                         @forelse($galeriSide as $idx => $foto)
-                        <img src="{{ asset('storage/' . $foto) }}" alt="Foto" onclick="bukaModal({{ $idx + 1 }})">
+                        <img src="{{ asset('storage/' . $foto) }}" alt="Foto">
                         @empty
                         <div style="height:98px;background:#F0F5F1;border-radius:14px;"></div>
                         <div style="height:98px;background:#F0F5F1;border-radius:14px;"></div>
                         @endforelse
 
                         @if(count($fotoKamarList) > 3)
-                        <div class="galeri-more" onclick="bukaModal(3)">
+                        <div class="galeri-more">
                             <img src="{{ asset('storage/' . $fotoKamarList[3]) }}" alt="Foto">
                             <span>+{{ count($fotoKamarList) - 3 }} Foto</span>
                         </div>
@@ -1008,14 +1007,11 @@ $fasIcons = [
             @if($kamar->fasilitas && $kamar->fasilitas->count() > 0)
             <div class="section-box">
                 <div class="section-title">Fasilitas Kamar</div>
-                <div class="fas-grid">
+
+                <div class="fasilitas-grid">
                     @foreach($kamar->fasilitas as $f)
-                    @php $ico = $fasIcons[$f->nama_fasilitas] ?? $fasIcons['default']; @endphp
-                    <div class="fas-tile">
-                        <div class="fas-tile-icon">
-                            <svg viewBox="0 0 24 24">{!! $ico !!}</svg>
-                        </div>
-                        <span class="fas-tile-label">{{ $f->nama_fasilitas }}</span>
+                    <div class="fasilitas-chip">
+                        {{ $f->nama_fasilitas }}
                     </div>
                     @endforeach
                 </div>
@@ -1095,17 +1091,7 @@ $fasIcons = [
             </div>
             @endif
 
-            {{-- SEMUA FOTO --}}
-            @if(count($galeriUrls) > 1)
-            <div class="section-box">
-                <div class="section-title">Semua Foto</div>
-                <div class="foto-grid">
-                    @foreach($galeriUrls as $i => $foto)
-                    <img src="{{ $fotoUtama }}" alt="{{ $kost->nama_kost }}" onclick="bukaModal(0)">
-                    @endforeach
-                </div>
-            </div>
-            @endif
+
 
         </div>
         {{-- akhir kolom kiri --}}
