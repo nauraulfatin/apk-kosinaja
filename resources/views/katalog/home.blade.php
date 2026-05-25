@@ -17,7 +17,6 @@
     --text-muted: #7A8A7C;
 }
 
-/* ─── GLOBAL ─────────────────────────────────── */
 * {
     box-sizing: border-box;
 }
@@ -28,113 +27,116 @@
     margin: 0 auto;
 }
 
-/* ─── HERO ────────────────────────────────────── */
+/* ─── HERO FULL ────────────────────────────────────────── */
 .hero {
-    padding: 15px 0 20px;
     position: relative;
+    width: 100%;
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
     overflow: hidden;
 }
 
-.hero-wrap {
-    display: grid;
-    grid-template-columns: 1fr 1.15fr;
-    align-items: center;
-    gap: 160px;
-    min-height: 88vh;
-}
-
-.hero-blur {
+/* Gambar background full cover */
+.hero-bg {
     position: absolute;
-    width: 420px;
-    height: 420px;
-    background: #DDEADF;
-    border-radius: 999px;
-    filter: blur(120px);
-    opacity: .5;
-    left: -120px;
-    top: 120px;
-    z-index: -1;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center top;
+    z-index: 0;
 }
 
-.hero::before {
-    content: '';
+/* Overlay gradient dari kiri ke transparan */
+.hero-overlay {
     position: absolute;
-    top: -80px;
-    right: -80px;
-    width: 400px;
-    height: 400px;
-    background: radial-gradient(circle, rgba(124, 163, 133, .12) 0%, transparent 70%);
-    border-radius: 50%;
-    pointer-events: none;
+    inset: 0;
+    background: linear-gradient(105deg,
+            rgba(12, 26, 15, 0.55) 0%,
+            rgba(15, 32, 18, 0.35) 35%,
+            rgba(15, 32, 18, 0.06) 58%,
+            rgba(15, 32, 18, 0.0) 100%);
+    z-index: 1;
 }
 
-.hero::after {
-    content: '';
-    position: absolute;
-    bottom: -60px;
-    left: -60px;
-    width: 300px;
-    height: 300px;
-    background: radial-gradient(circle, rgba(124, 163, 133, .10) 0%, transparent 70%);
-    border-radius: 50%;
-    pointer-events: none;
-}
-
-.hero-text {
+/* Konten teks hero */
+.hero-content {
     position: relative;
     z-index: 2;
-    max-width: 560px;
+    padding: 140px 0 100px;
+    max-width: 620px;
+    margin-left: calc((100% - 1320px) / 2);
+    padding-left: 0;
+}
+
+@media (max-width: 1320px) {
+    .hero-content {
+        margin-left: 5%;
+    }
 }
 
 .hero-badge {
     display: inline-flex;
     align-items: center;
     gap: 8px;
-    background: rgba(124, 163, 133, .12);
-    border: 1px solid rgba(124, 163, 133, .3);
-    border-radius: 20px;
-    padding: 8px 16px;
-    font-size: 1rem;
+    background: rgba(255, 255, 255, 0.12);
+    border: 1px solid rgba(255, 255, 255, 0.28);
+    backdrop-filter: blur(6px);
+    -webkit-backdrop-filter: blur(6px);
+    border-radius: 999px;
+    padding: 9px 18px;
+    font-size: 0.92rem;
     font-weight: 600;
-    color: var(--green-cta);
-    margin-bottom: 40px;
+    color: rgba(255, 255, 255, 0.92);
+    margin-bottom: 28px;
 }
 
-.hero-text h1 {
+.hero-content h1 {
     font-family: 'Plus Jakarta Sans', sans-serif;
     font-weight: 800;
-    font-size: clamp(2.3rem, 5vw, 4.5rem);
+    font-size: clamp(2.4rem, 4.5vw, 4rem);
     line-height: 1.1;
-    letter-spacing: -2.3px;
-    color: var(--green-dark);
-    margin-bottom: 30px;
+    letter-spacing: -2px;
+    color: #ffffff;
+    margin-bottom: 20px;
+    text-shadow: 0 2px 20px rgba(10, 22, 12, 0.35);
 }
 
-.hero-text h1 em {
+.hero-content h1 em {
     font-style: normal;
-    color: #729a7b;
+    color: #8FC99A;
 }
 
-.hero-text p {
-    font-size: 1.08rem;
-    color: var(--text-mid);
-    line-height: 1.9;
-    max-width: 520px;
-    margin-bottom: 30px;
+.hero-content p {
+    font-size: 1.05rem;
+    color: rgba(255, 255, 255, 0.88);
+    line-height: 1.85;
+    max-width: 480px;
+    margin-bottom: 32px;
+    text-shadow: 0 1px 10px rgba(10, 22, 12, 0.30);
 }
 
+/* Search bar */
 .hero-search {
     display: flex;
     align-items: center;
-    gap: 16px;
+    gap: 10px;
     background: #fff;
-    border: 1px solid #e6ece7;
-    border-radius: 24px;
-    padding: 10px;
-    max-width: 580px;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    border-radius: 20px;
+    padding: 8px 8px 8px 16px;
+    max-width: 540px;
     width: 100%;
-    margin-bottom: 30px;
-    box-shadow: 0 10px 35px rgba(124, 163, 133, .12), 0 2px 10px rgba(0, 0, 0, .03);
+    margin-bottom: 28px;
+    box-shadow: 0 12px 40px rgba(0, 0, 0, 0.22);
+}
+
+.hero-search svg {
+    width: 18px;
+    height: 18px;
+    fill: #9CA3AF;
+    flex-shrink: 0;
 }
 
 .hero-search input {
@@ -142,90 +144,90 @@
     min-width: 0;
     border: none;
     outline: none;
-    padding: 0 8px;
     font-family: 'DM Sans', sans-serif;
-    font-size: .9rem;
+    font-size: 0.9rem;
     background: transparent;
     color: var(--text-dark);
 }
 
 .hero-search input::placeholder {
-    color: var(--text-muted);
+    color: #9CA3AF;
 }
 
 .hero-search button {
     flex-shrink: 0;
-    padding: 12px 20px;
-    background: linear-gradient(135deg, #7CA385, #5F8568);
+    padding: 12px 22px;
+    background: var(--green-mid);
     color: #fff;
     border: none;
-    border-radius: 18px;
+    border-radius: 14px;
     font-weight: 700;
-    font-size: .95rem;
+    font-size: 0.92rem;
     cursor: pointer;
     white-space: nowrap;
-    transition: all .25s ease;
-    box-shadow: 0 10px 24px rgba(124, 163, 133, .28);
-    min-width: 200px;
+    transition: all 0.25s ease;
 }
 
 .hero-search button:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 14px 28px rgba(124, 163, 133, .35);
-    background: linear-gradient(135deg, #6C8B6B, #56725D);
+    background: var(--green-dark);
+    transform: translateY(-1px);
 }
 
+/* Trust badges */
 .hero-trust {
     display: flex;
-    gap: 18px;
+    gap: 10px;
     flex-wrap: wrap;
-    margin-top: 22px;
 }
 
 .hero-trust span {
-    font-size: .92rem;
-    color: #6B7B6D;
-    background: #F4F7F4;
-    border: 1px solid #E4ECE5;
-    padding: 10px 16px;
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: rgba(255, 255, 255, 0.88);
+    background: rgba(255, 255, 255, 0.10);
+    border: 1px solid rgba(255, 255, 255, 0.20);
+    backdrop-filter: blur(4px);
+    -webkit-backdrop-filter: blur(4px);
+    padding: 8px 16px;
     border-radius: 999px;
 }
 
-.hero-image {
-    position: relative;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-}
-
-.hero-image img {
-    max-width: 180%;
-    max-height: 800px;
-    object-fit: contain;
-    animation: float 4s ease-in-out infinite;
-}
-
+/* Float cards di atas gambar */
 .hero-float-card {
     position: absolute;
     background: #fff;
     border-radius: 14px;
     padding: 12px 16px;
-    box-shadow: 0 8px 28px rgba(0, 0, 0, .10);
+    box-shadow: 0 8px 28px rgba(0, 0, 0, 0.14);
     display: flex;
     align-items: center;
     gap: 10px;
-    z-index: 5;
-    animation: floatCard 3s ease-in-out infinite;
+    z-index: 3;
+    animation: floatCard 3.5s ease-in-out infinite;
 }
 
 .hero-float-card.card-1 {
-    top: 70px;
-    left: -20px;
+    top: 22%;
+    right: 8%;
+    animation-delay: 0s;
 }
 
 .hero-float-card.card-2 {
-    bottom: 70px;
-    left: -30px;
+    bottom: 20%;
+    right: 14%;
+    animation-delay: 1.2s;
+}
+
+@keyframes floatCard {
+
+    0%,
+    100% {
+        transform: translateY(0);
+    }
+
+    50% {
+        transform: translateY(-10px);
+    }
 }
 
 .float-icon {
@@ -246,38 +248,14 @@
 
 .float-text strong {
     display: block;
-    font-size: .88rem;
+    font-size: 0.86rem;
     font-weight: 700;
     color: var(--text-dark);
 }
 
 .float-text span {
-    font-size: .75rem;
+    font-size: 0.73rem;
     color: var(--text-muted);
-}
-
-@keyframes float {
-
-    0%,
-    100% {
-        transform: translateY(0)
-    }
-
-    50% {
-        transform: translateY(-14px)
-    }
-}
-
-@keyframes floatCard {
-
-    0%,
-    100% {
-        transform: translateY(0)
-    }
-
-    50% {
-        transform: translateY(-8px)
-    }
 }
 
 
@@ -512,7 +490,6 @@
     font-size: .95rem;
 }
 
-
 /* ─── STATS STRIP ─────────────────────────────── */
 .stats-strip {
     background: var(--green-mid);
@@ -557,7 +534,6 @@
     font-size: .78rem;
     color: rgba(255, 255, 255, .58);
 }
-
 
 /* ─── FASILITAS ───────────────────────────────── */
 .fac-section {
@@ -644,7 +620,6 @@
     color: var(--text-muted);
     transition: color .25s;
 }
-
 
 /* ─── KEUNGGULAN KAMI ────────────────────────── */
 .why-section {
@@ -776,7 +751,6 @@
     font-style: italic;
 }
 
-
 /* ─── CTA BANNER ───────────────────────────────── */
 .cta-banner {
     margin: 0 5% 60px;
@@ -844,7 +818,6 @@
     transform: translateY(-2px);
 }
 
-
 /* ─── RESPONSIVE ───────────────────────────────── */
 @media (max-width: 1024px) {
     .kos-grid {
@@ -859,28 +832,45 @@
         grid-template-columns: 1fr;
         gap: 32px;
     }
+
+    .hero-float-card.card-1 {
+        top: 14%;
+        right: 4%;
+    }
+
+    .hero-float-card.card-2 {
+        bottom: 12%;
+        right: 4%;
+    }
 }
 
 @media (max-width: 768px) {
-    .hero-wrap {
-        grid-template-columns: 1fr;
-        gap: 40px;
-    }
-
     .hero {
-        padding: 30px 0 50px;
+        min-height: 100svh;
     }
 
-    .hero-text {
-        text-align: center;
+    .hero-bg {
+        object-position: 68% center;
     }
 
-    .hero-search {
-        margin-inline: auto;
+    .hero-overlay {
+        background: linear-gradient(180deg,
+                rgba(12, 26, 15, 0.72) 0%,
+                rgba(12, 26, 15, 0.50) 55%,
+                rgba(12, 26, 15, 0.18) 100%);
     }
 
-    .hero-trust {
-        justify-content: center;
+    .hero-content {
+        padding: 100px 0 70px;
+        max-width: 90%;
+    }
+
+    .hero-content h1 {
+        font-size: 2.2rem;
+    }
+
+    .hero-float-card {
+        display: none;
     }
 
     .kos-grid {
@@ -900,50 +890,68 @@
 
 @section('content')
 
-{{-- ══════════════════ HERO ══════════════════ --}}
+{{-- ══════════════════ HERO FULL IMAGE ══════════════════ --}}
 <section class="hero">
-    <div class="container hero-wrap">
 
-        <div class="hero-text">
-            <div class="hero-blur"></div>
-            <div class="hero-badge">Bingung nyari kos? Yuuk cari di KosinAja!</div>
-            <h1>Cari Kos Jadi <em>Lebih Mudah</em> & Nyaman</h1>
-            <p>Jelajahi pilihan kos terbaik dan lihat detail lengkap sebelum memilih. Cepat, mudah, dan terpercaya.</p>
-            <div class="hero-trust">
-                <span>✓ Informasi Lengkap</span>
-                <span>✓ Harga Transparan</span>
-                <span>✓ Lihat Lokasi dan Fasilitas</span>
-            </div>
+    {{-- Background image full cover --}}
+    <img src="{{ asset('hero.png') }}" alt="KosinAja Hero" class="hero-bg">
+
+    {{-- Overlay gelap dari kiri --}}
+    <div class="hero-overlay"></div>
+
+    {{-- Float cards di atas gambar (pojok kanan) --}}
+    <div class="hero-float-card card-1">
+        <div class="float-icon">
+            <svg viewBox="0 0 24 24">
+                <path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41L9 16.17z" />
+            </svg>
         </div>
-
-        <div class="hero-image">
-            <div class="hero-float-card card-1">
-                <div class="float-icon">
-                    <svg viewBox="0 0 24 24">
-                        <path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41L9 16.17z" />
-                    </svg>
-                </div>
-                <div class="float-text">
-                    <strong>Terverifikasi</strong>
-                    <span>Semua kos sudah dicek</span>
-                </div>
-            </div>
-            <div class="hero-float-card card-2">
-                <div class="float-icon">
-                    <svg viewBox="0 0 24 24">
-                        <path
-                            d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5S10.62 6.5 12 6.5 14.5 7.62 14.5 9 13.38 11.5 12 11.5z" />
-                    </svg>
-                </div>
-                <div class="float-text">
-                    <strong>Temukan kos</strong>
-                    <span>Sesuai Lokasimu</span>
-                </div>
-            </div>
-            <img src="{{ asset('hero.png') }}" alt="Ilustrasi Cari Kos">
+        <div class="float-text">
+            <strong>Terverifikasi</strong>
+            <span>Semua kos sudah dicek</span>
         </div>
-
     </div>
+
+    <div class="hero-float-card card-2">
+        <div class="float-icon">
+            <svg viewBox="0 0 24 24">
+                <path
+                    d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5S10.62 6.5 12 6.5 14.5 7.62 14.5 9 13.38 11.5 12 11.5z" />
+            </svg>
+        </div>
+        <div class="float-text">
+            <strong>Temukan kos</strong>
+            <span>Sesuai Lokasimu</span>
+        </div>
+    </div>
+
+    {{-- Konten teks kiri --}}
+    <div class="hero-content">
+        <div class="hero-badge">🌿 Bingung nyari kos? Yuuk cari di KosinAja!</div>
+
+        <h1>Cari Kos Jadi <em>Lebih Mudah</em> & Nyaman</h1>
+
+        <p>Jelajahi pilihan kos terbaik dan lihat detail lengkap sebelum memilih. Cepat, mudah, dan terpercaya.</p>
+
+        <form action="{{ route('katalog') }}" method="GET">
+            <div class="hero-search">
+                <svg viewBox="0 0 24 24">
+                    <path
+                        d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5S10.62 6.5 12 6.5 14.5 7.62 14.5 9 13.38 11.5 12 11.5z" />
+                </svg>
+                <input type="text" name="search" placeholder="Cari kos di kota atau daerah..."
+                    value="{{ request('search') }}">
+                <button type="submit">Jelajahi Sekarang</button>
+            </div>
+        </form>
+
+        <div class="hero-trust">
+            <span>✓ Informasi Lengkap</span>
+            <span>✓ Harga Transparan</span>
+            <span>✓ Lihat Lokasi & Fasilitas</span>
+        </div>
+    </div>
+
 </section>
 
 {{-- ══════════════════ STATS STRIP ══════════════════ --}}
@@ -1050,14 +1058,10 @@
                     @endif
 
                     <div class="kos-actions">
-                        <a href="{{ route('detailKost', $kost->id) }}" class="btn-detail">
-                            Lihat Detail
-                        </a>
+                        <a href="{{ route('detailKost', $kost->id) }}" class="btn-detail">Lihat Detail</a>
 
                         @if($noWa)
-                        <a href="https://wa.me/{{ $noWa }}" class="btn-hubungi" target="_blank">
-                            Hubungi
-                        </a>
+                        <a href="https://wa.me/{{ $noWa }}" class="btn-hubungi" target="_blank">Hubungi</a>
                         @else
                         <a href="{{ route('hubungi') }}" class="btn-hubungi">Hubungi</a>
                         @endif
@@ -1076,7 +1080,6 @@
 
     </div>
 </section>
-
 
 {{-- ══════════════════ FASILITAS POPULER ══════════════════ --}}
 <section class="fac-section">
@@ -1189,7 +1192,6 @@
         </div>
     </div>
 </section>
-
 
 {{-- ══════════════════ CTA BANNER ══════════════════ --}}
 <div class="cta-banner">

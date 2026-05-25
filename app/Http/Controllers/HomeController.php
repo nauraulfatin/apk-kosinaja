@@ -8,6 +8,7 @@ use App\Models\KamarKost;
 use App\Models\HargaKamar;
 use App\Models\Fasilitas;
 
+
 class HomeController extends Controller
 {
     /**
@@ -100,6 +101,7 @@ public function index()
                     'kamars.fasilitas',
                     'kamars.hargaKamars.periode',
                     'fasilitas',
+                    'aturanKos',
                     'user'
                 ])->findOrFail($id);
 

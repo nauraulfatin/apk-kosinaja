@@ -237,6 +237,13 @@
     border-radius: 12px;
     background: #e5e7eb;
     flex-shrink: 0;
+    cursor: pointer;
+    transition: transform .2s, opacity .2s;
+}
+
+.kamar-foto:hover {
+    transform: scale(1.04);
+    opacity: 0.88;
 }
 
 .kamar-info {
@@ -640,73 +647,87 @@
     margin-top: 12px;
 }
 
-/* MODAL */
+/* ====== MODAL FOTO ====== */
 .modal-foto {
     display: none;
     position: fixed;
     inset: 0;
-    background: rgba(0, 0, 0, .88);
-    z-index: 999;
+    background: rgba(0, 0, 0, .92);
+    z-index: 9999;
     align-items: center;
     justify-content: center;
+    padding: 20px;
+    box-sizing: border-box;
 }
 
 .modal-foto.active {
     display: flex;
 }
 
+.modal-foto-inner {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    height: 100%;
+}
+
 #modalImg {
-    max-width: 88vw;
-    max-height: 88vh;
+    max-width: min(88vw, 1000px);
+    max-height: 85vh;
     border-radius: 16px;
     object-fit: contain;
-    position: relative;
-    z-index: 1000;
+    display: block;
     transition: transform .25s ease, opacity .25s ease;
+    user-select: none;
+    -webkit-user-drag: none;
 }
 
 .modal-close {
-    position: absolute;
+    position: fixed;
     top: 20px;
     right: 24px;
     color: white;
     cursor: pointer;
-    background: rgba(255, 255, 255, .15);
+    background: rgba(255, 255, 255, .18);
     border: none;
-    width: 40px;
-    height: 40px;
+    width: 42px;
+    height: 42px;
     border-radius: 50%;
     display: flex;
     align-items: center;
     justify-content: center;
     font-size: 1.2rem;
     transition: background .2s;
-    z-index: 1001;
+    z-index: 10001;
+    line-height: 1;
 }
 
 .modal-close:hover {
-    background: rgba(255, 255, 255, .28);
+    background: rgba(255, 255, 255, .32);
 }
 
 .modal-nav {
-    position: absolute;
+    position: fixed;
     top: 50%;
     transform: translateY(-50%);
-    background: rgba(255, 255, 255, .15);
+    background: rgba(255, 255, 255, .18);
     border: none;
-    width: 44px;
-    height: 44px;
+    width: 48px;
+    height: 48px;
     border-radius: 50%;
     display: flex;
     align-items: center;
     justify-content: center;
     cursor: pointer;
-    transition: background .2s;
-    z-index: 2000;
+    transition: background .2s, transform .2s;
+    z-index: 10001;
 }
 
 .modal-nav:hover {
-    background: rgba(255, 255, 255, .28);
+    background: rgba(255, 255, 255, .32);
+    transform: translateY(-50%) scale(1.08);
 }
 
 .modal-nav svg {
@@ -724,18 +745,55 @@
 }
 
 .modal-counter {
-    position: absolute;
-    bottom: 20px;
+    position: fixed;
+    bottom: 24px;
     left: 50%;
     transform: translateX(-50%);
-    background: rgba(0, 0, 0, .5);
+    background: rgba(0, 0, 0, .55);
     color: #fff;
-    font-size: 0.8rem;
+    font-size: 0.82rem;
     font-weight: 700;
-    padding: 5px 16px;
+    padding: 6px 18px;
     border-radius: 999px;
     pointer-events: none;
-    z-index: 1001;
+    z-index: 10001;
+    white-space: nowrap;
+}
+
+/* Thumbnail strip di bawah modal */
+.modal-thumbs {
+    position: fixed;
+    bottom: 64px;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    gap: 8px;
+    z-index: 10001;
+    max-width: 90vw;
+    overflow-x: auto;
+    padding: 4px 8px;
+}
+
+.modal-thumb {
+    width: 52px;
+    height: 38px;
+    object-fit: cover;
+    border-radius: 8px;
+    cursor: pointer;
+    opacity: 0.5;
+    border: 2px solid transparent;
+    transition: opacity .2s, border-color .2s, transform .2s;
+    flex-shrink: 0;
+}
+
+.modal-thumb.active-thumb {
+    opacity: 1;
+    border-color: #fff;
+    transform: scale(1.08);
+}
+
+.modal-thumb:hover {
+    opacity: 0.85;
 }
 
 /* RESPONSIVE */
@@ -768,6 +826,18 @@
 
     .kos-title {
         font-size: 1.4rem;
+    }
+
+    .modal-prev {
+        left: 8px;
+    }
+
+    .modal-next {
+        right: 8px;
+    }
+
+    .modal-thumbs {
+        display: none;
     }
 }
 </style>
@@ -809,10 +879,11 @@ $pesanWa = urlencode('Halo, saya tertarik dengan kost ' . $kost->nama_kost . '. 
                     {{-- Foto utama --}}
                     <div class="galeri-main">
                         @if($fotoUtama)
-                        <img src="{{ $fotoUtama }}" alt="{{ $kost->nama_kost }}" onclick="bukaFoto(0)">
+                        <img src="{{ $fotoUtama }}" alt="{{ $kost->nama_kost }}" onclick="bukaFoto(0)"
+                            title="Klik untuk melihat foto">
                         @else
                         <div style="width:100%;height:320px;background:#D5E0D6;border-radius:20px;
-                                        display:flex;align-items:center;justify-content:center;">
+                                    display:flex;align-items:center;justify-content:center;">
                             <svg style="width:56px;height:56px;fill:#A8C0AA;" viewBox="0 0 24 24">
                                 <path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z" />
                             </svg>
@@ -824,8 +895,8 @@ $pesanWa = urlencode('Halo, saya tertarik dengan kost ' . $kost->nama_kost . '. 
                     <div class="galeri-side">
                         @php $galeriSide = array_slice($galeri, 1, 2); @endphp
                         @forelse($galeriSide as $idx => $foto)
-                        <img src="{{ Storage::url($foto) }}" alt="Foto {{ $idx + 2 }}" data-modal-index="{{ $idx + 1 }}"
-                            onclick="bukaFoto(parseInt(this.dataset.modalIndex, 10))">
+                        <img src="{{ Storage::url($foto) }}" alt="Foto {{ $idx + 2 }}"
+                            onclick="bukaFoto({{ $idx + 1 }})" title="Klik untuk melihat foto">
                         @empty
                         @endforelse
 
@@ -873,9 +944,13 @@ $pesanWa = urlencode('Halo, saya tertarik dengan kost ' . $kost->nama_kost . '. 
 
                 @forelse($kost->kamars as $kamar)
                 @php
-                $fotoKamar = ($kamar->foto_kamar && count($kamar->foto_kamar) > 0)
-                ? asset('storage/' . $kamar->foto_kamar[0])
+                $fotoKamarArr = $kamar->foto_kamar ?? [];
+                $fotoKamar = (is_array($fotoKamarArr) && count($fotoKamarArr) > 0)
+                ? asset('storage/' . $fotoKamarArr[0])
                 : null;
+                $fotoKamarUrls = is_array($fotoKamarArr)
+                ? array_map(fn($f) => asset('storage/' . $f), $fotoKamarArr)
+                : [];
                 $hargaKamar = $kamar->hargaKamars->where('isactive', true)->first();
                 @endphp
 
@@ -883,7 +958,9 @@ $pesanWa = urlencode('Halo, saya tertarik dengan kost ' . $kost->nama_kost . '. 
 
                     {{-- Foto kamar --}}
                     @if($fotoKamar)
-                    <img src="{{ $fotoKamar }}" alt="{{ $kamar->nama_kamar }}" class="kamar-foto">
+                    <img src="{{ $fotoKamar }}" alt="{{ $kamar->nama_kamar }}" class="kamar-foto"
+                        onclick="bukaFotoKamar({{ json_encode($fotoKamarUrls) }}, 0)"
+                        title="Klik untuk melihat foto kamar">
                     @else
                     <div class="kamar-foto"
                         style="display:flex;align-items:center;justify-content:center;background:#F0F5F1;">
@@ -943,6 +1020,22 @@ $pesanWa = urlencode('Halo, saya tertarik dengan kost ' . $kost->nama_kost . '. 
                 @endforelse
             </div>
 
+            {{-- FASILITAS KOST --}}
+            @if($kost->fasilitas && $kost->fasilitas->count() > 0)
+            <div class="section-box">
+                <div class="section-title">Fasilitas Kost</div>
+                <p class="section-sub">Fasilitas yang tersedia di kost ini</p>
+
+                <div class="fasilitas-grid">
+                    @foreach($kost->fasilitas as $fasilitas)
+                    <div class="fasilitas-chip">
+                        {{ $fasilitas->nama_fasilitas }}
+                    </div>
+                    @endforeach
+                </div>
+            </div>
+            @endif
+
             {{-- LOKASI --}}
             @if($kost->lokasi)
             <div class="section-box">
@@ -958,6 +1051,36 @@ $pesanWa = urlencode('Halo, saya tertarik dengan kost ' . $kost->nama_kost . '. 
                     <iframe src="{{ $kost->lokasi }}" width="100%" height="300" style="border:0;display:block;"
                         allowfullscreen loading="lazy" referrerpolicy="no-referrer-when-downgrade">
                     </iframe>
+                </div>
+            </div>
+            @endif
+
+            {{-- ATURAN KOST --}}
+            @if($kost->aturanKos && $kost->aturanKos->count() > 0)
+            <div class="section-box">
+                <div class="section-title">Aturan Kost</div>
+                <p class="section-sub">Harap diperhatikan sebelum menyewa</p>
+
+                <div style="display:flex;flex-direction:column;gap:10px;">
+                    @foreach($kost->aturanKos as $index => $aturan)
+                    <div style="display:flex;gap:14px;align-items:flex-start;
+                                padding:14px 16px;
+                                background:#F8FAF8;
+                                border:1px solid #E8EFE9;
+                                border-radius:12px;">
+                        <div style="width:26px;height:26px;
+                                    background:#EAF3EB;
+                                    border-radius:8px;
+                                    display:flex;align-items:center;justify-content:center;
+                                    font-size:0.75rem;font-weight:800;
+                                    color:#4B8A4B;flex-shrink:0;">
+                            {{ $index + 1 }}
+                        </div>
+                        <p style="font-size:0.88rem;color:#4a5e4c;line-height:1.7;margin:0;padding-top:2px;">
+                            {{ $aturan->isi }}
+                        </p>
+                    </div>
+                    @endforeach
                 </div>
             </div>
             @endif
@@ -1062,25 +1185,33 @@ $pesanWa = urlencode('Halo, saya tertarik dengan kost ' . $kost->nama_kost . '. 
 
     </div>
 
-    {{-- MODAL FOTO --}}
-    <div class="modal-foto" id="modalFoto">
-        <button class="modal-close" onclick="tutupFoto()">✕</button>
+    {{-- ====== MODAL FOTO ====== --}}
+    <div class="modal-foto" id="modalFoto" role="dialog" aria-modal="true" aria-label="Galeri foto">
 
-        @if(count($galeri) > 1)
-        <button class="modal-nav modal-prev" onclick="fotoNav(-1)">
+        {{-- Tombol tutup --}}
+        <button class="modal-close" onclick="tutupFoto()" aria-label="Tutup galeri">✕</button>
+
+        {{-- Navigasi prev/next --}}
+        <button class="modal-nav modal-prev" id="modalPrev" onclick="fotoNav(-1)" aria-label="Foto sebelumnya">
             <svg viewBox="0 0 24 24">
                 <path d="M15.41 16.59L10.83 12l4.58-4.59L14 6l-6 6 6 6z" />
             </svg>
         </button>
-        <button class="modal-nav modal-next" onclick="fotoNav(1)">
+        <button class="modal-nav modal-next" id="modalNext" onclick="fotoNav(1)" aria-label="Foto berikutnya">
             <svg viewBox="0 0 24 24">
                 <path d="M8.59 16.59L13.17 12 8.59 7.41 10 6l6 6-6 6z" />
             </svg>
         </button>
-        <div class="modal-counter" id="modalCounter">1 / {{ count($galeri) }}</div>
-        @endif
 
-        <img id="modalImg" src="" alt="Foto" onclick="event.stopPropagation()">
+        {{-- Gambar utama --}}
+        <img id="modalImg" src="" alt="Preview foto" onclick="event.stopPropagation()">
+
+        {{-- Counter --}}
+        <div class="modal-counter" id="modalCounter">1 / 1</div>
+
+        {{-- Thumbnail strip --}}
+        <div class="modal-thumbs" id="modalThumbs"></div>
+
     </div>
 
 </div>
@@ -1104,64 +1235,116 @@ $hargaKamarJson[$kamar->id_kamar][] = [
 
 @push('scripts')
 
-{{-- Script 1: Kamar & Periode Select --}}
+{{-- ===== 1. DATA GALERI KOST (PHP → JS) ===== --}}
 <script>
-const hargaKamar = JSON.parse('{!! addslashes(json_encode($hargaKamarJson)) !!}');
+const galeriUrls = @json($galeriUrls);
+</script>
+
+{{-- ===== 2. KAMAR & PERIODE SELECT ===== --}}
+<script>
+const hargaKamar = @json($hargaKamarJson);
+
 const kamarSelect = document.getElementById('kamarSelect');
 const hargaSelect = document.getElementById('hargaSelect');
 
-kamarSelect.addEventListener('change', function() {
-    const kamarId = this.value;
-    hargaSelect.innerHTML = '<option value="">-- Pilih Periode --</option>';
-    if (hargaKamar[kamarId]) {
-        hargaKamar[kamarId].forEach(function(harga) {
-            hargaSelect.innerHTML += `
-                <option value="${harga.id}">
-                    ${harga.periode} - Rp ${Number(harga.harga).toLocaleString('id-ID')}
-                </option>`;
-        });
-    }
-});
+if (kamarSelect && hargaSelect) {
+    kamarSelect.addEventListener('change', function() {
+        const kamarId = this.value;
+        hargaSelect.innerHTML = '<option value="">-- Pilih Periode --</option>';
+        if (hargaKamar[kamarId]) {
+            hargaKamar[kamarId].forEach(function(harga) {
+                hargaSelect.innerHTML += `
+                        <option value="${harga.id}">
+                            ${harga.periode} - Rp ${Number(harga.harga).toLocaleString('id-ID')}
+                        </option>`;
+            });
+        }
+    });
+}
 </script>
 
-{{-- Script 2: Modal Foto dengan Slide & Swipe --}}
+{{-- ===== 3. MODAL FOTO — KOST & KAMAR ===== --}}
 <script>
-const galeriUrls = JSON.parse('{!! addslashes(json_encode($galeriUrls)) !!}');
-let modalIndex = 0;
+/* ---- State ---- */
+let modalUrls = []; // URL array yang sedang aktif di modal
+let modalIndex = 0; // Indeks foto yang sedang tampil
 let isAnimating = false;
 
+/* ------------------------------------------------------------------ */
+/* BUKA MODAL — galeri kost                                             */
+/* ------------------------------------------------------------------ */
 function bukaFoto(idx) {
-    if (!galeriUrls.length) return;
-    modalIndex = idx;
+    if (!galeriUrls || galeriUrls.length === 0) return;
+    bukaModalDenganUrls(galeriUrls, idx);
+}
 
+/* ------------------------------------------------------------------ */
+/* BUKA MODAL — foto kamar (dipanggil dengan array URLs & indeks)       */
+/* ------------------------------------------------------------------ */
+function bukaFotoKamar(urls, idx) {
+    if (!urls || urls.length === 0) return;
+    bukaModalDenganUrls(urls, idx);
+}
+
+/* ------------------------------------------------------------------ */
+/* INTI: tampilkan modal dengan array urls & indeks awal               */
+/* ------------------------------------------------------------------ */
+function bukaModalDenganUrls(urls, idx) {
+    modalUrls = urls;
+    modalIndex = Math.max(0, Math.min(idx, urls.length - 1));
+
+    const modal = document.getElementById('modalFoto');
     const img = document.getElementById('modalImg');
+
+    /* Sembunyikan nav jika hanya 1 foto */
+    const showNav = urls.length > 1;
+    document.getElementById('modalPrev').style.display = showNav ? 'flex' : 'none';
+    document.getElementById('modalNext').style.display = showNav ? 'flex' : 'none';
+
+    /* Bangun thumbnail strip */
+    renderThumbs();
+
+    /* Tampilkan gambar pertama */
     img.style.transition = 'none';
     img.style.opacity = '0';
-    img.style.transform = 'translateX(0)';
-    img.src = galeriUrls[modalIndex];
+    img.style.transform = 'translateX(0) scale(1)';
+    img.src = modalUrls[modalIndex];
 
-    document.getElementById('modalFoto').classList.add('active');
+    modal.classList.add('active');
     document.body.style.overflow = 'hidden';
 
-    img.onload = () => {
-        img.style.transition = 'opacity .25s ease';
+    const onLoad = () => {
+        img.style.transition = 'opacity .25s ease, transform .25s ease';
         img.style.opacity = '1';
     };
-    if (img.complete) {
-        img.style.transition = 'opacity .25s ease';
-        img.style.opacity = '1';
-    }
+    img.onload = onLoad;
+    if (img.complete && img.naturalWidth) onLoad();
 
     updateCounter();
 }
 
+/* ------------------------------------------------------------------ */
+/* TUTUP MODAL                                                          */
+/* ------------------------------------------------------------------ */
 function tutupFoto() {
-    document.getElementById('modalFoto').classList.remove('active');
-    document.body.style.overflow = '';
+    const modal = document.getElementById('modalFoto');
+    const img = document.getElementById('modalImg');
+
+    img.style.transition = 'opacity .2s ease';
+    img.style.opacity = '0';
+
+    setTimeout(() => {
+        modal.classList.remove('active');
+        document.body.style.overflow = '';
+        img.src = '';
+    }, 200);
 }
 
+/* ------------------------------------------------------------------ */
+/* NAVIGASI (dir: -1 = prev, +1 = next)                                */
+/* ------------------------------------------------------------------ */
 function fotoNav(dir) {
-    if (!galeriUrls.length || isAnimating) return;
+    if (!modalUrls.length || isAnimating) return;
     isAnimating = true;
 
     const img = document.getElementById('modalImg');
@@ -1171,11 +1354,11 @@ function fotoNav(dir) {
     img.style.opacity = '0';
 
     setTimeout(() => {
-        modalIndex = (modalIndex + dir + galeriUrls.length) % galeriUrls.length;
+        modalIndex = (modalIndex + dir + modalUrls.length) % modalUrls.length;
 
         img.style.transition = 'none';
         img.style.transform = 'translateX(' + (dir > 0 ? '60px' : '-60px') + ')';
-        img.src = galeriUrls[modalIndex];
+        img.src = modalUrls[modalIndex];
 
         requestAnimationFrame(() => {
             requestAnimationFrame(() => {
@@ -1187,35 +1370,100 @@ function fotoNav(dir) {
         });
 
         updateCounter();
+        updateActiveThumbs();
     }, 200);
 }
 
+/* ------------------------------------------------------------------ */
+/* COUNTER & THUMBS                                                     */
+/* ------------------------------------------------------------------ */
 function updateCounter() {
     const counter = document.getElementById('modalCounter');
-    if (counter) counter.textContent = (modalIndex + 1) + ' / ' + galeriUrls.length;
+    if (counter) {
+        counter.textContent = (modalIndex + 1) + ' / ' + modalUrls.length;
+        counter.style.display = modalUrls.length > 1 ? 'block' : 'none';
+    }
 }
 
+function renderThumbs() {
+    const strip = document.getElementById('modalThumbs');
+    if (!strip) return;
+    strip.innerHTML = '';
+
+    if (modalUrls.length <= 1) return; /* sembunyikan jika 1 foto */
+
+    modalUrls.forEach((url, i) => {
+        const thumb = document.createElement('img');
+        thumb.src = url;
+        thumb.alt = 'Foto ' + (i + 1);
+        thumb.className = 'modal-thumb' + (i === modalIndex ? ' active-thumb' : '');
+        thumb.addEventListener('click', (e) => {
+            e.stopPropagation();
+            if (i !== modalIndex) {
+                const dir = i > modalIndex ? 1 : -1;
+                modalIndex = i - dir; /* fotoNav akan increment */
+                fotoNav(dir);
+            }
+        });
+        strip.appendChild(thumb);
+    });
+}
+
+function updateActiveThumbs() {
+    const thumbs = document.querySelectorAll('.modal-thumb');
+    thumbs.forEach((t, i) => {
+        t.classList.toggle('active-thumb', i === modalIndex);
+    });
+
+    /* Scroll thumbnail yang aktif ke tengah strip */
+    const activeThumb = thumbs[modalIndex];
+    if (activeThumb) {
+        activeThumb.scrollIntoView({
+            behavior: 'smooth',
+            block: 'nearest',
+            inline: 'center'
+        });
+    }
+}
+
+/* ------------------------------------------------------------------ */
+/* EVENT LISTENERS                                                      */
+/* ------------------------------------------------------------------ */
+
+/* Klik backdrop tutup modal */
 document.getElementById('modalFoto').addEventListener('click', function(e) {
     if (e.target === this) tutupFoto();
 });
 
-document.addEventListener('keydown', e => {
+/* Keyboard: Escape, ArrowLeft, ArrowRight */
+document.addEventListener('keydown', function(e) {
     if (!document.getElementById('modalFoto').classList.contains('active')) return;
     if (e.key === 'Escape') tutupFoto();
     if (e.key === 'ArrowRight') fotoNav(1);
     if (e.key === 'ArrowLeft') fotoNav(-1);
 });
 
+/* Touch/swipe support */
 let touchStartX = 0;
+let touchStartY = 0;
 const modalEl = document.getElementById('modalFoto');
-modalEl.addEventListener('touchstart', e => {
+
+modalEl.addEventListener('touchstart', function(e) {
     touchStartX = e.touches[0].clientX;
+    touchStartY = e.touches[0].clientY;
 }, {
     passive: true
 });
-modalEl.addEventListener('touchend', e => {
-    const diff = touchStartX - e.changedTouches[0].clientX;
-    if (Math.abs(diff) > 50) fotoNav(diff > 0 ? 1 : -1);
+
+modalEl.addEventListener('touchend', function(e) {
+    const diffX = touchStartX - e.changedTouches[0].clientX;
+    const diffY = Math.abs(touchStartY - e.changedTouches[0].clientY);
+    /* Hanya swipe horizontal yang lebih dominan dari vertikal */
+    if (Math.abs(diffX) > 50 && Math.abs(diffX) > diffY) {
+        fotoNav(diffX > 0 ? 1 : -1);
+    }
+}, {
+    passive: true
 });
 </script>
 
