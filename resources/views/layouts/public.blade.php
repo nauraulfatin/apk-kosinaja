@@ -108,23 +108,14 @@
                         <div class="w-11 h-11 rounded-full
                             overflow-hidden border-2
                             border-[#6C8B6B]">
-
                             <img src="https://ui-avatars.com/api/?name={{ auth()->user()->nama }}"
                                 class="w-full h-full object-cover">
-
                         </div>
 
                         {{-- NAMA --}}
                         <div class="hidden md:block text-left">
-
-                            <p class="text-sm text-gray-400">
-                                Halo,
-                            </p>
-
-                            <h4 class="font-semibold text-[#1B2B1D]">
-                                {{ auth()->user()->nama }}
-                            </h4>
-
+                            <p class="text-sm text-gray-400">Halo,</p>
+                            <h4 class="font-semibold text-[#1B2B1D]">{{ auth()->user()->nama }}</h4>
                         </div>
 
                         {{-- ICON --}}
@@ -145,64 +136,58 @@
                         transition-all duration-200
                         overflow-hidden z-50">
 
-                        {{-- PROFIL --}}
-                        <a href="{{ route('profil.index') }}" class="flex items-center gap-3
-                           px-5 py-4 hover:bg-gray-50
-                           transition">
+                        {{-- ============================================
+                             SUPER ADMIN
+                             ============================================ --}}
+                        @if(auth()->user()->role === 'super admin')
 
-                            <span class="font-medium">
-                                Profil Saya
-                            </span>
-
+                        <a href="{{ route('superadmin.profil') }}"
+                            class="flex items-center gap-3 px-5 py-4 hover:bg-gray-50 transition">
+                            <span class="font-medium">Profil Saya</span>
                         </a>
 
-                        {{-- DASHBOARD ADMIN --}}
-                        @if(auth()->user()->role == 'admin kost')
 
-                        <a href="{{ route('admin.dashboard') }}" class="flex items-center gap-3
-                               px-5 py-4 hover:bg-gray-50
-                               transition">
 
-                            <span class="font-medium">
-                                Dashboard Admin
-                            </span>
+                        {{-- ============================================
+                             ADMIN KOST
+                             ============================================ --}}
+                        @elseif(auth()->user()->role === 'admin kost')
 
+                        <a href="{{ route('admin.profil.index') }}"
+                            class="flex items-center gap-3 px-5 py-4 hover:bg-gray-50 transition">
+                            <span class="font-medium">Profil Saya</span>
                         </a>
+
+                        @if(auth()->user()->status === 'aktif')
+                        <a href="{{ route('admin.dashboard') }}"
+                            class="flex items-center gap-3 px-5 py-4 hover:bg-gray-50 transition">
+                            <span class="font-medium">Dashboard Admin</span>
+                        </a>
+                        @endif
+
+                        {{-- ============================================
+                             PENGHUNI KOST
+                             ============================================ --}}
+                        @elseif(auth()->user()->role === 'penghuni kost')
+
+                        <a href="{{ route('profil.index') }}"
+                            class="flex items-center gap-3 px-5 py-4 hover:bg-gray-50 transition">
+                            <span class="font-medium">Profil Saya</span>
+                        </a>
+
+
 
                         @endif
 
-                        {{-- KOST SAYA - PENGHUNI --}}
-@if(auth()->user()->role == 'penghuni kost')
-
-<a href="{{ route('profil.index') }}" class="flex items-center gap-3
-       px-5 py-4 hover:bg-gray-50
-       transition">
-
-    <span class="font-medium">
-        Kost Saya
-    </span>
-
-</a>
-
-@endif
-                        
-
-                        {{-- LOGOUT --}}
+                        {{-- LOGOUT (semua role) --}}
                         <form method="POST" action="{{ route('logout') }}">
-
                             @csrf
-
                             <button type="submit" class="w-full text-left
                                        flex items-center gap-3
                                        px-5 py-4 hover:bg-red-50
                                        text-red-500 transition">
-
-                                <span class="font-medium">
-                                    Logout
-                                </span>
-
+                                <span class="font-medium">Logout</span>
                             </button>
-
                         </form>
 
                     </div>
@@ -219,9 +204,7 @@
                    hover:bg-[#6C8B6B]
                    hover:text-white
                    transition-all duration-200">
-
                     Masuk
-
                 </a>
 
                 {{-- DAFTAR --}}
@@ -230,9 +213,7 @@
                    hover:bg-[#587357]
                    text-white font-semibold
                    transition-all duration-200">
-
                     Daftar
-
                 </button>
 
                 @endauth
@@ -266,19 +247,14 @@
 
                 {{-- BRAND --}}
                 <div class="lg:col-span-2">
-
                     <div class="flex items-center gap-3 mb-6">
                         <img src="{{ asset('logo.png') }}" class="w-12 h-12 object-contain">
-                        <h2 class="text-3xl font-extrabold text-white">
-                            KosinAja!
-                        </h2>
+                        <h2 class="text-3xl font-extrabold text-white">KosinAja!</h2>
                     </div>
-
                     <p class="text-[#c7d5c8] leading-8 max-w-md">
                         Platform pencarian dan pengelolaan kos modern yang membantu pencari kos menemukan hunian nyaman
                         dengan cepat, aman, dan terpercaya.
                     </p>
-
                 </div>
 
                 {{-- MENU --}}
@@ -286,8 +262,10 @@
                     <h3 class="text-white font-bold text-lg mb-6">Navigasi</h3>
                     <div class="flex flex-col gap-4">
                         <a href="{{ route('home') }}" class="text-[#c7d5c8] hover:text-white transition">Beranda</a>
-                        <a href="{{ route('hubungi') }}" class="text-[#c7d5c8] hover:text-white transition">Hubungi Kami</a>
-                        <a href="{{ route('tentang') }}" class="text-[#c7d5c8] hover:text-white transition">Tentang Kami</a>
+                        <a href="{{ route('hubungi') }}" class="text-[#c7d5c8] hover:text-white transition">Hubungi
+                            Kami</a>
+                        <a href="{{ route('tentang') }}" class="text-[#c7d5c8] hover:text-white transition">Tentang
+                            Kami</a>
                     </div>
                 </div>
 
@@ -296,10 +274,8 @@
                     <h3 class="text-white font-bold text-lg mb-6">Kontak</h3>
                     <div class="space-y-5">
 
-                        {{-- Lokasi --}}
                         <div class="flex items-start gap-3">
-                            <div class="w-10 h-10 rounded-xl bg-[#223725]
-                                        flex items-center justify-center shrink-0">
+                            <div class="w-10 h-10 rounded-xl bg-[#223725] flex items-center justify-center shrink-0">
                                 <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 text-[#6C8B6B]" fill="none"
                                     viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8">
                                     <path stroke-linecap="round" stroke-linejoin="round"
@@ -307,15 +283,11 @@
                                     <circle cx="12" cy="8" r="2" fill="currentColor" stroke="none" />
                                 </svg>
                             </div>
-                            <p class="text-[#c7d5c8] leading-7 pt-1">
-                                Banyuwangi, Indonesia
-                            </p>
+                            <p class="text-[#c7d5c8] leading-7 pt-1">Banyuwangi, Indonesia</p>
                         </div>
 
-                        {{-- Email --}}
                         <div class="flex items-start gap-3">
-                            <div class="w-10 h-10 rounded-xl bg-[#223725]
-                                        flex items-center justify-center shrink-0">
+                            <div class="w-10 h-10 rounded-xl bg-[#223725] flex items-center justify-center shrink-0">
                                 <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 text-[#6C8B6B]" fill="none"
                                     viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8">
                                     <rect x="2" y="5" width="20" height="14" rx="2" stroke="currentColor"
@@ -329,10 +301,8 @@
                             </a>
                         </div>
 
-                        {{-- Telepon --}}
                         <div class="flex items-start gap-3">
-                            <div class="w-10 h-10 rounded-xl bg-[#223725]
-                                        flex items-center justify-center shrink-0">
+                            <div class="w-10 h-10 rounded-xl bg-[#223725] flex items-center justify-center shrink-0">
                                 <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 text-[#6C8B6B]" fill="none"
                                     viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8">
                                     <path stroke-linecap="round" stroke-linejoin="round" d="M6.6 10.8c1.4 2.8 3.8 5.1 6.6 6.6l2.2-2.2c.3-.3.7-.4 1-.2

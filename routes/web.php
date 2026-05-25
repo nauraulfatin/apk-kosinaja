@@ -15,6 +15,7 @@ use App\Http\Controllers\ProfilPenghuniController;
 use App\Http\Controllers\PengajuanSewaController;
 use App\Http\Controllers\Admin\AduanAdminController;
 use App\Http\Controllers\Penghuni\AduanPenghuniController;
+use App\Http\Controllers\ProfilAdminController;
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\HomeController;
@@ -196,6 +197,10 @@ Route::middleware([
         SuperAdminController::class,
         'editRiwayat'
     ])->name('riwayat.edit');
+
+    Route::get('/profil', [SuperAdminController::class, 'profil'])
+    ->name('profil');
+    
 });
 
 /*
@@ -344,7 +349,15 @@ Route::middleware([
         AduanAdminController::class,
         'update'
     ])->name('aduan.update');
+
+    Route::get('/profil', [ProfilAdminController::class, 'index'])->name('profil.index');
 });
+
+Route::middleware(['auth', 'force.password'])
+    ->group(function () {
+        Route::get('/admin/profil', [ProfilAdminController::class, 'index'])
+            ->name('admin.profil.index');
+    });
 
 /*
 |--------------------------------------------------------------------------
@@ -427,6 +440,7 @@ Route::middleware([
         PenghuniController::class,
         'hubungkan'
     ])->name('penghuni.hubungkan');
+
 });
 
 /*

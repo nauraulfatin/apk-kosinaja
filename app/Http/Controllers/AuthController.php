@@ -76,8 +76,10 @@ class AuthController extends Controller
 
         return match($user->role)
         {
-            'super admin'=> redirect()->route( 'superadmin.dashboard'),
-            'admin kost' => redirect()->route('admin.dashboard' ),
+            'super admin' => redirect()->route('home'),
+            'admin kost' => $user->status === 'aktif'
+    ? redirect()->route('home')
+    : redirect()->route('admin.profil.index'),
             'penghuni kost' => $user->riwayatHunian()
             ->where('status', 'aktif')
             ->exists()

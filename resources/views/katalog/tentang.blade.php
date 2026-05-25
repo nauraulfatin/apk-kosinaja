@@ -118,22 +118,6 @@
         </div>
     </div>
 
-    {{-- STATS --}}
-    <div class="bg-[#284535] rounded-2xl px-8 py-6 grid grid-cols-3 text-center">
-        <div class="border-r border-white/20 px-4">
-            <div class="font-extrabold text-2xl text-white leading-none mb-1">{{ $totalKos ?? '—' }}</div>
-            <div class="text-xs text-white/55">Kost Terdaftar</div>
-        </div>
-        <div class="border-r border-white/20 px-4">
-            <div class="font-extrabold text-2xl text-white leading-none mb-1">{{ $totalKamar ?? '—' }}</div>
-            <div class="text-xs text-white/55">Total Kamar</div>
-        </div>
-        <div class="px-4">
-            <div class="font-extrabold text-2xl text-white leading-none mb-1">{{ $totalPenghuni ?? '—' }}</div>
-            <div class="text-xs text-white/55">Penghuni Aktif</div>
-        </div>
-    </div>
-
     {{-- TIMELINE --}}
     <div class="bg-white rounded-2xl border border-[#E2EAE3] p-6">
         <div class="text-center mb-6">

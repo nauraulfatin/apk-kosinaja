@@ -202,4 +202,10 @@ public function hapusAdmin(User $user)
         );
 }
 
+public function profil()
+{
+    $user = auth()->user();
+    return view('profil.superadmin', compact('user'));
+}
+
 }

@@ -2,23 +2,40 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Controllers\Controller;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\View;
+
+use App\Models\User;
+use App\Models\Kost;
 
 class ProfilAdminController extends Controller
 {
+    /*
+    |--------------------------------------------------------------------------
+    | HALAMAN PROFIL ADMIN KOST
+    |--------------------------------------------------------------------------
+    */
+
     public function index()
     {
-        $admin = Auth::user();
+        $user = Auth::user()->load('kost');
 
-        $kost = $admin->kost;
-
-        $view = view()->file(
-            resource_path('views/profil/index.admin.blade.php'),
-            compact('admin', 'kost')
+        return view(
+            'profil.admin',
+            compact(
+                'user'
+            )
         );
+    }
 
-        return $view;
+    /*
+    |--------------------------------------------------------------------------
+    | DASHBOARD ADMIN
+    |--------------------------------------------------------------------------
+    */
+
+    public function dashboard()
+    {
+        return redirect()->route('admin.dashboard');
     }
 }
