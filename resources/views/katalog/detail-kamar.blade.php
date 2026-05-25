@@ -998,7 +998,7 @@ $fasIcons = [
                 @else
                 <span class="terisi-badge">
                     <span class="dot-merah"></span>
-                    Tidak Tersedia
+                    Terisi
                 </span>
                 @endif
             </div>
@@ -1134,7 +1134,7 @@ $fasIcons = [
                         @if($kamar->status == 'kosong')
                         <span style="color:#16a34a;">Tersedia</span>
                         @else
-                        <span style="color:#dc2626;">Penuh</span>
+                        <span style="color:#dc2626;">Terisi</span>
                         @endif
                     </strong>
                 </div>
