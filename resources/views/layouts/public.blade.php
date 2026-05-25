@@ -43,15 +43,15 @@
 
         <div class="max-w-7xl mx-auto
                     px-6 lg:px-8
-                    h-[84px]
+                    h-[72px] lg:h-[84px]
                     flex items-center justify-between">
 
             {{-- LOGO --}}
             <a href="{{ route('home') }}" class="flex items-center gap-3">
 
-                <img src="{{ asset('logo.png') }}" alt="KosinAja" class="w-11 h-11 object-contain">
+                <img src="{{ asset('logo.png') }}" alt="KosinAja" class="w-9 h-9 lg:w-11 lg:h-11 object-contain">
 
-                <span class="text-[30px] font-extrabold text-[#102313]">
+                <span class="text-[20px] lg:text-[30px] font-extrabold text-[#102313]">
                     KosinAja!
                 </span>
 
@@ -94,8 +94,36 @@
 
             </ul>
 
+
+            {{-- MOBILE MENU BUTTON --}}
+<button
+    onclick="toggleMobileMenu()"
+    class="lg:hidden
+           w-10 h-10
+           rounded-xl
+           border border-gray-200
+           flex items-center justify-center
+           text-[#314233]"
+>
+
+    <svg xmlns="http://www.w3.org/2000/svg"
+         class="w-5 h-5"
+         fill="none"
+         viewBox="0 0 24 24"
+         stroke="currentColor">
+
+        <path
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            stroke-width="2"
+            d="M4 6h16M4 12h16M4 18h16"
+        />
+
+    </svg>
+
+</button>
             {{-- ACTION --}}
-            <div class="flex items-center gap-4">
+            <div class="hidden lg:flex items-center gap-4">
 
                 @auth
 
@@ -197,7 +225,7 @@
                 @else
 
                 {{-- MASUK --}}
-                <a href="{{ route('login') }}" class="px-6 py-3 rounded-2xl
+                <a href="{{ route('login') }}" class="px-4 py-2.5 lg:px-6 lg:py-3 text-sm lg:text-base rounded-2xl
                    border border-[#6C8B6B]
                    text-[#6C8B6B]
                    font-semibold
@@ -208,7 +236,7 @@
                 </a>
 
                 {{-- DAFTAR --}}
-                <button onclick="bukaModal()" class="px-6 py-3 rounded-2xl
+                <button onclick="bukaModal()" class="px-4 py-2.5 lg:px-6 lg:py-3 text-sm lg:text-base rounded-2xl
                    bg-[#6C8B6B]
                    hover:bg-[#587357]
                    text-white font-semibold
@@ -223,6 +251,74 @@
         </div>
 
     </nav>
+    {{-- MOBILE MENU --}}
+<div
+    id="mobileMenu"
+    class="fixed top-[72px] left-0 right-0
+           bg-white z-40
+           border-b border-gray-100
+           shadow-lg
+           hidden lg:hidden"
+>
+
+    <div class="px-5 py-6 flex flex-col gap-5">
+
+        <a href="{{ route('home') }}"
+           class="font-semibold text-[#314233]">
+
+            Beranda
+
+        </a>
+
+        <a href="{{ route('tentang') }}"
+           class="font-semibold text-[#314233]">
+
+            Tentang
+
+        </a>
+
+        <a href="{{ route('hubungi') }}"
+           class="font-semibold text-[#314233]">
+
+            Hubungi
+
+        </a>
+
+        @guest
+
+        <div class="flex flex-col gap-3 pt-3">
+
+            <a href="{{ route('login') }}"
+               class="w-full text-center
+                      px-4 py-3 rounded-2xl
+                      border border-[#6C8B6B]
+                      text-[#6C8B6B]
+                      font-semibold">
+
+                Masuk
+
+            </a>
+
+            <button
+                onclick="bukaModal()"
+                class="w-full
+                       px-4 py-3 rounded-2xl
+                       bg-[#6C8B6B]
+                       text-white
+                       font-semibold"
+            >
+
+                Daftar
+
+            </button>
+
+        </div>
+
+        @endguest
+
+    </div>
+
+</div>
 
     {{-- CONTENT --}}
     <main class="pt-[84px]">
@@ -240,7 +336,7 @@
 
         <div class="relative z-10
                     max-w-7xl mx-auto
-                    px-6 lg:px-8
+                    px-4 lg:px-8
                     py-20">
 
             <div class="grid lg:grid-cols-4 gap-14">
@@ -336,6 +432,19 @@
     @include('auth.pilih-role')
     </div>
 
+    @stack('scripts')
+
+<script>
+
+function toggleMobileMenu()
+{
+    document
+        .getElementById('mobileMenu')
+        .classList
+        .toggle('hidden');
+}
+
+</script>
 </body>
 
 </html>

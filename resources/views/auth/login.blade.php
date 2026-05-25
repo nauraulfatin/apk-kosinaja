@@ -325,12 +325,6 @@
 
                 </div>
 
-                {{-- REGISTER --}}
-                <div class="text-center">
-
-                    <p class="text-gray-500">
-
-                        Belum punya akun?
 
                         {{-- REGISTER --}}
                     <div class="text-center">

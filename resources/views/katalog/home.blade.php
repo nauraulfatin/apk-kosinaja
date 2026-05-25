@@ -64,7 +64,7 @@
 .hero-content {
     position: relative;
     z-index: 2;
-    padding: 140px 0 100px;
+    padding: 70px 0 100px;
     max-width: 620px;
     margin-left: calc((100% - 1320px) / 2);
     padding-left: 0;
@@ -85,11 +85,11 @@
     backdrop-filter: blur(6px);
     -webkit-backdrop-filter: blur(6px);
     border-radius: 999px;
-    padding: 9px 18px;
+    padding: 9px 16px;
     font-size: 0.92rem;
     font-weight: 600;
     color: rgba(255, 255, 255, 0.92);
-    margin-bottom: 28px;
+    margin-bottom: 16px;
 }
 
 .hero-content h1 {
@@ -1100,10 +1100,28 @@
             @endphp
             <a href="{{ route('katalog', ['fasilitas' => $nama]) }}" class="fac-item">
                 <div class="fac-icon-wrap">
-                    <svg viewBox="0 0 24 24">
-                        <path d="M3 9.5L12 3l9 6.5V20a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V9.5z" />
-                        <path d="M9 21V12h6v9" />
-                    </svg>
+                    @php
+
+$icons = [
+    'WiFi' => ' <path d="M2 8.82a15 15 0 0120 0"/> <path d="M5 12.86a10 10 0 0114 0"/> <path d="M8.5 16.9a5 5 0 017 0"/> <path d="M12 20h.01"/>',
+    'AC' => ' <path d="M12 2v20"/> <path d="M4.93 4.93l14.14 14.14"/> <path d="M2 12h20"/> <path d="M4.93 19.07L19.07 4.93"/>',
+    'Kulkas' => ' <rect x="7" y="2" width="10" height="20" rx="2"/> <path d="M7 12h10"/> <path d="M10 6h.01"/> <path d="M10 16h.01"/>',
+    'CCTV' => ' <path d="M3 10l10-5 3 6-10 5z"/> <path d="M13 5l4-2"/><path d="M16 14l2 4"/>',
+    'Ruang Tamu' => '<path d="M4 12V7a2 2 0 012-2h12a2 2 0 012 2v5"/><path d="M2 12h20v5H2z"/>',
+    'TV' => ' <rect x="3" y="5" width="18" height="12" rx="2"/> <path d="M8 21h8"/>',
+    'Kipas Angin' => ' <circle cx="12" cy="12" r="2"/> <path d="M12 4 C15 4 16 7 14 9 C13 10 11 9 11 7 C11 5 11.5 4 12 4Z"/> <path d="M20 12 C20 15 17 16 15 14 C14 13 15 11 17 11 C19 11 20 11.5 20 12Z"/> <path d="M12 20 C9 20 8 17 10 15 C11 14 13 15 13 17 C13 19 12.5 20 12 20Z"/><path d="M4 12 C4 9 7 8 9 10 C10 11 9 13 7 13 C5 13 4 12.5 4 12Z "/>',
+    'Area Parkir' => '<path d="M6 4h7a4 4 0 010 8H6z"/> <path d="M6 12v8"/>'
+];
+
+@endphp
+
+<svg viewBox="0 0 24 24">
+
+    {!! $icons[$nama] ?? '
+        <circle cx="12" cy="12" r="8"/>
+    ' !!}
+
+</svg>
                 </div>
                 <span class="fac-name">{{ $nama }}</span>
                 <span class="fac-count">

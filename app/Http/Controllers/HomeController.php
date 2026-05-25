@@ -25,14 +25,16 @@ public function index()
                     ->take(6)
                     ->get();
 
-    $fasilitasPopuler = Fasilitas::withCount('kosts')
-        ->get()
-        ->map(function ($f) {
-            $f->total_count = $f->kosts_count;
-            return $f;
-        })
-        ->keyBy('nama_fasilitas');
+    $fasilitasPilihan = ['WiFi','AC','Kulkas', 'CCTV', 'Ruang Tamu','TV','Kipas Angin','Area Parkir'];
+$fasilitasPopuler = Fasilitas::whereIn( 'nama_fasilitas', $fasilitasPilihan)
+    ->withCount(['kosts', 'kamars' ])
+    ->get()
+    ->sortBy(function ($item) use ($fasilitasPilihan) {
 
+        return array_search( $item->nama_fasilitas,$fasilitasPilihan );
+    })
+
+    ->keyBy('nama_fasilitas');
     return view('katalog.home', compact('kostTerbaru', 'fasilitasPopuler'));
 }
     /**
@@ -82,13 +84,16 @@ public function index()
                         'user'
                     ])->latest()->take(6)->get();
 
-    $fasilitasPopuler = Fasilitas::withCount('kosts')
-        ->get()
-        ->map(function ($f) {
-            $f->total_count = $f->kosts_count;
-            return $f;
-        })
-        ->keyBy('nama_fasilitas');
+   $fasilitasPilihan = ['WiFi','AC','Kulkas', 'CCTV', 'Ruang Tamu','TV','Kipas Angin','Area Parkir'];
+$fasilitasPopuler = Fasilitas::whereIn( 'nama_fasilitas', $fasilitasPilihan)
+    ->withCount(['kosts', 'kamars' ])
+    ->get()
+    ->sortBy(function ($item) use ($fasilitasPilihan) {
+
+        return array_search( $item->nama_fasilitas,$fasilitasPilihan );
+    })
+
+    ->keyBy('nama_fasilitas');
 
     return view('katalog.home', compact('kost', 'kostTerbaru', 'fasilitasPopuler'));
 }

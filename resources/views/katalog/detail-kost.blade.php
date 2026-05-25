@@ -852,7 +852,10 @@ $fotoUtama = count($galeri) > 0 ? Storage::url($galeri[0]) : null;
 $galeriUrls = array_map(fn($f) => Storage::url($f), $galeri);
 
 $kamarKosong = $kost->kamars->where('status', 'kosong')->count();
-$hargaAktif = $kost->kamars->flatMap(fn($k) => $k->hargaKamars->where('isactive', true));
+$hargaAktif = $kost->kamars->flatMap(fn($k) => $k->hargaKamars ->where('isactive', true) ->filter(function ($harga) {
+            return $harga->periode && $harga->periode->satuan_interval === 'bulan';
+        })
+);
 $hargaMulai = $hargaAktif->min('harga');
 
 $pemilik = $kost->user;
@@ -1062,7 +1065,16 @@ $pesanWa = urlencode('Halo, saya tertarik dengan kost ' . $kost->nama_kost . '. 
                 <p class="section-sub">Harap diperhatikan sebelum menyewa</p>
 
                 <div style="display:flex;flex-direction:column;gap:10px;">
-                    @foreach($kost->aturanKos as $index => $aturan)
+                    @foreach($kost->aturanKos->take(5) as $index => $aturan)
+                    @if($kost->aturanKos->count() > 5)
+<button
+    onclick="bukaModalAturan()"
+    class="mt-4 text-sm font-semibold text-[#6C8B6B]  hover:underline"
+>
+    Lihat Selengkapnya
+</button>
+
+@endif
                     <div style="display:flex;gap:14px;align-items:flex-start;
                                 padding:14px 16px;
                                 background:#F8FAF8;
@@ -1216,6 +1228,123 @@ $pesanWa = urlencode('Halo, saya tertarik dengan kost ' . $kost->nama_kost . '. 
 
 </div>
 
+{{-- MODAL ATURAN --}}
+<div
+    id="modalAturan"
+    class="modal-foto"
+    onclick="tutupModalAturan()"
+>
+
+    <div
+        onclick="event.stopPropagation()"
+        style="
+            background:white;
+            width:min(92vw,600px);
+            max-height:85vh;
+            overflow-y:auto;
+            border-radius:28px;
+            padding:28px;
+            position:relative;
+        "
+    >
+
+        <button
+            onclick="tutupModalAturan()"
+            style="
+                position:absolute;
+                top:18px;
+                right:18px;
+                width:38px;
+                height:38px;
+                border:none;
+                border-radius:50%;
+                background:#F3F4F6;
+                cursor:pointer;
+                font-size:1rem;
+            "
+        >
+
+            ✕
+
+        </button>
+
+        <h2
+            style="
+                font-size:1.3rem;
+                font-weight:800;
+                color:#1F3A2C;
+                margin-bottom:24px;
+            "
+        >
+
+            Aturan Kost
+
+        </h2>
+
+        <div
+            style="
+                display:flex;
+                flex-direction:column;
+                gap:14px;
+            "
+        >
+
+            @foreach($kost->aturanKos as $index => $aturan)
+
+            <div
+                style="
+                    display:flex;
+                    gap:14px;
+                    align-items:flex-start;
+                    padding:16px;
+                    background:#F8FAF8;
+                    border-radius:16px;
+                    border:1px solid #E8EFE9;
+                "
+            >
+
+                <div
+                    style="
+                        width:28px;
+                        height:28px;
+                        border-radius:10px;
+                        background:#EAF3EB;
+                        display:flex;
+                        align-items:center;
+                        justify-content:center;
+                        font-weight:800;
+                        font-size:.78rem;
+                        color:#4B8A4B;
+                        flex-shrink:0;
+                    "
+                >
+
+                    {{ $index + 1 }}
+
+                </div>
+
+                <p
+                    style="
+                        margin:0;
+                        font-size:.9rem;
+                        line-height:1.8;
+                        color:#4a5e4c;
+                    "
+                >
+
+                    {{ $aturan->isi }}
+
+                </p>
+
+            </div>
+
+            @endforeach
+
+        </div>
+
+    </div>
+
+</div>
 @endsection
 
 {{-- ===== DATA HARGA KAMAR ===== --}}
@@ -1465,6 +1594,26 @@ modalEl.addEventListener('touchend', function(e) {
 }, {
     passive: true
 });
+
+function bukaModalAturan()
+{
+    document
+        .getElementById('modalAturan')
+        .classList
+        .add('active');
+
+    document.body.style.overflow = 'hidden';
+}
+
+function tutupModalAturan()
+{
+    document
+        .getElementById('modalAturan')
+        .classList
+        .remove('active');
+
+    document.body.style.overflow = '';
+}
 </script>
 
 @endpush

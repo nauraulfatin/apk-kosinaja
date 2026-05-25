@@ -845,7 +845,17 @@ $fotoUtama = count($fotoKamarList) > 0 ? asset('storage/' . $fotoKamarList[0]) :
 $galeriUrls = array_map(fn($f) => asset('storage/' . $f), $fotoKamarList);
 
 /* ── data kamar ── */
-$hargaKamar = $kamar->hargaKamars->where('isactive', true)->first();
+$hargaAktif = $kamar->hargaKamars
+    ->where('isactive', true);
+//prioritas bulanan
+
+$hargaKamar = $hargaAktif->first( function ($h) {
+        return $h->periode && $h->periode->satuan_interval === 'bulan';  }
+);
+
+//fallback ke harga pertama
+if (!$hargaKamar)
+{ $hargaKamar = $hargaAktif->first();}
 
 /* ── data kos / pemilik ── */
 $pemilik = $kos->user ?? null;
@@ -920,7 +930,7 @@ $fasIcons = [
                 <div class="galeri-grid">
                     <div class="galeri-main">
                         @if($fotoUtama)
-                        <img src="{{ $fotoUtama }}" alt="{{ $kamar->nama_kamar ?? 'Kamar ' . $kamar->nomor_kamar }}">
+                        <img src="{{ $fotoUtama }}" alt="{{ $kamar->nama_kamar ?? 'Kamar ' . $kamar->nomor_kamar }}" onclick="bukaModal(0)" >
                         @else
                         <div style="width:100%;height:320px;background:#D5E0D6;border-radius:20px;
                                         display:flex;align-items:center;justify-content:center;">
@@ -934,14 +944,14 @@ $fasIcons = [
                     <div class="galeri-side">
                         @php $galeriSide = array_slice($fotoKamarList, 1, 2); @endphp
                         @forelse($galeriSide as $idx => $foto)
-                        <img src="{{ asset('storage/' . $foto) }}" alt="Foto">
+                        <img src="{{ asset('storage/' . $foto) }}" alt="Foto" onclick="bukaModal({{ $idx + 1 }})" >
                         @empty
                         <div style="height:98px;background:#F0F5F1;border-radius:14px;"></div>
                         <div style="height:98px;background:#F0F5F1;border-radius:14px;"></div>
                         @endforelse
 
                         @if(count($fotoKamarList) > 3)
-                        <div class="galeri-more">
+                        <div class="galeri-more" onclick="bukaModal(3)">
                             <img src="{{ asset('storage/' . $fotoKamarList[3]) }}" alt="Foto">
                             <span>+{{ count($fotoKamarList) - 3 }} Foto</span>
                         </div>
@@ -1105,12 +1115,52 @@ $fasIcons = [
                 <div class="harga-mulai">
                     @if($hargaKamar)
                     Rp {{ number_format($hargaKamar->harga, 0, ',', '.') }}
-                    <span>/ bulan</span>
+                    <span>/ {{ $hargaKamar->periode->satuan_interval ?? '-' }}</span>
                     @else
                     <span style="font-size:1rem;">Hubungi Kami</span>
                     @endif
                 </div>
                 <div class="harga-divider"></div>
+
+                @if($kamar->hargaKamars->where('isactive', true)->count() > 0)
+
+<div style="margin-bottom:18px;">
+
+    @foreach(
+        $kamar->hargaKamars
+            ->where('isactive', true)
+        as $harga
+    )
+
+    <div
+        class="harga-info-row"
+        style="
+            background:#F8FAF8;
+            padding:10px 14px;
+            border-radius:12px;
+            margin-bottom:8px;
+        "
+    >
+
+        <span>
+
+            {{ ucfirst($harga->periode->periode_penagihan) }}
+
+        </span>
+
+        <strong>
+
+            Rp {{ number_format($harga->harga, 0, ',', '.') }}
+
+        </strong>
+
+    </div>
+
+    @endforeach
+
+</div>
+
+@endif
 
                 <div class="harga-info-row">
                     <span>Nomor Kamar</span>
