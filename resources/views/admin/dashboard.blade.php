@@ -26,40 +26,58 @@
         </div>
     </div>
 
-    {{-- KODE UNDANGAN --}}
-<div class="bg-white rounded-2xl p-6 shadow-sm border border-gray-100">
+ <div class="bg-white rounded-2xl p-6 shadow-sm border border-gray-100">
     <div class="flex items-center justify-between gap-4">
+
         <div>
-            <p class="text-sm text-gray-500"> Kode Undangan </p>
+            <p class="text-sm text-gray-500">Kode Undangan</p>
+
             <h2
                 id="kodeUndangan"
                 class="text-2xl font-bold text-[#0F0937] mt-2 tracking-widest"
-            >  {{ $kost?->kode_undangan ?? '-' }}
+            >
+                {{ $kost?->kode_undangan ?? '-' }}
             </h2>
         </div>
 
-        {{-- BUTTON COPY --}}
-        <button
-            type="button" onclick="copyKodeUndangan()" class="bg-[#6C8B6B] hover:bg-[#5B765A] text-white px-4 py-2 rounded-xl text-sm font-semibold transition"
-        >
-            Copy
-        </button>
-        <form method="POST" action="{{ route('admin.kost.refresh-kode') }}"
->
-    @csrf
+        {{-- ACTION BUTTONS --}}
+        <div class="flex items-center gap-2">
 
-    <button
-        type="submit" class="p-2 rounded-xl bg-yellow-100 hover:bg-yellow-200 text-yellow-700 transition"
-        title="Refresh Kode"
-    >
-        <svg xmlns="http://www.w3.org/2000/svg"class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            {{-- BUTTON COPY --}}
+            <button
+                type="button"
+                onclick="copyKodeUndangan()"
+                class="bg-[#6C8B6B] hover:bg-[#5B765A] text-white px-4 py-2 rounded-xl text-sm font-semibold transition"
+            >
+                Copy
+            </button>
 
-            <path
-                stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"
-            />
-        </svg>
-    </button>
-</form>
+            {{-- BUTTON REFRESH --}}
+            <form method="POST" action="{{ route('admin.kost.refresh-kode') }}">
+                @csrf
+
+                <button
+                    type="submit"
+                    class="p-2 rounded-xl bg-yellow-100 hover:bg-yellow-200 text-yellow-700 transition"
+                    title="Refresh Kode"
+                >
+                    <svg xmlns="http://www.w3.org/2000/svg"
+                        class="w-5 h-5"
+                        fill="none"
+                        viewBox="0 0 24 24"
+                        stroke="currentColor">
+
+                        <path
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                            stroke-width="2"
+                            d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"
+                        />
+                    </svg>
+                </button>
+            </form>
+
+        </div>
     </div>
 </div>
 
