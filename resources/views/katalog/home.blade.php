@@ -37,7 +37,6 @@
     overflow: hidden;
 }
 
-/* Gambar background full cover */
 .hero-bg {
     position: absolute;
     inset: 0;
@@ -48,7 +47,6 @@
     z-index: 0;
 }
 
-/* Overlay gradient dari kiri ke transparan */
 .hero-overlay {
     position: absolute;
     inset: 0;
@@ -60,7 +58,6 @@
     z-index: 1;
 }
 
-/* Konten teks hero */
 .hero-content {
     position: relative;
     z-index: 2;
@@ -192,7 +189,7 @@
     border-radius: 999px;
 }
 
-/* Float cards di atas gambar */
+/* Float cards */
 .hero-float-card {
     position: absolute;
     background: #fff;
@@ -219,15 +216,8 @@
 }
 
 @keyframes floatCard {
-
-    0%,
-    100% {
-        transform: translateY(0);
-    }
-
-    50% {
-        transform: translateY(-10px);
-    }
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-10px); }
 }
 
 .float-icon {
@@ -493,7 +483,10 @@
 /* ─── STATS STRIP ─────────────────────────────── */
 .stats-strip {
     background: var(--green-mid);
-    padding: 36px 0;
+    padding: 26px 0;
+    margin-top: -80px;
+    position: relative;
+    z-index: 5;
 }
 
 .stats-inner {
@@ -818,7 +811,9 @@
     transform: translateY(-2px);
 }
 
-/* ─── RESPONSIVE ───────────────────────────────── */
+/* ═══════════════════════════════════════════════════
+   RESPONSIVE — TABLET (≤1024px)
+═══════════════════════════════════════════════════ */
 @media (max-width: 1024px) {
     .kos-grid {
         grid-template-columns: repeat(2, 1fr);
@@ -844,45 +839,372 @@
     }
 }
 
+/* ═══════════════════════════════════════════════════
+   RESPONSIVE — MOBILE (≤768px)
+═══════════════════════════════════════════════════ */
 @media (max-width: 768px) {
+
+    /* ── Hero: tata letak teks tetap di kiri atas ── */
     .hero {
         min-height: 100svh;
+        align-items: flex-start; /* teks tetap di atas kiri seperti desktop */
     }
 
     .hero-bg {
         object-position: 68% center;
     }
 
+    /* overlay sedikit lebih gelap di kiri-atas supaya teks terbaca */
     .hero-overlay {
-        background: linear-gradient(180deg,
+        background: linear-gradient(120deg,
                 rgba(12, 26, 15, 0.72) 0%,
-                rgba(12, 26, 15, 0.50) 55%,
-                rgba(12, 26, 15, 0.18) 100%);
+                rgba(12, 26, 15, 0.45) 50%,
+                rgba(12, 26, 15, 0.10) 100%);
     }
 
     .hero-content {
-        padding: 100px 0 70px;
-        max-width: 90%;
+        padding: 55px 5% 50px; /* top lebih besar untuk clear navbar */
+        max-width: 100%;
+        margin-left: 0;
+        width: 100%;
     }
 
-    .hero-content h1 {
-        font-size: 2.2rem;
+    .hero-badge {
+        font-size: 0.72rem;
+        padding: 6px 11px;
+        margin-bottom: 10px;
     }
 
+   .hero-content h1 {
+    font-size: clamp(2.1rem, 9vw, 2.8rem);
+    line-height: 1.05;
+    letter-spacing: -1.5px;
+    max-width: 290px;
+}
+
+   .hero-content p {
+    font-size: 0.9rem;
+    line-height: 1.8;
+    max-width: 310px;
+}
+    /* ── Search bar: compact, tetap 1 baris ── */
+    .hero-search {
+        flex-wrap: nowrap;       /* tetap 1 baris, tidak stack */
+        height: 50px;
+        border-radius: 14px;
+        padding: 6px 6px 6px 12px;
+        gap: 6px;
+        margin-bottom: 16px;
+        max-width: 100%;
+    }
+
+    .hero-search svg {
+        width: 14px;
+        height: 14px;
+        flex-shrink: 0;
+    }
+
+    .hero-search input {
+        font-size: 0.8rem;
+        padding: 2px 0;
+        min-width: 0;
+    }
+
+    /* Tombol kecil tapi tetap terbaca */
+    .hero-search button {
+        padding: 0 16px;
+        height: 38px;
+        border-radius: 10px;
+        font-size: 0.78rem;
+        white-space: nowrap;
+        width: auto;
+    }
+
+    /* Trust badges */
+    .hero-trust {
+        gap: 6px;
+    }
+
+    .hero-trust span {
+        font-size: 0.68rem;
+        padding: 5px 10px;
+    }
+
+    /* Float cards: sembunyikan */
     .hero-float-card {
         display: none;
     }
 
+    /* ── Stats strip ── */
+    .stats-strip {
+        padding: 20px 0;
+    }
+
+    .stats-inner {
+        gap: 0;
+    }
+
+    .stat-item {
+        min-width: 90px;
+        padding: 6px 12px;
+    }
+
+    .stat-num {
+        font-size: 1.3rem;
+    }
+
+    .stat-label {
+        font-size: 0.65rem;
+    }
+
+    /* ── Rekomendasi Kos ── */
+    .rekom-section {
+        padding: 36px 0 44px;
+    }
+
+    .sec-header {
+        flex-direction: row;          /* judul & tombol tetap sejajar */
+        align-items: center;
+        margin-bottom: 20px;
+        gap: 12px;
+    }
+
+    .sec-title {
+        font-size: 1.35rem;
+        margin-bottom: 4px;
+    }
+
+    .sec-sub {
+        font-size: 0.78rem;
+        display: none; /* sembunyikan subtitle agar tidak penuh */
+    }
+
+    .btn-lihat-semua {
+        padding: 8px 14px;
+        font-size: 0.75rem;
+        border-radius: 10px;
+        flex-shrink: 0;
+    }
+
+    /* ── Kos card: layout HORIZONTAL (seperti Mamikos) ── */
     .kos-grid {
         grid-template-columns: 1fr;
+        gap: 12px;
+    }
+
+    /* Ubah card jadi horizontal: foto kiri, info kanan */
+    .kos-card {
+        display: flex;
+        flex-direction: row;
+        border-radius: 18px;
+        min-height: 0;
+    }
+
+    .kos-thumb {
+        width: 120px;
+        min-width: 120px;
+        height: auto;
+        min-height: 140px;
+        border-radius: 0;
+        flex-shrink: 0;
+    }
+
+    /* Sembunyikan peta di dalam card mobile — terlalu padat */
+    .kos-card .kos-body iframe,
+    .kos-card .kos-body div[style*="height:120px"] {
+        display: none;
+    }
+
+    .kos-body {
+        padding: 12px 13px 12px;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        min-width: 0;
+        flex: 1;
+    }
+
+    .kos-name {
+        font-size: 0.88rem;
+        font-weight: 800;
+        margin-bottom: 2px;
+        /* potong jika kepanjangan */
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+
+    .kos-loc {
+        font-size: 0.72rem;
+        margin-bottom: 6px;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+
+    .kos-divider {
+        margin-bottom: 6px;
+    }
+
+    .kos-price {
+        font-size: 0.88rem;
+        margin-bottom: 6px;
+    }
+
+    .kos-price span {
+        font-size: 0.7rem;
+    }
+
+    .kos-tags {
+        gap: 4px;
+        margin-bottom: 8px;
+    }
+
+    .kos-tag {
+        font-size: 0.62rem;
+        padding: 3px 8px;
+    }
+
+    .kos-actions {
+        gap: 6px;
+    }
+
+    .btn-detail,
+    .btn-hubungi {
+        padding: 8px 6px;
+        font-size: 0.75rem;
+        border-radius: 10px;
+    }
+
+    /* ── Fasilitas: 4 kolom kecil seperti Mamikos ── */
+    .fac-section {
+        padding: 36px 0;
     }
 
     .fac-grid {
-        grid-template-columns: repeat(2, 1fr);
+        grid-template-columns: repeat(4, 1fr);
+        gap: 8px;
+        margin-top: 20px;
     }
 
+    .fac-item {
+        padding: 14px 6px 12px;
+        border-radius: 14px;
+        gap: 6px;
+    }
+
+    .fac-icon-wrap {
+        width: 34px;
+        height: 34px;
+        border-radius: 10px;
+    }
+
+    .fac-icon-wrap svg {
+        width: 17px;
+        height: 17px;
+    }
+
+    .fac-name {
+        font-size: 0.68rem;
+        line-height: 1.2;
+    }
+
+    .fac-count {
+        font-size: 0.6rem;
+    }
+
+    /* ── Keunggulan ── */
+    .why-section {
+        padding: 40px 0;
+    }
+
+    .why-layout {
+        grid-template-columns: 1fr;
+        gap: 24px;
+    }
+
+    .why-panel {
+        padding: 24px 18px;
+        border-radius: 20px;
+    }
+
+    .testi-card {
+        padding: 14px;
+        margin-bottom: 8px;
+    }
+
+    .testi-text {
+        font-size: 0.8rem;
+    }
+
+    /* ── CTA Banner ── */
     .cta-banner {
-        margin: 0 4% 40px;
+        margin: 0 4% 36px;
+        border-radius: 18px;
+        min-height: 240px;
+    }
+
+    .cta-content {
+        min-height: 240px;
+        padding: 36px 20px;
+    }
+
+    .cta-content h2 {
+        font-size: clamp(1.2rem, 5vw, 1.6rem);
+        margin-bottom: 8px;
+    }
+
+    .cta-content p {
+        font-size: 0.83rem;
+        margin-bottom: 18px;
+    }
+
+    .btn-cta-white {
+        padding: 12px 28px;
+        font-size: 0.9rem;
+    }
+}
+
+/* ═══════════════════════════════════════════════════
+   RESPONSIVE — MOBILE KECIL (≤400px)
+═══════════════════════════════════════════════════ */
+@media (max-width: 400px) {
+    .hero-content h1 {
+        font-size: 1.5rem;
+        max-width: 320px;
+    }
+
+    .hero-search button {
+        font-size: 0.72rem;
+        padding: 8px 10px;
+    }
+
+    /* Stats: tetap 3 kolom tapi lebih kecil */
+    .stat-num {
+        font-size: 1.1rem;
+    }
+
+    .stat-label {
+        font-size: 0.6rem;
+    }
+
+    /* Foto card kos sedikit lebih sempit */
+    .kos-thumb {
+        width: 100px;
+        min-width: 100px;
+    }
+
+    /* Fasilitas: tetap 4 kolom, lebih rapat */
+    .fac-grid {
+        gap: 6px;
+    }
+
+    .fac-item {
+        padding: 12px 4px 10px;
+    }
+
+    .fac-name {
+        font-size: 0.62rem;
     }
 }
 </style>
@@ -993,10 +1315,61 @@
 
             @php
             $hargaAktif = $kost->kamars
-            ->flatMap(fn($kamar) => $kamar->hargaKamars->where('isactive', true));
+    ->flatMap(function ($kamar) {
 
-            $hargaMin = $hargaAktif->min('harga');
-            $hargaMax = $hargaAktif->max('harga');
+        return $kamar->hargaKamars
+            ->where('isactive', true);
+
+    });
+
+/*
+|--------------------------------------------------------------------------
+| PRIORITAS HARGA BULANAN
+|--------------------------------------------------------------------------
+*/
+
+$hargaBulanan = $hargaAktif->filter(function ($harga) {
+
+    return $harga->periode
+        &&
+        $harga->periode->satuan_interval === 'bulan';
+
+});
+
+/*
+|--------------------------------------------------------------------------
+| JIKA ADA BULANAN → PAKAI BULANAN
+|--------------------------------------------------------------------------
+*/
+
+if ($hargaBulanan->count() > 0)
+{
+    $hargaDipakai = $hargaBulanan;
+
+    $labelPeriode = 'bulan';
+}
+
+/*
+|--------------------------------------------------------------------------
+| JIKA TIDAK ADA → PAKAI SEMUA HARGA AKTIF
+|--------------------------------------------------------------------------
+*/
+
+else
+{
+    $hargaDipakai = $hargaAktif;
+
+    $periodePertama =
+        $hargaAktif->first()?->periode;
+
+    $labelPeriode =
+        $periodePertama?->satuan_interval
+        ?? '-';
+}
+
+$hargaMin = $hargaDipakai->min('harga');
+
+$hargaMax = $hargaDipakai->max('harga');
 
             $fasilitasKost = $kost->fasilitas ?? collect();
 
@@ -1037,10 +1410,20 @@
                     <div class="kos-price">
                         @if($hargaMin && $hargaMax && $hargaMin != $hargaMax)
                         Rp {{ number_format($hargaMin, 0, ',', '.') }}
-                        <span>– Rp {{ number_format($hargaMax, 0, ',', '.') }} / bulan</span>
+                        <span>
+
+    – Rp {{ number_format($hargaMax, 0, ',', '.') }}
+
+    / {{ $labelPeriode }}
+
+</span>
                         @elseif($hargaMin)
                         Rp {{ number_format($hargaMin, 0, ',', '.') }}
-                        <span>/ bulan</span>
+                        <span>
+
+    / {{ $labelPeriode }}
+
+</span>
                         @else
                         <span>Hubungi Kami</span>
                         @endif
