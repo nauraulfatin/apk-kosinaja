@@ -326,7 +326,7 @@
     </main>
 
     {{-- FOOTER --}}
-    <footer class="bg-[#162818] mt-24 overflow-hidden relative">
+    <footer class="bg-[#162818] mt-14 lg:mt-24 overflow-hidden relative">
 
         <div class="absolute inset-0 opacity-30">
             <img src="{{ asset('footer.png') }}" class="w-full h-full object-cover" alt="">
@@ -337,17 +337,17 @@
         <div class="relative z-10
                     max-w-7xl mx-auto
                     px-4 lg:px-8
-                    py-20">
+                    py-12 lg:py-20">
 
-            <div class="grid lg:grid-cols-4 gap-14">
+            <div class="grid lg:grid-cols-4 gap-10 lg:gap-14">
 
                 {{-- BRAND --}}
                 <div class="lg:col-span-2">
                     <div class="flex items-center gap-3 mb-6">
-                        <img src="{{ asset('logo.png') }}" class="w-12 h-12 object-contain">
-                        <h2 class="text-3xl font-extrabold text-white">KosinAja!</h2>
+                        <img src="{{ asset('logo.png') }}" class="w-10 h-10 lg:w-12 lg:h-12 object-contain">
+                        <h2 class="text-2xl lg:text-3xl font-extrabold text-white">KosinAja!</h2>
                     </div>
-                    <p class="text-[#c7d5c8] leading-8 max-w-md">
+                    <p class="text-[#c7d5c8] leading-7 text-sm lg:text-base max-w-md">
                         Platform pencarian dan pengelolaan kos modern yang membantu pencari kos menemukan hunian nyaman
                         dengan cepat, aman, dan terpercaya.
                     </p>
@@ -419,7 +419,7 @@
             </div>
 
             {{-- COPYRIGHT --}}
-            <div class="border-t border-[#2b412d] mt-16 pt-8 text-center">
+            <div class="border-t border-[#2b412d] mt-10 pt-6 text-center">
                 <p class="text-[#91A392] text-sm">
                     © {{ date('Y') }} KosinAja! — Orbit
                 </p>

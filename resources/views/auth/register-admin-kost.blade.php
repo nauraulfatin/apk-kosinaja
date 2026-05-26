@@ -3,35 +3,127 @@
 
 <div class="h-screen bg-[#F8F5F0] flex overflow-hidden">
 
+   
+    {{-- ========================================================= --}}
     {{-- LEFT IMAGE --}}
-    <div class="hidden lg:block lg:w-[42%] relative overflow-hidden h-screen sticky top-0">
+    {{-- ========================================================= --}}
+    <div class="hidden lg:block lg:w-[42%]
+               relative overflow-hidden
+               h-screen sticky top-0">
 
-        <img src="{{ asset('foto-pintu.png') }}" alt="Register" class="absolute inset-0 w-full h-full object-cover">
-        <div class="absolute inset-0 bg-gradient-to-t from-black/80  via-black/20  to-transparent"></div>
-        <div class="absolute inset-0 z-10 flex flex-col justify-between  p-10">
+        {{-- IMAGE --}}
+        <img src="{{ asset('foto-pintu.png') }}" alt="Login" class="absolute inset-0 w-full h-full object-cover">
+
+        {{-- OVERLAY --}}
+        <div class="absolute inset-0
+                   bg-gradient-to-t
+                   from-black/80
+                   via-black/20
+                   to-transparent"></div>
+
+        {{-- CONTENT --}}
+        <div class="absolute inset-0 z-10
+                   flex flex-col justify-between
+                   p-10">
 
             {{-- LOGO --}}
             <div class="flex items-center gap-3">
-                <img src="{{ asset('logo.png') }}"  class="w-11 h-11 object-contain">
-                <h1 class="text-3xl font-bold text-white"> KosinAja! </h1>
+
+                <img src="{{ asset('logo.png') }}" class="w-11 h-11 object-contain">
+
+                <h1 class="text-3xl font-bold text-white">
+                    KosinAja!
+                </h1>
+
             </div>
 
             {{-- TEXT --}}
             <div>
-                <h2 class="text-5xl font-bold text-white leading-[1.15]"> Kelola Kost <br>
-                    <span class="text-[#D6E5D6]"> Lebih Mudah, </span>
+
+                <h2 class="text-5xl font-bold text-white
+                           leading-[1.15]">
+
+                    Kelola Kost
                     <br>
-                    Semua Dalam Satu Tempat.
+
+                    <span class="text-[#D6E5D6]">
+
+                        Lebih Praktis,
+
+                    </span>
+
+                    <br>
+
+                    Semua Dalam
+                    Satu Platform.
+
                 </h2>
 
-                <p class="text-white/80 text-lg leading-relaxed mt-6 max-w-md">
+                <p class="text-white/80 text-lg
+                           leading-relaxed mt-6
+                           max-w-md">
+
                     Kelola penghuni,
-                    kamar, dan pembayaran
-                    dengan lebih praktis.
+                    pembayaran,
+                    kamar, dan seluruh
+                    operasional kost
+                    dengan lebih modern.
 
                 </p>
+
+                {{-- FLOATING CARD --}}
+                <div class="mt-10 bg-white/10
+                           backdrop-blur-md
+                           border border-white/20
+                           rounded-3xl p-5
+                           max-w-sm">
+
+                    <div class="flex items-start gap-4">
+
+                        {{-- ICON --}}
+                        <div class="w-14 h-14 rounded-2xl
+                                   bg-[#D6E5D6]/20
+                                   flex items-center justify-center
+                                   text-white">
+
+                            <svg xmlns="http://www.w3.org/2000/svg" class="w-7 h-7" fill="none" viewBox="0 0 24 24"
+                                stroke="currentColor">
+
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M12 11c0-1.657 1.343-3 3-3s3 1.343 3 3v2a3 3 0 11-6 0v-2zm0 0V9a5 5 0 0110 0v2m-10 0H6a2 2 0 00-2 2v5a2 2 0 002 2h12a2 2 0 002-2v-5a2 2 0 00-2-2h-2" />
+
+                            </svg>
+
+                        </div>
+
+                        {{-- TEXT --}}
+                        <div>
+
+                            <h3 class="text-white font-semibold text-lg">
+
+                                Aman & Modern
+
+                            </h3>
+
+                            <p class="text-white/70 text-sm
+                                       mt-1 leading-relaxed">
+
+                                Sistem manajemen kost
+                                modern dengan pengalaman
+                                pengguna yang nyaman.
+
+                            </p>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
             </div>
+
         </div>
+
     </div>
 
     {{-- FORM --}}

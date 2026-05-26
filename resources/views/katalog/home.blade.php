@@ -839,7 +839,7 @@
  
     .hero-content {
         /* top = navbar (~64px) + 10px, bawah ramping */
-        padding: 74px 5% 32px;
+        padding: 48px 5% 24px;
         max-width: 100%;
         margin-left: 0;
         width: 100%;
@@ -847,70 +847,45 @@
  
     .hero-badge {
         font-size: 0.68rem;
-        padding: 5px 10px;
+        padding: 8px 10px;
         margin-bottom: 8px;
         gap: 5px;
     }
  
     /* Judul: BESAR & bold — kontras tinggi vs paragraf */
     .hero-content h1 {
-        font-size: clamp(2rem, 8.5vw, 2.6rem);
-        font-weight: 900;
-        line-height: 1.08;
-        letter-spacing: -1.2px;
-        margin-bottom: 8px;
-        max-width: 74vw;
-        text-wrap: balance;
-        color: #ffffff; /* putih penuh */
-    }
+    font-size: clamp(5.2rem, 14vw, 8rem);
+    font-weight: 900;
+    line-height: 0.98;
+    letter-spacing: -0.5px;
+    margin-bottom: 14px;
+    max-width: 260px;
+    text-wrap: balance;
+    color: #ffffff;
+}
  
     /* Paragraf: kecil & lebih redup — jelas di bawah judul */
-    .hero-content p {
-        font-size: 0.8rem;
-        font-weight: 400;
-        line-height: 1.6;
-        color: rgba(255, 255, 255, 0.68); /* redup = hierarki jelas */
-        margin-bottom: 14px;
-        max-width: 82vw;
-    }
+   .hero-content p {
+    font-size: 0.74rem;
+    font-weight: 400;
+    line-height: 1.7;
+    color: rgba(255, 255, 255, 0.72);
+    margin-bottom: 12px;
+    max-width: 250px;
+}
  
     /* ── Search bar: compact, tetap 1 baris ── */
     .hero-search {
-        flex-wrap: nowrap;
-        height: 40px;
-        border-radius: 13px;
-        padding: 5px 5px 5px 11px;
-        gap: 5px;
-        margin-bottom: 14px;
-        max-width: 100%;
-    }
+    display: none;
+}
  
-    .hero-search svg {
-        width: 14px;
-        height: 14px;
-        flex-shrink: 0;
-    }
- 
-    .hero-search input {
-        font-size: 0.78rem;
-        padding: 0;
-        min-width: 0;
-    }
- 
-    /* Tombol fit di dalam search bar */
-    .hero-search button {
-        height: 32px;
-        padding: 0 13px;
-        border-radius: 9px;
-        font-size: 0.5rem;
-        white-space: nowrap;
-        width: auto;
-    }
- 
-    /* Trust badges */
-    .hero-trust {
-        gap: 6px;
-    }
+   .hero-trust {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 8px;
+    margin-top: 16px;
+}
  
     .hero-trust span {
         font-size: 0.68rem;
