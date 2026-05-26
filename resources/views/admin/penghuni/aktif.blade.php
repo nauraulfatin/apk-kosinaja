@@ -25,40 +25,31 @@
 {{-- NAVIGATION --}}
 <div class="flex items-center gap-8 mb-10 border-b border-gray-200">
 
-    <a
-        href="{{ route('admin.penghuni.aktif') }}"
-        class="pb-3 text-sm font-semibold transition
+    <a href="{{ route('admin.penghuni.aktif') }}" class="pb-3 text-sm font-semibold transition
         {{ request()->routeIs('admin.penghuni.aktif')
             ? 'text-[#6C8B6B] border-b-2 border-[#6C8B6B]'
             : 'text-gray-400 hover:text-[#6C8B6B]'
-        }}"
-    >
+        }}">
 
         Penghuni Aktif
 
     </a>
 
-    <a
-        href="{{ route('admin.penghuni.antrian') }}"
-        class="pb-3 text-sm font-semibold transition
+    <a href="{{ route('admin.penghuni.antrian') }}" class="pb-3 text-sm font-semibold transition
         {{ request()->routeIs('admin.penghuni.antrian')
             ? 'text-[#E8B44D] border-b-2 border-[#E8B44D]'
             : 'text-gray-400 hover:text-[#E8B44D]'
-        }}"
-    >
+        }}">
 
         Dalam Antrian
 
     </a>
 
-    <a
-        href="{{ route('admin.penghuni.nonaktif') }}"
-        class="pb-3 text-sm font-semibold transition
+    <a href="{{ route('admin.penghuni.nonaktif') }}" class="pb-3 text-sm font-semibold transition
         {{ request()->routeIs('admin.penghuni.nonaktif')
             ? 'text-red-500 border-b-2 border-red-500'
             : 'text-gray-400 hover:text-red-500'
-        }}"
-    >
+        }}">
 
         Riwayat Penghuni
 
@@ -108,93 +99,88 @@
 
                 @forelse($items as $i)
 
-                    <tr class="hover:bg-gray-50">
+                <tr class="hover:bg-gray-50">
 
-                        <td class="px-6 py-4">
+                    <td class="px-6 py-4">
 
-                            <div>
+                        <div>
 
-                                <h4 class="font-semibold text-gray-800">
+                            <h4 class="font-semibold text-gray-800">
 
-                                    {{ $i->user->nama }}
+                                {{ $i->user->nama }}
 
-                                </h4>
+                            </h4>
 
-                                <p class="text-sm text-gray-400">
+                            <p class="text-sm text-gray-400">
 
-                                    {{ $i->user->username }}
+                                {{ $i->user->username }}
 
-                                </p>
+                            </p>
 
-                            </div>
+                        </div>
 
-                        </td>
+                    </td>
 
-                        <td class="px-6 py-4 text-gray-600">
+                    <td class="px-6 py-4 text-gray-600">
 
-                            {{ $i->kamar->nomor_kamar ?? '-' }}
+                        {{ $i->kamar->nomor_kamar ?? '-' }}
 
-                        </td>
+                    </td>
 
-                        <td class="px-6 py-4 text-gray-600">
+                    <td class="px-6 py-4 text-gray-600">
 
-                            {{ \Carbon\Carbon::parse($i->tanggal_masuk)->format('d M Y') }}
+                        {{ \Carbon\Carbon::parse($i->tanggal_masuk)->format('d M Y') }}
 
-                        </td>
+                    </td>
 
-                        <td class="px-6 py-4 text-gray-600">
+                    <td class="px-6 py-4 text-gray-600">
 
-                            {{ \Carbon\Carbon::parse($i->tanggal_keluar)->format('d M Y') }}
+                        {{ \Carbon\Carbon::parse($i->tanggal_keluar)->format('d M Y') }}
 
-                        </td>
+                    </td>
 
-                        <td class="px-6 py-4">
+                    <td class="px-6 py-4">
 
-                            <span class="bg-green-100 text-green-700 px-3 py-1 rounded-full text-xs font-semibold">
+                        <span class="bg-green-100 text-green-700 px-3 py-1 rounded-full text-xs font-semibold">
 
-                                Aktif
+                            Aktif
 
-                            </span>
+                        </span>
 
-                        </td>
+                    </td>
 
-                        <td class="px-6 py-4">
+                    <td class="px-6 py-4">
 
-                            <form
-                                method="POST"
-                                action="{{ route('admin.penghuni.nonaktifkan', $i) }}"
-                                onsubmit="return confirm('Nonaktifkan penghuni ini?')"
-                            >
+                        <form method="POST" action="{{ route('admin.penghuni.nonaktifkan', $i) }}"
+                            onsubmit="return confirm('Nonaktifkan penghuni ini?')">
 
-                                @csrf
-                                @method('PUT')
+                            @csrf
+                            @method('PUT')
 
-                                <button
-                                    class="bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded-lg text-sm"
-                                >
+                            <button
+                                class="bg-[#FCEBEB] hover:bg-[#F7C1C1] text-[#791F1F] px-6 py-2.5 rounded-xl font-medium text-sm transition">
 
-                                    Nonaktifkan
+                                Nonaktifkan
 
-                                </button>
+                            </button>
 
-                            </form>
+                        </form>
 
-                        </td>
+                    </td>
 
-                    </tr>
+                </tr>
 
                 @empty
 
-                    <tr>
+                <tr>
 
-                        <td colspan="6"
-                            class="px-6 py-10 text-center text-gray-500">
+                    <td colspan="6" class="px-6 py-10 text-center text-gray-500">
 
-                            Belum ada penghuni aktif
+                        Belum ada penghuni aktif
 
-                        </td>
+                    </td>
 
-                    </tr>
+                </tr>
 
                 @endforelse
 

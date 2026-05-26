@@ -216,8 +216,15 @@
 }
 
 @keyframes floatCard {
-    0%, 100% { transform: translateY(0); }
-    50% { transform: translateY(-10px); }
+
+    0%,
+    100% {
+        transform: translateY(0);
+    }
+
+    50% {
+        transform: translateY(-10px);
+    }
 }
 
 .float-icon {
@@ -812,7 +819,7 @@
    RESPONSIVE — MOBILE (≤768px)
 ═══════════════════════════════════════════════════ */
 @media (max-width: 768px) {
- 
+
     /* ── Hero: tata letak teks di kiri atas, tinggi menyesuaikan konten ── */
     .hero {
         /* Bukan 100svh lagi — cukup muat konten tanpa sisa ruang berlebih */
@@ -820,7 +827,7 @@
         height: auto;
         align-items: flex-start;
     }
- 
+
     .hero-bg {
         /* Foto tetap mengisi kotak hero */
         position: absolute;
@@ -828,7 +835,7 @@
         height: 100%;
         object-position: 68% center;
     }
- 
+
     /* Overlay kuat di kiri-atas supaya teks jelas terbaca */
     .hero-overlay {
         background: linear-gradient(120deg,
@@ -836,7 +843,7 @@
                 rgba(12, 26, 15, 0.55) 45%,
                 rgba(12, 26, 15, 0.14) 100%);
     }
- 
+
     .hero-content {
         /* top = navbar (~64px) + 10px, bawah ramping */
         padding: 48px 5% 24px;
@@ -844,116 +851,118 @@
         margin-left: 0;
         width: 100%;
     }
- 
+
     .hero-badge {
         font-size: 0.68rem;
         padding: 8px 10px;
         margin-bottom: 8px;
         gap: 5px;
     }
- 
+
     /* Judul: BESAR & bold — kontras tinggi vs paragraf */
     .hero-content h1 {
-    font-size: clamp(5.2rem, 14vw, 8rem);
-    font-weight: 900;
-    line-height: 0.98;
-    letter-spacing: -0.5px;
-    margin-bottom: 14px;
-    max-width: 260px;
-    text-wrap: balance;
-    color: #ffffff;
-}
- 
+        font-size: clamp(5.2rem, 14vw, 8rem);
+        font-weight: 900;
+        line-height: 0.98;
+        letter-spacing: -0.5px;
+        margin-bottom: 14px;
+        max-width: 260px;
+        text-wrap: balance;
+        color: #ffffff;
+    }
+
     /* Paragraf: kecil & lebih redup — jelas di bawah judul */
-   .hero-content p {
-    font-size: 0.74rem;
-    font-weight: 400;
-    line-height: 1.7;
-    color: rgba(255, 255, 255, 0.72);
-    margin-bottom: 12px;
-    max-width: 250px;
-}
- 
+    .hero-content p {
+        font-size: 0.74rem;
+        font-weight: 400;
+        line-height: 1.7;
+        color: rgba(255, 255, 255, 0.72);
+        margin-bottom: 12px;
+        max-width: 250px;
+    }
+
     /* ── Search bar: compact, tetap 1 baris ── */
     .hero-search {
-    display: none;
-}
- 
-   .hero-trust {
-    display: flex;
-    flex-direction: column;
-    align-items: flex-start;
-    gap: 8px;
-    margin-top: 16px;
-}
- 
+        display: none;
+    }
+
+    .hero-trust {
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 8px;
+        margin-top: 16px;
+    }
+
     .hero-trust span {
         font-size: 0.68rem;
         padding: 5px 10px;
     }
- 
+
     /* Float cards: sembunyikan */
     .hero-float-card {
         display: none;
     }
- 
+
     /* ── Stats strip ── */
     .stats-strip {
         padding: 20px 0;
     }
- 
+
     .stats-inner {
         gap: 0;
     }
- 
+
     .stat-item {
         min-width: 90px;
         padding: 6px 12px;
     }
- 
+
     .stat-num {
         font-size: 1.3rem;
     }
- 
+
     .stat-label {
         font-size: 0.65rem;
     }
- 
+
     /* ── Rekomendasi Kos ── */
     .rekom-section {
         padding: 36px 0 44px;
     }
- 
+
     .sec-header {
-        flex-direction: row;          /* judul & tombol tetap sejajar */
+        flex-direction: row;
+        /* judul & tombol tetap sejajar */
         align-items: center;
         margin-bottom: 20px;
         gap: 12px;
     }
- 
+
     .sec-title {
         font-size: 1.35rem;
         margin-bottom: 4px;
     }
- 
+
     .sec-sub {
         font-size: 0.78rem;
-        display: none; /* sembunyikan subtitle agar tidak penuh */
+        display: none;
+        /* sembunyikan subtitle agar tidak penuh */
     }
- 
+
     .btn-lihat-semua {
         padding: 8px 14px;
         font-size: 0.75rem;
         border-radius: 10px;
         flex-shrink: 0;
     }
- 
+
     /* ── Kos card: layout HORIZONTAL (seperti Mamikos) ── */
     .kos-grid {
         grid-template-columns: 1fr;
         gap: 12px;
     }
- 
+
     /* Ubah card jadi horizontal: foto kiri, info kanan */
     .kos-card {
         display: flex;
@@ -961,7 +970,7 @@
         border-radius: 18px;
         min-height: 0;
     }
- 
+
     .kos-thumb {
         width: 120px;
         min-width: 120px;
@@ -970,13 +979,13 @@
         border-radius: 0;
         flex-shrink: 0;
     }
- 
+
     /* Sembunyikan peta di dalam card mobile — terlalu padat */
     .kos-card .kos-body iframe,
     .kos-card .kos-body div[style*="height:120px"] {
         display: none;
     }
- 
+
     .kos-body {
         padding: 12px 13px 12px;
         display: flex;
@@ -985,7 +994,7 @@
         min-width: 0;
         flex: 1;
     }
- 
+
     .kos-name {
         font-size: 0.88rem;
         font-weight: 800;
@@ -995,7 +1004,7 @@
         overflow: hidden;
         text-overflow: ellipsis;
     }
- 
+
     .kos-loc {
         font-size: 0.72rem;
         margin-bottom: 6px;
@@ -1003,124 +1012,124 @@
         overflow: hidden;
         text-overflow: ellipsis;
     }
- 
+
     .kos-divider {
         margin-bottom: 6px;
     }
- 
+
     .kos-price {
         font-size: 0.88rem;
         margin-bottom: 6px;
     }
- 
+
     .kos-price span {
         font-size: 0.7rem;
     }
- 
+
     .kos-tags {
         gap: 4px;
         margin-bottom: 8px;
     }
- 
+
     .kos-tag {
         font-size: 0.62rem;
         padding: 3px 8px;
     }
- 
+
     .kos-actions {
         gap: 6px;
     }
- 
+
     .btn-detail,
     .btn-hubungi {
         padding: 8px 6px;
         font-size: 0.75rem;
         border-radius: 10px;
     }
- 
+
     /* ── Fasilitas: 4 kolom kecil seperti Mamikos ── */
     .fac-section {
         padding: 36px 0;
     }
- 
+
     .fac-grid {
         grid-template-columns: repeat(4, 1fr);
         gap: 8px;
         margin-top: 20px;
     }
- 
+
     .fac-item {
         padding: 14px 6px 12px;
         border-radius: 14px;
         gap: 6px;
     }
- 
+
     .fac-icon-wrap {
         width: 34px;
         height: 34px;
         border-radius: 10px;
     }
- 
+
     .fac-icon-wrap svg {
         width: 17px;
         height: 17px;
     }
- 
+
     .fac-name {
         font-size: 0.68rem;
         line-height: 1.2;
     }
- 
+
     .fac-count {
         font-size: 0.6rem;
     }
- 
+
     /* ── Keunggulan ── */
     .why-section {
         padding: 40px 0;
     }
- 
+
     .why-layout {
         grid-template-columns: 1fr;
         gap: 24px;
     }
- 
+
     .why-panel {
         padding: 24px 18px;
         border-radius: 20px;
     }
- 
+
     .testi-card {
         padding: 14px;
         margin-bottom: 8px;
     }
- 
+
     .testi-text {
         font-size: 0.8rem;
     }
- 
+
     /* ── CTA Banner ── */
     .cta-banner {
         margin: 0 4% 36px;
         border-radius: 18px;
         min-height: 240px;
     }
- 
+
     .cta-content {
         min-height: 240px;
         padding: 36px 20px;
     }
- 
+
     .cta-content h2 {
         font-size: clamp(1.2rem, 5vw, 1.6rem);
         margin-bottom: 8px;
     }
- 
+
     .cta-content p {
         font-size: 0.83rem;
         margin-bottom: 18px;
     }
- 
+
     .btn-cta-white {
         padding: 12px 28px;
         font-size: 0.9rem;
@@ -1277,61 +1286,61 @@
 
             @php
             $hargaAktif = $kost->kamars
-    ->flatMap(function ($kamar) {
+            ->flatMap(function ($kamar) {
 
-        return $kamar->hargaKamars
+            return $kamar->hargaKamars
             ->where('isactive', true);
 
-    });
+            });
 
-/*
-|--------------------------------------------------------------------------
-| PRIORITAS HARGA BULANAN
-|--------------------------------------------------------------------------
-*/
+            /*
+            |--------------------------------------------------------------------------
+            | PRIORITAS HARGA BULANAN
+            |--------------------------------------------------------------------------
+            */
 
-$hargaBulanan = $hargaAktif->filter(function ($harga) {
+            $hargaBulanan = $hargaAktif->filter(function ($harga) {
 
-    return $harga->periode
-        &&
-        $harga->periode->satuan_interval === 'bulan';
+            return $harga->periode
+            &&
+            $harga->periode->satuan_interval === 'bulan';
 
-});
+            });
 
-/*
-|--------------------------------------------------------------------------
-| JIKA ADA BULANAN → PAKAI BULANAN
-|--------------------------------------------------------------------------
-*/
+            /*
+            |--------------------------------------------------------------------------
+            | JIKA ADA BULANAN → PAKAI BULANAN
+            |--------------------------------------------------------------------------
+            */
 
-if ($hargaBulanan->count() > 0)
-{
-    $hargaDipakai = $hargaBulanan;
+            if ($hargaBulanan->count() > 0)
+            {
+            $hargaDipakai = $hargaBulanan;
 
-    $labelPeriode = 'bulan';
-}
+            $labelPeriode = 'bulan';
+            }
 
-/*
-|--------------------------------------------------------------------------
-| JIKA TIDAK ADA → PAKAI SEMUA HARGA AKTIF
-|--------------------------------------------------------------------------
-*/
+            /*
+            |--------------------------------------------------------------------------
+            | JIKA TIDAK ADA → PAKAI SEMUA HARGA AKTIF
+            |--------------------------------------------------------------------------
+            */
 
-else
-{
-    $hargaDipakai = $hargaAktif;
+            else
+            {
+            $hargaDipakai = $hargaAktif;
 
-    $periodePertama =
-        $hargaAktif->first()?->periode;
+            $periodePertama =
+            $hargaAktif->first()?->periode;
 
-    $labelPeriode =
-        $periodePertama?->satuan_interval
-        ?? '-';
-}
+            $labelPeriode =
+            $periodePertama?->satuan_interval
+            ?? '-';
+            }
 
-$hargaMin = $hargaDipakai->min('harga');
+            $hargaMin = $hargaDipakai->min('harga');
 
-$hargaMax = $hargaDipakai->max('harga');
+            $hargaMax = $hargaDipakai->max('harga');
 
             $fasilitasKost = $kost->fasilitas ?? collect();
 
@@ -1374,18 +1383,18 @@ $hargaMax = $hargaDipakai->max('harga');
                         Rp {{ number_format($hargaMin, 0, ',', '.') }}
                         <span>
 
-    – Rp {{ number_format($hargaMax, 0, ',', '.') }}
+                            – Rp {{ number_format($hargaMax, 0, ',', '.') }}
 
-    / {{ $labelPeriode }}
+                            / {{ $labelPeriode }}
 
-</span>
+                        </span>
                         @elseif($hargaMin)
                         Rp {{ number_format($hargaMin, 0, ',', '.') }}
                         <span>
 
-    / {{ $labelPeriode }}
+                            / {{ $labelPeriode }}
 
-</span>
+                        </span>
                         @else
                         <span>Hubungi Kami</span>
                         @endif
@@ -1447,26 +1456,52 @@ $hargaMax = $hargaDipakai->max('harga');
                 <div class="fac-icon-wrap">
                     @php
 
-$icons = [
-    'WiFi' => ' <path d="M2 8.82a15 15 0 0120 0"/> <path d="M5 12.86a10 10 0 0114 0"/> <path d="M8.5 16.9a5 5 0 017 0"/> <path d="M12 20h.01"/>',
-    'AC' => ' <path d="M12 2v20"/> <path d="M4.93 4.93l14.14 14.14"/> <path d="M2 12h20"/> <path d="M4.93 19.07L19.07 4.93"/>',
-    'Kulkas' => ' <rect x="7" y="2" width="10" height="20" rx="2"/> <path d="M7 12h10"/> <path d="M10 6h.01"/> <path d="M10 16h.01"/>',
-    'CCTV' => ' <path d="M3 10l10-5 3 6-10 5z"/> <path d="M13 5l4-2"/><path d="M16 14l2 4"/>',
-    'Ruang Tamu' => '<path d="M4 12V7a2 2 0 012-2h12a2 2 0 012 2v5"/><path d="M2 12h20v5H2z"/>',
-    'TV' => ' <rect x="3" y="5" width="18" height="12" rx="2"/> <path d="M8 21h8"/>',
-    'Kipas Angin' => ' <circle cx="12" cy="12" r="2"/> <path d="M12 4 C15 4 16 7 14 9 C13 10 11 9 11 7 C11 5 11.5 4 12 4Z"/> <path d="M20 12 C20 15 17 16 15 14 C14 13 15 11 17 11 C19 11 20 11.5 20 12Z"/> <path d="M12 20 C9 20 8 17 10 15 C11 14 13 15 13 17 C13 19 12.5 20 12 20Z"/><path d="M4 12 C4 9 7 8 9 10 C10 11 9 13 7 13 C5 13 4 12.5 4 12Z "/>',
-    'Area Parkir' => '<path d="M6 4h7a4 4 0 010 8H6z"/> <path d="M6 12v8"/>'
-];
+                    $icons = [
+                    'WiFi' => '
+                    <path d="M2 8.82a15 15 0 0120 0" />
+                    <path d="M5 12.86a10 10 0 0114 0" />
+                    <path d="M8.5 16.9a5 5 0 017 0" />
+                    <path d="M12 20h.01" />',
+                    'AC' => '
+                    <path d="M12 2v20" />
+                    <path d="M4.93 4.93l14.14 14.14" />
+                    <path d="M2 12h20" />
+                    <path d="M4.93 19.07L19.07 4.93" />',
+                    'Kulkas' => '
+                    <rect x="7" y="2" width="10" height="20" rx="2" />
+                    <path d="M7 12h10" />
+                    <path d="M10 6h.01" />
+                    <path d="M10 16h.01" />',
+                    'CCTV' => '
+                    <path d="M3 10l10-5 3 6-10 5z" />
+                    <path d="M13 5l4-2" />
+                    <path d="M16 14l2 4" />',
+                    'Ruang Tamu' => '
+                    <path d="M4 12V7a2 2 0 012-2h12a2 2 0 012 2v5" />
+                    <path d="M2 12h20v5H2z" />',
+                    'TV' => '
+                    <rect x="3" y="5" width="18" height="12" rx="2" />
+                    <path d="M8 21h8" />',
+                    'Kipas Angin' => '
+                    <circle cx="12" cy="12" r="2" />
+                    <path d="M12 4 C15 4 16 7 14 9 C13 10 11 9 11 7 C11 5 11.5 4 12 4Z" />
+                    <path d="M20 12 C20 15 17 16 15 14 C14 13 15 11 17 11 C19 11 20 11.5 20 12Z" />
+                    <path d="M12 20 C9 20 8 17 10 15 C11 14 13 15 13 17 C13 19 12.5 20 12 20Z" />
+                    <path d="M4 12 C4 9 7 8 9 10 C10 11 9 13 7 13 C5 13 4 12.5 4 12Z " />',
+                    'Area Parkir' => '
+                    <path d="M6 4h7a4 4 0 010 8H6z" />
+                    <path d="M6 12v8" />'
+                    ];
 
-@endphp
+                    @endphp
 
-<svg viewBox="0 0 24 24">
+                    <svg viewBox="0 0 24 24">
 
-    {!! $icons[$nama] ?? '
-        <circle cx="12" cy="12" r="8"/>
-    ' !!}
+                        {!! $icons[$nama] ?? '
+                        <circle cx="12" cy="12" r="8" />
+                        ' !!}
 
-</svg>
+                    </svg>
                 </div>
                 <span class="fac-name">{{ $nama }}</span>
                 <span class="fac-count">
@@ -1544,10 +1579,10 @@ $icons = [
                 </div>
 
                 <div class="testi-card">
-                    <div class="testi-stars">🔍 Survey Langsung</div>
+                    <div class="testi-stars">🔍 Lihat Detail Kos</div>
                     <div class="testi-text">
-                        Selalu survey langsung sebelum memilih. Cek kondisi kamar, kamar mandi, keamanan, dan
-                        kebersihan lingkungan sekitar.
+                        Cek kondisi kamar, fasilitas, harga, keamanan, dan informasi lingkungan kos langsung melalui
+                        platform sebelum melakukan pengajuan.
                     </div>
                 </div>
             </div>

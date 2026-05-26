@@ -28,6 +28,7 @@ public function dashboard(Request $r)
     $hunianAktif = RiwayatHunian::with([
 
             'kamar.kost'
+            
 
         ])
         ->where(

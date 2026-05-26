@@ -21,19 +21,23 @@
     </div>
 
 </div>
+
 {{-- TAB NAVIGATION --}}
-<div class="flex gap-2 mb-8">
+{{-- TAB NAVIGATION --}}
+<div class="flex items-center gap-8 mb-10 border-b border-gray-200">
+
     <a href="{{ route('admin.tagihan.index') }}"
-       class="px-6 py-3 rounded-2xl font-semibold text-sm transition
-              bg-[#6C8B6B] text-white">
+        class="pb-3 text-sm font-semibold transition {{ request()->routeIs('admin.tagihan.index') ? 'text-[#6C8B6B] border-b-2 border-[#6C8B6B]' : 'text-gray-400 hover:text-[#6C8B6B]' }}">
         Tagihan
     </a>
+
     <a href="{{ route('admin.tagihan.riwayat') }}"
-       class="px-6 py-3 rounded-2xl font-semibold text-sm transition
-              bg-gray-100 text-gray-600 hover:bg-gray-200">
+        class="pb-3 text-sm font-semibold transition {{ request()->routeIs('admin.tagihan.riwayat') ? 'text-[#6C8B6B] border-b-2 border-[#6C8B6B]' : 'text-gray-400 hover:text-[#6C8B6B]' }}">
         Riwayat Pembayaran
     </a>
+
 </div>
+
 
 {{-- ========================================================= --}}
 {{-- SUMMARY --}}
@@ -140,93 +144,93 @@
 
                 @php
 
-                    $user =
-                        $tagihans->first()->user;
+                $user =
+                $tagihans->first()->user;
 
-                    /*
-                    |--------------------------------------------------------------------------
-                    | TOTAL TAGIHAN
-                    |--------------------------------------------------------------------------
-                    */
+                /*
+                |--------------------------------------------------------------------------
+                | TOTAL TAGIHAN
+                |--------------------------------------------------------------------------
+                */
 
-                    $jumlahTagihan =
-                        $tagihans->count();
+                $jumlahTagihan =
+                $tagihans->count();
 
-                    /*
-                    |--------------------------------------------------------------------------
-                    | MENUNGGU
-                    |--------------------------------------------------------------------------
-                    */
+                /*
+                |--------------------------------------------------------------------------
+                | MENUNGGU
+                |--------------------------------------------------------------------------
+                */
 
-                    $menunggu =
-                        $tagihans
-                            ->filter(function($t){
+                $menunggu =
+                $tagihans
+                ->filter(function($t){
 
-                                return
-                                    $t->status_label
-                                    === 'menunggu_verifikasi';
+                return
+                $t->status_label
+                === 'menunggu_verifikasi';
 
-                            })
-                            ->count();
+                })
+                ->count();
 
-                    /*
-                    |--------------------------------------------------------------------------
-                    | TELAT
-                    |--------------------------------------------------------------------------
-                    */
+                /*
+                |--------------------------------------------------------------------------
+                | TELAT
+                |--------------------------------------------------------------------------
+                */
 
-                    $telat =
-                        $tagihans
-                            ->filter(function($t){
+                $telat =
+                $tagihans
+                ->filter(function($t){
 
-                                return
-                                    $t->status_label
-                                    === 'telat';
+                return
+                $t->status_label
+                === 'telat';
 
-                            })
-                            ->count();
+                })
+                ->count();
 
-                    /*
-                    |--------------------------------------------------------------------------
-                    | BELUM LUNAS
-                    |--------------------------------------------------------------------------
-                    */
+                /*
+                |--------------------------------------------------------------------------
+                | BELUM LUNAS
+                |--------------------------------------------------------------------------
+                */
 
-                    $belumLunas =
-                        $tagihans
-                            ->filter(function($t){
+                $belumLunas =
+                $tagihans
+                ->filter(function($t){
 
-                                return
-                                    $t->status_label
-                                    !== 'lunas';
+                return
+                $t->status_label
+                !== 'lunas';
 
-                            })
-                            ->count();
-                    $lunas =
-    $tagihans
-        ->filter(function($t){
+                })
+                ->count();
+                $lunas =
+                $tagihans
+                ->filter(function($t){
 
-            return
+                return
                 $t->status_label
                 === 'lunas';
 
-        })
-        ->count();
+                })
+                ->count();
 
-                    /*
-                    |--------------------------------------------------------------------------
-                    | TOTAL NOMINAL BELUM LUNAS
-                    |--------------------------------------------------------------------------
-                    */
+                /*
+                |--------------------------------------------------------------------------
+                | TOTAL NOMINAL BELUM LUNAS
+                |--------------------------------------------------------------------------
+                */
 
-                    $totalBelumLunas =
-                        $tagihans
-                            ->sum(function($t){
+                $totalBelumLunas =
+                $tagihans
+                ->sum(function($t){
 
-                                return
-                                    $t->sisa_tagihan;
+                return
+                $t->sisa_tagihan;
 
-                            });
+                });
 
                 @endphp
 
@@ -271,113 +275,100 @@
                     </td>
 
                     {{-- ========================================================= --}}
-{{-- STATUS --}}
-{{-- ========================================================= --}}
-<td class="px-6 py-5">
+                    {{-- STATUS --}}
+                    {{-- ========================================================= --}}
+                    <td class="px-6 py-5">
 
-    <div class="flex flex-wrap gap-2">
+                        <div class="flex flex-wrap gap-2">
 
-        {{-- LUNAS --}}
-        @if($lunas > 0)
+                            {{-- LUNAS --}}
+                            @if($lunas > 0)
 
-        <div
-            class="px-3 py-1 rounded-full
+                            <div class="px-3 py-1 rounded-full
                    bg-green-100 text-green-700
-                   text-xs font-semibold"
-        >
+                   text-xs font-semibold">
 
-            {{ $lunas }}
-            lunas
+                                {{ $lunas }}
+                                lunas
 
-        </div>
+                            </div>
 
-        @endif
+                            @endif
 
-        {{-- BELUM LUNAS --}}
-        @if($belumLunas > 0)
+                            {{-- BELUM LUNAS --}}
+                            @if($belumLunas > 0)
 
-        <div
-            class="px-3 py-1 rounded-full
+                            <div class="px-3 py-1 rounded-full
                    bg-gray-100 text-gray-700
-                   text-xs font-semibold"
-        >
+                   text-xs font-semibold">
 
-            {{ $belumLunas }}
-            belum lunas
+                                {{ $belumLunas }}
+                                belum lunas
 
-        </div>
+                            </div>
 
-        @endif
+                            @endif
 
-        {{-- MENUNGGU --}}
-        @if($menunggu > 0)
+                            {{-- MENUNGGU --}}
+                            @if($menunggu > 0)
 
-        <div
-            class="px-3 py-1 rounded-full
+                            <div class="px-3 py-1 rounded-full
                    bg-yellow-100 text-yellow-700
-                   text-xs font-semibold"
-        >
+                   text-xs font-semibold">
 
-            {{ $menunggu }}
-            menunggu
+                                {{ $menunggu }}
+                                menunggu
 
-        </div>
+                            </div>
 
-        @endif
+                            @endif
 
-        {{-- TELAT --}}
-        @if($telat > 0)
+                            {{-- TELAT --}}
+                            @if($telat > 0)
 
-        <div
-            class="px-3 py-1 rounded-full
+                            <div class="px-3 py-1 rounded-full
                    bg-red-100 text-red-700
-                   text-xs font-semibold"
-        >
+                   text-xs font-semibold">
 
-            {{ $telat }}
-            telat
+                                {{ $telat }}
+                                telat
 
-        </div>
+                            </div>
 
-        @endif
+                            @endif
 
-        {{-- SEMUA LUNAS --}}
-        @if(
-            $lunas === $jumlahTagihan
-            &&
-            $jumlahTagihan > 0
-        )
+                            {{-- SEMUA LUNAS --}}
+                            @if(
+                            $lunas === $jumlahTagihan
+                            &&
+                            $jumlahTagihan > 0
+                            )
 
-        <div
-            class="px-3 py-1 rounded-full
+                            <div class="px-3 py-1 rounded-full
                    bg-emerald-100 text-emerald-700
-                   text-xs font-semibold"
-        >
+                   text-xs font-semibold">
 
-            Semua lunas
+                                Semua lunas
 
-        </div>
+                            </div>
 
-        @endif
+                            @endif
 
-    </div>
+                        </div>
 
-</td>
+                    </td>
 
                     {{-- ========================================================= --}}
                     {{-- BUTTON --}}
                     {{-- ========================================================= --}}
                     <td class="px-6 py-5">
 
-                        <a
-                            href="{{ route('admin.tagihan.detail', $userId) }}"
-                            class="inline-flex items-center
+                        <a href="{{ route('admin.tagihan.detail', $userId) }}" class="inline-flex items-center
                                    bg-[#6C8B6B]
                                    hover:bg-[#5B765A]
                                    text-white px-5 py-3
                                    rounded-2xl text-sm
-                                   font-semibold transition"
-                        >
+                                   font-semibold transition">
 
                             Lihat Detail
 
@@ -391,10 +382,7 @@
 
                 <tr>
 
-                    <td
-                        colspan="4"
-                        class="px-6 py-12 text-center text-gray-500"
-                    >
+                    <td colspan="4" class="px-6 py-12 text-center text-gray-500">
 
                         Belum ada data pembayaran.
 

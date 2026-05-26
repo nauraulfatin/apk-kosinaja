@@ -2,71 +2,60 @@
 
 @section('content')
 
-<div class="p-6">
+<div class="flex items-center justify-between mb-8">
+    <div>
+        <h1 class="text-3xl font-bold text-[#0F0937]">Aturan Kos</h1>
+        <p class="text-gray-500 mt-2">Harap diperhatikan sebelum menyewa.</p>
+    </div>
+    <a href="{{ route('admin.aturan.create') }}"
+        class="bg-[#6C8B6B] hover:bg-[#5B765A] text-white px-6 py-3 rounded-xl font-semibold transition">
+        + Tambah Aturan
+    </a>
+</div>
 
-    <div class="flex justify-between mb-5">
+<div class="bg-white rounded-2xl shadow-sm border border-gray-100 p-2 space-y-2">
 
-        <!-- Judul -->
-        <h1 class="text-2xl font-bold text-black">
-            Aturan Kos
-        </h1>
+    @forelse($aturans as $aturan)
 
-        <!-- Tombol Tambah -->
-        <a href="{{ route('admin.aturan.create') }}"
-           class="bg-[#6E8B74] text-white px-5 py-2 rounded-xl shadow hover:bg-[#5c7764] transition">
-            Tambah
-        </a>
+    <div
+        class="flex justify-between items-center px-4 py-3 rounded-xl border border-gray-100 hover:bg-gray-50 transition">
+
+        <div class="flex items-center gap-4">
+            <span
+                class="w-7 h-7 flex items-center justify-center rounded-full bg-[#EEF3EE] text-[#6C8B6B] text-sm font-bold">
+                {{ $loop->iteration }}
+            </span>
+            <p class="text-gray-700 font-medium">
+                {{ $aturan->isi }}
+            </p>
+        </div>
+
+        <div class="flex gap-2">
+            <a href="{{ route('admin.aturan.edit', $aturan->id) }}"
+                class="bg-gray-100 hover:bg-gray-200 text-gray-700 px-4 py-2 rounded-lg text-sm font-semibold transition">
+                Edit
+            </a>
+            <form action="{{ route('admin.aturan.destroy', $aturan->id) }}" method="POST">
+                @csrf
+                @method('DELETE')
+                <button onclick="return confirm('Yakin ingin menghapus aturan ini?')"
+                    class="bg-[#FCEBEB] hover:bg-[#F7C1C1] text-[#791F1F] px-6 py-2.5 rounded-xl font-medium text-sm transition">
+
+                    Hapus
+
+                </button>
+            </form>
+        </div>
 
     </div>
 
-    <div class="bg-white rounded-2xl shadow p-5">
+    @empty
 
-        @forelse($aturans as $aturan)
-
-            <div class="border-b py-4 flex justify-between items-center">
-
-                <div>
-                    <p class="text-gray-700">
-                        {{ $aturan->isi }}
-                    </p>
-                </div>
-
-                <div class="flex gap-2">
-
-                    <!-- Tombol Edit -->
-                    <a href="{{ route('admin.aturan.edit', $aturan->id) }}"
-                       class="bg-green-100 text-green-700 px-3 py-1 rounded-lg hover:bg-green-200 transition">
-                        Edit
-                    </a>
-
-                    <!-- Tombol Hapus -->
-                    <form action="{{ route('admin.aturan.destroy', $aturan->id) }}"
-                          method="POST">
-
-                        @csrf
-                        @method('DELETE')
-
-                        <button
-                            onclick="return confirm('Yakin ingin menghapus aturan ini?')"
-                            class="bg-red-500 text-white px-3 py-1 rounded-lg hover:bg-red-600 transition">
-                            Hapus
-                        </button>
-
-                    </form>
-
-                </div>
-
-            </div>
-
-        @empty
-
-            <div class="text-center py-10 text-gray-400">
-                Belum ada aturan kos
-            </div>
-
-        @endforelse
-
+    <div class="text-center py-12 text-gray-500">
+        Belum ada aturan kos
     </div>
+
+    @endforelse
 
 </div>
 

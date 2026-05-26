@@ -2,43 +2,38 @@
 
 @section('content')
 
-<div class="p-6">
+<div class="flex items-center justify-between mb-8">
+    <div>
+        <h1 class="text-3xl font-bold text-[#0F0937]">Aturan Kos</h1>
+        <p class="text-gray-500 mt-2">Harap dipatuhi aturan yang berlaku</p>
+    </div>
+</div>
 
-    <div class="bg-white rounded-2xl shadow p-6">
+<div class="bg-white rounded-2xl shadow-sm border border-gray-100 p-2 space-y-2">
 
-        <h1 class="text-2xl font-bold text-black mb-6">
-            Aturan Kos
-        </h1>
+    @forelse($aturans as $aturan)
 
-        @forelse($aturans as $aturan)
+    <div class="flex items-center px-4 py-3 rounded-xl border border-gray-100 hover:bg-gray-50 transition">
 
-            <div class="border-b py-4">
-
-                {{-- JUDUL --}}
-                @if(!empty($aturan->judul))
-
-                    <h2 class="font-semibold text-lg text-black mb-2">
-                        {{ $aturan->judul }}
-                    </h2>
-
-                @endif
-
-                {{-- ISI ATURAN --}}
-                <p class="text-gray-700 leading-relaxed">
-                    {{ $aturan->isi }}
-                </p>
-
-            </div>
-
-        @empty
-
-            <p class="text-gray-500 text-center">
-                Belum ada aturan kos
+        <div class="flex items-center gap-4">
+            <span
+                class="w-7 h-7 flex items-center justify-center rounded-full bg-[#EEF3EE] text-[#6C8B6B] text-sm font-bold">
+                {{ $loop->iteration }}
+            </span>
+            <p class="text-gray-700 font-medium">
+                {{ $aturan->isi }}
             </p>
-
-        @endforelse
+        </div>
 
     </div>
+
+    @empty
+
+    <div class="text-center py-12 text-gray-500">
+        Belum ada aturan kos
+    </div>
+
+    @endforelse
 
 </div>
 

@@ -25,19 +25,15 @@
 
     <div class="flex gap-3">
 
-        <a
-            href="{{ route('admin.kamar.harga.create', $kamar) }}"
-            class="bg-[#6C8B6B] hover:bg-[#5B765A] text-white px-5 py-3 rounded-xl font-semibold transition"
-        >
+        <a href="{{ route('admin.kamar.harga.create', $kamar) }}"
+            class="bg-[#6C8B6B] hover:bg-[#5B765A] text-white px-5 py-3 rounded-xl font-semibold transition">
 
             Tambah Harga
 
         </a>
 
-        <a
-            href="{{ route('admin.kamar.index') }}"
-            class="bg-gray-100 hover:bg-gray-200 text-gray-700 px-5 py-3 rounded-xl font-semibold transition"
-        >
+        <a href="{{ route('admin.kamar.index') }}"
+            class="bg-gray-100 hover:bg-gray-200 text-gray-700 px-5 py-3 rounded-xl font-semibold transition">
 
             Kembali
 
@@ -137,27 +133,21 @@
 
                         <div class="flex flex-wrap gap-2">
 
-                            <a
-                                href="{{ route('admin.kamar.harga.edit', [$kamar, $i]) }}"
-                                class="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-lg text-sm"
-                            >
+                            <a href="{{ route('admin.kamar.harga.edit', [$kamar, $i]) }}"
+                                class="bg-[#EAF1FB] hover:bg-[#D6E4FA] text-[#1D4E89] px-6 py-2.5 rounded-xl font-medium text-sm transition">
 
                                 Edit
 
                             </a>
 
-                            <form
-                                method="POST"
-                                action="{{ route('admin.kamar.harga.destroy', [$kamar, $i]) }}"
-                                onsubmit="return confirm('Hapus harga kamar ini?')"
-                            >
+                            <form method="POST" action="{{ route('admin.kamar.harga.destroy', [$kamar, $i]) }}"
+                                onsubmit="return confirm('Hapus harga kamar ini?')">
 
                                 @csrf
                                 @method('DELETE')
 
                                 <button
-                                    class="bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded-lg text-sm"
-                                >
+                                    class="bg-[#FCEBEB] hover:bg-[#F7C1C1] text-[#791F1F] px-6 py-2.5 rounded-xl font-medium text-sm transition">
 
                                     Hapus
 

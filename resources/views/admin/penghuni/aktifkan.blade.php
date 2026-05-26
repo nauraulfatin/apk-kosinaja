@@ -2,337 +2,297 @@
 
 @section('content')
 
-<div class="max-w-4xl mx-auto">
+<div class="w-full"></div>
 
-    {{-- HEADER --}}
+{{-- HEADER --}}
+<div class="mb-8">
+
+    <h1 class="text-3xl font-bold text-[#0F0937]">
+
+        Aktifkan Penghuni
+
+    </h1>
+
+    <p class="text-gray-500 mt-2">
+
+        Pilih kamar dan atur periode tinggal penghuni.
+
+    </p>
+
+</div>
+
+{{-- CARD --}}
+<div class="bg-white rounded-3xl shadow-sm border border-gray-100 p-8">
+
+    {{-- DATA PENGHUNI --}}
     <div class="mb-8">
 
-        <h1 class="text-3xl font-bold text-[#0F0937]">
+        <h2 class="text-lg font-bold text-gray-800 mb-4">
 
-            Aktifkan Penghuni
+            Data Penghuni
 
-        </h1>
+        </h2>
 
-        <p class="text-gray-500 mt-2">
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
 
-            Pilih kamar dan atur periode tinggal penghuni.
+            <div>
 
-        </p>
+                <p class="text-sm text-gray-400 mb-1">
 
-    </div>
+                    Nama
 
-    {{-- CARD --}}
-    <div class="bg-white rounded-3xl shadow-sm border border-gray-100 p-8">
+                </p>
 
-        {{-- DATA PENGHUNI --}}
-        <div class="mb-8">
+                <p class="font-semibold text-gray-800">
 
-            <h2 class="text-lg font-bold text-gray-800 mb-4">
+                    {{ $riwayatHunian->user->nama }}
 
-                Data Penghuni
+                </p>
 
-            </h2>
+            </div>
 
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
+            <div>
 
-                <div>
+                <p class="text-sm text-gray-400 mb-1">
 
-                    <p class="text-sm text-gray-400 mb-1">
+                    Username
 
-                        Nama
+                </p>
 
-                    </p>
+                <p class="font-semibold text-gray-800">
 
-                    <p class="font-semibold text-gray-800">
+                    {{ $riwayatHunian->user->username }}
 
-                        {{ $riwayatHunian->user->nama }}
-
-                    </p>
-
-                </div>
-
-                <div>
-
-                    <p class="text-sm text-gray-400 mb-1">
-
-                        Username
-
-                    </p>
-
-                    <p class="font-semibold text-gray-800">
-
-                        {{ $riwayatHunian->user->username }}
-
-                    </p>
-
-                </div>
+                </p>
 
             </div>
 
         </div>
 
-        {{-- FORM --}}
-        <form
-            method="POST"
-            action="{{ route('admin.penghuni.aktifkan', $riwayatHunian) }}"
-            class="space-y-7"
-        >
+    </div>
 
-            @csrf
-            @method('PUT')
+    {{-- FORM --}}
+    <form method="POST" action="{{ route('admin.penghuni.aktifkan', $riwayatHunian) }}" class="space-y-7">
 
-            {{-- PILIH KAMAR --}}
-            <div>
+        @csrf
+        @method('PUT')
 
-                <label class="block mb-2 font-semibold text-gray-700">
-
-                    Pilih Kamar
-
-                </label>
-
-                <select
-                    id="selectKamar"
-                    name="id_kamar"
-                    required
-                    class="w-full border border-gray-300
-                           rounded-xl px-4 py-3
-                           focus:outline-none
-                           focus:ring-2
-                           focus:ring-[#6C8B6B]"
-                >
-
-                    <option value="">
-
-                        -- Pilih Kamar --
-
-                    </option>
-
-                    @foreach($kamars as $k)
-
-                        @php
-
-                            $aktif = $k->riwayatHunian
-                                ->where('status', 'aktif')
-                                ->first();
-
-                        @endphp
-
-                        <option value="{{ $k->id_kamar }}">
-
-                            {{ $k->nomor_kamar }}
-
-                            -
-
-                            {{ strtoupper($k->status) }}
-
-                            @if($aktif)
-
-                                | Terisi oleh:
-
-                                {{ $aktif->user->nama }}
-
-                            @endif
-
-                        </option>
-
-                    @endforeach
-
-                </select>
-
-                @error('id_kamar')
-
-                    <p class="text-red-500 text-sm mt-2">
-
-                        {{ $message }}
-
-                    </p>
-
-                @enderror
-
-            </div>
-
-            {{-- TANGGAL MASUK --}}
-            <div>
-
-                <label class="block mb-2 font-semibold text-gray-700">
-
-                    Tanggal Masuk
-
-                </label>
-
-                <input
-                    type="date"
-                    name="tanggal_masuk"
-                    required
-                    value="{{ old('tanggal_masuk') }}"
-                    class="w-full border border-gray-300
-                           rounded-xl px-4 py-3
-                           focus:outline-none
-                           focus:ring-2
-                           focus:ring-[#6C8B6B]"
-                >
-
-                @error('tanggal_masuk')
-
-                    <p class="text-red-500 text-sm mt-2">
-
-                        {{ $message }}
-
-                    </p>
-
-                @enderror
-
-            </div>
-
-            {{-- TANGGAL KELUAR --}}
-            <div>
-
-                <label class="block mb-2 font-semibold text-gray-700">
-
-                    Tanggal Keluar
-
-                </label>
-
-                <input
-                    type="date"
-                    name="tanggal_keluar"
-                    required
-                    value="{{ old('tanggal_keluar') }}"
-                    class="w-full border border-gray-300
-                           rounded-xl px-4 py-3
-                           focus:outline-none
-                           focus:ring-2
-                           focus:ring-[#6C8B6B]"
-                >
-
-                @error('tanggal_keluar')
-
-                    <p class="text-red-500 text-sm mt-2">
-
-                        {{ $message }}
-
-                    </p>
-
-                @enderror
-
-            </div>
-
-            {{-- HARGA KAMAR --}}
-            <div>
-
-                <label class="block mb-2 font-semibold text-gray-700">
-
-                    Pilih Harga Kamar
-
-                </label>
-
-                <select
-                    id="selectHarga"
-                    name="id_harga_kamar"
-                    required
-                    class="w-full border border-gray-300
-                           rounded-xl px-4 py-3
-                           focus:outline-none
-                           focus:ring-2
-                           focus:ring-[#6C8B6B]"
-                >
-
-                    <option value="">
-
-                        -- Pilih Harga --
-
-                    </option>
-
-                    @foreach($hargaKamars as $h)
-
-                        <option
-                            value="{{ $h->id_harga_kamar }}"
-                            data-kamar="{{ $h->id_kamar }}"
-                        >
-
-
-                            Rp {{ number_format($h->harga, 0, ',', '.') }}
-
-                            /
-
-                            {{ $h->periode->periode_penagihan }}
-
-                        </option>
-
-                    @endforeach
-
-                </select>
-
-                @error('id_harga_kamar')
-
-                    <p class="text-red-500 text-sm mt-2">
-
-                        {{ $message }}
-
-                    </p>
-
-                @enderror
-
-            </div>
+        {{-- PILIH KAMAR --}}
+        <div>
 
             <label class="block mb-2 font-semibold text-gray-700">
 
-    Jatuh Tempo Setelah (Hari)
+                Pilih Kamar
 
-</label>
+            </label>
 
-<input
-    type="number"
-    name="jatuh_tempo_hari"
-    min="1"
-    max="31"
-    value="{{ old('jatuh_tempo_hari', 5) }}"
-    required
-    class="w-full border border-gray-300
+            <select id="selectKamar" name="id_kamar" required class="w-full border border-gray-300
+                           rounded-xl px-4 py-3
+                           focus:outline-none
+                           focus:ring-2
+                           focus:ring-[#6C8B6B]">
+
+                <option value="">
+
+                    -- Pilih Kamar --
+
+                </option>
+
+                @foreach($kamars as $k)
+
+                @php
+
+                $aktif = $k->riwayatHunian
+                ->where('status', 'aktif')
+                ->first();
+
+                @endphp
+
+                <option value="{{ $k->id_kamar }}">
+
+                    {{ $k->nomor_kamar }}
+
+                    -
+
+                    {{ strtoupper($k->status) }}
+
+                    @if($aktif)
+
+                    | Terisi oleh:
+
+                    {{ $aktif->user->nama }}
+
+                    @endif
+
+                </option>
+
+                @endforeach
+
+            </select>
+
+            @error('id_kamar')
+
+            <p class="text-red-500 text-sm mt-2">
+
+                {{ $message }}
+
+            </p>
+
+            @enderror
+
+        </div>
+
+        {{-- TANGGAL MASUK --}}
+        <div>
+
+            <label class="block mb-2 font-semibold text-gray-700">
+
+                Tanggal Masuk
+
+            </label>
+
+            <input type="date" name="tanggal_masuk" required value="{{ old('tanggal_masuk') }}" class="w-full border border-gray-300
+                           rounded-xl px-4 py-3
+                           focus:outline-none
+                           focus:ring-2
+                           focus:ring-[#6C8B6B]">
+
+            @error('tanggal_masuk')
+
+            <p class="text-red-500 text-sm mt-2">
+
+                {{ $message }}
+
+            </p>
+
+            @enderror
+
+        </div>
+
+        {{-- TANGGAL KELUAR --}}
+        <div>
+
+            <label class="block mb-2 font-semibold text-gray-700">
+
+                Tanggal Keluar
+
+            </label>
+
+            <input type="date" name="tanggal_keluar" required value="{{ old('tanggal_keluar') }}" class="w-full border border-gray-300
+                           rounded-xl px-4 py-3
+                           focus:outline-none
+                           focus:ring-2
+                           focus:ring-[#6C8B6B]">
+
+            @error('tanggal_keluar')
+
+            <p class="text-red-500 text-sm mt-2">
+
+                {{ $message }}
+
+            </p>
+
+            @enderror
+
+        </div>
+
+        {{-- HARGA KAMAR --}}
+        <div>
+
+            <label class="block mb-2 font-semibold text-gray-700">
+
+                Pilih Harga Kamar
+
+            </label>
+
+            <select id="selectHarga" name="id_harga_kamar" required class="w-full border border-gray-300
+                           rounded-xl px-4 py-3
+                           focus:outline-none
+                           focus:ring-2
+                           focus:ring-[#6C8B6B]">
+
+                <option value="">
+
+                    -- Pilih Harga --
+
+                </option>
+
+                @foreach($hargaKamars as $h)
+
+                <option value="{{ $h->id_harga_kamar }}" data-kamar="{{ $h->id_kamar }}">
+
+
+                    Rp {{ number_format($h->harga, 0, ',', '.') }}
+
+                    /
+
+                    {{ $h->periode->periode_penagihan }}
+
+                </option>
+
+                @endforeach
+
+            </select>
+
+            @error('id_harga_kamar')
+
+            <p class="text-red-500 text-sm mt-2">
+
+                {{ $message }}
+
+            </p>
+
+            @enderror
+
+        </div>
+
+        <label class="block mb-2 font-semibold text-gray-700">
+
+            Jatuh Tempo Setelah (Hari)
+
+        </label>
+
+        <input type="number" name="jatuh_tempo_hari" min="1" max="31" value="{{ old('jatuh_tempo_hari', 5) }}" required
+            class="w-full border border-gray-300
            rounded-xl px-4 py-3
            focus:outline-none
            focus:ring-2
-           focus:ring-[#6C8B6B]"
->
+           focus:ring-[#6C8B6B]">
 
-<p class="text-sm text-gray-400 mt-2">
+        <p class="text-sm text-gray-400 mt-2">
 
-    Contoh:
-    5 = tagihan jatuh tempo
-    5 hari setelah periode dimulai
+            Contoh:
+            5 = tagihan jatuh tempo
+            5 hari setelah periode dimulai
 
-</p>
+        </p>
 
-@error('jatuh_tempo_hari')
+        @error('jatuh_tempo_hari')
 
-    <p class="text-red-500 text-sm mt-2">
+        <p class="text-red-500 text-sm mt-2">
 
-        {{ $message }}
+            {{ $message }}
 
-    </p>
+        </p>
 
-@enderror
+        @enderror
 
-            {{-- BUTTON --}}
-            <div class="pt-4 flex items-center gap-4">
+        {{-- BUTTON --}}
+        <div class="pt-4 flex items-center gap-4">
 
-                <button
-                    type="submit"
-                    class="bg-[#6C8B6B]
+            <button type="submit" class="bg-[#6C8B6B]
                            hover:bg-[#5B765A]
                            text-white
                            px-8 py-3
                            rounded-xl
                            font-semibold
-                           transition"
-                >
+                           transition">
 
-                    Aktifkan Penghuni
+                Aktifkan Penghuni
 
-                </button>
+            </button>
 
-                <a
-                    href="
+            <a href="
 @if(request('from') === 'aktif')
     {{ route('admin.penghuni.aktif') }}
 
@@ -342,32 +302,29 @@
 @else
     {{ route('admin.penghuni.nonaktif') }}
 @endif
-"
-                    class="bg-gray-100
+" class="bg-gray-100
                            hover:bg-gray-200
                            text-gray-700
                            px-8 py-3
                            rounded-xl
                            font-semibold
-                           transition"
-                >
+                           transition">
 
-                    Kembali
+                Kembali
 
-                </a>
+            </a>
 
-            </div>
+        </div>
 
-        </form>
+    </form>
 
-    </div>
+</div>
 
 </div>
 
 {{-- FILTER HARGA BERDASARKAN KAMAR --}}
 <script>
-
-document.addEventListener('DOMContentLoaded', function () {
+document.addEventListener('DOMContentLoaded', function() {
 
     const selectKamar = document.getElementById('selectKamar');
 
@@ -377,7 +334,7 @@ document.addEventListener('DOMContentLoaded', function () {
         ...selectHarga.querySelectorAll('option')
     ];
 
-    selectKamar.addEventListener('change', function () {
+    selectKamar.addEventListener('change', function() {
 
         const kamarDipilih = this.value;
 
@@ -443,7 +400,6 @@ document.addEventListener('DOMContentLoaded', function () {
     });
 
 });
-
 </script>
 
 @endsection

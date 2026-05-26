@@ -28,7 +28,7 @@ class AduanPenghuniController extends Controller
     {
         $request->validate([
             'isi_aduan' => 'required',
-            'foto_aduan' => 'nullable|image|mimes:jpg,jpeg,png|max:2048'
+            'foto_aduan' => 'nullable|image|mimes:jpg,jpeg,png|max:5120'
         ]);
 
         $foto = null;

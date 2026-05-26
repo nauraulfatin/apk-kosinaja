@@ -24,10 +24,8 @@
     </div>
 
     {{-- KEMBALI --}}
-    <a
-        href="{{ route('superadmin.pengajuan.index') }}"
-        class="bg-gray-100 hover:bg-gray-200 text-gray-700 px-5 py-3 rounded-xl font-semibold transition"
-    >
+    <a href="{{ route('superadmin.pengajuan.index') }}"
+        class="bg-gray-100 hover:bg-gray-200 text-gray-700 px-5 py-3 rounded-xl font-semibold transition">
 
         Kembali
 
@@ -162,11 +160,8 @@
                 Foto Kost
             </p>
 
-            <img
-                src="{{ asset('storage/' . $user->kost->foto_kost) }}"
-                alt="Foto Kost"
-                class="w-full max-w-xl rounded-2xl border border-gray-200"
-            >
+            <img src="{{ asset('storage/' . $user->kost->foto_kost) }}" alt="Foto Kost"
+                class="w-full max-w-xl rounded-2xl border border-gray-200">
 
         </div>
 
@@ -183,15 +178,8 @@
 
             <div class="rounded-2xl overflow-hidden border border-gray-200">
 
-                <iframe
-                    src="{{ $user->kost->lokasi }}"
-                    width="100%"
-                    height="450"
-                    style="border:0;"
-                    allowfullscreen=""
-                    loading="lazy"
-                    referrerpolicy="no-referrer-when-downgrade"
-                ></iframe>
+                <iframe src="{{ $user->kost->lokasi }}" width="100%" height="450" style="border:0;" allowfullscreen=""
+                    loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
 
             </div>
 
@@ -200,47 +188,29 @@
         @endif
 
         {{-- ACTION --}}
-        <div class="flex flex-wrap gap-3 mt-10">
+        <div class="flex flex-wrap gap-3 mt-10 pt-6 border-t border-gray-100">
 
-            {{-- VALIDASI --}}
-            <form
-                method="POST"
-                action="{{ route('superadmin.admin.validasi', $user) }}"
-            >
-
+            {{-- TERIMA --}}
+            <form method="POST" action="{{ route('superadmin.admin.validasi', $user) }}">
                 @csrf
-
-                <button
-                    type="submit"
-                    class="bg-green-500 hover:bg-green-600 text-white px-6 py-3 rounded-xl font-semibold transition"
-                >
-
-                    Terima Pengajuan
-
+                <button type="submit"
+                    class="bg-[#EAF3DE] hover:bg-[#C0DD97] text-[#27500A] px-6 py-2.5 rounded-xl font-medium text-sm transition">
+                    Terima pengajuan
                 </button>
-
             </form>
 
             {{-- TOLAK --}}
-            <form
-                method="POST"
-                action="{{ route('superadmin.admin.tolak', $user) }}"
-            >
-
+            <form method="POST" action="{{ route('superadmin.admin.tolak', $user) }}">
                 @csrf
-
-                <button
-                    type="submit"
-                    class="bg-red-500 hover:bg-red-600 text-white px-6 py-3 rounded-xl font-semibold transition"
-                >
-
-                    Tolak Pengajuan
-
+                <button type="submit"
+                    class="bg-[#FCEBEB] hover:bg-[#F7C1C1] text-[#791F1F] px-6 py-2.5 rounded-xl font-medium text-sm transition">
+                    Tolak pengajuan
                 </button>
-
             </form>
 
         </div>
+
+
 
     </div>
 

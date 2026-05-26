@@ -6,167 +6,72 @@
 
 @section('content')
 
-{{-- ========================================================= --}}
+
 {{-- HEADER --}}
-{{-- ========================================================= --}}
 <div class="flex items-center justify-between mb-8">
-
     <div>
-
-        <h1 class="text-3xl font-bold text-[#0F0937]">
-            Master Fasilitas Kost
-        </h1>
-
-        <p class="text-gray-500 mt-2">
-            Kelola data fasilitas yang digunakan seluruh kost.
-        </p>
-
+        <h1 class="text-3xl font-bold text-[#0F0937]">Master Fasilitas Kost</h1>
+        <p class="text-gray-500 mt-2">Kelola data fasilitas yang digunakan seluruh kost.</p>
     </div>
-
     <div class="flex gap-3">
-
-        {{-- TAMBAH --}}
-        <a
-            href="{{ route('superadmin.fasilitas.create') }}"
-            class="bg-[#6C8B6B] hover:bg-[#5B765A] text-white px-5 py-3 rounded-xl font-semibold transition"
-        >
-
-            Tambah Fasilitas
-
+        <a href="{{ route('superadmin.fasilitas.create') }}"
+            class="bg-[#6C8B6B] hover:bg-[#5B765A] text-white px-5 py-2.5 rounded-xl font-medium text-sm transition">
+            + Tambah fasilitas
         </a>
-
-        {{-- KEMBALI --}}
-        <a
-            href="{{ route('superadmin.dashboard') }}"
-            class="bg-gray-100 hover:bg-gray-200 text-gray-700 px-5 py-3 rounded-xl font-semibold transition"
-        >
-
+        <a href="{{ route('superadmin.dashboard') }}"
+            class="bg-gray-100 hover:bg-gray-200 text-gray-600 px-5 py-2.5 rounded-xl font-medium text-sm transition">
             Kembali
-
         </a>
-
     </div>
-
 </div>
 
-{{-- ========================================================= --}}
 {{-- TABLE --}}
-{{-- ========================================================= --}}
 <div class="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden">
-
     <div class="overflow-x-auto">
-
         <table class="w-full">
-
             <thead class="bg-[#F8F5F0]">
-
                 <tr>
-
-                    <th class="px-6 py-4 text-left text-sm font-semibold text-gray-600">
-                        ID
-                    </th>
-
-                    <th class="px-6 py-4 text-left text-sm font-semibold text-gray-600">
-                        Nama Fasilitas
-                    </th>
-
-                    <th class="px-6 py-4 text-left text-sm font-semibold text-gray-600">
-                        Aksi
-                    </th>
-
+                    <th class="px-6 py-4 text-left text-xs font-medium text-gray-500">ID</th>
+                    <th class="px-6 py-4 text-left text-xs font-medium text-gray-500">Nama Fasilitas</th>
+                    <th class="px-6 py-4 text-left text-xs font-medium text-gray-500">Aksi</th>
                 </tr>
-
             </thead>
-
             <tbody class="divide-y divide-gray-100">
-
                 @forelse($items as $i)
-
                 <tr class="hover:bg-gray-50">
-
-                    {{-- ID --}}
-                    <td class="px-6 py-5 font-medium text-[#0F0937]">
-
+                    <td class="px-6 py-4 text-xs text-gray-400">
                         #{{ $i->id_fasilitas }}
-
                     </td>
-
-                    {{-- NAMA --}}
-                    <td class="px-6 py-5">
-
-                        <div class="font-semibold text-[#0F0937]">
-
-                            {{ $i->nama_fasilitas }}
-
-                        </div>
-
+                    <td class="px-6 py-4 text-sm text-[#0F0937]">
+                        {{ $i->nama_fasilitas }}
                     </td>
-
-                    {{-- AKSI --}}
-                    <td class="px-6 py-5">
-
-                        <div class="flex flex-wrap gap-2">
-
-                            {{-- EDIT --}}
-                            <a
-                                href="{{ route('superadmin.fasilitas.edit', $i) }}"
-                                class="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-xl text-sm font-semibold transition"
-                            >
-
+                    <td class="px-6 py-4">
+                        <div class="flex gap-2">
+                            <a href="{{ route('superadmin.fasilitas.edit', $i) }}"
+                                class="bg-[#E6F1FB] hover:bg-[#B5D4F4] text-[#0C447C] px-3 py-1.5 rounded-lg text-xs font-medium transition">
                                 Edit
-
                             </a>
-
-                            {{-- HAPUS --}}
-                            <form
-                                method="POST"
-                                action="{{ route('superadmin.fasilitas.destroy', $i) }}"
-                                onsubmit="return confirm('Hapus fasilitas ini?')"
-                            >
-
+                            <form method="POST" action="{{ route('superadmin.fasilitas.destroy', $i) }}"
+                                onsubmit="return confirm('Hapus fasilitas ini?')">
                                 @csrf
                                 @method('DELETE')
-
-                                <button
-                                    type="submit"
-                                    class="bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded-xl text-sm font-semibold transition"
-                                >
-
+                                <button type="submit"
+                                    class="bg-[#FCEBEB] hover:bg-[#F7C1C1] text-[#791F1F] px-3 py-1.5 rounded-lg text-xs font-medium transition">
                                     Hapus
-
                                 </button>
-
                             </form>
-
                         </div>
-
                     </td>
-
                 </tr>
-
                 @empty
-
                 <tr>
-
-                    <td
-                        colspan="3"
-                        class="px-6 py-10 text-center text-gray-500"
-                    >
-
+                    <td colspan="3" class="px-6 py-12 text-center text-sm text-gray-400">
                         Belum ada data fasilitas.
-
                     </td>
-
                 </tr>
-
                 @endforelse
-
             </tbody>
-
         </table>
-
     </div>
-
 </div>
-
 @endsection

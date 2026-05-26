@@ -24,10 +24,8 @@
     </div>
 
     {{-- KEMBALI --}}
-    <a
-        href="{{ route('superadmin.riwayat.index') }}"
-        class="bg-gray-100 hover:bg-gray-200 text-gray-700 px-5 py-3 rounded-xl font-semibold transition"
-    >
+    <a href="{{ route('superadmin.riwayat.index') }}"
+        class="bg-gray-100 hover:bg-gray-200 text-gray-700 px-5 py-3 rounded-xl font-semibold transition">
 
         Kembali
 
@@ -143,9 +141,7 @@
 
             @if($user->status === 'aktif')
 
-            <span
-                class="px-4 py-2 rounded-full bg-green-100 text-green-700 text-sm font-semibold"
-            >
+            <span class="px-4 py-2 rounded-full bg-green-100 text-green-700 text-sm font-semibold">
 
                 Disetujui
 
@@ -153,9 +149,7 @@
 
             @elseif($user->status === 'ditolak')
 
-            <span
-                class="px-4 py-2 rounded-full bg-red-100 text-red-700 text-sm font-semibold"
-            >
+            <span class="px-4 py-2 rounded-full bg-red-100 text-red-700 text-sm font-semibold">
 
                 Ditolak
 
@@ -165,77 +159,44 @@
 
         </div>
 
-       {{-- ACTION --}}
-<div class="flex flex-wrap gap-3 mt-10">
+        {{-- ACTION --}}
+        <div class="flex flex-wrap gap-3 mt-10">
 
-    {{-- SETUJUI --}}
-    @if($user->status === 'ditolak')
 
-    <form
-        method="POST"
-        action="{{ route('superadmin.admin.validasi', $user) }}"
-    >
+            {{-- SETUJUI --}}
+            @if($user->status === 'ditolak')
+            <form method="POST" action="{{ route('superadmin.admin.validasi', $user) }}">
+                @csrf
+                <button type="submit"
+                    class="bg-[#EAF3DE] hover:bg-[#C0DD97] text-[#27500A] px-6 py-2.5 rounded-xl font-medium text-sm transition">
+                    Setujui pengajuan
+                </button>
+            </form>
+            @endif
 
-        @csrf
+            {{-- TOLAK --}}
+            @if($user->status === 'aktif')
+            <form method="POST" action="{{ route('superadmin.admin.tolak', $user) }}">
+                @csrf
+                <button type="submit"
+                    class="bg-[#FCEBEB] hover:bg-[#F7C1C1] text-[#791F1F] px-6 py-2.5 rounded-xl font-medium text-sm transition">
+                    Tolak pengajuan
+                </button>
+            </form>
+            @endif
 
-        <button
-            type="submit"
-            class="bg-green-500 hover:bg-green-600 text-white px-6 py-3 rounded-xl font-semibold transition"
-        >
+            {{-- HAPUS ADMIN --}}
+            <form method="POST" action="{{ route('superadmin.admin.hapus', $user) }}"
+                onsubmit="return confirm('Hapus akun admin kost ini?')">
+                @csrf
+                @method('DELETE')
+                <button type="submit"
+                    class="bg-[#F7C1C1] hover:bg-[#F09595] text-[#791F1F] px-6 py-2.5 rounded-xl font-medium text-sm transition">
+                    Hapus admin
+                </button>
+            </form>
 
-            Setujui Pengajuan
-
-        </button>
-
-    </form>
-
-    @endif
-
-    {{-- TOLAK --}}
-    @if($user->status === 'aktif')
-
-    <form
-        method="POST"
-        action="{{ route('superadmin.admin.tolak', $user) }}"
-    >
-
-        @csrf
-
-        <button
-            type="submit"
-            class="bg-red-500 hover:bg-red-600 text-white px-6 py-3 rounded-xl font-semibold transition"
-        >
-
-            Tolak Pengajuan
-
-        </button>
-
-    </form>
-
-    @endif
-
-    {{-- HAPUS ADMIN --}}
-    <form
-        method="POST"
-        action="{{ route('superadmin.admin.hapus', $user) }}"
-        onsubmit="return confirm('Hapus akun admin kost ini?')"
-    >
-
-        @csrf
-        @method('DELETE')
-
-        <button
-            type="submit"
-            class="bg-red-700 hover:bg-red-800 text-white px-6 py-3 rounded-xl font-semibold transition"
-        >
-
-            Hapus Admin
-
-        </button>
-
-    </form>
-
-</div>
+        </div>
     </div>
 
 </div>

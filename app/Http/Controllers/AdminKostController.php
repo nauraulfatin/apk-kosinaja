@@ -6,6 +6,7 @@ use App\Models\Fasilitas;
 use App\Models\Kost;
 use App\Models\User;
 use App\Models\Pembayaran;
+use App\Models\Aduan;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
@@ -154,16 +155,22 @@ $pendingPembayaran = Pembayaran::where(
     ->get();
 
     //aduan terbaru
-    $aduanTerbaru = [];
-    return view('admin.dashboard', [
-        'kost' => $kost,
-        'totalKamar' => $totalKamar,
-        'totalPenghuni' => $totalPenghuni,
-        'pendingPembayaran' => $pendingPembayaran,
-        'pembayaranTerbaru' => $pembayaranTerbaru,
-        'aduanTerbaru' => $aduanTerbaru,
-    ]);
+    $aduanTerbaru = Aduan::with('user')
+    ->where('kost_id', $kost->id)
+    ->orderBy('tanggal', 'desc')
+    ->take(3)
+    ->get();
+
+return view('admin.dashboard', [
+    'kost'                => $kost,
+    'totalKamar'          => $totalKamar,
+    'totalPenghuni'       => $totalPenghuni,
+    'pendingPembayaran'   => $pendingPembayaran,
+    'pembayaranTerbaru'   => $pembayaranTerbaru,
+    'aduanTerbaru'        => $aduanTerbaru,
+]);
 }
+
     //infomrasi kost
 
     public function index(Request $request)

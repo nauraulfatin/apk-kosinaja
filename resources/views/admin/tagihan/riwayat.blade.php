@@ -9,40 +9,38 @@
     </div>
 </div>
 
+
 {{-- TAB NAVIGATION --}}
-<div class="flex gap-2 mb-8">
+<div class="flex items-center gap-8 mb-10 border-b border-gray-200">
+
     <a href="{{ route('admin.tagihan.index') }}"
-       class="px-6 py-3 rounded-2xl font-semibold text-sm transition
-              bg-gray-100 text-gray-600 hover:bg-gray-200">
+        class="pb-3 text-sm font-semibold transition {{ request()->routeIs('admin.tagihan.index') ? 'text-[#6C8B6B] border-b-2 border-[#6C8B6B]' : 'text-gray-400 hover:text-[#6C8B6B]' }}">
         Tagihan
     </a>
+
     <a href="{{ route('admin.tagihan.riwayat') }}"
-       class="px-6 py-3 rounded-2xl font-semibold text-sm transition
-              bg-[#6C8B6B] text-white">
+        class="pb-3 text-sm font-semibold transition {{ request()->routeIs('admin.tagihan.riwayat') ? 'text-[#6C8B6B] border-b-2 border-[#6C8B6B]' : 'text-gray-400 hover:text-[#6C8B6B]' }}">
         Riwayat Pembayaran
     </a>
+
 </div>
 
 {{-- FILTER + EXPORT --}}
 <div class="bg-white rounded-3xl border border-gray-100 shadow-sm p-6 mb-6">
-    <form method="GET" action="{{ route('admin.tagihan.riwayat') }}"
-          class="flex flex-col sm:flex-row gap-4 items-end">
+    <form method="GET" action="{{ route('admin.tagihan.riwayat') }}" class="flex flex-col sm:flex-row gap-4 items-end">
 
         <div class="flex-1">
             <label class="text-sm font-semibold text-gray-600 mb-2 block">Pilih Bulan</label>
-            <input type="month" name="bulan" value="{{ $bulan }}"
-                   class="w-full border border-gray-200 rounded-2xl px-4 py-3
+            <input type="month" name="bulan" value="{{ $bulan }}" class="w-full border border-gray-200 rounded-2xl px-4 py-3
                           text-sm focus:outline-none focus:ring-2 focus:ring-[#6C8B6B]">
         </div>
 
-        <button type="submit"
-                class="bg-[#6C8B6B] hover:bg-[#5B765A] text-white
+        <button type="submit" class="bg-[#6C8B6B] hover:bg-[#5B765A] text-white
                        px-6 py-3 rounded-2xl font-semibold text-sm transition">
             Tampilkan
         </button>
 
-        <a href="{{ route('admin.tagihan.export-pdf', ['bulan' => $bulan]) }}"
-           class="bg-red-500 hover:bg-red-600 text-white
+        <a href="{{ route('admin.tagihan.export-pdf', ['bulan' => $bulan]) }}" class="bg-red-500 hover:bg-red-600 text-white
                   px-6 py-3 rounded-2xl font-semibold text-sm transition">
             Export PDF
         </a>
@@ -89,11 +87,11 @@
                     <td class="px-6 py-4 text-sm text-[#0F0937]">
                         {{ $p->tagihan->kamar?->nomor_kamar }}
                     </td>
-                   <td class="px-6 py-4 text-sm text-gray-500">
-    {{ $p->tagihan->tanggal_mulai?->format('d M Y') }}
-    <div class="text-xs text-gray-400">sampai</div>
-    {{ $p->tagihan->tanggal_selesai?->format('d M Y') }}
-</td>
+                    <td class="px-6 py-4 text-sm text-gray-500">
+                        {{ $p->tagihan->tanggal_mulai?->format('d M Y') }}
+                        <div class="text-xs text-gray-400">sampai</div>
+                        {{ $p->tagihan->tanggal_selesai?->format('d M Y') }}
+                    </td>
                     <td class="px-6 py-4 font-semibold text-[#0F0937]">
                         Rp {{ number_format($p->nominal_pembayaran, 0, ',', '.') }}
                     </td>

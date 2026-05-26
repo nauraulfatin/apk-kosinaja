@@ -2,43 +2,37 @@
 
 @section('content')
 
-<div class="p-6">
+<div class="mb-8">
+    <h1 class="text-3xl font-bold text-[#0F0937]">Tambah Aturan Kos</h1>
+    <p class="text-gray-500 mt-2">Tambahkan aturan baru untuk penghuni kost.</p>
+</div>
 
-    <div class="bg-white rounded-2xl shadow p-6 max-w-3xl mx-auto">
+<div class="bg-white rounded-2xl shadow-sm border border-gray-100 p-8">
 
-       <h1 class="text-3xl font-bold text-black">
-            Tambah Aturan Kos
-        </h1>
+    <form action="{{ route('admin.aturan.store') }}" method="POST" class="space-y-6">
 
-        <form action="{{ route('admin.aturan.store') }}"
-              method="POST">
+        @csrf
 
-            @csrf
+        <div>
+            <label class="block mb-2 font-semibold text-gray-700">
+                Isi Aturan
+            </label>
+            <textarea name="isi_aturan" rows="5" required
+                class="w-full border border-gray-300 rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-[#6C8B6B]"></textarea>
+        </div>
 
-            <div class="mb-4">
-
-                <label class="block mb-2 font-medium">
-                    Isi Aturan
-                </label>
-
-                <textarea
-                    name="isi_aturan"
-                    rows="5"
-                    class="w-full border rounded-xl px-4 py-3"
-                    required></textarea>
-
-            </div>
-
-            <button
-                type="submit"
-                class="bg-[#3A5C3A] hover:bg-[#2f4b2f] text-white px-6 py-3 rounded-xl transition"
->
-                 Simpan
+        <div class="flex gap-4">
+            <button type="submit"
+                class="bg-[#6C8B6B] hover:bg-[#5B765A] text-white px-8 py-3 rounded-xl font-semibold transition">
+                Simpan
             </button>
+            <a href="{{ route('admin.aturan.index') }}"
+                class="bg-gray-100 hover:bg-gray-200 text-gray-700 px-8 py-3 rounded-xl font-semibold transition">
+                Kembali
+            </a>
+        </div>
 
-        </form>
-
-    </div>
+    </form>
 
 </div>
 
