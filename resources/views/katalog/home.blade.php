@@ -484,9 +484,6 @@
 .stats-strip {
     background: var(--green-mid);
     padding: 26px 0;
-    margin-top: -80px;
-    position: relative;
-    z-index: 5;
 }
 
 .stats-inner {
@@ -812,186 +809,176 @@
 }
 
 /* ═══════════════════════════════════════════════════
-   RESPONSIVE — TABLET (≤1024px)
-═══════════════════════════════════════════════════ */
-@media (max-width: 1024px) {
-    .kos-grid {
-        grid-template-columns: repeat(2, 1fr);
-    }
-
-    .fac-grid {
-        grid-template-columns: repeat(4, 1fr);
-    }
-
-    .why-layout {
-        grid-template-columns: 1fr;
-        gap: 32px;
-    }
-
-    .hero-float-card.card-1 {
-        top: 14%;
-        right: 4%;
-    }
-
-    .hero-float-card.card-2 {
-        bottom: 12%;
-        right: 4%;
-    }
-}
-
-/* ═══════════════════════════════════════════════════
    RESPONSIVE — MOBILE (≤768px)
 ═══════════════════════════════════════════════════ */
 @media (max-width: 768px) {
-
-    /* ── Hero: tata letak teks tetap di kiri atas ── */
+ 
+    /* ── Hero: tata letak teks di kiri atas, tinggi menyesuaikan konten ── */
     .hero {
-        min-height: 100svh;
-        align-items: flex-start; /* teks tetap di atas kiri seperti desktop */
+        /* Bukan 100svh lagi — cukup muat konten tanpa sisa ruang berlebih */
+        min-height: auto;
+        height: auto;
+        align-items: flex-start;
     }
-
+ 
     .hero-bg {
+        /* Foto tetap mengisi kotak hero */
+        position: absolute;
+        inset: 0;
+        height: 100%;
         object-position: 68% center;
     }
-
-    /* overlay sedikit lebih gelap di kiri-atas supaya teks terbaca */
+ 
+    /* Overlay kuat di kiri-atas supaya teks jelas terbaca */
     .hero-overlay {
         background: linear-gradient(120deg,
-                rgba(12, 26, 15, 0.72) 0%,
-                rgba(12, 26, 15, 0.45) 50%,
-                rgba(12, 26, 15, 0.10) 100%);
+                rgba(12, 26, 15, 0.82) 0%,
+                rgba(12, 26, 15, 0.55) 45%,
+                rgba(12, 26, 15, 0.14) 100%);
     }
-
+ 
     .hero-content {
-        padding: 55px 5% 50px; /* top lebih besar untuk clear navbar */
+        /* top = navbar (~64px) + 10px, bawah ramping */
+        padding: 74px 5% 32px;
         max-width: 100%;
         margin-left: 0;
         width: 100%;
     }
-
+ 
     .hero-badge {
-        font-size: 0.72rem;
-        padding: 6px 11px;
-        margin-bottom: 10px;
+        font-size: 0.68rem;
+        padding: 5px 10px;
+        margin-bottom: 8px;
+        gap: 5px;
     }
-
-   .hero-content h1 {
-    font-size: clamp(2.1rem, 9vw, 2.8rem);
-    line-height: 1.05;
-    letter-spacing: -1.5px;
-    max-width: 290px;
-}
-
-   .hero-content p {
-    font-size: 0.9rem;
-    line-height: 1.8;
-    max-width: 310px;
-}
+ 
+    /* Judul: BESAR & bold — kontras tinggi vs paragraf */
+    .hero-content h1 {
+        font-size: clamp(2rem, 8.5vw, 2.6rem);
+        font-weight: 900;
+        line-height: 1.08;
+        letter-spacing: -1.2px;
+        margin-bottom: 8px;
+        max-width: 74vw;
+        text-wrap: balance;
+        color: #ffffff; /* putih penuh */
+    }
+ 
+    /* Paragraf: kecil & lebih redup — jelas di bawah judul */
+    .hero-content p {
+        font-size: 0.8rem;
+        font-weight: 400;
+        line-height: 1.6;
+        color: rgba(255, 255, 255, 0.68); /* redup = hierarki jelas */
+        margin-bottom: 14px;
+        max-width: 82vw;
+    }
+ 
     /* ── Search bar: compact, tetap 1 baris ── */
     .hero-search {
-        flex-wrap: nowrap;       /* tetap 1 baris, tidak stack */
-        height: 50px;
-        border-radius: 14px;
-        padding: 6px 6px 6px 12px;
-        gap: 6px;
-        margin-bottom: 16px;
+        flex-wrap: nowrap;
+        height: 40px;
+        border-radius: 13px;
+        padding: 5px 5px 5px 11px;
+        gap: 5px;
+        margin-bottom: 14px;
         max-width: 100%;
     }
-
+ 
     .hero-search svg {
         width: 14px;
         height: 14px;
         flex-shrink: 0;
     }
-
+ 
     .hero-search input {
-        font-size: 0.8rem;
-        padding: 2px 0;
+        font-size: 0.78rem;
+        padding: 0;
         min-width: 0;
     }
-
-    /* Tombol kecil tapi tetap terbaca */
+ 
+    /* Tombol fit di dalam search bar */
     .hero-search button {
-        padding: 0 16px;
-        height: 38px;
-        border-radius: 10px;
-        font-size: 0.78rem;
+        height: 32px;
+        padding: 0 13px;
+        border-radius: 9px;
+        font-size: 0.5rem;
         white-space: nowrap;
         width: auto;
     }
-
+ 
     /* Trust badges */
     .hero-trust {
         gap: 6px;
     }
-
+ 
     .hero-trust span {
         font-size: 0.68rem;
         padding: 5px 10px;
     }
-
+ 
     /* Float cards: sembunyikan */
     .hero-float-card {
         display: none;
     }
-
+ 
     /* ── Stats strip ── */
     .stats-strip {
         padding: 20px 0;
     }
-
+ 
     .stats-inner {
         gap: 0;
     }
-
+ 
     .stat-item {
         min-width: 90px;
         padding: 6px 12px;
     }
-
+ 
     .stat-num {
         font-size: 1.3rem;
     }
-
+ 
     .stat-label {
         font-size: 0.65rem;
     }
-
+ 
     /* ── Rekomendasi Kos ── */
     .rekom-section {
         padding: 36px 0 44px;
     }
-
+ 
     .sec-header {
         flex-direction: row;          /* judul & tombol tetap sejajar */
         align-items: center;
         margin-bottom: 20px;
         gap: 12px;
     }
-
+ 
     .sec-title {
         font-size: 1.35rem;
         margin-bottom: 4px;
     }
-
+ 
     .sec-sub {
         font-size: 0.78rem;
         display: none; /* sembunyikan subtitle agar tidak penuh */
     }
-
+ 
     .btn-lihat-semua {
         padding: 8px 14px;
         font-size: 0.75rem;
         border-radius: 10px;
         flex-shrink: 0;
     }
-
+ 
     /* ── Kos card: layout HORIZONTAL (seperti Mamikos) ── */
     .kos-grid {
         grid-template-columns: 1fr;
         gap: 12px;
     }
-
+ 
     /* Ubah card jadi horizontal: foto kiri, info kanan */
     .kos-card {
         display: flex;
@@ -999,7 +986,7 @@
         border-radius: 18px;
         min-height: 0;
     }
-
+ 
     .kos-thumb {
         width: 120px;
         min-width: 120px;
@@ -1008,13 +995,13 @@
         border-radius: 0;
         flex-shrink: 0;
     }
-
+ 
     /* Sembunyikan peta di dalam card mobile — terlalu padat */
     .kos-card .kos-body iframe,
     .kos-card .kos-body div[style*="height:120px"] {
         display: none;
     }
-
+ 
     .kos-body {
         padding: 12px 13px 12px;
         display: flex;
@@ -1023,7 +1010,7 @@
         min-width: 0;
         flex: 1;
     }
-
+ 
     .kos-name {
         font-size: 0.88rem;
         font-weight: 800;
@@ -1033,7 +1020,7 @@
         overflow: hidden;
         text-overflow: ellipsis;
     }
-
+ 
     .kos-loc {
         font-size: 0.72rem;
         margin-bottom: 6px;
@@ -1041,124 +1028,124 @@
         overflow: hidden;
         text-overflow: ellipsis;
     }
-
+ 
     .kos-divider {
         margin-bottom: 6px;
     }
-
+ 
     .kos-price {
         font-size: 0.88rem;
         margin-bottom: 6px;
     }
-
+ 
     .kos-price span {
         font-size: 0.7rem;
     }
-
+ 
     .kos-tags {
         gap: 4px;
         margin-bottom: 8px;
     }
-
+ 
     .kos-tag {
         font-size: 0.62rem;
         padding: 3px 8px;
     }
-
+ 
     .kos-actions {
         gap: 6px;
     }
-
+ 
     .btn-detail,
     .btn-hubungi {
         padding: 8px 6px;
         font-size: 0.75rem;
         border-radius: 10px;
     }
-
+ 
     /* ── Fasilitas: 4 kolom kecil seperti Mamikos ── */
     .fac-section {
         padding: 36px 0;
     }
-
+ 
     .fac-grid {
         grid-template-columns: repeat(4, 1fr);
         gap: 8px;
         margin-top: 20px;
     }
-
+ 
     .fac-item {
         padding: 14px 6px 12px;
         border-radius: 14px;
         gap: 6px;
     }
-
+ 
     .fac-icon-wrap {
         width: 34px;
         height: 34px;
         border-radius: 10px;
     }
-
+ 
     .fac-icon-wrap svg {
         width: 17px;
         height: 17px;
     }
-
+ 
     .fac-name {
         font-size: 0.68rem;
         line-height: 1.2;
     }
-
+ 
     .fac-count {
         font-size: 0.6rem;
     }
-
+ 
     /* ── Keunggulan ── */
     .why-section {
         padding: 40px 0;
     }
-
+ 
     .why-layout {
         grid-template-columns: 1fr;
         gap: 24px;
     }
-
+ 
     .why-panel {
         padding: 24px 18px;
         border-radius: 20px;
     }
-
+ 
     .testi-card {
         padding: 14px;
         margin-bottom: 8px;
     }
-
+ 
     .testi-text {
         font-size: 0.8rem;
     }
-
+ 
     /* ── CTA Banner ── */
     .cta-banner {
         margin: 0 4% 36px;
         border-radius: 18px;
         min-height: 240px;
     }
-
+ 
     .cta-content {
         min-height: 240px;
         padding: 36px 20px;
     }
-
+ 
     .cta-content h2 {
         font-size: clamp(1.2rem, 5vw, 1.6rem);
         margin-bottom: 8px;
     }
-
+ 
     .cta-content p {
         font-size: 0.83rem;
         margin-bottom: 18px;
     }
-
+ 
     .btn-cta-white {
         padding: 12px 28px;
         font-size: 0.9rem;
