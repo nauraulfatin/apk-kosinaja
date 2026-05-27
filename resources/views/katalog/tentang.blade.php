@@ -4,11 +4,11 @@
 
 @section('content')
 
-<div class="max-w-8xl mx-auto px-6 py-8 flex flex-col gap-4">
+<div class="max-w-8xl mx-auto px-4 lg:px-6 py-8 flex flex-col gap-4">
 
     {{-- HERO --}}
     <div
-        class="bg-white rounded-2xl border border-[#E2EAE3] p-8 grid grid-cols-2 gap-6 items-center relative overflow-hidden">
+        class="bg-white rounded-2xl border border-[#E2EAE3] p-6 lg:p-8 grid grid-cols-1 lg:grid-cols-2 gap-6 items-center relative overflow-hidden">
         <div class="absolute -top-16 -right-16 w-56 h-56 rounded-full pointer-events-none"
             style="background:radial-gradient(circle,rgba(124,163,133,.12) 0%,transparent 70%)"></div>
 
@@ -25,16 +25,16 @@
             </p>
         </div>
 
-        <div class="flex justify-end relative z-10">
+        <div class="hidden lg:flex justify-end relative z-10">
             <img src="{{ asset('Ilustrasi Tentang KosinAja.png') }}" alt="Ilustrasi Tentang KosinAja"
                 class="w-full h-auto">
         </div>
     </div>
 
     {{-- KISAH --}}
-    <div class="bg-white rounded-2xl border border-[#E2EAE3] p-8 grid grid-cols-2 gap-6 items-center">
+    <div class="bg-white rounded-2xl border border-[#E2EAE3] p-6 lg:p-8 grid grid-cols-1 lg:grid-cols-2 gap-6 items-center">
         <div class="rounded-xl overflow-hidden">
-            <img src="{{ asset('fasilitas.png') }}" alt="Ruangan Kost" class="w-full h-92 object-cover rounded-xl">
+            <img src="{{ asset('fasilitas.png') }}" alt="Ruangan Kost" class="w-full h-48 lg:h-92 object-cover rounded-xl">
         </div>
         <div>
             <div
@@ -55,7 +55,7 @@
     </div>
 
     {{-- VISI MISI --}}
-    <div class="grid grid-cols-2 gap-3">
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-3">
         <div class="bg-white rounded-2xl border border-[#E2EAE3] p-6">
             <div class="w-10 h-10 bg-[#f0f5f1] rounded-xl flex items-center justify-center text-xl mb-4">👁️</div>
             <h3 class="font-extrabold text-base text-[#1F3A2C] mb-2">Visi Kami</h3>
@@ -93,7 +93,7 @@
             </div>
             <h2 class="font-extrabold text-xl text-[#1F3A2C]">Keunggulan Kami</h2>
         </div>
-        <div class="grid grid-cols-3 gap-3">
+        <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
             <div class="bg-[#F5F4F0] border border-[#E2EAE3] rounded-xl p-4 text-center">
                 <div class="w-11 h-11 bg-[#f0f5f1] rounded-xl flex items-center justify-center mx-auto mb-3 text-xl">🔍
                 </div>
@@ -203,7 +203,7 @@
             <h2 class="font-extrabold text-xl text-[#1F3A2C]">Orang-orang di Balik KosinAja</h2>
             <p class="text-sm text-[#7A8A7C] mt-1">Empat mahasiswa yang membangun KosinAja dari nol</p>
         </div>
-        <div class="grid grid-cols-4 gap-3">
+        <div class="grid grid-cols-2 lg:grid-cols-4 gap-3">
             <div
                 class="bg-[#F5F4F0] border border-[#E2EAE3] rounded-xl p-5 text-center hover:-translate-y-1 transition-transform">
                 <div class="w-14 h-14 rounded-full flex items-center justify-center mx-auto mb-3 font-extrabold text-lg text-white"
@@ -236,7 +236,7 @@
     </div>
 
     {{-- CTA JOIN --}}
-    <div class="bg-white rounded-2xl border border-[#E2EAE3] p-8 flex items-center justify-between gap-8 mb-4">
+    <div class="bg-white rounded-2xl border border-[#E2EAE3] p-6 lg:p-8 flex flex-col lg:flex-row items-start lg:items-center justify-between gap-6 mb-4">
         <div class="flex-1">
             <h2 class="font-extrabold text-xl text-[#1F3A2C] mb-2">Bersama KosinAja, semua jadi lebih mudah!</h2>
             <p class="text-sm text-[#4A5E4C] leading-relaxed">Temukan kost impianmu atau kelola kostmu sekarang juga.
@@ -249,7 +249,7 @@
                 Daftarkan Kost Anda
             </a>
         </div>
-        <div>
+        <div class="hidden lg:block">
             <img src="{{ asset('daon (1).png') }}" alt="Ilustrasi" class="w-36 object-contain">
         </div>
     </div>

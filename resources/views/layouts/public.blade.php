@@ -415,7 +415,6 @@
     </footer>
 
     @include('auth.pilih-role')
-    </div>
 
     @stack('scripts')
 
