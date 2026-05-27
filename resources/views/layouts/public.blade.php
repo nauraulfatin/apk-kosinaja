@@ -97,32 +97,21 @@
 
 
             {{-- MOBILE MENU BUTTON --}}
-<button
-    onclick="toggleMobileMenu()"
-    class="lg:hidden
+            <button onclick="toggleMobileMenu()" class="lg:hidden
            w-10 h-10
            rounded-xl
            border border-gray-200
            flex items-center justify-center
-           text-[#314233]"
->
+           text-[#314233]">
 
-    <svg xmlns="http://www.w3.org/2000/svg"
-         class="w-5 h-5"
-         fill="none"
-         viewBox="0 0 24 24"
-         stroke="currentColor">
+                <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" fill="none" viewBox="0 0 24 24"
+                    stroke="currentColor">
 
-        <path
-            stroke-linecap="round"
-            stroke-linejoin="round"
-            stroke-width="2"
-            d="M4 6h16M4 12h16M4 18h16"
-        />
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
 
-    </svg>
+                </svg>
 
-</button>
+            </button>
             {{-- ACTION --}}
             <div class="hidden lg:flex items-center gap-4">
 
@@ -165,14 +154,17 @@
                         transition-all duration-200
                         overflow-hidden z-50">
 
-                        {{-- ============================================
-                             SUPER ADMIN
-                             ============================================ --}}
+                        {{-- SUPER ADMIN --}}
                         @if(auth()->user()->role === 'super admin')
 
                         <a href="{{ route('superadmin.profil') }}"
                             class="flex items-center gap-3 px-5 py-4 hover:bg-gray-50 transition">
                             <span class="font-medium">Profil Saya</span>
+                        </a>
+
+                        <a href="{{ route('superadmin.dashboard') }}"
+                            class="flex items-center gap-3 px-5 py-4 hover:bg-gray-50 transition">
+                            <span class="font-medium">Dashboard Super Admin</span>
                         </a>
 
 
@@ -190,13 +182,11 @@
                         @if(auth()->user()->status === 'aktif')
                         <a href="{{ route('admin.dashboard') }}"
                             class="flex items-center gap-3 px-5 py-4 hover:bg-gray-50 transition">
-                            <span class="font-medium">Dashboard Admin</span>
+                            <span class="font-medium">Dashboard Saya</span>
                         </a>
                         @endif
 
-                        {{-- ============================================
-                             PENGHUNI KOST
-                             ============================================ --}}
+                        {{-- PENGHUNI KOST --}}
                         @elseif(auth()->user()->role === 'penghuni kost')
 
                         <a href="{{ route('profil.index') }}"
@@ -204,6 +194,10 @@
                             <span class="font-medium">Profil Saya</span>
                         </a>
 
+                        <a href="{{ route('penghuni.dashboard') }}"
+                            class="flex items-center gap-3 px-5 py-4 hover:bg-gray-50 transition">
+                            <span class="font-medium">Dashboard Saya</span>
+                        </a>
 
 
                         @endif
@@ -253,73 +247,63 @@
 
     </nav>
     {{-- MOBILE MENU --}}
-<div
-    id="mobileMenu"
-    class="fixed top-[72px] left-0 right-0
+    <div id="mobileMenu" class="fixed top-[72px] left-0 right-0
            bg-white z-40
            border-b border-gray-100
            shadow-lg
-           hidden lg:hidden"
->
+           hidden lg:hidden">
 
-    <div class="px-5 py-6 flex flex-col gap-5">
+        <div class="px-5 py-6 flex flex-col gap-5">
 
-        <a href="{{ route('home') }}"
-           class="font-semibold text-[#314233]">
+            <a href="{{ route('home') }}" class="font-semibold text-[#314233]">
 
-            Beranda
+                Beranda
 
-        </a>
+            </a>
 
-        <a href="{{ route('tentang') }}"
-           class="font-semibold text-[#314233]">
+            <a href="{{ route('tentang') }}" class="font-semibold text-[#314233]">
 
-            Tentang
+                Tentang
 
-        </a>
+            </a>
 
-        <a href="{{ route('hubungi') }}"
-           class="font-semibold text-[#314233]">
+            <a href="{{ route('hubungi') }}" class="font-semibold text-[#314233]">
 
-            Hubungi
+                Hubungi
 
-        </a>
+            </a>
 
-        @guest
+            @guest
 
-        <div class="flex flex-col gap-3 pt-3">
+            <div class="flex flex-col gap-3 pt-3">
 
-            <a href="{{ route('login') }}"
-               class="w-full text-center
+                <a href="{{ route('login') }}" class="w-full text-center
                       px-4 py-3 rounded-2xl
                       border border-[#6C8B6B]
                       text-[#6C8B6B]
                       font-semibold">
 
-                Masuk
+                    Masuk
 
-            </a>
+                </a>
 
-            <button
-                onclick="bukaModal()"
-                class="w-full
+                <button onclick="bukaModal()" class="w-full
                        px-4 py-3 rounded-2xl
                        bg-[#6C8B6B]
                        text-white
-                       font-semibold"
-            >
+                       font-semibold">
 
-                Daftar
+                    Daftar
 
-            </button>
+                </button>
+
+            </div>
+
+            @endguest
 
         </div>
 
-        @endguest
-
     </div>
-
-</div>
 
     {{-- CONTENT --}}
     <main class="pt-[84px]">
@@ -327,7 +311,7 @@
     </main>
 
     {{-- FOOTER --}}
-    <footer class="bg-[#162818] mt-14 lg:mt-24 overflow-hidden relative">
+    <footer class="bg-[#162818] mt-14 lg:mt-24 overflow-hidden relative pb-0">
 
         <div class="absolute inset-0 opacity-30">
             <img src="{{ asset('footer.png') }}" class="w-full h-full object-cover" alt="">
@@ -338,7 +322,7 @@
         <div class="relative z-10
                     max-w-7xl mx-auto
                     px-4 lg:px-8
-                    py-12 lg:py-20">
+                    py-10 lg:py-20">
 
             <div class="grid lg:grid-cols-4 gap-10 lg:gap-14">
 
@@ -435,17 +419,14 @@
 
     @stack('scripts')
 
-<script>
-
-function toggleMobileMenu()
-{
-    document
-        .getElementById('mobileMenu')
-        .classList
-        .toggle('hidden');
-}
-
-</script>
+    <script>
+    function toggleMobileMenu() {
+        document
+            .getElementById('mobileMenu')
+            .classList
+            .toggle('hidden');
+    }
+    </script>
 </body>
 
 </html>

@@ -16,6 +16,7 @@ use App\Http\Controllers\PengajuanSewaController;
 use App\Http\Controllers\Admin\AduanAdminController;
 use App\Http\Controllers\Penghuni\AduanPenghuniController;
 use App\Http\Controllers\ProfilAdminController;
+use App\Http\Controllers\ContactController;
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\HomeController;
@@ -37,6 +38,9 @@ Route::get('/hubungi', [
     HomeController::class,
     'hubungi'
 ])->name('hubungi');
+
+// EMAIL
+Route::post('/hubungi', [ContactController::class, 'send'])->name('contact.send');
 
 /*
 |--------------------------------------------------------------------------

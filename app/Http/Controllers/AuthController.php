@@ -84,7 +84,7 @@ class AuthController extends Controller
             ->session()
             ->regenerateToken();
         return redirect()
-            ->route('login');
+            ->route('home');
     }
 
     //show force password

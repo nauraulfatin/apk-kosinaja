@@ -229,8 +229,8 @@
 
                     </label>
 
-                    <input type="text" name="username" value="{{ old('username') }}" placeholder="Masukkan username anda"
-                        class="w-full rounded-2xl
+                    <input type="text" name="username" value="{{ old('username') }}"
+                        placeholder="Masukkan username anda" class="w-full rounded-2xl
                                border border-[#E7E2DA]
                                bg-[#FCFBF8]
                                px-5 py-4
@@ -326,25 +326,25 @@
                 </div>
 
 
-                        {{-- REGISTER --}}
-                    <div class="text-center">
-                        <p class="text-gray-500">
-                            Belum punya akun?
-                            <button type="button" onclick="bukaModal()"
-                                class="text-[#6C8B6B] font-semibold hover:underline">
-                                Daftar Sekarang
-                            </button>
-                        </p>
-                    </div>
+                {{-- REGISTER --}}
+                <div class="text-center">
+                    <p class="text-gray-500">
+                        Belum punya akun?
+                        <button type="button" onclick="bukaModal()"
+                            class="text-[#6C8B6B] font-semibold hover:underline">
+                            Daftar Sekarang
+                        </button>
                     </p>
-
                 </div>
-
-            </form>
+                </p>
 
         </div>
 
+        </form>
+
     </div>
+
+</div>
 
 </div>
 

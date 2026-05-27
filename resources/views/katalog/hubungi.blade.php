@@ -191,54 +191,68 @@
         <p class="text-[0.78rem] text-[#7A8A7C] mb-5">Isi form di bawah dan kami akan membalas melalui email secepat
             mungkin.</p>
 
-        <div class="grid grid-cols-2 gap-3 mb-3">
-            <div class="flex flex-col gap-1.5">
-                <label for="f-nama" class="text-[0.72rem] font-semibold text-[#4A5E4C]"
-                    style="font-family:'Plus Jakarta Sans',sans-serif">Nama Lengkap</label>
-                <input type="text" id="f-nama" placeholder="Nama kamu"
-                    class="px-3.5 py-2.5 border border-[#E2EAE3] rounded-xl text-[0.78rem] text-[#1F3A2C] bg-white outline-none focus:border-[#5F8568] transition-colors">
+        @if(session('success'))
+        <div
+            class="mb-4 px-4 py-3 bg-[#eef4ef] border border-[#5F8568] rounded-xl text-[0.78rem] font-semibold text-[#5F8568]">
+            ✅ {{ session('success') }}
+        </div>
+        @endif
+
+        @if($errors->any())
+        <div class="mb-4 px-4 py-3 bg-red-50 border border-red-300 rounded-xl text-[0.78rem] text-red-600">
+            @foreach($errors->all() as $error)
+            <p>• {{ $error }}</p>
+            @endforeach
+        </div>
+        @endif
+
+        <form action="{{ route('contact.send') }}" method="POST">
+            @csrf
+
+            <div class="grid grid-cols-2 gap-3 mb-3">
+                <div class="flex flex-col gap-1.5">
+                    <label class="text-[0.72rem] font-semibold text-[#4A5E4C]"
+                        style="font-family:'Plus Jakarta Sans',sans-serif">Nama Lengkap</label>
+                    <input type="text" name="nama" value="{{ old('nama') }}" placeholder="Nama kamu"
+                        class="px-3.5 py-2.5 border border-[#E2EAE3] rounded-xl text-[0.78rem] text-[#1F3A2C] bg-white outline-none focus:border-[#5F8568] transition-colors">
+                </div>
+                <div class="flex flex-col gap-1.5">
+                    <label class="text-[0.72rem] font-semibold text-[#4A5E4C]"
+                        style="font-family:'Plus Jakarta Sans',sans-serif">Email</label>
+                    <input type="email" name="email" value="{{ old('email') }}" placeholder="email@kamu.com"
+                        class="px-3.5 py-2.5 border border-[#E2EAE3] rounded-xl text-[0.78rem] text-[#1F3A2C] bg-white outline-none focus:border-[#5F8568] transition-colors">
+                </div>
             </div>
-            <div class="flex flex-col gap-1.5">
-                <label for="f-email" class="text-[0.72rem] font-semibold text-[#4A5E4C]"
-                    style="font-family:'Plus Jakarta Sans',sans-serif">Email</label>
-                <input type="email" id="f-email" placeholder="email@kamu.com"
-                    class="px-3.5 py-2.5 border border-[#E2EAE3] rounded-xl text-[0.78rem] text-[#1F3A2C] bg-white outline-none focus:border-[#5F8568] transition-colors">
+
+            <div class="flex flex-col gap-1.5 mb-3">
+                <label class="text-[0.72rem] font-semibold text-[#4A5E4C]"
+                    style="font-family:'Plus Jakarta Sans',sans-serif">Topik</label>
+                <select name="topik"
+                    class="px-3.5 py-2.5 border border-[#E2EAE3] rounded-xl text-[0.78rem] text-[#1F3A2C] bg-white outline-none focus:border-[#5F8568] transition-colors appearance-none cursor-pointer">
+                    <option value="">Pilih topik...</option>
+                    <option {{ old('topik') == 'Pencarian Kos' ? 'selected' : '' }}>Pencarian Kos</option>
+                    <option {{ old('topik') == 'Daftarkan Kos Saya' ? 'selected' : '' }}>Daftarkan Kos Saya</option>
+                    <option {{ old('topik') == 'Masalah Akun' ? 'selected' : '' }}>Masalah Akun</option>
+                    <option {{ old('topik') == 'Laporan Bug' ? 'selected' : '' }}>Laporan Bug</option>
+                    <option {{ old('topik') == 'Lainnya' ? 'selected' : '' }}>Lainnya</option>
+                </select>
             </div>
-        </div>
 
-        <div class="flex flex-col gap-1.5 mb-3">
-            <label for="f-topik" class="text-[0.72rem] font-semibold text-[#4A5E4C]"
-                style="font-family:'Plus Jakarta Sans',sans-serif">Topik</label>
-            <select id="f-topik"
-                class="px-3.5 py-2.5 border border-[#E2EAE3] rounded-xl text-[0.78rem] text-[#1F3A2C] bg-white outline-none focus:border-[#5F8568] transition-colors appearance-none cursor-pointer">
-                <option value="">Pilih topik...</option>
-                <option>Pencarian Kos</option>
-                <option>Daftarkan Kos Saya</option>
-                <option>Masalah Akun</option>
-                <option>Laporan Bug</option>
-                <option>Lainnya</option>
-            </select>
-        </div>
+            <div class="flex flex-col gap-1.5 mb-5">
+                <label class="text-[0.72rem] font-semibold text-[#4A5E4C]"
+                    style="font-family:'Plus Jakarta Sans',sans-serif">Pesan</label>
+                <textarea name="pesan" rows="3" placeholder="Tulis pesanmu di sini..."
+                    class="px-3.5 py-2.5 border border-[#E2EAE3] rounded-xl text-[0.78rem] text-[#1F3A2C] bg-white outline-none focus:border-[#5F8568] transition-colors resize-y">{{ old('pesan') }}</textarea>
+            </div>
 
-        <div class="flex flex-col gap-1.5 mb-5">
-            <label for="f-pesan" class="text-[0.72rem] font-semibold text-[#4A5E4C]"
-                style="font-family:'Plus Jakarta Sans',sans-serif">Pesan</label>
-            <textarea id="f-pesan" rows="3" placeholder="Tulis pesanmu di sini..."
-                class="px-3.5 py-2.5 border border-[#E2EAE3] rounded-xl text-[0.78rem] text-[#1F3A2C] bg-white outline-none focus:border-[#5F8568] transition-colors resize-y"></textarea>
-        </div>
-
-        <div class="flex items-center gap-3 flex-wrap">
-            <button onclick="kirimPesan()"
+            <button type="submit"
                 class="inline-flex items-center gap-2 px-5 py-2.5 bg-[#5F8568] hover:bg-[#4e7057] text-white rounded-xl font-bold text-[0.78rem] transition-colors cursor-pointer border-0">
                 <svg class="w-4 h-4 fill-white" viewBox="0 0 24 24">
                     <path d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z" />
                 </svg>
                 Kirim Pesan
             </button>
-            <span id="form-success" class="hidden text-[0.75rem] font-semibold text-[#5F8568]">
-                ✅ Membuka aplikasi email kamu...
-            </span>
-        </div>
+        </form>
     </div>
 
     {{-- BANTUAN WHATSAPP --}}
@@ -264,70 +278,62 @@
                     </svg>
                     Chat WhatsApp
                 </a>
-                <a href="mailto:twoorbital@gmail.com"
-                    class="inline-flex items-center gap-2 px-5 py-2.5 bg-transparent border-2 border-[#5F8568] text-[#5F8568] hover:bg-[#5F8568] hover:text-white rounded-xl font-bold text-[0.78rem] transition-colors no-underline group">
-                    <svg class="w-4 h-4 fill-[#5F8568] group-hover:fill-white transition-colors" viewBox="0 0 24 24">
-                        <path
-                            d="M20 4H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z" />
-                    </svg>
-                    Kirim Email
-                </a>
+
             </div>
         </div>
+
     </div>
 
-</div>
+    <script>
+    function toggleFaq(btn) {
+        const item = btn.parentElement;
+        const answer = item.querySelector('.faq-answer');
+        const icon = btn.querySelector('.faq-icon');
+        const arrow = btn.querySelector('.faq-arrow');
+        const isOpen = item.dataset.open === '1';
 
-<script>
-function toggleFaq(btn) {
-    const item = btn.parentElement;
-    const answer = item.querySelector('.faq-answer');
-    const icon = btn.querySelector('.faq-icon');
-    const arrow = btn.querySelector('.faq-arrow');
-    const isOpen = item.dataset.open === '1';
+        document.querySelectorAll('.faq-item').forEach(el => {
+            el.dataset.open = '0';
+            el.querySelector('.faq-answer').style.maxHeight = '0';
+            el.querySelector('.faq-icon').style.background = '#f0f5f1';
+            el.querySelector('.faq-arrow').style.transform = '';
+            el.querySelector('.faq-arrow').style.fill = '#5F8568';
+        });
 
-    document.querySelectorAll('.faq-item').forEach(el => {
-        el.dataset.open = '0';
-        el.querySelector('.faq-answer').style.maxHeight = '0';
-        el.querySelector('.faq-icon').style.background = '#f0f5f1';
-        el.querySelector('.faq-arrow').style.transform = '';
-        el.querySelector('.faq-arrow').style.fill = '#5F8568';
-    });
-
-    if (!isOpen) {
-        item.dataset.open = '1';
-        answer.style.maxHeight = answer.scrollHeight + 'px';
-        icon.style.background = '#5F8568';
-        arrow.style.transform = 'rotate(180deg)';
-        arrow.style.fill = '#fff';
-    }
-}
-
-function kirimPesan() {
-    const nama = document.getElementById('f-nama').value.trim();
-    const email = document.getElementById('f-email').value.trim();
-    const topik = document.getElementById('f-topik').value;
-    const pesan = document.getElementById('f-pesan').value.trim();
-
-    if (!nama || !email || !pesan) {
-        alert('Mohon isi nama, email, dan pesan terlebih dahulu.');
-        return;
+        if (!isOpen) {
+            item.dataset.open = '1';
+            answer.style.maxHeight = answer.scrollHeight + 'px';
+            icon.style.background = '#5F8568';
+            arrow.style.transform = 'rotate(180deg)';
+            arrow.style.fill = '#fff';
+        }
     }
 
-    const subject = encodeURIComponent('Pesan dari KosinAja' + (topik ? ' \u2013 ' + topik : ''));
-    const body = encodeURIComponent(
-        'Nama: ' + nama + '\n' +
-        'Email: ' + email + '\n' +
-        (topik ? 'Topik: ' + topik + '\n' : '') +
-        '\nPesan:\n' + pesan
-    );
+    function kirimPesan() {
+        const nama = document.getElementById('f-nama').value.trim();
+        const email = document.getElementById('f-email').value.trim();
+        const topik = document.getElementById('f-topik').value;
+        const pesan = document.getElementById('f-pesan').value.trim();
 
-    window.location.href = 'mailto:twoorbital@gmail.com?subject=' + subject + '&body=' + body;
+        if (!nama || !email || !pesan) {
+            alert('Mohon isi nama, email, dan pesan terlebih dahulu.');
+            return;
+        }
 
-    const status = document.getElementById('form-success');
-    status.classList.remove('hidden');
-    setTimeout(() => status.classList.add('hidden'), 4000);
-}
-</script>
+        const subject = encodeURIComponent('Pesan dari KosinAja' + (topik ? ' \u2013 ' + topik : ''));
+        const body = encodeURIComponent(
+            'Nama: ' + nama + '\n' +
+            'Email: ' + email + '\n' +
+            (topik ? 'Topik: ' + topik + '\n' : '') +
+            '\nPesan:\n' + pesan
+        );
 
-@endsection
+        window.location.href = 'mailto:twoorbital@gmail.com?subject=' + subject + '&body=' + body;
+
+        const status = document.getElementById('form-success');
+        status.classList.remove('hidden');
+        setTimeout(() => status.classList.add('hidden'), 4000);
+    }
+    </script>
+
+    @endsection

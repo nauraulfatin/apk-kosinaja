@@ -45,17 +45,28 @@
     object-fit: cover;
     object-position: center top;
     z-index: 0;
+    filter: brightness(1.25) saturate(1.05);
 }
 
 .hero-overlay {
     position: absolute;
     inset: 0;
-    background: linear-gradient(105deg,
-            rgba(12, 26, 15, 0.55) 0%,
-            rgba(15, 32, 18, 0.35) 35%,
-            rgba(15, 32, 18, 0.06) 58%,
-            rgba(15, 32, 18, 0.0) 100%);
     z-index: 1;
+    background: linear-gradient(to right,
+            rgba(8, 20, 10, 0.55) 0%,
+            rgba(8, 20, 10, 0.35) 35%,
+            rgba(8, 20, 10, 0.10) 58%,
+            rgba(8, 20, 10, 0.00) 80%);
+}
+
+.hero-overlay::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(to top,
+            rgba(8, 20, 10, 0.18) 0%,
+            rgba(8, 20, 10, 0.04) 22%,
+            transparent 48%);
 }
 
 .hero-content {
@@ -225,6 +236,51 @@
     50% {
         transform: translateY(-10px);
     }
+}
+
+/* ── CTA Button Hero ── */
+.hero-cta-group {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    flex-wrap: wrap;
+    margin-bottom: 28px;
+}
+
+.btn-hero-primary {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 14px 28px;
+    background: #5F8568;
+    color: #fff;
+    border: none;
+    border-radius: 16px;
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    font-weight: 700;
+    font-size: 0.98rem;
+    text-decoration: none;
+    cursor: pointer;
+    transition: all 0.28s ease;
+    box-shadow: 0 6px 24px rgba(31, 58, 44, 0.40);
+}
+
+.btn-hero-primary:hover {
+    background: #4a6e52;
+    transform: translateY(-2px);
+    box-shadow: 0 12px 36px rgba(31, 58, 44, 0.50);
+    color: #fff;
+}
+
+.btn-hero-primary svg {
+    width: 18px;
+    height: 18px;
+    fill: currentColor;
+    transition: transform 0.2s ease;
+}
+
+.btn-hero-primary:hover svg {
+    transform: translateX(3px);
 }
 
 .float-icon {
@@ -532,6 +588,7 @@
     color: rgba(255, 255, 255, .58);
 }
 
+
 /* ─── FASILITAS ───────────────────────────────── */
 .fac-section {
     padding: 64px 0;
@@ -815,6 +872,217 @@
     transform: translateY(-2px);
 }
 
+
+/* ─── CARA KERJA ─────────────────────────────── */
+.how-section {
+    padding: 80px 0;
+    background: #fff;
+}
+
+.how-grid {
+    display: grid;
+    grid-template-columns: 1fr 24px 1fr 24px 1fr 24px 1fr;
+    gap: 0 8px;
+    align-items: center;
+}
+
+.how-card {
+    background: transparent;
+    border: 1.5px solid var(--border-soft);
+    border-radius: 24px;
+    padding: 28px 24px 26px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    transition: all 0.25s ease;
+    position: relative;
+    z-index: 1;
+    cursor: default;
+}
+
+.how-card:hover {
+    background: var(--green-mid);
+    border-color: var(--green-mid);
+    transform: translateY(-5px);
+    box-shadow: 0 16px 40px rgba(31, 58, 44, 0.18);
+}
+
+.how-card:hover .how-step-num {
+    color: rgba(255, 255, 255, 0.50);
+}
+
+.how-card:hover .how-title {
+    color: #fff;
+}
+
+.how-card:hover .how-desc {
+    color: rgba(255, 255, 255, 0.75);
+}
+
+.how-card:hover .how-icon-wrap {
+    background: rgba(255, 255, 255, 0.15) !important;
+}
+
+.how-card:hover .how-icon-wrap svg {
+    stroke: #fff;
+}
+
+.how-card:hover .how-cta {
+    border-color: rgba(255, 255, 255, 0.50);
+    color: #fff;
+}
+
+.how-card:hover .how-cta:hover {
+    background: rgba(255, 255, 255, 0.20);
+}
+
+.how-card--highlight {
+    background: var(--green-mid);
+    border-color: var(--green-mid);
+}
+
+.how-card--highlight .how-step-num {
+    color: rgba(255, 255, 255, 0.45);
+}
+
+.how-icon-wrap {
+    width: 52px;
+    height: 52px;
+    border-radius: 16px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 4px;
+}
+
+.how-icon-wrap svg {
+    width: 26px;
+    height: 26px;
+}
+
+.how-step-num {
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    font-size: 0.72rem;
+    font-weight: 800;
+    letter-spacing: 1.5px;
+    color: var(--green-cta);
+    text-transform: uppercase;
+}
+
+.how-title {
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    font-size: 1rem;
+    font-weight: 800;
+    color: var(--green-dark);
+    line-height: 1.3;
+    margin: 0;
+}
+
+.how-desc {
+    font-size: 0.82rem;
+    color: var(--text-muted);
+    line-height: 1.7;
+    margin: 0;
+}
+
+.how-cta {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    margin-top: 8px;
+    padding: 8px 16px;
+    font-size: 0.80rem;
+    font-weight: 700;
+    color: var(--green-mid);
+    text-decoration: none;
+    border: 1.5px solid var(--green-mid);
+    border-radius: 10px;
+    background: transparent;
+    transition: all 0.22s ease;
+    touch-action: manipulation;
+    cursor: pointer;
+    width: fit-content;
+}
+
+.how-cta:hover {
+    background: var(--green-mid);
+    color: #fff;
+    gap: 10px;
+}
+
+.how-arrow {
+    text-align: center;
+    font-size: 1.2rem;
+    color: #C5D5C7;
+    font-weight: 300;
+    user-select: none;
+}
+
+@media (max-width: 768px) {
+    .how-grid {
+        grid-template-columns: 1fr;
+        gap: 12px;
+    }
+
+    .how-arrow {
+        display: none;
+    }
+
+    .how-card {
+        padding: 22px 20px;
+        flex-direction: row;
+        align-items: flex-start;
+        gap: 16px;
+    }
+
+    .how-icon-wrap {
+        flex-shrink: 0;
+        width: 44px;
+        height: 44px;
+        border-radius: 14px;
+        margin-bottom: 0;
+    }
+
+    .how-icon-wrap svg {
+        width: 22px;
+        height: 22px;
+    }
+
+    .how-card>div:not(.how-icon-wrap) {
+        display: contents;
+    }
+
+    .how-step-num {
+        order: -1;
+    }
+
+    .how-cta {
+        display: inline-flex;
+        margin-top: 4px;
+        padding: 8px 16px;
+        background: var(--green-mid);
+        color: #fff;
+        border-radius: 10px;
+        font-size: 0.78rem;
+        font-weight: 700;
+        text-decoration: none;
+        width: fit-content;
+        -webkit-tap-highlight-color: rgba(0, 0, 0, 0.1);
+        touch-action: manipulation;
+    }
+
+    .how-cta:hover,
+    .how-cta:active {
+        background: var(--green-dark);
+        gap: 8px;
+    }
+
+    .how-card--highlight .how-cta {
+        background: rgba(255, 255, 255, 0.2);
+        border: 1px solid rgba(255, 255, 255, 0.4);
+    }
+}
+
 /* ═══════════════════════════════════════════════════
    RESPONSIVE — MOBILE (≤768px)
 ═══════════════════════════════════════════════════ */
@@ -838,10 +1106,10 @@
 
     /* Overlay kuat di kiri-atas supaya teks jelas terbaca */
     .hero-overlay {
-        background: linear-gradient(120deg,
-                rgba(12, 26, 15, 0.82) 0%,
-                rgba(12, 26, 15, 0.55) 45%,
-                rgba(12, 26, 15, 0.14) 100%);
+        background: linear-gradient(to right,
+                rgba(8, 20, 10, 0.68) 0%,
+                rgba(8, 20, 10, 0.40) 50%,
+                rgba(8, 20, 10, 0.08) 100%);
     }
 
     .hero-content {
@@ -861,7 +1129,7 @@
 
     /* Judul: BESAR & bold — kontras tinggi vs paragraf */
     .hero-content h1 {
-        font-size: clamp(5.2rem, 14vw, 8rem);
+        font-size: clamp(2rem, 8vw, 2.8rem);
         font-weight: 900;
         line-height: 0.98;
         letter-spacing: -0.5px;
@@ -876,7 +1144,7 @@
         font-size: 0.74rem;
         font-weight: 400;
         line-height: 1.7;
-        color: rgba(255, 255, 255, 0.72);
+        color: rgba(255, 255, 255, 0.78);
         margin-bottom: 12px;
         max-width: 250px;
     }
@@ -1220,23 +1488,13 @@
 
     {{-- Konten teks kiri --}}
     <div class="hero-content">
-        <div class="hero-badge">🌿 Bingung nyari kos? Yuuk cari di KosinAja!</div>
+        <div class="hero-badge">🌿 Bingung nyari kos? Yuk cari di KosinAja!</div>
 
         <h1>Cari Kos Jadi <em>Lebih Mudah</em> & Nyaman</h1>
 
-        <p>Jelajahi pilihan kos terbaik dan lihat detail lengkap sebelum memilih. Cepat, mudah, dan terpercaya.</p>
-
-        <form action="{{ route('katalog') }}" method="GET">
-            <div class="hero-search">
-                <svg viewBox="0 0 24 24">
-                    <path
-                        d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5S10.62 6.5 12 6.5 14.5 7.62 14.5 9 13.38 11.5 12 11.5z" />
-                </svg>
-                <input type="text" name="search" placeholder="Cari kos di kota atau daerah..."
-                    value="{{ request('search') }}">
-                <button type="submit">Jelajahi Sekarang</button>
-            </div>
-        </form>
+        <p>Temukan kos impianmu dengan mudah dan cepat. Kami menyediakan pilihan kos terbaik dengan informasi lengkap —
+            foto asli, harga transparan, fasilitas jelas, dan lokasi akurat. Tidak perlu repot survey ke sana-sini,
+            cukup buka KosinAja dan temukan kos yang pas untuk kamu!</p>
 
         <div class="hero-trust">
             <span>✓ Informasi Lengkap</span>
@@ -1265,6 +1523,90 @@
     </div>
 </div>
 
+{{-- ══════════════════ CARA KERJA ══════════════════ --}}
+<section class="how-section">
+    <div class="container">
+
+        <div style="text-align:center;margin-bottom:56px;">
+            <div class="sec-label">🌿 Cara Kerja</div>
+            <h2 class="sec-title">Mudah dalam 4 Langkah</h2>
+            <p class="sec-sub">Dari cari hingga tinggal — semua bisa dilakukan dari sini</p>
+        </div>
+
+        <div class="how-grid">
+
+            {{-- Step 1 --}}
+            <div class="how-card">
+                <div class="how-icon-wrap" style="background:#E8F4EC;">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="#284535" stroke-width="1.8" stroke-linecap="round"
+                        stroke-linejoin="round">
+                        <path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z" />
+                        <polyline points="9 22 9 12 15 12 15 22" />
+                    </svg>
+                </div>
+                <div class="how-step-num">01</div>
+                <h4 class="how-title">Lihat Pilihan Kost</h4>
+                <p class="how-desc">Jelajahi daftar kost tersedia lengkap dengan foto, fasilitas, harga, dan lokasi yang
+                    sudah terverifikasi.</p>
+            </div>
+
+            <div class="how-arrow">→</div>
+
+            {{-- Step 2 --}}
+            <div class="how-card">
+                <div class="how-icon-wrap" style="background:#EEF4EF;">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="#284535" stroke-width="1.8" stroke-linecap="round"
+                        stroke-linejoin="round">
+                        <rect x="3" y="3" width="18" height="14" rx="2" />
+                        <path d="M3 9h18" />
+                        <path d="M9 21h6" />
+                        <path d="M12 17v4" />
+                    </svg>
+                </div>
+                <div class="how-step-num">02</div>
+                <h4 class="how-title">Lihat Detail & Foto</h4>
+                <p class="how-desc">Cek foto asli, fasilitas lengkap, harga transparan, dan lokasi kos langsung di peta
+                    sebelum memutuskan.</p>
+            </div>
+
+            <div class="how-arrow">→</div>
+
+            {{-- Step 3 --}}
+            <div class="how-card">
+                <div class="how-icon-wrap" style="background:#E8F4EC;">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="#284535" stroke-width="1.8" stroke-linecap="round"
+                        stroke-linejoin="round">
+                        <path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z" />
+                        <path d="M8 10h8M8 14h5" />
+                    </svg>
+                </div>
+                <div class="how-step-num">03</div>
+                <h4 class="how-title">Hubungi Pemilik</h4>
+                <p class="how-desc">Langsung hubungi pemilik kos via WhatsApp untuk tanya-tanya atau jadwalkan kunjungan
+                    ke lokasi.</p>
+            </div>
+
+            <div class="how-arrow">→</div>
+
+            {{-- Step 4 --}}
+            <div class="how-card how-card--highlight">
+                <div class="how-icon-wrap" style="background:rgba(255,255,255,0.15);">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="1.8" stroke-linecap="round"
+                        stroke-linejoin="round">
+                        <path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z" />
+                        <polyline points="9 22 9 12 15 12 15 22" />
+                    </svg>
+                </div>
+                <div class="how-step-num" style="color:rgba(255,255,255,0.45);">04</div>
+                <h4 class="how-title" style="color:#fff;">Tinggal & Nikmati</h4>
+                <p class="how-desc" style="color:rgba(255,255,255,0.75);">Setelah deal, kamu tinggal pindah dan nikmati
+                    kos barumu. Semudah itu!</p>
+            </div>
+
+        </div>
+    </div>
+</section>
+
 {{-- ══════════════════ REKOMENDASI KOS ══════════════════ --}}
 <section class="rekom-section">
     <div class="container">
@@ -1278,7 +1620,6 @@
                     lokasi strategis, dan harga terbaik untuk kebutuhanmu.
                 </p>
             </div>
-            <a href="{{ route('katalog') }}" class="btn-lihat-semua">Lihat Semua →</a>
         </div>
 
         <div class="kos-grid">
@@ -1515,6 +1856,8 @@
 
     </div>
 </section>
+
+
 
 {{-- ══════════════════ KEUNGGULAN KAMI ══════════════════ --}}
 <section class="why-section">
