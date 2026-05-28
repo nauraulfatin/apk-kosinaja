@@ -30,6 +30,77 @@
     h6 {
         font-family: 'Plus Jakarta Sans', sans-serif;
     }
+    /* ───────────────── MOBILE FOOTER ───────────────── */
+@media (max-width: 768px) {
+
+    footer {
+        margin-top: 40px !important;
+    }
+
+    footer .relative.z-10 {
+        padding-top: 38px !important;
+        padding-bottom: 22px !important;
+    }
+
+    footer .grid {
+        gap: 28px !important;
+    }
+
+    /* LOGO */
+    footer img {
+        width: 36px !important;
+        height: 36px !important;
+    }
+
+    footer h2 {
+        font-size: 1.45rem !important;
+    }
+
+    /* TITLE */
+    footer h3 {
+        font-size: 0.95rem !important;
+        margin-bottom: 12px !important;
+    }
+
+    /* TEXT */
+    footer p,
+    footer a {
+        font-size: 0.8rem !important;
+        line-height: 1.6 !important;
+    }
+
+    /* NAV MENU */
+    footer .flex.flex-col.gap-4 {
+        gap: 10px !important;
+    }
+
+    /* CONTACT */
+    footer .space-y-5 {
+        gap: 14px !important;
+    }
+
+    /* ICON BOX */
+    footer .w-10.h-10 {
+        width: 34px !important;
+        height: 34px !important;
+        border-radius: 10px !important;
+    }
+
+    footer svg {
+        width: 17px !important;
+        height: 17px !important;
+    }
+
+    /* COPYRIGHT */
+    footer .border-t {
+        margin-top: 24px !important;
+        padding-top: 16px !important;
+    }
+
+    footer .border-t p {
+        font-size: 0.72rem !important;
+    }
+}
     </style>
 
     @yield('styles')
@@ -113,135 +184,192 @@
 
             </button>
             {{-- ACTION --}}
-            <div class="hidden lg:flex items-center gap-4">
+<div class="hidden lg:flex items-center gap-4">
 
-                @auth
+    @auth
 
-                {{-- PROFILE DROPDOWN --}}
-                <div class="relative group">
+    {{-- PROFILE DROPDOWN --}}
+    <div class="relative group">
 
-                    <button class="flex items-center gap-3">
+        <button class="flex items-center gap-3">
 
-                        {{-- FOTO --}}
-                        <div class="w-11 h-11 rounded-full
-                            overflow-hidden border-2
-                            border-[#6C8B6B]">
-                            <img src="https://ui-avatars.com/api/?name={{ auth()->user()->nama }}"
-                                class="w-full h-full object-cover">
-                        </div>
+            {{-- FOTO --}}
+            <div class="w-11 h-11 rounded-full
+                        overflow-hidden border-2
+                        border-[#6C8B6B]">
 
-                        {{-- NAMA --}}
-                        <div class="hidden md:block text-left">
-                            <p class="text-sm text-gray-400">Halo,</p>
-                            <h4 class="font-semibold text-[#1B2B1D]">{{ auth()->user()->nama }}</h4>
-                        </div>
-
-                        {{-- ICON --}}
-                        <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 text-gray-500" fill="none"
-                            viewBox="0 0 24 24" stroke="currentColor">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
-                        </svg>
-
-                    </button>
-
-                    {{-- DROPDOWN --}}
-                    <div class="absolute right-0 mt-4
-                        w-64 bg-white rounded-2xl
-                        shadow-xl border border-gray-100
-                        opacity-0 invisible
-                        group-hover:opacity-100
-                        group-hover:visible
-                        transition-all duration-200
-                        overflow-hidden z-50">
-
-                        {{-- SUPER ADMIN --}}
-                        @if(auth()->user()->role === 'super admin')
-
-                        <a href="{{ route('superadmin.profil') }}"
-                            class="flex items-center gap-3 px-5 py-4 hover:bg-gray-50 transition">
-                            <span class="font-medium">Profil Saya</span>
-                        </a>
-
-                        <a href="{{ route('superadmin.dashboard') }}"
-                            class="flex items-center gap-3 px-5 py-4 hover:bg-gray-50 transition">
-                            <span class="font-medium">Dashboard Super Admin</span>
-                        </a>
-
-
-
-                        {{-- ============================================
-                             ADMIN KOST
-                             ============================================ --}}
-                        @elseif(auth()->user()->role === 'admin kost')
-
-                        <a href="{{ route('admin.profil.index') }}"
-                            class="flex items-center gap-3 px-5 py-4 hover:bg-gray-50 transition">
-                            <span class="font-medium">Profil Saya</span>
-                        </a>
-
-                        @if(auth()->user()->status === 'aktif')
-                        <a href="{{ route('admin.dashboard') }}"
-                            class="flex items-center gap-3 px-5 py-4 hover:bg-gray-50 transition">
-                            <span class="font-medium">Dashboard Saya</span>
-                        </a>
-                        @endif
-
-                        {{-- PENGHUNI KOST --}}
-                        @elseif(auth()->user()->role === 'penghuni kost')
-
-                        <a href="{{ route('profil.index') }}"
-                            class="flex items-center gap-3 px-5 py-4 hover:bg-gray-50 transition">
-                            <span class="font-medium">Profil Saya</span>
-                        </a>
-
-                        <a href="{{ route('penghuni.dashboard') }}"
-                            class="flex items-center gap-3 px-5 py-4 hover:bg-gray-50 transition">
-                            <span class="font-medium">Dashboard Saya</span>
-                        </a>
-
-
-                        @endif
-
-                        {{-- LOGOUT (semua role) --}}
-                        <form method="POST" action="{{ route('logout') }}">
-                            @csrf
-                            <button type="submit" class="w-full text-left
-                                       flex items-center gap-3
-                                       px-5 py-4 hover:bg-red-50
-                                       text-red-500 transition">
-                                <span class="font-medium">Logout</span>
-                            </button>
-                        </form>
-
-                    </div>
-
-                </div>
-
-                @else
-
-                {{-- MASUK --}}
-                <a href="{{ route('login') }}" class="px-4 py-2.5 lg:px-6 lg:py-3 text-sm lg:text-base rounded-2xl
-                   border border-[#6C8B6B]
-                   text-[#6C8B6B]
-                   font-semibold
-                   hover:bg-[#6C8B6B]
-                   hover:text-white
-                   transition-all duration-200">
-                    Masuk
-                </a>
-
-                {{-- DAFTAR --}}
-                <button onclick="bukaModal()" class="px-4 py-2.5 lg:px-6 lg:py-3 text-sm lg:text-base rounded-2xl
-                   bg-[#6C8B6B]
-                   hover:bg-[#587357]
-                   text-white font-semibold
-                   transition-all duration-200">
-                    Daftar
-                </button>
-
-                @endauth
+                <img src="https://ui-avatars.com/api/?name={{ auth()->user()->nama }}"
+                    class="w-full h-full object-cover">
 
             </div>
+
+            {{-- NAMA --}}
+            <div class="hidden md:block text-left">
+
+                <p class="text-sm text-gray-400">
+                    Halo,
+                </p>
+
+                <h4 class="font-semibold text-[#1B2B1D]">
+                    {{ auth()->user()->nama }}
+                </h4>
+
+            </div>
+
+            {{-- ICON --}}
+            <svg xmlns="http://www.w3.org/2000/svg"
+                class="w-4 h-4 text-gray-500"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor">
+
+                <path stroke-linecap="round"
+                    stroke-linejoin="round"
+                    stroke-width="2"
+                    d="M19 9l-7 7-7-7" />
+
+            </svg>
+
+        </button>
+
+        {{-- DROPDOWN --}}
+        <div class="absolute right-0 mt-4
+                    w-64 bg-white rounded-2xl
+                    shadow-xl border border-gray-100
+                    opacity-0 invisible
+                    group-hover:opacity-100
+                    group-hover:visible
+                    transition-all duration-200
+                    overflow-hidden z-50">
+
+            {{-- SUPER ADMIN --}}
+            @if(auth()->user()->role === 'super admin')
+
+            <a href="{{ route('superadmin.profil') }}"
+                class="flex items-center gap-3 px-5 py-4 hover:bg-gray-50 transition">
+
+                <span class="font-medium">
+                    Profil Saya
+                </span>
+
+            </a>
+
+            <a href="{{ route('superadmin.dashboard') }}"
+                class="flex items-center gap-3 px-5 py-4 hover:bg-gray-50 transition">
+
+                <span class="font-medium">
+                    Dashboard Super Admin
+                </span>
+
+            </a>
+
+            {{-- ADMIN KOST --}}
+            @elseif(auth()->user()->role === 'admin kost')
+
+            <a href="{{ route('admin.profil.index') }}"
+                class="flex items-center gap-3 px-5 py-4 hover:bg-gray-50 transition">
+
+                <span class="font-medium">
+                    Profil Saya
+                </span>
+
+            </a>
+
+            @if(auth()->user()->status === 'aktif')
+
+            <a href="{{ route('admin.dashboard') }}"
+                class="flex items-center gap-3 px-5 py-4 hover:bg-gray-50 transition">
+
+                <span class="font-medium">
+                    Dashboard Saya
+                </span>
+
+            </a>
+
+            @endif
+
+            {{-- PENGHUNI --}}
+            @elseif(auth()->user()->role === 'penghuni kost')
+
+            <a href="{{ route('profil.index') }}"
+                class="flex items-center gap-3 px-5 py-4 hover:bg-gray-50 transition">
+
+                <span class="font-medium">
+                    Profil Saya
+                </span>
+
+            </a>
+
+            @if(auth()->user()->riwayatHunian()->where('status', 'aktif')->exists())
+
+            <a href="{{ route('penghuni.dashboard') }}"
+                class="flex items-center gap-3 px-5 py-4 hover:bg-gray-50 transition">
+
+                <span class="font-medium">
+                    Dashboard Saya
+                </span>
+
+            </a>
+
+            @endif
+
+            @endif
+
+            {{-- LOGOUT --}}
+            <form method="POST"
+                action="{{ route('logout') }}">
+
+                @csrf
+
+                <button type="submit"
+                    class="w-full text-left
+                           flex items-center gap-3
+                           px-5 py-4 hover:bg-red-50
+                           text-red-500 transition">
+
+                    <span class="font-medium">
+                        Logout
+                    </span>
+
+                </button>
+
+            </form>
+
+        </div>
+
+    </div>
+
+    @else
+
+    {{-- MASUK --}}
+    <a href="{{ route('login') }}"
+        class="px-4 py-2.5 lg:px-6 lg:py-3 text-sm lg:text-base rounded-2xl
+               border border-[#6C8B6B]
+               text-[#6C8B6B]
+               font-semibold
+               hover:bg-[#6C8B6B]
+               hover:text-white
+               transition-all duration-200">
+
+        Masuk
+
+    </a>
+
+    {{-- DAFTAR --}}
+    <button onclick="bukaModal()"
+        class="px-4 py-2.5 lg:px-6 lg:py-3 text-sm lg:text-base rounded-2xl
+               bg-[#6C8B6B]
+               hover:bg-[#587357]
+               text-white font-semibold
+               transition-all duration-200">
+
+        Daftar
+
+    </button>
+
+    @endauth
+
+</div>
 
         </div>
 

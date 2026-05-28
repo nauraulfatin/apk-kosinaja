@@ -1021,7 +1021,7 @@
 @media (max-width: 768px) {
     .how-grid {
         grid-template-columns: 1fr;
-        gap: 12px;
+        gap: 10px;
     }
 
     .how-arrow {
@@ -1029,41 +1029,51 @@
     }
 
     .how-card {
-        padding: 22px 20px;
+        padding: 16px 14px;
+        border-radius: 18px;
         flex-direction: row;
         align-items: flex-start;
-        gap: 16px;
+        gap: 12px;
     }
 
     .how-icon-wrap {
         flex-shrink: 0;
-        width: 44px;
-        height: 44px;
-        border-radius: 14px;
+        width: 38px;
+        height: 38px;
+        border-radius: 12px;
         margin-bottom: 0;
     }
 
     .how-icon-wrap svg {
-        width: 22px;
-        height: 22px;
+        width: 18px;
+        height: 18px;
+    }
+     .how-step-num {
+        font-size: 0.62rem;
+        letter-spacing: 1px;
+    }
+        .how-title {
+        font-size: 0.86rem;
+        line-height: 1.3;
+    }
+
+    .how-desc {
+        font-size: 0.72rem;
+        line-height: 1.5;
     }
 
     .how-card>div:not(.how-icon-wrap) {
         display: contents;
     }
 
-    .how-step-num {
-        order: -1;
-    }
-
     .how-cta {
         display: inline-flex;
         margin-top: 4px;
-        padding: 8px 16px;
+        padding: 6px 12px;
         background: var(--green-mid);
         color: #fff;
-        border-radius: 10px;
-        font-size: 0.78rem;
+        border-radius: 8px;
+        font-size: 0.72rem;
         font-weight: 700;
         text-decoration: none;
         width: fit-content;
@@ -1091,8 +1101,8 @@
     /* ── Hero: tata letak teks di kiri atas, tinggi menyesuaikan konten ── */
     .hero {
         /* Bukan 100svh lagi — cukup muat konten tanpa sisa ruang berlebih */
-        min-height: auto;
-        height: auto;
+        min-height: 60svh;
+        height: 60svh;
         align-items: flex-start;
     }
 
@@ -1114,7 +1124,7 @@
 
     .hero-content {
         /* top = navbar (~64px) + 10px, bawah ramping */
-        padding: 48px 5% 24px;
+        padding: 70px 5% 40px;
         max-width: 100%;
         margin-left: 0;
         width: 100%;
@@ -1123,7 +1133,7 @@
     .hero-badge {
         font-size: 0.68rem;
         padding: 8px 10px;
-        margin-bottom: 8px;
+        margin-bottom: 18px;
         gap: 5px;
     }
 
@@ -1133,7 +1143,7 @@
         font-weight: 900;
         line-height: 0.98;
         letter-spacing: -0.5px;
-        margin-bottom: 14px;
+        margin-bottom: 25px;
         max-width: 260px;
         text-wrap: balance;
         color: #ffffff;
@@ -1145,7 +1155,7 @@
         font-weight: 400;
         line-height: 1.7;
         color: rgba(255, 255, 255, 0.78);
-        margin-bottom: 12px;
+        margin-bottom: 25px;
         max-width: 250px;
     }
 
@@ -1159,7 +1169,7 @@
         flex-direction: column;
         align-items: flex-start;
         gap: 8px;
-        margin-top: 16px;
+        margin-top: 30px;
     }
 
     .hero-trust span {
@@ -1446,6 +1456,24 @@
         font-size: 0.62rem;
     }
 }
+
+/* ─── SCROLL REVEAL ───────────────────────────────── */
+.reveal {
+    opacity: 0;
+    transform: translateY(32px);
+    transition: opacity 0.65s ease, transform 0.65s ease;
+}
+
+.reveal.visible {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+.reveal-delay-1 { transition-delay: 0.1s; }
+.reveal-delay-2 { transition-delay: 0.2s; }
+.reveal-delay-3 { transition-delay: 0.3s; }
+.reveal-delay-4 { transition-delay: 0.4s; }
+
 </style>
 @endsection
 
@@ -1505,25 +1533,31 @@
 </section>
 
 {{-- ══════════════════ STATS STRIP ══════════════════ --}}
-<div class="stats-strip">
+<div class="stats-strip reveal">
     <div class="container stats-inner">
         <div class="stat-item">
             <div class="stat-num">{{ $kostTerbaru->count() }}</div>
             <div class="stat-label">Kos Terdaftar</div>
         </div>
+
         <div class="stat-item">
-            <div class="stat-num">{{ $kostTerbaru->sum(fn($k) => $k->kamars->count()) }}</div>
+            <div class="stat-num">
+                {{ $kostTerbaru->sum(fn($k) => $k->kamars->count()) }}
+            </div>
             <div class="stat-label">Total Kamar</div>
         </div>
+
         <div class="stat-item">
-            <div class="stat-num">{{ $kostTerbaru->sum(fn($k) => $k->kamars->flatMap->hargaKamars->count()) }}</div>
+            <div class="stat-num">
+                {{ $kostTerbaru->sum(fn($k) => $k->kamars->flatMap->hargaKamars->count()) }}
+            </div>
             <div class="stat-label">Penghuni Aktif</div>
         </div>
     </div>
 </div>
 
 {{-- ══════════════════ CARA KERJA ══════════════════ --}}
-<section class="how-section">
+<section class="how-section reveal">
     <div class="container">
 
         <div style="text-align:center;margin-bottom:56px;">
@@ -1597,7 +1631,7 @@
                     </svg>
                 </div>
                 <div class="how-step-num">04</div>
-                <h4 class="how-title">Nikmati Kost baru mu!</h4>
+                <h4 class="how-title">Nikmati Kost mu!</h4>
                 <p class="how-desc">Setelah deal, kamu tinggal pindah dan nikmati
                     kos barumu. Semudah itu!</p>
             </div>
@@ -1609,7 +1643,7 @@
 </section>
 
 {{-- ══════════════════ REKOMENDASI KOS ══════════════════ --}}
-<section class="rekom-section">
+<section class="rekom-section reveal">
     <div class="container">
 
         <div class="sec-header">
@@ -1624,7 +1658,7 @@
         </div>
 
         <div class="kos-grid">
-            @forelse($kostTerbaru as $kost)
+            @forelse($kostTerbaru as $index => $kost)
 
             @php
             $hargaAktif = $kost->kamars
@@ -1634,6 +1668,8 @@
             ->where('isactive', true);
 
             });
+
+            
 
             /*
             |--------------------------------------------------------------------------
@@ -1684,13 +1720,14 @@
 
             $hargaMax = $hargaDipakai->max('harga');
 
+            
             $fasilitasKost = $kost->fasilitas ?? collect();
 
             $noHp = $kost->user?->no_hp;
             $noWa = $noHp ? '62' . ltrim(preg_replace('/[^0-9]/', '', $noHp), '0') : null;
             @endphp
 
-            <div class="kos-card">
+            <div class="kos-card reveal reveal-delay-{{ ($index % 3) + 1 }}">
 
                 <div class="kos-thumb">
                     @if($kost->foto_kost && count($kost->foto_kost) > 0)
@@ -1720,7 +1757,7 @@
 
                     <div class="kos-divider"></div>
 
-                    <div class="kos-price">
+                        <div class="kos-price">
                         @if($hargaMin && $hargaMax && $hargaMin != $hargaMax)
                         Rp {{ number_format($hargaMin, 0, ',', '.') }}
                         <span>
@@ -1778,7 +1815,7 @@
 </section>
 
 {{-- ══════════════════ FASILITAS POPULER ══════════════════ --}}
-<section class="fac-section">
+<section class="fac-section reveal">
     <div class="container">
 
         <div class="sec-header">
@@ -1858,10 +1895,8 @@
     </div>
 </section>
 
-
-
 {{-- ══════════════════ KEUNGGULAN KAMI ══════════════════ --}}
-<section class="why-section">
+<section class="why-section reveal">
     <div class="container">
 
         <div class="why-layout">
@@ -1936,7 +1971,7 @@
 </section>
 
 {{-- ══════════════════ CTA BANNER ══════════════════ --}}
-<div class="cta-banner">
+<div class="cta-banner reveal">
     <img src="{{ asset('why.png') }}" alt="Kelola Kos">
     <div class="cta-overlay"></div>
     <div class="cta-content">
@@ -1945,5 +1980,24 @@
         <a href="{{ route('admin-kost.register') }}" class="btn-cta-white">Daftar Sekarang</a>
     </div>
 </div>
-
 @endsection
+
+@push('scripts')
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+    const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                entry.target.classList.add('visible');
+                observer.unobserve(entry.target); // animasi hanya sekali
+            }
+        });
+    }, {
+        threshold: 0.08,      // muncul saat 8% elemen terlihat
+        rootMargin: '0px 0px -40px 0px' // sedikit sebelum masuk viewport
+    });
+
+    document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+});
+</script>
+@endpush

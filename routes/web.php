@@ -318,12 +318,12 @@ Route::middleware([
         'detail'
     ])->name('tagihan.detail');
 
-    Route::post('/tagihan/{tagihan}/validasi', [
+    Route::post('/tagihan/{pembayaran}/validasi', [
         TagihanController::class,
         'validasiBukti'
     ])->name('tagihan.validasi');
 
-    Route::post('/tagihan/{tagihan}/tolak', [
+    Route::post('/tagihan/{pembayaran}/tolak', [
         TagihanController::class,
         'tolakBukti'
     ])->name('tagihan.tolak');
