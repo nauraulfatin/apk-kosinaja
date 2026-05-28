@@ -2,7 +2,7 @@
 
 @section('content')
 
-<div class="h-screen bg-[#F8F5F0] flex overflow-hidden">
+<div class="min-h-screen bg-[#F8F5F0] flex overflow-hidden">
 
     {{-- ========================================================= --}}
     {{-- LEFT IMAGE --}}
@@ -40,7 +40,7 @@
             {{-- TEXT --}}
             <div>
 
-                <h2 class="text-5xl font-bold text-white
+                <h2 class="text-4xl font-bold text-white
                            leading-[1.15]">
 
                     Kelola Kost
@@ -75,7 +75,7 @@
                 <div class="mt-10 bg-white/10
                            backdrop-blur-md
                            border border-white/20
-                           rounded-3xl p-5
+                           rounded-3xl p-4
                            max-w-sm">
 
                     <div class="flex items-start gap-4">
@@ -129,62 +129,51 @@
     {{-- ========================================================= --}}
     {{-- RIGHT FORM --}}
     {{-- ========================================================= --}}
-    <div class="w-full lg:w-[58%]
-               h-screen overflow-y-auto
-               flex items-center justify-center
-               px-6 py-10">
+   <div class="w-full lg:w-[58%]
+           h-screen overflow-y-auto
+           flex items-center justify-center
+           px-4 py-6 lg:px-8">
 
-        <div class="w-full max-w-xl
-                   bg-white/95 backdrop-blur-sm
-                   rounded-[36px]
-                   border border-[#ECE8E1]
-                   shadow-[0_10px_40px_rgba(0,0,0,0.05)]
-                   p-8 lg:p-10">
+    <div class="w-full max-w-md lg:max-w-lg
+               bg-white/95 backdrop-blur-sm
+               rounded-[24px] lg:rounded-[36px]
+               border border-[#ECE8E1]
+               shadow-[0_10px_40px_rgba(0,0,0,0.05)]
+               p-5 lg:p-8">
 
             {{-- HEADER --}}
-            <div class="mb-10">
+           <div class="mb-5 lg:mb-8">
 
-                {{-- ICON --}}
-                <div class="w-20 h-20 rounded-3xl
-                           bg-[#F5F7F2]
-                           flex items-center justify-center
-                           mb-6">
+    {{-- TITLE --}}
+    <h1 class="text-[26px]
+               lg:text-[40px]
+               leading-tight
+               font-bold
+               text-[#0F0937]">
 
-                    <svg xmlns="http://www.w3.org/2000/svg" class="w-10 h-10 text-[#6C8B6B]" fill="none"
-                        viewBox="0 0 24 24" stroke="currentColor">
+        Selamat Datang!
 
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                            d="M15 7a2 2 0 012 2v8a2 2 0 01-2 2H7a2 2 0 01-2-2V9a2 2 0 012-2m8 0V5a3 3 0 10-6 0v2" />
+    </h1>
 
-                    </svg>
+    {{-- SUBTITLE --}}
+    <p class="text-gray-500
+               mt-2 lg:mt-3
+               text-sm lg:text-lg
+               leading-relaxed
+               max-w-md">
 
-                </div>
+        Masuk untuk melanjutkan
+        aktivitas anda di KosinAja.
 
-                {{-- TITLE --}}
-                <h1 class="text-[40px]
-                           leading-tight
-                           font-bold
-                           text-[#0F0937]">
+    </p>
 
-                    Selamat Datang!
-
-                </h1>
-
-                {{-- SUBTITLE --}}
-                <p class="text-gray-500 mt-3 text-base leading-relaxed">
-
-                    Masuk untuk melanjutkan
-                    aktivitas anda di KosinAja.
-
-                </p>
-
-            </div>
+</div>
 
             {{-- ERROR --}}
             @if($errors->any())
 
-            <div class="mb-8 bg-red-50 border border-red-200
-                       rounded-2xl px-5 py-4 text-red-700">
+            <div class="mb-6 bg-red-50 border border-red-200
+           rounded-xl px-4 py-3 text-red-700">
 
                 <ul class="space-y-1 text-sm">
 
@@ -205,8 +194,8 @@
             {{-- SUCCESS --}}
             @if(session('success'))
 
-            <div class="mb-8 bg-green-50 border border-green-200
-                       rounded-2xl px-5 py-4 text-green-700">
+            <div class="mb-6 bg-green-50 border border-green-200
+           rounded-xl px-4 py-3 text-green-700">
 
                 {{ session('success') }}
 
@@ -215,7 +204,7 @@
             @endif
 
             {{-- FORM --}}
-            <form method="POST" action="{{ route('login.post') }}" class="space-y-6">
+            <form method="POST" action="{{ route('login.post') }}" class="space-y-5">
 
                 @csrf
 
@@ -229,17 +218,22 @@
 
                     </label>
 
-                    <input type="text" name="username" value="{{ old('username') }}"
-                        placeholder="Masukkan username anda" class="w-full rounded-2xl
-                               border border-[#E7E2DA]
-                               bg-[#FCFBF8]
-                               px-5 py-4
-                               text-[#0F0937]
-                               placeholder:text-gray-400
-                               focus:ring-2
-                               focus:ring-[#6C8B6B]
-                               focus:border-transparent
-                               transition-all">
+                    <input type="text"
+       name="username"
+       value="{{ old('username') }}"
+       placeholder="Masukkan username anda"
+       class="w-full rounded-xl lg:rounded-2xl
+              border border-[#E7E2DA]
+              bg-[#FCFBF8]
+              px-4 py-3.5
+              lg:px-5 lg:py-4
+              text-sm lg:text-base
+              text-[#0F0937]
+              placeholder:text-gray-400
+              focus:ring-2
+              focus:ring-[#6C8B6B]
+              focus:border-transparent
+              transition-all">
 
                 </div>
 
@@ -255,16 +249,22 @@
 
                     <div class="relative">
 
-                        <input id="password" type="password" name="password" placeholder="Masukkan password" class="w-full rounded-2xl
-                                   border border-[#E7E2DA]
-                                   bg-[#FCFBF8]
-                                   px-5 py-4 pr-14
-                                   text-[#0F0937]
-                                   placeholder:text-gray-400
-                                   focus:ring-2
-                                   focus:ring-[#6C8B6B]
-                                   focus:border-transparent
-                                   transition-all">
+                        <input id="password"
+       type="password"
+       name="password"
+       placeholder="Masukkan password"
+       class="w-full rounded-xl lg:rounded-2xl
+              border border-[#E7E2DA]
+              bg-[#FCFBF8]
+              px-4 py-3.5 pr-12
+              lg:px-5 lg:py-4 lg:pr-14
+              text-sm lg:text-base
+              text-[#0F0937]
+              placeholder:text-gray-400
+              focus:ring-2
+              focus:ring-[#6C8B6B]
+              focus:border-transparent
+              transition-all">
 
                         {{-- TOGGLE --}}
                         <button type="button" onclick="togglePassword('password', this)" class="absolute right-5 top-1/2
@@ -291,13 +291,16 @@
                 </div>
 
                 {{-- BUTTON --}}
-                <button type="submit" class="w-full bg-[#6C8B6B]
-                           hover:bg-[#5E7B5D]
-                           text-white font-semibold
-                           py-4 rounded-2xl
-                           text-lg transition-all
-                           shadow-lg shadow-[#6C8B6B]/20
-                           hover:scale-[1.01]">
+                <button type="submit"
+        class="w-full bg-[#6C8B6B]
+               hover:bg-[#5E7B5D]
+               text-white font-semibold
+               py-3.5 lg:py-4
+               rounded-xl lg:rounded-2xl
+               text-base lg:text-lg
+               transition-all
+               shadow-lg shadow-[#6C8B6B]/20
+               hover:scale-[1.01]">
 
                     Masuk
 
@@ -346,16 +349,6 @@
 
 </div>
 
-</div>
-
-
-{{-- TUTUP --}}
-<button type="button" onclick="document.getElementById('modalPilihRole').classList.add('hidden')"
-    class="mt-6 text-sm text-gray-400 hover:text-gray-600">
-    Batal
-</button>
-
-</div>
 </div>
 
 {{-- MODAL PILIH ROLE --}}

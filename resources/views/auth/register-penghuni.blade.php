@@ -41,7 +41,7 @@
             {{-- TEXT --}}
             <div>
 
-                <h2 class="text-5xl font-bold text-white
+                <h2 class="text-4xl font-bold text-white
                            leading-[1.15]">
 
                     Kelola Kost
@@ -76,7 +76,7 @@
                 <div class="mt-10 bg-white/10
                            backdrop-blur-md
                            border border-white/20
-                           rounded-3xl p-5
+                           rounded-[24px] p-4
                            max-w-sm">
 
                     <div class="flex items-start gap-4">
@@ -130,15 +130,15 @@
     {{-- ========================================================= --}}
     {{-- FORM --}}
     {{-- ========================================================= --}}
-    <div class="w-full lg:w-[58%]  h-screen overflow-y-auto flex items-start justify-center  px-6 py-10">
+    <div class="w-full lg:w-[58%] h-screen overflow-y-auto flex items-start justify-center px-4 py-5 lg:px-8 lg:py-8">
 
-        <div class="w-full max-w-4xl bg-white rounded-[32px]  border border-gray-100 shadow-sm p-8 lg:p-12">
+        <div class="w-full max-w-md lg:max-w-3xl bg-white rounded-[24px] lg:rounded-[32px] border border-gray-100 shadow-sm p-5 lg:p-10">
 
             {{-- HEADER --}}
-            <div class="mb-10">
-                <h1 class="text-4xl font-bold text-[#0F0937]">  Daftar Sebagai Penghuni </h1>
+            <div class="mb-6 lg:mb-10">
+                <h1 class="text-[28px] lg:text-4xl leading-tight font-bold text-[#0F0937]"> Daftar Sebagai Penghuni </h1>
 
-                <p class="text-gray-500 mt-3 text-base">
+                <p class="text-gray-500 mt-2 lg:mt-3 text-sm lg:text-base leading-relaxed">
                     Buat akun untuk mulai mencari kost.
                 </p>
 
@@ -147,7 +147,7 @@
             {{-- ERROR --}}
             @if($errors->any())
 
-                <div class="mb-8 bg-red-50 border border-red-200  rounded-2xl px-5 py-4 text-red-700">
+                <div class="mb-8 bg-red-50 border border-red-200  rounded-xl lg:rounded-2xl px-4 py-3 lg:px-5 lg:py-4 text-red-700">
                     <ul class="space-y-1 text-sm">
                         @foreach($errors->all() as $e)
                             <li>• {{ $e }}</li>
@@ -186,10 +186,10 @@
                             />
 
                         </svg>
-                        <h2 class="text-2xl font-semibold text-[#4F6B4F]"> Data Akun </h2>
+                        <h2 class="text-xl lg:text-2xl font-semibold text-[#4F6B4F]">Data Akun </h2>
                     </div>
 
-                    <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
+                    <div class="grid grid-cols-1 lg:grid-cols-2 gap-4 lg:gap-5">
 
                         {{-- NAMA --}}
                         <div>
@@ -203,8 +203,7 @@
                                 name="nama"
                                 placeholder="Masukkan nama lengkap"
                                 value="{{ old('nama') }}"
-                                class="w-full rounded-2xl border
-                                       border-gray-200 px-5 py-4
+                                class="w-full rounded-xl lg:rounded-2xl border border-gray-200 px-4 py-3.5 lg:px-5 lg:py-4 text-sm lg:text-base
                                        focus:ring-2
                                        focus:ring-[#6C8B6B]"
                             >
@@ -222,8 +221,7 @@
                                 name="nik"
                                 placeholder="Masukkan NIK"
                                 value="{{ old('nik') }}"
-                                class="w-full rounded-2xl border
-                                       border-gray-200 px-5 py-4
+                                class="w-full rounded-xl lg:rounded-2xl border border-gray-200 px-4 py-3.5 lg:px-5 lg:py-4 text-sm lg:text-base
                                        focus:ring-2
                                        focus:ring-[#6C8B6B]"
                             >
@@ -241,8 +239,7 @@
                                 name="username"
                                 placeholder="Masukkan username anda"
                                 value="{{ old('username') }}"
-                                class="w-full rounded-2xl border
-                                       border-gray-200 px-5 py-4
+                                class="w-full rounded-xl lg:rounded-2xl border border-gray-200 px-4 py-3.5 lg:px-5 lg:py-4 text-sm lg:text-base
                                        focus:ring-2
                                        focus:ring-[#6C8B6B]"
                             >
@@ -259,8 +256,7 @@
                                 name="no_hp"
                                 placeholder="08xxxxxxxxxx"
                                 value="{{ old('no_hp') }}"
-                                class="w-full rounded-2xl border
-                                       border-gray-200 px-5 py-4
+                                class="w-full rounded-xl lg:rounded-2xl border border-gray-200 px-4 py-3.5 lg:px-5 lg:py-4 text-sm lg:text-base
                                        focus:ring-2
                                        focus:ring-[#6C8B6B]"
                             >
@@ -278,8 +274,7 @@
                                     type="password"
                                     name="password"
                                     placeholder="Masukkan password"
-                                    class="w-full rounded-2xl border
-                                           border-gray-200 px-5 py-4
+                                    class="w-full rounded-xl lg:rounded-2xl border border-gray-200 px-4 py-3.5 lg:px-5 lg:py-4 text-sm lg:text-base
                                            pr-14 focus:ring-2
                                            focus:ring-[#6C8B6B]"
                                 >
@@ -320,16 +315,15 @@
                                     type="password"
                                     name="password_confirmation"
                                     placeholder="Ulangi password"
-                                    class="w-full rounded-2xl border
-                                           border-gray-200 px-5 py-4
-                                           pr-14 focus:ring-2
+                                    class="w-full rounded-xl lg:rounded-2xl border border-gray-200 px-4 py-3.5 lg:px-5 lg:py-4 text-sm lg:text-base
+                                           pr-12 lg:pr-14 focus:ring-2
                                            focus:ring-[#6C8B6B]"
                                 >
 
                                 <button
                                     type="button"
                                     onclick="togglePassword('password_confirmation')"
-                                    class="absolute right-5 top-1/2
+                                    class="absolute right-4 lg:right-5 top-1/2
                                            -translate-y-1/2 text-gray-400"
                                 >
                                     
@@ -354,6 +348,7 @@
                 {{-- RECAPTCHA --}}
                 {{-- ========================================================= --}}
                 <div class="mb-6">
+                    <div class="scale-[0.92] lg:scale-100 origin-left">
 
                     <div
                         class="g-recaptcha" data-sitekey="{{ env('NOCAPTCHA_SITEKEY') }}"
@@ -373,14 +368,13 @@
                     class="w-full bg-[#6C8B6B]
                            hover:bg-[#5B765A]
                            text-white font-semibold
-                           py-5 rounded-2xl
-                           text-lg transition"
+                           py-3.5 lg:py-5 rounded-xl lg:rounded-2xl text-base lg:text-lg transition"
                 >
                     Daftar Sekarang
                 </button>
 
                 {{-- LOGIN --}}
-                <div class="text-center mt-6">
+                <div class="text-center mt-5 lg:mt-6">
                     <p class="text-gray-500">
                         Sudah punya akun?
                         <a

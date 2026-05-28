@@ -7,15 +7,15 @@
             opacity-0 pointer-events-none
             transition-all duration-300">
 
-    <div id="modal-box" class="relative bg-[#FDFBF7] rounded-3xl shadow-2xl
-                w-full max-w-2xl
-                px-10 py-12
+    <div id="modal-box" class="relative bg-[#FDFBF7] rounded-[26px] lg:rounded-3xl shadow-2xl
+                w-full max-w-sm lg:max-w-2xl
+                px-5 py-6 lg:px-10 lg:py-12
                 scale-95 opacity-0
                 transition-all duration-300">
 
         {{-- CLOSE BUTTON --}}
         <button onclick="tutupModal()" class="absolute top-5 right-5
-                       w-9 h-9 rounded-full
+                       w-8 h-8 lg:w-9 lg:h-9 rounded-full
                        flex items-center justify-center
                        bg-[#edf1ed] hover:bg-[#d4e0d4]
                        text-[#526453] hover:text-[#102313]
@@ -27,20 +27,20 @@
         </button>
 
         {{-- HEADER --}}
-        <div class="text-center mb-10">
-            <h2 class="text-2xl font-extrabold text-[#102313] mb-2">
+        <div class="text-center mb-6 lg:mb-10">
+            <h2 class="text-[22px] lg:text-2xl font-extrabold text-[#102313] mb-2">
                 Pilih peran Anda
             </h2>
-            <p class="text-[#526453] text-[15px]">
+            <p class="text-[#526453] text-[13px] lg:text-[15px]">
                 Daftarkan diri sebagai penghuni atau pemilik kos
             </p>
         </div>
 
         {{-- ROLE CARDS --}}
-        <div class="grid grid-cols-2 gap-5 mb-10">
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-3 lg:gap-5 mb-6 lg:mb-10">
 
             {{-- PENGHUNI --}}
-            <a href="{{ route('register.penghuni') }}" class="group relative flex flex-col items-center gap-5
+            <a href="{{ route('register.penghuni') }}" class="group relative flex flex-col items-center gap-3 lg:gap-5
                       p-8 rounded-2xl border-2
                       border-[#dde8dd] hover:border-[#6C8B6B]
                       bg-white hover:bg-[#f4f8f4]
@@ -48,7 +48,7 @@
                       shadow-sm hover:shadow-md">
 
                 {{-- Ilustrasi penghuni --}}
-                <div class="w-28 h-28 flex items-center justify-center">
+                <div class="w-20 h-20 lg:w-28 lg:h-28 flex items-center justify-center">
                     <svg viewBox="0 0 120 140" fill="none" xmlns="http://www.w3.org/2000/svg" class="w-full h-full">
                         {{-- Kepala --}}
                         <ellipse cx="60" cy="28" rx="16" ry="18" fill="#C8956C" />
@@ -73,12 +73,12 @@
                     </svg>
                 </div>
 
-                <span class="text-[16px] font-bold text-[#102313]
+                <span class="text-[15px] lg:text-[16px] font-bold text-[#102313]
                              group-hover:text-[#6C8B6B] transition-colors duration-200">
                     Penghuni
                 </span>
 
-                <span class="text-[12px] text-[#526453] text-center leading-5">
+                <span class="text-[11px] lg:text-[12px] text-[#526453] text-center leading-5">
                     Saya mencari kos untuk ditempati
                 </span>
 
@@ -87,7 +87,7 @@
             </a>
 
             {{-- ADMIN/OWNER --}}
-            <a href="{{ route('register.admin') }}" class="group relative flex flex-col items-center gap-5
+            <a href="{{ route('register.admin') }}" class="group relative flex flex-col items-center gap-3 lg:gap-5
                       p-8 rounded-2xl border-2
                       border-[#dde8dd] hover:border-[#6C8B6B]
                       bg-white hover:bg-[#f4f8f4]
@@ -95,7 +95,7 @@
                       shadow-sm hover:shadow-md">
 
                 {{-- Ilustrasi admin/owner --}}
-                <div class="w-28 h-28 flex items-center justify-center">
+                <div class="w-20 h-20 lg:w-28 lg:h-28 flex items-center justify-center">
                     <svg viewBox="0 0 140 140" fill="none" xmlns="http://www.w3.org/2000/svg" class="w-full h-full">
                         {{-- Rumah --}}
                         <polygon points="90,65 115,65 115,110 90,110" fill="#C4A882" />
@@ -133,12 +133,12 @@
                     </svg>
                 </div>
 
-                <span class="text-[16px] font-bold text-[#102313]
+                <span class="text-[15px] lg:text-[16px] font-bold text-[#102313]
                              group-hover:text-[#6C8B6B] transition-colors duration-200">
                     Admin / Owner
                 </span>
 
-                <span class="text-[12px] text-[#526453] text-center leading-5">
+                <span class="text-[11px] lg:text-[12px] text-[#526453] text-center leading-5">
                     Saya pemilik atau pengelola kos
                 </span>
 
@@ -149,7 +149,7 @@
         </div>
 
         {{-- FOOTER NOTE --}}
-        <p class="text-center text-[13px] text-[#7A9A7B]">
+        <p class="text-center text-[12px] lg:text-[13px] text-[#7A9A7B]">
             Sudah punya akun?
             <a href="{{ route('login') }}"
                 class="font-semibold text-[#6C8B6B] hover:text-[#102313] transition-colors duration-200">

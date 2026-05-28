@@ -1492,8 +1492,7 @@
 
         <h1>Cari Kos Jadi <em>Lebih Mudah</em> & Nyaman</h1>
 
-        <p>Temukan kos impianmu dengan mudah dan cepat. Kami menyediakan pilihan kos terbaik dengan informasi lengkap —
-            foto asli, harga transparan, fasilitas jelas, dan lokasi akurat. Tidak perlu repot survey ke sana-sini,
+        <p>Temukan kos impianmu dengan mudah dan cepat. Tidak perlu repot survey ke sana-sini,
             cukup buka KosinAja dan temukan kos yang pas untuk kamu!</p>
 
         <div class="hero-trust">
@@ -1589,19 +1588,21 @@
             <div class="how-arrow">→</div>
 
             {{-- Step 4 --}}
-            <div class="how-card how-card--highlight">
-                <div class="how-icon-wrap" style="background:rgba(255,255,255,0.15);">
-                    <svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="1.8" stroke-linecap="round"
+            <div class="how-card">
+                <div class="how-icon-wrap" style="background:#E8F4EC;">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="#284535" stroke-width="1.8" stroke-linecap="round"
                         stroke-linejoin="round">
                         <path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z" />
                         <polyline points="9 22 9 12 15 12 15 22" />
                     </svg>
                 </div>
-                <div class="how-step-num" style="color:rgba(255,255,255,0.45);">04</div>
-                <h4 class="how-title" style="color:#fff;">Tinggal & Nikmati</h4>
-                <p class="how-desc" style="color:rgba(255,255,255,0.75);">Setelah deal, kamu tinggal pindah dan nikmati
+                <div class="how-step-num">04</div>
+                <h4 class="how-title">Nikmati Kost baru mu!</h4>
+                <p class="how-desc">Setelah deal, kamu tinggal pindah dan nikmati
                     kos barumu. Semudah itu!</p>
             </div>
+
+            <div class="how-arrow">→</div>
 
         </div>
     </div>
