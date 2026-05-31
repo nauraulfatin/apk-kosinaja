@@ -4,7 +4,6 @@
 
 <div class="h-screen bg-[#F8F5F0] flex overflow-hidden">
 
-   
     {{-- ========================================================= --}}
     {{-- LEFT IMAGE --}}
     {{-- ========================================================= --}}
@@ -41,16 +40,13 @@
             {{-- TEXT --}}
             <div>
 
-                <h2 class="text-4xl font-bold text-white
-                           leading-[1.15]">
+                <h2 class="text-4xl font-bold text-white leading-[1.15]">
 
                     Kelola Kost
                     <br>
 
                     <span class="text-[#D6E5D6]">
-
                         Lebih Praktis,
-
                     </span>
 
                     <br>
@@ -60,9 +56,7 @@
 
                 </h2>
 
-                <p class="text-white/80 text-lg
-                           leading-relaxed mt-6
-                           max-w-md">
+                <p class="text-white/80 text-lg leading-relaxed mt-6 max-w-md">
 
                     Kelola penghuni,
                     pembayaran,
@@ -87,11 +81,18 @@
                                    flex items-center justify-center
                                    text-white">
 
-                            <svg xmlns="http://www.w3.org/2000/svg" class="w-7 h-7" fill="none" viewBox="0 0 24 24"
-                                stroke="currentColor">
+                            <svg xmlns="http://www.w3.org/2000/svg"
+                                 class="w-7 h-7"
+                                 fill="none"
+                                 viewBox="0 0 24 24"
+                                 stroke="currentColor">
 
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                    d="M12 11c0-1.657 1.343-3 3-3s3 1.343 3 3v2a3 3 0 11-6 0v-2zm0 0V9a5 5 0 0110 0v2m-10 0H6a2 2 0 00-2 2v5a2 2 0 002 2h12a2 2 0 002-2v-5a2 2 0 00-2-2h-2" />
+                                <path
+                                    stroke-linecap="round"
+                                    stroke-linejoin="round"
+                                    stroke-width="2"
+                                    d="M12 11c0-1.657 1.343-3 3-3s3 1.343 3 3v2a3 3 0 11-6 0v-2zm0 0V9a5 5 0 0110 0v2m-10 0H6a2 2 0 00-2 2v5a2 2 0 002 2h12a2 2 0 002-2v-5a2 2 0 00-2-2h-2"
+                                />
 
                             </svg>
 
@@ -101,13 +102,10 @@
                         <div>
 
                             <h3 class="text-white font-semibold text-lg">
-
                                 Aman & Modern
-
                             </h3>
 
-                            <p class="text-white/70 text-sm
-                                       mt-1 leading-relaxed">
+                            <p class="text-white/70 text-sm mt-1 leading-relaxed">
 
                                 Sistem manajemen kost
                                 modern dengan pengalaman
@@ -130,13 +128,29 @@
     {{-- ========================================================= --}}
     {{-- FORM --}}
     {{-- ========================================================= --}}
-    <div class="w-full lg:w-[58%] h-screen overflow-y-auto flex items-start justify-center px-4 py-5 lg:px-8 lg:py-8">
+    <div class="w-full lg:w-[58%]
+                h-screen overflow-y-auto
+                flex items-start justify-center
+                px-4 py-6 lg:px-8 lg:py-6">
 
-        <div class="w-full max-w-md lg:max-w-3xl bg-white rounded-[24px] lg:rounded-[32px] border border-gray-100 shadow-sm p-5 lg:p-10">
+        <div class="w-full max-w-md lg:max-w-2xl
+                    bg-white
+                    rounded-[24px] lg:rounded-[28px]
+                    border border-gray-100
+                    shadow-sm
+                    p-5 lg:p-8">
 
             {{-- HEADER --}}
-            <div class="mb-6 lg:mb-10">
-                <h1 class="text-[28px] lg:text-4xl leading-tight font-bold text-[#0F0937]"> Daftar Sebagai Penghuni </h1>
+            <div class="mb-6 lg:mb-8">
+
+                <h1 class="text-[28px] lg:text-3xl
+                           leading-tight
+                           font-bold
+                           text-[#0F0937]">
+
+                    Daftar Sebagai Penghuni
+
+                </h1>
 
                 <p class="text-gray-500 mt-2 lg:mt-3 text-sm lg:text-base leading-relaxed">
                     Buat akun untuk mulai mencari kost.
@@ -147,25 +161,34 @@
             {{-- ERROR --}}
             @if($errors->any())
 
-                <div class="mb-8 bg-red-50 border border-red-200  rounded-xl lg:rounded-2xl px-4 py-3 lg:px-5 lg:py-4 text-red-700">
+                <div class="mb-6 bg-red-50 border border-red-200
+                            rounded-xl lg:rounded-2xl
+                            px-4 py-3 lg:px-5 lg:py-4
+                            text-red-700">
+
                     <ul class="space-y-1 text-sm">
+
                         @foreach($errors->all() as $e)
+
                             <li>• {{ $e }}</li>
+
                         @endforeach
+
                     </ul>
+
                 </div>
 
             @endif
 
             {{-- FORM --}}
-            <form method="POST"  action="{{ route('register.penghuni.store') }}" >
+            <form method="POST" action="{{ route('register.penghuni.store') }}">
 
                 @csrf
 
                 {{-- ========================================================= --}}
                 {{-- DATA AKUN --}}
                 {{-- ========================================================= --}}
-                <div class="mb-10">
+                <div class="mb-8">
 
                     <div class="flex items-center gap-3 mb-5">
 
@@ -186,7 +209,11 @@
                             />
 
                         </svg>
-                        <h2 class="text-xl lg:text-2xl font-semibold text-[#4F6B4F]">Data Akun </h2>
+
+                        <h2 class="text-xl font-semibold text-[#4F6B4F]">
+                            Data Akun
+                        </h2>
+
                     </div>
 
                     <div class="grid grid-cols-1 lg:grid-cols-2 gap-4 lg:gap-5">
@@ -203,10 +230,15 @@
                                 name="nama"
                                 placeholder="Masukkan nama lengkap"
                                 value="{{ old('nama') }}"
-                                class="w-full rounded-xl lg:rounded-2xl border border-gray-200 px-4 py-3.5 lg:px-5 lg:py-4 text-sm lg:text-base
+                                class="w-full rounded-xl lg:rounded-2xl
+                                       border border-gray-200
+                                       px-4 py-3.5 lg:px-5 lg:py-3.5
+                                       text-sm lg:text-base
+                                       focus:outline-none
                                        focus:ring-2
                                        focus:ring-[#6C8B6B]"
                             >
+
                         </div>
 
                         {{-- NIK --}}
@@ -221,7 +253,11 @@
                                 name="nik"
                                 placeholder="Masukkan NIK"
                                 value="{{ old('nik') }}"
-                                class="w-full rounded-xl lg:rounded-2xl border border-gray-200 px-4 py-3.5 lg:px-5 lg:py-4 text-sm lg:text-base
+                                class="w-full rounded-xl lg:rounded-2xl
+                                       border border-gray-200
+                                       px-4 py-3.5 lg:px-5 lg:py-3.5
+                                       text-sm lg:text-base
+                                       focus:outline-none
                                        focus:ring-2
                                        focus:ring-[#6C8B6B]"
                             >
@@ -230,7 +266,8 @@
 
                         {{-- USERNAME --}}
                         <div>
-                            <label class="block text-sm font-medium  text-gray-600 mb-2">
+
+                            <label class="block text-sm font-medium text-gray-600 mb-2">
                                 Username
                             </label>
 
@@ -239,15 +276,21 @@
                                 name="username"
                                 placeholder="Masukkan username anda"
                                 value="{{ old('username') }}"
-                                class="w-full rounded-xl lg:rounded-2xl border border-gray-200 px-4 py-3.5 lg:px-5 lg:py-4 text-sm lg:text-base
+                                class="w-full rounded-xl lg:rounded-2xl
+                                       border border-gray-200
+                                       px-4 py-3.5 lg:px-5 lg:py-3.5
+                                       text-sm lg:text-base
+                                       focus:outline-none
                                        focus:ring-2
                                        focus:ring-[#6C8B6B]"
                             >
+
                         </div>
 
                         {{-- NO HP --}}
                         <div>
-                            <label class="block text-sm font-medium  text-gray-600 mb-2">
+
+                            <label class="block text-sm font-medium text-gray-600 mb-2">
                                 Nomor WhatsApp
                             </label>
 
@@ -256,50 +299,76 @@
                                 name="no_hp"
                                 placeholder="08xxxxxxxxxx"
                                 value="{{ old('no_hp') }}"
-                                class="w-full rounded-xl lg:rounded-2xl border border-gray-200 px-4 py-3.5 lg:px-5 lg:py-4 text-sm lg:text-base
+                                class="w-full rounded-xl lg:rounded-2xl
+                                       border border-gray-200
+                                       px-4 py-3.5 lg:px-5 lg:py-3.5
+                                       text-sm lg:text-base
+                                       focus:outline-none
                                        focus:ring-2
                                        focus:ring-[#6C8B6B]"
                             >
+
                         </div>
 
                         {{-- PASSWORD --}}
                         <div>
+
                             <label class="block text-sm font-medium text-gray-600 mb-2">
                                 Password
                             </label>
 
                             <div class="relative">
+
                                 <input
                                     id="password"
                                     type="password"
                                     name="password"
                                     placeholder="Masukkan password"
-                                    class="w-full rounded-xl lg:rounded-2xl border border-gray-200 px-4 py-3.5 lg:px-5 lg:py-4 text-sm lg:text-base
-                                           pr-14 focus:ring-2
+                                    class="w-full rounded-xl lg:rounded-2xl
+                                           border border-gray-200
+                                           px-4 py-3.5 lg:px-5 lg:py-3.5
+                                           pr-12 lg:pr-14
+                                           text-sm lg:text-base
+                                           focus:outline-none
+                                           focus:ring-2
                                            focus:ring-[#6C8B6B]"
                                 >
 
                                 <button
                                     type="button"
                                     onclick="togglePassword('password')"
-                                    class="absolute right-5 top-1/2
-                                           -translate-y-1/2 text-gray-400"
-                                >
+                                    class="absolute right-4 lg:right-5 top-1/2
+                                           -translate-y-1/2 text-gray-400">
 
-                                    
-                                    <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" fill="none"
-                                        viewBox="0 0 24 24" stroke="currentColor">
+                                    <svg xmlns="http://www.w3.org/2000/svg"
+                                         class="w-5 h-5"
+                                         fill="none"
+                                         viewBox="0 0 24 24"
+                                         stroke="currentColor">
 
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                                        <path
+                                            stroke-linecap="round"
+                                            stroke-linejoin="round"
+                                            stroke-width="2"
+                                            d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"
+                                        />
 
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5
+                                        <path
+                                            stroke-linecap="round"
+                                            stroke-linejoin="round"
+                                            stroke-width="2"
+                                            d="M2.458 12C3.732 7.943 7.523 5 12 5
                                                c4.478 0 8.268 2.943 9.542 7
                                                -1.274 4.057-5.064 7-9.542 7
-                                               -4.477 0-8.268-2.943-9.542-7z" />
+                                               -4.477 0-8.268-2.943-9.542-7z"
+                                        />
 
                                     </svg>
+
                                 </button>
+
                             </div>
+
                         </div>
 
                         {{-- KONFIRMASI PASSWORD --}}
@@ -310,13 +379,19 @@
                             </label>
 
                             <div class="relative">
+
                                 <input
                                     id="password_confirmation"
                                     type="password"
                                     name="password_confirmation"
                                     placeholder="Ulangi password"
-                                    class="w-full rounded-xl lg:rounded-2xl border border-gray-200 px-4 py-3.5 lg:px-5 lg:py-4 text-sm lg:text-base
-                                           pr-12 lg:pr-14 focus:ring-2
+                                    class="w-full rounded-xl lg:rounded-2xl
+                                           border border-gray-200
+                                           px-4 py-3.5 lg:px-5 lg:py-3.5
+                                           pr-12 lg:pr-14
+                                           text-sm lg:text-base
+                                           focus:outline-none
+                                           focus:ring-2
                                            focus:ring-[#6C8B6B]"
                                 >
 
@@ -324,42 +399,65 @@
                                     type="button"
                                     onclick="togglePassword('password_confirmation')"
                                     class="absolute right-4 lg:right-5 top-1/2
-                                           -translate-y-1/2 text-gray-400"
-                                >
-                                    
-                                    <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" fill="none"
-                                        viewBox="0 0 24 24" stroke="currentColor">
+                                           -translate-y-1/2 text-gray-400">
 
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                                    <svg xmlns="http://www.w3.org/2000/svg"
+                                         class="w-5 h-5"
+                                         fill="none"
+                                         viewBox="0 0 24 24"
+                                         stroke="currentColor">
 
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5
+                                        <path
+                                            stroke-linecap="round"
+                                            stroke-linejoin="round"
+                                            stroke-width="2"
+                                            d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"
+                                        />
+
+                                        <path
+                                            stroke-linecap="round"
+                                            stroke-linejoin="round"
+                                            stroke-width="2"
+                                            d="M2.458 12C3.732 7.943 7.523 5 12 5
                                                c4.478 0 8.268 2.943 9.542 7
                                                -1.274 4.057-5.064 7-9.542 7
-                                               -4.477 0-8.268-2.943-9.542-7z" />
+                                               -4.477 0-8.268-2.943-9.542-7z"
+                                        />
 
                                     </svg>
+
                                 </button>
+
                             </div>
+
                         </div>
+
                     </div>
+
                 </div>
 
                 {{-- ========================================================= --}}
                 {{-- RECAPTCHA --}}
                 {{-- ========================================================= --}}
                 <div class="mb-6">
+
                     <div class="scale-[0.92] lg:scale-100 origin-left">
 
-                    <div
-                        class="g-recaptcha" data-sitekey="{{ env('NOCAPTCHA_SITEKEY') }}"
-                    ></div>
+                        <div
+                            class="g-recaptcha"
+                            data-sitekey="{{ env('NOCAPTCHA_SITEKEY') }}"
+                        ></div>
+
+                    </div>
 
                     @if ($errors->has('g-recaptcha-response'))
+
                         <p class="text-red-500 text-sm mt-2">
                             {{ $errors->first('g-recaptcha-response') }}
                         </p>
 
                     @endif
+
                 </div>
 
                 {{-- BUTTON --}}
@@ -368,35 +466,48 @@
                     class="w-full bg-[#6C8B6B]
                            hover:bg-[#5B765A]
                            text-white font-semibold
-                           py-3.5 lg:py-5 rounded-xl lg:rounded-2xl text-base lg:text-lg transition"
-                >
+                           py-3.5 lg:py-4
+                           rounded-xl lg:rounded-2xl
+                           text-base
+                           transition">
+
                     Daftar Sekarang
+
                 </button>
 
                 {{-- LOGIN --}}
                 <div class="text-center mt-5 lg:mt-6">
+
                     <p class="text-gray-500">
+
                         Sudah punya akun?
+
                         <a
                             href="{{ route('login') }}"
-                            class="text-[#6C8B6B] font-semibold hover:underline"
-                        >
+                            class="text-[#6C8B6B] font-semibold hover:underline">
+
                             Masuk di sini
+
                         </a>
+
                     </p>
+
                 </div>
+
             </form>
+
         </div>
+
     </div>
+
 </div>
 
 {{-- ========================================================= --}}
 {{-- SCRIPT --}}
 {{-- ========================================================= --}}
 <script>
+function togglePassword(id) {
 
-function togglePassword(id)
-{
     const input =
         document.getElementById(id);
 
@@ -404,6 +515,8 @@ function togglePassword(id)
         input.type === 'password'
             ? 'text'
             : 'password';
+
 }
 </script>
+
 @endsection
