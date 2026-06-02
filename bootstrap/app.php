@@ -14,6 +14,9 @@ return Application::configure(basePath: dirname(__DIR__))
             'force.password' => ForcePasswordChange::class,
         ]);
     })
+    ->withMiddleware(function (Middleware $middleware) {
+    $middleware->append(\App\Http\Middleware\SecurityHeaders::class);
+})
     ->withExceptions(function (Exceptions $exceptions) {
         //
     })->create();
