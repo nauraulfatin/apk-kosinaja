@@ -275,32 +275,19 @@ $tagihanTerbaru =
     |--------------------------------------------------------------------------
     */
 
-    public function nonaktifkan(
-        RiwayatHunian $riwayatHunian
-    )
-    {
-        /*
-        |--------------------------------------------------------------------------
-        | UPDATE RIWAYAT
-        |--------------------------------------------------------------------------
-        */
+    public function nonaktifkan(RiwayatHunian $riwayatHunian)
+{
+    $riwayatHunian->update([
+        'status' => 'nonaktif',
+        'tanggal_keluar' => now(),
+    ]);
 
-        $riwayatHunian->update([
+    Tagihan::where('id_user', $riwayatHunian->id_user)
+           ->where('status', '!=', 'lunas')
+           ->delete();
 
-            'status' => 'nonaktif',
-
-            'tanggal_keluar' => now(),
-
-        ]);
-
-        return back()->with(
-
-            'success',
-
-            'Penghuni berhasil dinonaktifkan.'
-
-        );
-    }
+    return back()->with('success', 'Penghuni berhasil dinonaktifkan, dan tagihan pending terkait telah dihapus.');
+}
 
     /*
     |--------------------------------------------------------------------------

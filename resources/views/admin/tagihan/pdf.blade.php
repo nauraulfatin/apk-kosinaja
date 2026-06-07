@@ -21,57 +21,53 @@
     </style>
 </head>
 <body>
+<div class="header">
+    <h1>Laporan Pembayaran Kost</h1>
+    <p>Periode: {{ \Carbon\Carbon::createFromFormat('Y-m',
+    (strlen($bulanInput) <= 2 ? now()->year.'-'.$bulanInput : $bulanInput)
+)->translatedFormat('F Y') }}</p>
+    <p>Dicetak: {{ now()->translatedFormat('d F Y, H:i') }}</p>
+</div>
 
-    <div class="header">
-        <h1>Laporan Pembayaran Kost</h1>
-        <p>
-            Periode:
-            {{ \Carbon\Carbon::createFromFormat('Y-m', $bulan)->translatedFormat('F Y') }}
-        </p>
-        <p>Dicetak: {{ now()->translatedFormat('d F Y, H:i') }}</p>
+<div class="summary">
+    <div class="summary-box">
+        <div class="label">Total Transaksi</div>
+        <div class="value">{{ $pembayaran->count() }}</div>
     </div>
-
-    <div class="summary">
-        <div class="summary-box">
-            <div class="label">Total Transaksi</div>
-            <div class="value">{{ $pembayaran->count() }}</div>
-        </div>
-        <div class="summary-box">
-            <div class="label">Total Nominal</div>
-            <div class="value">Rp {{ number_format($totalNominal, 0, ',', '.') }}</div>
-        </div>
+    <div class="summary-box">
+        <div class="label">Total Nominal</div>
+        <div class="value">Rp {{ number_format($totalNominal, 0, ',', '.') }}</div>
     </div>
+</div>
 
-    <table>
-        <thead>
-            <tr>
-                <th>No</th>
-                <th>Penghuni</th>
-                <th>Kamar</th>
-                <th>Periode</th>
-                <th>Nominal</th>
-                <th>Tanggal Bayar</th>
-            </tr>
-        </thead>
-        <tbody>
-            @forelse($pembayaran as $i => $p)
-            <tr>
-                <td>{{ $i + 1 }}</td>
-                <td>{{ $p->tagihan->user?->nama }}</td>
-                <td>{{ $p->tagihan->kamar?->nomor_kamar }}</td>
-                <td>{{ $p->tagihan->tanggal_mulai?->format('d M Y') }} s/d {{ $p->tagihan->tanggal_selesai?->format('d M Y') }}</td>
-                <td>Rp {{ number_format($p->nominal_pembayaran, 0, ',', '.') }}</td>
-                <td>{{ $p->tanggal_bayar?->format('d M Y, H:i') }}</td>
-            </tr>
-            @empty
-            <tr>
-                <td colspan="6" style="text-align:center; color:#999; padding: 20px;">
-                    Tidak ada data.
-                </td>
-            </tr>
-            @endforelse
-        </tbody>
-    </table>
+<table>
+    <thead>
+        <tr>
+            <th>No</th>
+            <th>Penghuni</th>
+            <th>Kamar</th>
+            <th>Periode</th>
+            <th>Nominal</th>
+            <th>Tanggal Bayar</th>
+        </tr>
+    </thead>
+    <tbody>
+        @forelse($pembayaran as $i => $p)
+        <tr>
+            <td>{{ $i + 1 }}</td>
+            <td>{{ $p->tagihan->user?->nama }}</td>
+            <td>{{ $p->tagihan->kamar?->nomor_kamar }}</td>
+            <td>{{ $p->tagihan->tanggal_mulai?->format('d M Y') }} s/d {{ $p->tagihan->tanggal_selesai?->format('d M Y') }}</td>
+            <td>Rp {{ number_format($p->nominal_pembayaran, 0, ',', '.') }}</td>
+            <td>{{ $p->tanggal_bayar?->format('d M Y, H:i') }}</td>
+        </tr>
+        @empty
+        <tr>
+            <td colspan="6" style="text-align:center; color:#999; padding: 20px;">Tidak ada data.</td>
+        </tr>
+        @endforelse
+    </tbody>
+</table>
 
     <div class="footer">
         Laporan dibuat otomatis oleh sistem.

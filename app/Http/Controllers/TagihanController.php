@@ -18,29 +18,29 @@ class TagihanController extends Controller
     */
 
     public function penghuniIndex(Request $r)
-{
-    $tagihanAktif = Tagihan::with([
+    {
+        $tagihanAktif = Tagihan::with([
 
-            'kamar',
-            'hargaKamar.periode',
-            'pembayaran'
+                'kamar',
+                'hargaKamar.periode',
+                'pembayaran'
 
-        ])
-        ->where(
-            'id_user',
-            $r->user()->id
-        )
-        ->latest()
-        ->get();
+            ])
+            ->where(
+                'id_user',
+                $r->user()->id
+            )
+            ->latest()
+            ->get();
 
-    return view(
+        return view(
 
-        'penghuni.pembayaran.index',
+            'penghuni.pembayaran.index',
 
-        compact('tagihanAktif')
+            compact('tagihanAktif')
 
-    );
-}
+        );
+    }
 
     /*
     |--------------------------------------------------------------------------
@@ -117,38 +117,38 @@ class TagihanController extends Controller
             );
 
         /*
-|--------------------------------------------------------------------------
-| VALIDASI KEPEMILIKAN
-|--------------------------------------------------------------------------
-*/
+        |--------------------------------------------------------------------------
+        | VALIDASI KEPEMILIKAN
+        |--------------------------------------------------------------------------
+        */
 
-abort_if(
+        abort_if(
 
-    (int)$tagihan->id_user !== (int)$r->user()->id,
+            (int)$tagihan->id_user !== (int)$r->user()->id,
 
-    403
-
-);
-
-/*
-|--------------------------------------------------------------------------
-| TOTAL SUDAH DIBAYAR
-|--------------------------------------------------------------------------
-*/
-
-$totalDibayar =
-
-    $tagihan
-        ->pembayaran()
-        ->where(
-            'status_validasi',
-            'diterima'
-        )
-        ->sum(
-
-            'nominal_pembayaran'
+            403
 
         );
+
+        /*
+        |--------------------------------------------------------------------------
+        | TOTAL SUDAH DIBAYAR
+        |--------------------------------------------------------------------------
+        */
+
+        $totalDibayar =
+
+            $tagihan
+                ->pembayaran()
+                ->where(
+                    'status_validasi',
+                    'diterima'
+                )
+                ->sum(
+
+                    'nominal_pembayaran'
+
+                );
 
         /*
         |--------------------------------------------------------------------------
@@ -213,11 +213,11 @@ $totalDibayar =
 
         Pembayaran::create([
 
-            'id_tagihan' =>$tagihan->id_tagihan,
-            'nominal_pembayaran' =>$d['nominal_pembayaran'],
-            'tanggal_bayar' =>now(),
-            'bukti_bayar' =>$path,
-            'status_validasi'    => 'menunggu',
+            'id_tagihan'      => $tagihan->id_tagihan,
+            'nominal_pembayaran' => $d['nominal_pembayaran'],
+            'tanggal_bayar'   => now(),
+            'bukti_bayar'     => $path,
+            'status_validasi' => 'menunggu',
 
         ]);
 
@@ -299,7 +299,7 @@ $totalDibayar =
         |--------------------------------------------------------------------------
         */
 
-        if($r->filter === 'menunggu')
+        if ($r->filter === 'menunggu')
         {
             $query->where(
                 'status',
@@ -307,7 +307,7 @@ $totalDibayar =
             );
         }
 
-        elseif($r->filter === 'lunas')
+        elseif ($r->filter === 'lunas')
         {
             $query->where(
                 'status',
@@ -315,7 +315,7 @@ $totalDibayar =
             );
         }
 
-        elseif($r->filter === 'telat')
+        elseif ($r->filter === 'telat')
         {
             $query->where(
                 'status',
@@ -323,7 +323,7 @@ $totalDibayar =
             );
         }
 
-        elseif($r->filter === 'tagihan')
+        elseif ($r->filter === 'tagihan')
         {
             $query->where(
                 'status',
@@ -364,76 +364,90 @@ $totalDibayar =
 
             )->get();
 
-       $totalMenunggu =
+        $totalMenunggu =
 
-    $all
-        ->filter(function($t){
+            $all
+                ->filter(function ($t) {
 
-            return
-                $t->status_label
-                === 'menunggu_verifikasi';
+                    return
+                        $t->status
+                        === 'menunggu_verifikasi';
 
-        })
-        ->count();
+                })
+                ->count();
 
-$totalLunas =
+        $totalLunas =
 
-    $all
-        ->filter(function($t){
+            $all
+                ->filter(function ($t) {
 
-            return
-                $t->status_label
-                === 'lunas';
+                    return
+                        $t->status
+                        === 'lunas';
 
-        })
-        ->count();
+                })
+                ->count();
 
-$totalTelat =
+        $totalTelat =
 
-    $all
-        ->filter(function($t){
+            $all
+                ->filter(function ($t) {
 
-            return
-                $t->status_label
-                === 'telat';
+                    return
+                        $t->status
+                        === 'telat';
 
-        })
-        ->count();
-
-        /*
-|--------------------------------------------------------------------------
-| RIWAYAT
-|--------------------------------------------------------------------------
-*/
-
-$bulan = $r->get('bulan', now()->format('Y-m'));
-[$tahun, $bln] = explode('-', $bulan);
-
-$riwayat = Pembayaran::with(['tagihan.user', 'tagihan.kamar.kost'])
-    ->whereMonth('tanggal_bayar', $bln)
-    ->whereYear('tanggal_bayar', $tahun)
-    ->where('status_validasi', 'diterima')
-    ->latest('tanggal_bayar')
-    ->get();
-
-$totalNominalRiwayat = $riwayat->sum('nominal_pembayaran');
-
-
+                })
+                ->count();
 
         return view(
-    'admin.tagihan.index',
-    compact(
-        'items',
-        'totalMenunggu',
-        'totalLunas',
-        'totalTelat',
-        'riwayat',           // tambah
-        'totalNominalRiwayat', // tambah
-        'bulan',             // tambah
-    )
-);
+
+            'admin.tagihan.index',
+
+            compact(
+
+                'items',
+                'totalMenunggu',
+                'totalLunas',
+                'totalTelat'
+
+            )
+
+        );
     }
-    
+
+    /*
+    |--------------------------------------------------------------------------
+    | RIWAYAT
+    |--------------------------------------------------------------------------
+    */
+
+    public function riwayat(Request $r)
+    {
+        $kostId = $r->user()->kost->id;
+
+        $bulanTahun = $r->get('bulan', now()->format('Y-m'));
+        if (str_contains($bulanTahun, '-')) {
+            [$tahun, $bln] = explode('-', $bulanTahun);
+        } else {
+            $bln = $bulanTahun;
+            $tahun = now()->year;
+        }
+
+        $riwayat = Pembayaran::with(['tagihan.user', 'tagihan.kamar.kost'])
+            ->whereMonth('tanggal_bayar', $bln)
+            ->whereYear('tanggal_bayar', $tahun)
+            ->where('status_validasi', 'diterima')
+            ->latest('tanggal_bayar')
+            ->get();
+
+        $totalNominalRiwayat = $riwayat->sum('nominal_pembayaran');
+
+        return view('admin.tagihan.riwayat', compact(
+            'riwayat', 'totalNominalRiwayat', 'bulanTahun'
+        ));
+    }
+
     /*
     |--------------------------------------------------------------------------
     | DETAIL
@@ -487,98 +501,98 @@ $totalNominalRiwayat = $riwayat->sum('nominal_pembayaran');
         );
     }
 
-   /*
-|--------------------------------------------------------------------------
-| VALIDASI PEMBAYARAN
-|--------------------------------------------------------------------------
-*/
-
-public function validasiBukti(
-    Request $r,
-    Pembayaran $pembayaran
-)
-{
-   $tagihan = $pembayaran->tagihan;
-
-abort_if(
-
-    !$tagihan,
-
-    404
-
-);
-
-// ✅ BENAR
-abort_if(
-    !$tagihan->kamar ||
-    $tagihan->kamar->id_kost != $r->user()->kost->id,  // ganti id_kost → id
-    403
-);
-
     /*
     |--------------------------------------------------------------------------
-    | UPDATE STATUS PEMBAYARAN
+    | VALIDASI PEMBAYARAN
     |--------------------------------------------------------------------------
     */
 
-    $pembayaran->update([
+    public function validasiBukti(
+        Request $r,
+        Pembayaran $pembayaran
+    )
+    {
+        $tagihan = $pembayaran->tagihan;
 
-        'status_validasi' => 'diterima'
+        abort_if(
 
-    ]);
+            !$tagihan,
 
-    /*
-    |--------------------------------------------------------------------------
-    | TOTAL CICILAN DITERIMA
-    |--------------------------------------------------------------------------
-    */
+            404
 
-    $totalPembayaran =
+        );
 
-        $tagihan
-            ->pembayaran()
-            ->where(
-                'status_validasi',
-                'diterima'
-            )
-            ->sum(
-                'nominal_pembayaran'
-            );
+        // ✅ BENAR
+        abort_if(
+            !$tagihan->kamar ||
+            $tagihan->kamar->id_kost != $r->user()->kost->id,
+            403
+        );
 
-    /*
-    |--------------------------------------------------------------------------
-    | TOTAL TAGIHAN
-    |--------------------------------------------------------------------------
-    */
+        /*
+        |--------------------------------------------------------------------------
+        | UPDATE STATUS PEMBAYARAN
+        |--------------------------------------------------------------------------
+        */
 
-    $totalTagihan =
+        $pembayaran->update([
 
-        $tagihan
-            ->hargaKamar
-            ?->harga ?? 0;
+            'status_validasi' => 'diterima'
 
-    /*
-    |--------------------------------------------------------------------------
-    | STATUS TAGIHAN
-    |--------------------------------------------------------------------------
-    */
+        ]);
 
-    $tagihan->update([
+        /*
+        |--------------------------------------------------------------------------
+        | TOTAL CICILAN DITERIMA
+        |--------------------------------------------------------------------------
+        */
 
-    'validated_by' => $r->user()->id,
+        $totalPembayaran =
 
-    'validated_at' => now(),
+            $tagihan
+                ->pembayaran()
+                ->where(
+                    'status_validasi',
+                    'diterima'
+                )
+                ->sum(
+                    'nominal_pembayaran'
+                );
 
-]);
+        /*
+        |--------------------------------------------------------------------------
+        | TOTAL TAGIHAN
+        |--------------------------------------------------------------------------
+        */
 
-    return back()->with(
+        $totalTagihan =
 
-        'success',
+            $tagihan
+                ->hargaKamar
+                ?->harga ?? 0;
 
-        'Pembayaran berhasil divalidasi.'
+        /*
+        |--------------------------------------------------------------------------
+        | STATUS TAGIHAN
+        |--------------------------------------------------------------------------
+        */
 
-    );
-}
+        $tagihan->update([
+
+            'validated_by' => $r->user()->id,
+
+            'validated_at' => now(),
+
+        ]);
+
+        return back()->with(
+
+            'success',
+
+            'Pembayaran berhasil divalidasi.'
+
+        );
+    }
 
     /*
     |--------------------------------------------------------------------------
@@ -593,20 +607,20 @@ abort_if(
     {
         $tagihan = $pembayaran->tagihan;
 
-       // Cek apakah ini sudah benar
-abort_if(
-    $tagihan->kamar->id_kost !== $r->user()->kost->id,  // pastikan ->id bukan ->id_kost
-    403
-);
+        // Cek apakah ini sudah benar
+        abort_if(
+            $tagihan->kamar->id_kost !== $r->user()->kost->id,
+            403
+        );
 
         $pembayaran->update(['status_validasi' => 'ditolak']);
 
         $tagihan->update([
 
-    'validated_by' => $r->user()->id,
-    'validated_at' => now(),
+            'validated_by' => $r->user()->id,
+            'validated_at' => now(),
 
-]);
+        ]);
 
         return back()->with(
             'success',
@@ -662,92 +676,63 @@ abort_if(
     }
 
     /*
-|--------------------------------------------------------------------------
-| RIWAYAT PEMBAYARAN
-|--------------------------------------------------------------------------
-*/
+    |--------------------------------------------------------------------------
+    | RIWAYAT PEMBAYARAN
+    |--------------------------------------------------------------------------
+    */
 
-public function riwayatPembayaran(Request $r)
-{
-    $items = Pembayaran::with([
+    public function riwayatPembayaran(Request $r)
+    {
+        $items = Pembayaran::with([
 
-            'tagihan.kamar',
-            'tagihan.hargaKamar.periode',
+                'tagihan.kamar',
+                'tagihan.hargaKamar.periode',
 
-        ])
-        ->whereHas('tagihan', function ($q)
-        use ($r) {
+            ])
+            ->whereHas('tagihan', function ($q)
+            use ($r) {
 
-            $q->where(
-                'id_user',
-                $r->user()->id
-            );
+                $q->where(
+                    'id_user',
+                    $r->user()->id
+                );
 
-        })
-        ->latest()
-        ->get();
+            })
+            ->latest()
+            ->get();
 
-    return view(
+        return view(
 
-        'penghuni.pembayaran.riwayat',
+            'penghuni.pembayaran.riwayat',
 
-        compact('items')
+            compact('items')
 
-    );
-}
+        );
+    }
 
-public function riwayat(Request $r)
-{
-    $kostId = $r->user()->kost->id;
+    public function exportPdf(Request $r)
+    {
+        $bulanInput = $r->get('bulan', now()->format('Y-m'));
 
-    $bulan = $r->get('bulan', now()->format('Y-m'));
-    [$tahun, $bln] = explode('-', $bulan);
+        if (str_contains($bulanInput, '-')) {
+            [$tahun, $bulan] = explode('-', $bulanInput);
+        } else {
+            $bulan = $bulanInput;
+            $tahun = now()->year;
+        }
 
-    $riwayat = Pembayaran::with(['tagihan.user', 'tagihan.kamar.kost'])
-        ->whereHas('tagihan.kamar', function ($q) use ($kostId) {
-            $q->where('id_kost', $kostId);
-        })
-        ->whereMonth('tanggal_bayar', $bln)
-        ->whereYear('tanggal_bayar', $tahun)
-        ->where('status_validasi', 'diterima')
-        ->latest('tanggal_bayar')
-        ->get();
+        $pembayaran = Pembayaran::with(['tagihan.user', 'tagihan.kamar.kost'])
+            ->whereMonth('tanggal_bayar', $bulan)
+            ->whereYear('tanggal_bayar', $tahun)
+            ->where('status_validasi', 'diterima')
+            ->latest('tanggal_bayar')
+            ->get();
 
-    $totalNominalRiwayat = $riwayat->sum('nominal_pembayaran');
+        $totalNominal = $pembayaran->sum('nominal_pembayaran');
 
-    return view('admin.tagihan.riwayat', compact(
-        'riwayat',
-        'totalNominalRiwayat',
-        'bulan',
-    ));
-}
-// ── EXPORT PDF ───────────────────────────────────────────────
-public function exportPdf(Request $r)
-{
-    $bulan = $r->get('bulan', now()->format('Y-m'));
+        $pdf = Pdf::loadView('admin.tagihan.pdf', compact('pembayaran', 'totalNominal', 'bulanInput'))
+            ->setPaper('a4', 'landscape');
 
-    [$tahun, $bln] = explode('-', $bulan);
-
-    $pembayaran = Pembayaran::with([
-            'tagihan.user',
-            'tagihan.kamar.kost',
-        ])
-        ->whereMonth('tanggal_bayar', $bln)
-        ->whereYear('tanggal_bayar', $tahun)
-        ->where('status_validasi', 'diterima')
-        ->latest('tanggal_bayar')
-        ->get();
-
-    $totalNominal = $pembayaran->sum('nominal_pembayaran');
-
-    $pdf = Pdf::loadView('admin.tagihan.pdf', compact(
-            'pembayaran',
-            'totalNominal',
-            'bulan',
-        ))
-        ->setPaper('a4', 'landscape');
-
-    return $pdf->download('laporan-pembayaran-' . $bulan . '.pdf');
-}
-
+        return $pdf->download('laporan-pembayaran-' . $bulanInput . '.pdf');
+    }
 }
