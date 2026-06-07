@@ -94,7 +94,6 @@ class TagihanController extends Controller
                 'required|numeric|min:1000',
 
             'bukti_bayar' =>
-
                 'required|image|mimes:jpg,jpeg,png|max:4096',
 
         ]);
