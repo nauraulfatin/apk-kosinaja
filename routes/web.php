@@ -454,5 +454,18 @@ Route::middleware([
 */
 
 Route::get('/profil', function () {
-    return view('profil.index');
+
+    $riwayat = \App\Models\RiwayatHunian::with('kamar.kost')
+        ->where('id_user', auth()->id())
+        ->latest()
+        ->first();
+
+    $riwayatList = \App\Models\RiwayatHunian::with(['kamar.kost.user'])
+        ->where('id_user', auth()->id())
+        ->where('status', 'nonaktif')
+        ->latest()
+        ->get();
+
+    return view('profil.index', compact('riwayat', 'riwayatList'));
+
 })->name('profil.index');

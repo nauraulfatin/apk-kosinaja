@@ -181,14 +181,24 @@
         {{-- ========================================================= --}}
         <div class="flex-1 w-full">
 
-            <div class="bg-white rounded-[28px]
-                        border border-[#EEF2EE]
-                        shadow-sm p-10">
+    <div class="bg-white rounded-[28px] border border-[#EEF2EE] shadow-sm p-10">
 
-                {{-- TITLE --}}
-                <h2 class="text-[24px] font-bold text-[#1B2B1D] mb-6">
-                    Kos Saya
-                </h2>
+        {{-- TAB NAVIGASI --}}
+        <div class="flex items-center gap-6 border-b border-gray-100 mb-8">
+            <button onclick="switchTab('kos-saya')" id="tab-kos-saya"
+                    class="tab-btn pb-3 text-[15px] font-bold text-[#6C8B6B] border-b-2 border-[#6C8B6B] transition">
+                Kos Saya
+            </button>
+            <button onclick="switchTab('riwayat-hunian')" id="tab-riwayat-hunian"
+                    class="tab-btn pb-3 text-[15px] font-semibold text-gray-400 border-b-2 border-transparent transition">
+                Riwayat Hunian
+            </button>
+        </div>
+
+        {{-- ============================================
+             PANEL : KOS SAYA
+             ============================================ --}}
+        <div id="panel-kos-saya">
 
                 {{-- ============================================
                      STATE 1 : BELUM PUNYA KOS (empty state)
@@ -508,8 +518,8 @@
               max-w-md mt-4">
 
                         Kamu sudah keluar dari kost sebelumnya.
-                        Jika ingin masuk kembali atau bergabung
-                        ke kost lain, silakan masukkan kode unik
+                        Jika ingin aktif kembali silahkan hubungi pemilik kos.
+                        Jik ingin bergabung ke kost lain, masukkan kode unik
                         dari pemilik kost.
 
                     </p>
@@ -531,13 +541,75 @@
                 @endif
 
             </div>
+            {{-- ============================================
+             PANEL : RIWAYAT HUNIAN
+             ============================================ --}}
+        <div id="panel-riwayat-hunian" class="hidden overflow-y-auto max-h-[600px]">
 
+            @if($riwayatList->isEmpty())
+            <div class="flex flex-col items-center justify-center text-center py-16">
+                <img src="{{ asset('empty-kos.png') }}" alt="Kosong" class="w-[200px] h-auto object-contain">
+                <h3 class="text-[20px] font-bold text-[#1B2B1D] mt-6">Belum ada riwayat hunian</h3>
+                <p class="text-gray-500 text-[14px] mt-3">Riwayat kos yang pernah kamu tempati akan muncul di sini.</p>
+            </div>
+
+            @else
+            <div class="flex flex-col gap-4">
+                @foreach($riwayatList as $r)
+                <div class="border border-gray-100 rounded-2xl p-5
+                            flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+                    <div>
+                        <p class="text-[14px] font-bold text-[#1B2B1D]">
+                            {{ $r->kamar?->kost?->nama_kost ?? '-' }}
+                        </p>
+                        <p class="text-[13px] text-gray-500 mt-1">
+                            Kamar {{ $r->kamar?->nomor_kamar ?? '-' }}
+                        </p>
+                        <p class="text-[12px] text-gray-400 mt-1">
+                            {{ $r->tanggal_masuk?->format('d M Y') }}
+                            –
+                            {{ $r->tanggal_keluar?->format('d M Y') ?? '-' }}
+                        </p>
+                    </div>
+
+                    <div class="flex items-center gap-3 shrink-0">
+
+                        <span class="text-[12px] font-semibold px-3 py-1.5 rounded-full bg-red-100 text-red-600">
+                            Tidak Aktif
+                        </span>
+
+                        @if($r->kamar?->kost?->user?->no_hp)
+                        @php
+                            $noWa = preg_replace('/^0/', '62', $r->kamar->kost->user->no_hp);
+                            $pesan = urlencode(
+                                'Halo admin, saya ' . auth()->user()->nama .
+                                ' ingin bergabung kembali ke ' . $r->kamar->kost->nama_kost .
+                                '. Mohon bantuannya.'
+                            );
+                        @endphp
+                        <a href="https://wa.me/{{ $noWa }}?text={{ $pesan }}"
+                           target="_blank"
+                           class="flex items-center gap-2 bg-green-500 hover:bg-green-600
+                                  text-white text-[13px] font-semibold
+                                  px-4 py-2 rounded-xl transition">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">
+                                <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"/>
+                                <path d="M12 0C5.373 0 0 5.373 0 12c0 2.127.558 4.126 1.533 5.862L.054 23.5l5.83-1.53A11.945 11.945 0 0012 24c6.627 0 12-5.373 12-12S18.627 0 12 0zm0 22c-1.886 0-3.655-.502-5.188-1.381l-.372-.22-3.461.907.924-3.369-.242-.389A9.956 9.956 0 012 12C2 6.477 6.477 2 12 2s10 4.477 10 10-4.477 10-10 10z"/>
+                            </svg>
+                            Hubungi Admin
+                        </a>
+                        @endif
+
+                    </div>
+                </div>
+                @endforeach
+            </div>
+            @endif
         </div>
 
     </div>
 
 </div>
-
 
 {{-- =========================================================
      MODAL : KODE UNIK (8 DIGIT)
@@ -608,9 +680,9 @@
                 <path stroke-linecap="round" stroke-linejoin="round"
                     d="M12 9v2m0 4h.01M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z" />
             </svg>
-            <p class="text-[13px] text-red-500 font-medium">
-                Maaf, kode yang kamu masukkan salah.
-            </p>
+            <p id="kodeUnikPesanErrorText" class="text-[13px] text-red-500 font-medium">
+    Maaf, kode yang kamu masukkan salah.
+</p>
         </div>
 
         {{-- PESAN SUKSES (menunggu approval setelah submit) --}}
@@ -636,7 +708,23 @@
 </div>
 @endif
 
+{{-- SCRIPT TAB — selalu di-render --}}
+<script>
+function switchTab(tab) {
+    document.getElementById('panel-kos-saya').classList.add('hidden');
+    document.getElementById('panel-riwayat-hunian').classList.add('hidden');
 
+    document.querySelectorAll('.tab-btn').forEach(btn => {
+        btn.classList.remove('text-[#6C8B6B]', 'border-[#6C8B6B]', 'font-bold');
+        btn.classList.add('text-gray-400', 'border-transparent', 'font-semibold');
+    });
+
+    document.getElementById('panel-' + tab).classList.remove('hidden');
+    const activeBtn = document.getElementById('tab-' + tab);
+    activeBtn.classList.remove('text-gray-400', 'border-transparent', 'font-semibold');
+    activeBtn.classList.add('text-[#6C8B6B]', 'border-[#6C8B6B]', 'font-bold');
+}
+</script>
 {{-- =========================================================
      SCRIPT
      ========================================================= --}}
@@ -894,9 +982,7 @@ function submitKodeUnik() {
                 |--------------------------------------------------------------------------
                 */
 
-                kodeUnikPesanError.classList.add('hidden');
-
-                kodeUnikPesanSukses.classList.remove('hidden');
+                kodeUnikPesanError.classList.add('hidden');                kodeUnikPesanSukses.classList.remove('hidden');
 
                 kodeUnikPesanSukses.classList.add('flex');
 
@@ -952,16 +1038,12 @@ function submitKodeUnik() {
             |--------------------------------------------------------------------------
             */
             else {
+                document.getElementById('kodeUnikPesanErrorText').textContent = data.message; // ← tambah ini
                 kodeUnikPesanSukses.classList.add('hidden');
-
                 kodeUnikPesanError.classList.remove('hidden');
-
                 kodeUnikPesanError.classList.add('flex');
-
                 kodeUnikBtn.disabled = false;
-
-                kodeUnikBtn.textContent =
-                    'Kirim kode unik';
+                kodeUnikBtn.textContent = 'Kirim kode unik';
             }
 
         })

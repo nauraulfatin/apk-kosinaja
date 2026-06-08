@@ -26,13 +26,24 @@ class ProfilPenghuniController extends Controller
             ->latest()
             ->first();
 
-        return view(
-            'penghuni.profil',
-            compact(
-                'user',
-                'riwayat'
-            )
-        );
+        $riwayatList = RiwayatHunian::with([
+
+            'kamar.kost.user'
+
+        ])
+        ->where('id_user', $user->id)
+        ->where('status', 'nonaktif')
+        ->latest()
+        ->get();
+
+    return view(
+        'penghuni.profil',
+        compact(
+            'user',
+            'riwayat',
+            'riwayatList'
+        )
+    );
     }
 
     /*
@@ -134,6 +145,28 @@ public function submitKode(Request $request)
 
             ]);
         }
+
+        /*
+|--------------------------------------------------------------------------
+| CEK PERNAH TINGGAL DI KOST INI (nonaktif)
+|--------------------------------------------------------------------------
+*/
+
+$pernahTinggal = RiwayatHunian::where('id_user', Auth::user()->id)
+    ->where('id_kost', $kost->id)
+    ->where('status', 'nonaktif')
+    ->exists();
+
+if ($pernahTinggal)
+{
+    return response()->json([
+
+        'success' => false,
+
+        'message' => 'Kamu pernah tinggal di kost ini. Silakan hubungi admin untuk mengaktifkan kembali.'
+
+    ]);
+}
 
         /*
         |--------------------------------------------------------------------------
