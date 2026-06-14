@@ -16,12 +16,9 @@
 
     </div>
 
-    <a
-        href="{{ route('admin.kost.edit') }}"
-        class="bg-[#6C8B6B] hover:bg-[#5B765A]
+    <a href="{{ route('admin.kost.edit') }}" class="bg-[#6C8B6B] hover:bg-[#5B765A]
                text-white px-5 py-3 rounded-xl
-               font-semibold transition"
-    >
+               font-semibold transition">
 
         Edit Informasi
 
@@ -45,12 +42,9 @@
 
     </p>
 
-    <a
-        href="{{ route('admin.kost.edit') }}"
-        class="bg-[#6C8B6B] hover:bg-[#5B765A]
+    <a href="{{ route('admin.kost.edit') }}" class="bg-[#6C8B6B] hover:bg-[#5B765A]
                text-white px-5 py-3 rounded-xl
-               font-semibold transition"
-    >
+               font-semibold transition">
 
         Tambah Informasi
 
@@ -70,21 +64,17 @@
             {{-- FOTO --}}
             <div class="w-full lg:w-[350px] shrink-0">
 
-              @if($kost->foto_kost && is_array($kost->foto_kost) && count($kost->foto_kost))
+                @if($kost->foto_kost && is_array($kost->foto_kost) && count($kost->foto_kost))
 
-<img
-    src="{{ asset('storage/' . $kost->foto_kost[0]) }}"
-    class="w-full h-[250px] object-cover rounded-2xl border border-gray-200"
->
+                <img src="{{ asset('storage/' . $kost->foto_kost[0]) }}"
+                    class="w-full h-[250px] object-cover rounded-2xl border border-gray-200">
 
-@elseif($kost->foto_kost)
+                @elseif($kost->foto_kost)
 
-<img
-    src="{{ asset('storage/' . $kost->foto_kost) }}"
-    class="w-full h-[250px] object-cover rounded-2xl border border-gray-200"
->
+                <img src="{{ asset('storage/' . $kost->foto_kost) }}"
+                    class="w-full h-[250px] object-cover rounded-2xl border border-gray-200">
 
-@else
+                @else
 
                 <div class="w-full h-[250px]
                             bg-gray-100 rounded-2xl
@@ -140,24 +130,22 @@
 
                 </div>
                 {{-- NO HP --}}
-<div class="mt-6">
+                <div class="mt-6">
 
-    <p class="text-sm text-gray-500 mb-2">
+                    <p class="text-sm text-gray-500 mb-2">
 
-        Nomor WhatsApp
+                        Nomor WhatsApp
 
-    </p>
+                    </p>
 
-    <div
-        class="border border-gray-200 rounded-xl
-               px-4 py-3 text-sm text-gray-700"
-    >
+                    <div class="border border-gray-200 rounded-xl
+               px-4 py-3 text-sm text-gray-700">
 
-        {{ $kost->user->no_hp ?: '-' }}
+                        {{ $kost->user->no_hp ?: '-' }}
 
-    </div>
+                    </div>
 
-</div>
+                </div>
 
             </div>
 
@@ -180,11 +168,9 @@
 
             @foreach($kost->fasilitas as $f)
 
-            <span
-                class="bg-[#F8F5F0] text-[#6C8B6B]
+            <span class="bg-[#F8F5F0] text-[#6C8B6B]
                        px-4 py-2 rounded-full
-                       text-sm font-medium"
-            >
+                       text-sm font-medium">
 
                 {{ $f->nama_fasilitas }}
 
@@ -221,10 +207,8 @@
 
             @foreach($kost->foto_kost as $foto)
 
-            <img
-                src="{{ asset('storage/' . $foto) }}"
-                class="w-full h-44 object-cover rounded-2xl border border-gray-200"
-            >
+            <img src="{{ asset('storage/' . $foto) }}"
+                class="w-full h-44 object-cover rounded-2xl border border-gray-200">
 
             @endforeach
 
@@ -255,14 +239,8 @@
 
         <div class="rounded-2xl overflow-hidden border border-gray-200">
 
-            <iframe
-                src="{{ $kost->lokasi }}"
-                width="100%"
-                height="450"
-                style="border:0;"
-                allowfullscreen=""
-                loading="lazy"
-            ></iframe>
+            <iframe src="{{ $kost->lokasi }}" width="100%" height="450" style="border:0;" allowfullscreen=""
+                loading="lazy"></iframe>
 
         </div>
 

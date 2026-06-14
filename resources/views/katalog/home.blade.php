@@ -1048,11 +1048,13 @@
         width: 18px;
         height: 18px;
     }
-     .how-step-num {
+
+    .how-step-num {
         font-size: 0.62rem;
         letter-spacing: 1px;
     }
-        .how-title {
+
+    .how-title {
         font-size: 0.86rem;
         line-height: 1.3;
     }
@@ -1469,11 +1471,21 @@
     transform: translateY(0);
 }
 
-.reveal-delay-1 { transition-delay: 0.1s; }
-.reveal-delay-2 { transition-delay: 0.2s; }
-.reveal-delay-3 { transition-delay: 0.3s; }
-.reveal-delay-4 { transition-delay: 0.4s; }
+.reveal-delay-1 {
+    transition-delay: 0.1s;
+}
 
+.reveal-delay-2 {
+    transition-delay: 0.2s;
+}
+
+.reveal-delay-3 {
+    transition-delay: 0.3s;
+}
+
+.reveal-delay-4 {
+    transition-delay: 0.4s;
+}
 </style>
 @endsection
 
@@ -1669,7 +1681,7 @@
 
             });
 
-            
+
 
             /*
             |--------------------------------------------------------------------------
@@ -1720,7 +1732,7 @@
 
             $hargaMax = $hargaDipakai->max('harga');
 
-            
+
             $fasilitasKost = $kost->fasilitas ?? collect();
 
             $noHp = $kost->user?->no_hp;
@@ -1757,7 +1769,7 @@
 
                     <div class="kos-divider"></div>
 
-                        <div class="kos-price">
+                    <div class="kos-price">
                         @if($hargaMin && $hargaMax && $hargaMin != $hargaMax)
                         Rp {{ number_format($hargaMin, 0, ',', '.') }}
                         <span>
@@ -1993,7 +2005,7 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         });
     }, {
-        threshold: 0.08,      // muncul saat 8% elemen terlihat
+        threshold: 0.08, // muncul saat 8% elemen terlihat
         rootMargin: '0px 0px -40px 0px' // sedikit sebelum masuk viewport
     });
 
