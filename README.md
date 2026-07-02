@@ -182,7 +182,7 @@ nama-repo/
 | _(Nama Anggota 3)_ | _(NIM)_ | _(Frontend/Backend/Fullstack)_ |
 | _(Nama Anggota 4)_ | _(NIM)_ | _(Frontend/Backend/Fullstack)_ |
 
-> Silakan lengkapi tabel di atas dengan data anggota kelompok yang sebenarnya.
+
 
 ---
 
