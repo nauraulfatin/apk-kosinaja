@@ -49,13 +49,13 @@
 
             </div>
 
-            <div
-                class="w-16 h-16 rounded-2xl bg-[#D6E5D6] flex items-center justify-center text-3xl"
-            >
+            <div class="w-16 h-16 rounded-2xl bg-[#D6E5D6] flex items-center justify-center text-3xl">
 
-                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
-                    </svg>
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24"
+                    stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                        d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
+                </svg>
 
             </div>
 
@@ -86,13 +86,13 @@
 
             </div>
 
-            <div
-                class="w-16 h-16 rounded-2xl bg-yellow-100 flex items-center justify-center text-3xl"
-            >
+            <div class="w-16 h-16 rounded-2xl bg-yellow-100 flex items-center justify-center text-3xl">
 
-                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
-                    </svg>
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24"
+                    stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                        d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
+                </svg>
 
             </div>
 
@@ -123,24 +123,14 @@
 
             </div>
 
-            <div
-                class="w-16 h-16 rounded-2xl bg-red-100 flex items-center justify-center text-3xl"
-            >
+            <div class="w-16 h-16 rounded-2xl bg-red-100 flex items-center justify-center text-3xl">
 
-                <svg xmlns="http://www.w3.org/2000/svg"
-     class="h-5 w-5"
-     fill="none"
-     viewBox="0 0 24 24"
-     stroke="currentColor">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24"
+                    stroke="currentColor">
 
-    <path
-        stroke-linecap="round"
-        stroke-linejoin="round"
-        stroke-width="2"
-        d="M6 18L18 6M6 6l12 12"
-    />
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
 
-</svg>
+                </svg>
 
             </div>
 
@@ -156,7 +146,7 @@
 <div class="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden">
 
     {{-- HEADER --}}
-    <div class="px-6 py-5 border-b border-gray-100 bg-[#F8F5F0]">
+    <div class="px-6 py-5 border-b border-gray-100 bg-[#E6F4EC]">
 
         <div class="flex items-center justify-between">
 
@@ -181,7 +171,7 @@
 
         <table class="w-full">
 
-            <thead class="bg-[#F8F5F0]">
+            <thead class="bg-[#E6F4EC]">
 
                 <tr>
 
@@ -216,10 +206,10 @@
             <tbody class="divide-y divide-gray-100">
 
                 @php
-                    $pendingAdmins = $admins
-                        ->where('status', 'pending')
-                        ->sortByDesc('created_at')
-                        ->take(5);
+                $pendingAdmins = $admins
+                ->where('status', 'pending')
+                ->sortByDesc('created_at')
+                ->take(5);
                 @endphp
 
                 @forelse($pendingAdmins as $u)
@@ -272,10 +262,8 @@
                     {{-- AKSI --}}
                     <td class="px-6 py-5">
 
-                        <a
-                            href="{{ route('superadmin.admin.detail', $u) }}"
-                            class="text-[#3A5C3A] hover:underline font-semibold"
-                        >
+                        <a href="{{ route('superadmin.admin.detail', $u) }}"
+                            class="text-[#3A5C3A] hover:underline font-semibold">
 
                             Lihat Detail
 
@@ -289,10 +277,7 @@
 
                 <tr>
 
-                    <td
-                        colspan="6"
-                        class="px-6 py-10 text-center text-gray-500"
-                    >
+                    <td colspan="6" class="px-6 py-10 text-center text-gray-500">
 
                         Belum ada pengajuan admin kost.
 
@@ -313,10 +298,8 @@
 
     <div class="px-6 py-4 border-t border-gray-100 bg-[#FAFAFA]">
 
-        <a
-            href="{{ route('superadmin.pengajuan.index') }}"
-            class="text-[#3A5C3A] hover:underline font-semibold text-sm"
-        >
+        <a href="{{ route('superadmin.pengajuan.index') }}"
+            class="text-[#3A5C3A] hover:underline font-semibold text-sm">
 
             Lihat Semua Pengajuan
 

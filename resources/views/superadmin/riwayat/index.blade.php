@@ -24,10 +24,8 @@
     </div>
 
     {{-- KEMBALI --}}
-    <a
-        href="{{ route('superadmin.dashboard') }}"
-        class="bg-gray-100 hover:bg-gray-200 text-gray-700 px-5 py-3 rounded-xl font-semibold transition"
-    >
+    <a href="{{ route('superadmin.dashboard') }}"
+        class="bg-gray-100 hover:bg-gray-200 text-gray-700 px-5 py-3 rounded-xl font-semibold transition">
 
         Kembali
 
@@ -44,7 +42,7 @@
 
         <table class="w-full">
 
-            <thead class="bg-[#F8F5F0]">
+            <thead class="bg-[#E6F4EC]">
 
                 <tr>
 
@@ -134,9 +132,7 @@
 
                         @if($u->status === 'aktif')
 
-                        <span
-                            class="px-3 py-1 rounded-full bg-green-100 text-green-700 text-xs font-semibold"
-                        >
+                        <span class="px-3 py-1 rounded-full bg-green-100 text-green-700 text-xs font-semibold">
 
                             Disetujui
 
@@ -144,9 +140,7 @@
 
                         @elseif($u->status === 'ditolak')
 
-                        <span
-                            class="px-3 py-1 rounded-full bg-red-100 text-red-700 text-xs font-semibold"
-                        >
+                        <span class="px-3 py-1 rounded-full bg-red-100 text-red-700 text-xs font-semibold">
 
                             Ditolak
 
@@ -159,10 +153,8 @@
                     {{-- AKSI --}}
                     <td class="px-6 py-5">
 
-                        <a
-                            href="{{ route('superadmin.riwayat.edit', $u) }}"
-                            class="text-[#3A5C3A] hover:underline font-semibold"
-                        >
+                        <a href="{{ route('superadmin.riwayat.edit', $u) }}"
+                            class="text-[#3A5C3A] hover:underline font-semibold">
 
                             Edit
 
@@ -176,10 +168,7 @@
 
                 <tr>
 
-                    <td
-                        colspan="7"
-                        class="px-6 py-10 text-center text-gray-500"
-                    >
+                    <td colspan="7" class="px-6 py-10 text-center text-gray-500">
 
                         Belum ada riwayat pengajuan admin kost.
 

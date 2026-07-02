@@ -29,7 +29,7 @@
 <div class="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden">
     <div class="overflow-x-auto">
         <table class="w-full">
-            <thead class="bg-[#F8F5F0]">
+            <thead class="bg-[#E6F4EC]">
                 <tr>
                     <th class="px-6 py-4 text-left text-xs font-medium text-gray-500">ID</th>
                     <th class="px-6 py-4 text-left text-xs font-medium text-gray-500">Nama Fasilitas</th>

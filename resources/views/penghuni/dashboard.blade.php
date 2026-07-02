@@ -98,11 +98,26 @@
             @if(count($fotos))
             <div class="grid grid-cols-3 gap-2 mb-6 rounded-2xl overflow-hidden">
                 @foreach(array_slice($fotos, 0, 3) as $idx => $foto)
-                <a href="{{ asset('storage/' . $foto) }}" target="_blank"
-                    class="block aspect-square overflow-hidden {{ $idx === 0 ? 'col-span-2 row-span-2' : '' }} rounded-xl">
+                <div onclick="document.getElementById('preview-{{ $idx }}').classList.remove('hidden')"
+                    class="block aspect-square overflow-hidden {{ $idx === 0 ? 'col-span-2 row-span-2' : '' }} rounded-xl cursor-pointer">
                     <img src="{{ asset('storage/' . $foto) }}"
                         class="w-full h-full object-cover hover:scale-105 transition-transform duration-200">
-                </a>
+                </div>
+
+                {{-- MODAL PREVIEW --}}
+                <div id="preview-{{ $idx }}" onclick="this.classList.add('hidden')"
+                    class="hidden fixed inset-0 bg-black/80 z-50 flex items-center justify-center p-4">
+                    <button onclick="document.getElementById('preview-{{ $idx }}').classList.add('hidden')"
+                        class="absolute top-5 right-5 w-10 h-10 rounded-full bg-white/10 hover:bg-white/20 text-white flex items-center justify-center transition">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6" fill="none" viewBox="0 0 24 24"
+                            stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M6 18L18 6M6 6l12 12" />
+                        </svg>
+                    </button>
+                    <img onclick="event.stopPropagation()" src="{{ asset('storage/' . $foto) }}"
+                        class="max-w-full max-h-full object-contain rounded-xl">
+                </div>
                 @endforeach
             </div>
             @else

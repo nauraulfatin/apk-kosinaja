@@ -1,59 +1,191 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+# Sistem Manajemen Kos
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+## 📋 Deskripsi Proyek
 
-## About Laravel
+**Sistem Manajemen Kos** adalah aplikasi berbasis web yang dirancang untuk memudahkan pengelolaan rumah kos, mulai dari pencarian kos oleh calon penghuni, pengelolaan data kamar dan penghuni oleh admin kos, hingga proses pembayaran dan pengaduan. Sistem ini melibatkan empat peran pengguna utama, yaitu **Super Admin**, **Admin Kos**, **Penghuni**, dan **Pencari Kos**, yang masing-masing memiliki hak akses berbeda sesuai kebutuhannya.
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+Aplikasi ini bertujuan untuk mendigitalisasi proses manual pengelolaan kos, seperti pencatatan tagihan, verifikasi pembayaran, dan penanganan aduan, sehingga lebih efisien, transparan, dan mudah diakses oleh semua pihak yang terlibat.
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+---
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+## ✨ Fitur-Fitur
 
-## Learning Laravel
+### Untuk Pencari Kos
+- Melihat katalog kos beserta informasi lengkap (ketersediaan & detail kamar, harga, galeri, kontak pemilik, fasilitas, dan lokasi)
+- Register dan login ke sistem
+- Melihat aturan kos yang berlaku
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework. You can also check out [Laravel Learn](https://laravel.com/learn), where you will be guided through building a modern Laravel application.
+### Untuk Admin Kos
+- Register dan login ke sistem
+- Mengelola informasi kos yang ditampilkan di katalog (nama, alamat, deskripsi, fasilitas, foto, dll)
+- Mengelola data kamar (menambah, mengedit, menghapus fasilitas, harga, dan periode pembayaran)
+- Mengelola penghuni: menyetujui permintaan bergabung, menentukan kamar, tanggal masuk/keluar, periode pembayaran, jatuh tempo tagihan, serta status aktif/non-aktif
+- Memverifikasi bukti pembayaran penghuni (diterima/ditolak)
+- Melihat riwayat pembayaran seluruh penghuni
+- Melihat dan menanggapi aduan dari penghuni
+- Mengelola aturan kos (menambah, mengubah, memperbarui)
 
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+### Untuk Penghuni Kos
+- Register dan login ke sistem
+- Bergabung ke kos menggunakan kode undangan dan menunggu persetujuan admin
+- Melihat tagihan, melakukan cicilan, dan mengunggah bukti pembayaran untuk konfirmasi
+- Melihat riwayat pembayaran pribadi
+- Mengirimkan aduan terkait fasilitas, pelayanan, atau kondisi kos
+- Melihat aturan kos yang berlaku
 
-## Laravel Sponsors
+### Untuk Super Admin
+- Memverifikasi (menyetujui/menolak) pendaftaran admin kos
 
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the [Laravel Partners program](https://partners.laravel.com).
+### Fitur Sistem Otomatis
+- Menghasilkan tagihan otomatis berdasarkan periode pembayaran, tanggal masuk/keluar, dan jatuh tempo yang ditentukan admin
 
-### Premium Partners
+### Kebutuhan Non-Fungsional
+- **Autentikasi Pengguna** — sistem menyediakan login dan hak akses berdasarkan role (super admin, admin kos, penghuni, pencari kos)
+- **Keamanan Data** — password disimpan dalam bentuk *hashed*
+- **Tampilan Responsif** — tampilan menyesuaikan ukuran layar, baik laptop maupun smartphone
+- **Batasan Hak Akses** — setiap pengguna hanya dapat mengakses fitur sesuai role yang dimiliki
 
-- **[Vehikl](https://vehikl.com)**
-- **[Tighten Co.](https://tighten.co)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Curotec](https://www.curotec.com/services/technologies/laravel)**
-- **[DevSquad](https://devsquad.com/hire-laravel-developers)**
-- **[Redberry](https://redberry.international/laravel-development)**
-- **[Active Logic](https://activelogic.com)**
+---
 
-## Contributing
+## 🛠️ Tech Stack
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+- **Backend:** Laravel (PHP)
+- **Database:** MySQL
+- **Frontend:** Blade Template / Tailwind CSS *(sesuaikan jika menggunakan Vue/React sebagai frontend terpisah)*
+- **Autentikasi:** Laravel Breeze / Sanctum *(sesuaikan dengan implementasi)*
+- **Package Manager:** Composer (PHP), NPM/Yarn (Frontend Assets)
+- **Web Server (lokal):** Laravel Artisan Serve / XAMPP / Laragon
 
-## Code of Conduct
+> ⚠️ Sesuaikan bagian tech stack di atas dengan library atau package spesifik yang benar-benar digunakan dalam proyek (misalnya paket upload gambar, library PDF, dsb).
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+---
 
-## Security Vulnerabilities
+## 🚀 Panduan Instalasi
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+### Prasyarat
+Pastikan perangkat sudah memiliki:
+- PHP >= 8.1
+- Composer
+- MySQL / MariaDB
+- Node.js & NPM
+- Git
 
-## License
+### Langkah Instalasi
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+1. **Clone repository**
+   ```bash
+   git clone https://github.com/username/nama-repo.git
+   cd nama-repo
+   ```
+
+2. **Install dependency PHP**
+   ```bash
+   composer install
+   ```
+
+3. **Install dependency frontend**
+   ```bash
+   npm install
+   ```
+
+4. **Salin file environment**
+   ```bash
+   cp .env.example .env
+   ```
+
+5. **Generate application key**
+   ```bash
+   php artisan key:generate
+   ```
+
+6. **Konfigurasi database**
+   Buka file `.env` dan sesuaikan konfigurasi berikut:
+   ```env
+   DB_CONNECTION=mysql
+   DB_HOST=127.0.0.1
+   DB_PORT=3306
+   DB_DATABASE=nama_database
+   DB_USERNAME=root
+   DB_PASSWORD=
+   ```
+
+7. **Jalankan migrasi & seeder database**
+   ```bash
+   php artisan migrate --seed
+   ```
+
+8. **Buat symbolic link untuk storage (upload foto/bukti bayar)**
+   ```bash
+   php artisan storage:link
+   ```
+
+9. **Compile asset frontend**
+   ```bash
+   npm run dev
+   ```
+
+10. **Jalankan server lokal**
+    ```bash
+    php artisan serve
+    ```
+
+11. **Akses aplikasi**
+    Buka browser dan kunjungi:
+    ```
+    http://127.0.0.1:8000
+    ```
+
+---
+
+## 🔑 Akun Demo
+
+| Role | Email | Password |
+|------|-------|----------|
+| Super Admin | superadmin@example.com | password |
+| Admin Kos | admin@example.com | password |
+| Penghuni | penghuni@example.com | password |
+| Pencari Kos | pencari@example.com | password |
+
+> Akun di atas hanya contoh. Sesuaikan dengan data hasil `seeder` pada proyek.
+
+---
+
+## 📁 Struktur Folder (Ringkasan)
+
+```
+nama-repo/
+├── app/
+│   ├── Http/Controllers/     # Controller untuk tiap fitur (Kos, Kamar, Penghuni, Pembayaran, Aduan, dll)
+│   ├── Models/                # Model Eloquent (User, Kos, Kamar, Penghuni, Tagihan, Pembayaran, Aduan, Aturan)
+│   └── ...
+├── database/
+│   ├── migrations/            # Struktur tabel database
+│   └── seeders/                # Data awal/demo
+├── resources/
+│   ├── views/                  # Tampilan Blade
+│   └── js/ css/                # Asset frontend
+├── routes/
+│   └── web.php                 # Routing aplikasi
+├── public/                     # Asset publik (gambar, favicon)
+├── .env.example                # Contoh konfigurasi environment
+└── README.md
+```
+
+---
+
+## 👥 Anggota Kelompok
+
+| Nama | NIM | Peran |
+|------|-----|-------|
+| _(Nama Anggota 1)_ | _(NIM)_ | _(Frontend/Backend/Fullstack)_ |
+| _(Nama Anggota 2)_ | _(NIM)_ | _(Frontend/Backend/Fullstack)_ |
+| _(Nama Anggota 3)_ | _(NIM)_ | _(Frontend/Backend/Fullstack)_ |
+| _(Nama Anggota 4)_ | _(NIM)_ | _(Frontend/Backend/Fullstack)_ |
+
+> Silakan lengkapi tabel di atas dengan data anggota kelompok yang sebenarnya.
+
+---
+
+## 📄 Lisensi
+
+Proyek ini dibuat untuk keperluan akademik/tugas mata kuliah. Seluruh hak terkait implementasi berada pada tim pengembang.

@@ -39,7 +39,7 @@
 <div class="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden">
 
     {{-- HEADER --}}
-    <div class="px-6 py-5 border-b border-gray-100 bg-[#F8F5F0]">
+    <div class="px-6 py-5 border-b border-gray-100 bg-[#E6F4EC]">
 
         <h2 class="text-xl font-bold text-[#0F0937]">
             Informasi Admin Kost
@@ -141,7 +141,7 @@
                 Deskripsi Kost
             </p>
 
-            <div class="bg-[#F8F5F0] rounded-2xl p-5 text-gray-700 leading-relaxed">
+            <div class="bg-[#E6F4EC] rounded-2xl p-5 text-gray-700 leading-relaxed">
 
                 {{ $user->kost?->deskripsi }}
 
