@@ -1,10 +1,19 @@
-# Sistem Manajemen Kos
+# KosinAja! 🏠
 
 ## 📋 Deskripsi Proyek
 
-**Sistem Manajemen Kos** adalah aplikasi berbasis web yang dirancang untuk memudahkan pengelolaan rumah kos, mulai dari pencarian kos oleh calon penghuni, pengelolaan data kamar dan penghuni oleh admin kos, hingga proses pembayaran dan pengaduan. Sistem ini melibatkan empat peran pengguna utama, yaitu **Super Admin**, **Admin Kos**, **Penghuni**, dan **Pencari Kos**, yang masing-masing memiliki hak akses berbeda sesuai kebutuhannya.
+Berdasarkan permasalahan yang ditemukan, tim kami merancang sebuah solusi berupa **Sistem Informasi dan Manajemen Kos** yang terintegrasi. Sistem ini dirancang untuk mempermudah pengelolaan data kos, kamar, penghuni, tagihan, pembayaran, serta aduan penghuni secara digital dan terpusat. Dengan sistem ini, proses administrasi menjadi lebih efisien, data tersimpan secara rapi, dan calon penghuni dapat mengakses informasi kos secara mandiri tanpa harus menunggu balasan dari admin secara langsung.
 
-Aplikasi ini bertujuan untuk mendigitalisasi proses manual pengelolaan kos, seperti pencatatan tagihan, verifikasi pembayaran, dan penanganan aduan, sehingga lebih efisien, transparan, dan mudah diakses oleh semua pihak yang terlibat.
+### Keunggulan Solusi
+
+**📇 Pencatatan Penghuni Secara Digital**
+Semua data penghuni dicatat langsung melalui sistem KosinAja!. Admin dapat mengakses informasi penghuni kapan saja tanpa harus menggunakan catatan manual. Dengan sistem ini, data tersimpan secara rapi, terstruktur, dan mudah dicari kembali, sehingga memudahkan pemantauan hunian.
+
+**💳 Pencatatan Tagihan dan Pembayaran Lebih Terdokumentasi**
+Semua pembayaran yang masuk dicatat secara otomatis. Admin dapat melihat status pembayaran masing-masing penghuni, termasuk yang sudah membayar, belum membayar, atau terlambat. Bukti pembayaran tersimpan di dalam sistem sehingga tidak perlu melakukan pengecekan manual satu per satu, meningkatkan efisiensi dan akurasi administrasi.
+
+**🏘️ Informasi Kos Terstruktur, Lengkap, dan Akurat**
+Calon penghuni dapat mengakses informasi kos melalui katalog yang tersedia di sistem. Informasi yang ditampilkan meliputi foto kamar, harga sewa, fasilitas, lokasi, serta ketersediaan kamar. Dengan demikian, calon penghuni dapat memperoleh informasi secara mandiri tanpa harus menunggu balasan langsung dari admin, sehingga proses pencarian kos menjadi lebih cepat dan efisien.
 
 ---
 
@@ -51,12 +60,12 @@ Aplikasi ini bertujuan untuk mendigitalisasi proses manual pengelolaan kos, sepe
 
 - **Backend:** Laravel (PHP)
 - **Database:** MySQL
-- **Frontend:** Blade Template / Tailwind CSS *(sesuaikan jika menggunakan Vue/React sebagai frontend terpisah)*
-- **Autentikasi:** Laravel Breeze / Sanctum *(sesuaikan dengan implementasi)*
-- **Package Manager:** Composer (PHP), NPM/Yarn (Frontend Assets)
+- **Frontend:** Blade Template, Tailwind CSS 
+- **Autentikasi:** Laravel Breeze 
+- **Package Manager:** Composer (PHP), NPM (Frontend Assets)
 - **Web Server (lokal):** Laravel Artisan Serve / XAMPP / Laragon
 
-> ⚠️ Sesuaikan bagian tech stack di atas dengan library atau package spesifik yang benar-benar digunakan dalam proyek (misalnya paket upload gambar, library PDF, dsb).
+
 
 ---
 
@@ -74,8 +83,8 @@ Pastikan perangkat sudah memiliki:
 
 1. **Clone repository**
    ```bash
-   git clone https://github.com/username/nama-repo.git
-   cd nama-repo
+   git clone https://github.com/nauraulfatin/apk-kosinaja.git
+   cd apk-kosinaja
    ```
 
 2. **Install dependency PHP**
@@ -139,21 +148,20 @@ Pastikan perangkat sudah memiliki:
 
 ## 🔑 Akun Demo
 
-| Role | Email | Password |
-|------|-------|----------|
-| Super Admin | superadmin@example.com | password |
-| Admin Kos | admin@example.com | password |
-| Penghuni | penghuni@example.com | password |
-| Pencari Kos | pencari@example.com | password |
+| Role | Username | Password |
+|------|----------|----------|
+| Super Admin | `superadmin` | `orbitgacor` |
+| Admin Kos | `teamorbit` | `Orbit123` |
+| Penghuni | `kadek` | `Kadek123` |
 
-> Akun di atas hanya contoh. Sesuaikan dengan data hasil `seeder` pada proyek.
+> ⚠️ Akun ini hanya untuk keperluan demo/testing. Jangan gunakan kredensial ini di lingkungan production.
 
 ---
 
 ## 📁 Struktur Folder (Ringkasan)
 
 ```
-nama-repo/
+apk-kosinaja/
 ├── app/
 │   ├── Http/Controllers/     # Controller untuk tiap fitur (Kos, Kamar, Penghuni, Pembayaran, Aduan, dll)
 │   ├── Models/                # Model Eloquent (User, Kos, Kamar, Penghuni, Tagihan, Pembayaran, Aduan, Aturan)
@@ -175,14 +183,12 @@ nama-repo/
 
 ## 👥 Anggota Kelompok
 
-| Nama | NIM | Peran |
-|------|-----|-------|
-| _(Nama Anggota 1)_ | _(NIM)_ | _(Frontend/Backend/Fullstack)_ |
-| _(Nama Anggota 2)_ | _(NIM)_ | _(Frontend/Backend/Fullstack)_ |
-| _(Nama Anggota 3)_ | _(NIM)_ | _(Frontend/Backend/Fullstack)_ |
-| _(Nama Anggota 4)_ | _(NIM)_ | _(Frontend/Backend/Fullstack)_ |
-
-
+| Nama | NIM |
+|------|-----|
+| Naura Ulfatin Nadya | 362458302129 |
+| Shavira Nindya Putriawan | 362458302050 |
+| Rahma Titis Pratiwi | 362458302052 |
+| Moh Andy Yusril | 362458302111 |
 
 ---
 
