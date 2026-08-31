@@ -420,7 +420,7 @@
                             @elseif(auth()->user()->role === 'penghuni kost')
 
                                 <a
-                                    href="{{ route('profil.index') }}"
+                                    href="{{ route('penghuni.profil.index') }}"
                                     class="flex items-center gap-3 px-5 py-4 hover:bg-gray-50 transition">
 
                                     <span class="font-medium">
@@ -710,13 +710,13 @@
                                     @elseif(auth()->user()->role === 'penghuni kost')
 
                                         <a
-                                            href="{{ route('profil.index') }}"
+                                            href="{{ route('penghuni.profil.index') }}"
                                             onclick="closeMobileMenu()"
                                             class="mobile-link flex items-center justify-between
                                                    px-4 py-3
                                                    text-sm font-semibold
                                                    hover:bg-[#F4F7F4]
-                                                   {{ request()->routeIs('profil.*') ? 'text-[#6C8B6B] bg-[#EEF5EE]' : 'text-[#314233]' }}">
+                                                   {{ request()->routeIs('penghuni.profil.*') ? 'text-[#6C8B6B] bg-[#EEF5EE]' : 'text-[#314233]' }}">
 
                                             <span>Profil Saya</span>
                                             <span class="text-gray-400">›</span>

@@ -4,10 +4,10 @@ namespace App\Http\Controllers;
 
 use App\Models\Pembayaran;
 use App\Models\Tagihan;
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Storage;
 use Barryvdh\DomPDF\Facade\Pdf;
-use Carbon\Carbon;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Storage;
 
 class TagihanController extends Controller
 {
@@ -20,58 +20,22 @@ class TagihanController extends Controller
     public function penghuniIndex(Request $r)
     {
         $tagihanAktif = Tagihan::with([
-
                 'kamar',
                 'hargaKamar.periode',
-                'pembayaran'
-
+                'pembayaran',
             ])
-            ->where(
-                'id_user',
-                $r->user()->id
-            )
+            ->where('id_user', $r->user()->id)
             ->latest()
             ->get();
 
-        return view(
-
-            'penghuni.pembayaran.index',
-
-            compact('tagihanAktif')
-
+        // Sinkronkan status finansial pending/telat/lunas.
+        $tagihanAktif->each(
+            fn (Tagihan $tagihan) => $tagihan->syncFinancialStatus()
         );
-    }
-
-    /*
-    |--------------------------------------------------------------------------
-    | FORM PEMBAYARAN
-    |--------------------------------------------------------------------------
-    */
-
-    public function createPembayaran(Request $r)
-    {
-        $tagihans = Tagihan::with([
-
-                'kamar',
-                'hargaKamar.periode'
-
-            ])
-            ->where('id_user', $r->user()->id)
-            ->whereIn('status', [
-
-                'pending',
-                'telat',
-                'ditolak'
-
-            ])
-            ->get();
 
         return view(
-
-            'penghuni.pembayaran.create',
-
-            compact('tagihans')
-
+            'penghuni.pembayaran.index',
+            compact('tagihanAktif')
         );
     }
 
@@ -83,148 +47,87 @@ class TagihanController extends Controller
 
     public function storePembayaran(Request $r)
     {
-        $d = $r->validate([
-
-            'id_tagihan' =>
-
-                'required|exists:tagihans,id_tagihan',
-
-            'nominal_pembayaran' =>
-
-                'required|numeric|min:1000',
-
-            'bukti_bayar' =>
-                'required|image|mimes:jpg,jpeg,png|max:4096',
-
+        $data = $r->validate([
+            'id_tagihan' => 'required|exists:tagihans,id_tagihan',
+            'nominal_pembayaran' => 'required|numeric|min:1000',
+            'bukti_bayar' => 'required|image|mimes:jpg,jpeg,png|max:4096',
         ]);
 
-        /*
-        |--------------------------------------------------------------------------
-        | TAGIHAN
-        |--------------------------------------------------------------------------
-        */
-
         $tagihan = Tagihan::with([
-
                 'hargaKamar',
-                'pembayaran'
-
+                'pembayaran',
             ])
-            ->findOrFail(
-
-                $d['id_tagihan']
-
-            );
+            ->findOrFail($data['id_tagihan']);
 
         /*
         |--------------------------------------------------------------------------
-        | VALIDASI KEPEMILIKAN
+        | CEK KEPEMILIKAN
         |--------------------------------------------------------------------------
         */
 
         abort_if(
-
-            (int)$tagihan->id_user !== (int)$r->user()->id,
-
+            (int) $tagihan->id_user !== (int) $r->user()->id,
             403
-
         );
 
+        $tagihan->syncFinancialStatus();
+
         /*
         |--------------------------------------------------------------------------
-        | TOTAL SUDAH DIBAYAR
+        | CEGAH PEMBAYARAN GANDA SAAT MASIH DIVERIFIKASI
         |--------------------------------------------------------------------------
         */
 
-        $totalDibayar =
-
-            $tagihan
-                ->pembayaran()
-                ->where(
-                    'status_validasi',
-                    'diterima'
-                )
-                ->sum(
-
-                    'nominal_pembayaran'
-
+        if ($tagihan->status_label === 'menunggu_verifikasi') {
+            return back()
+                ->withInput()
+                ->with(
+                    'error',
+                    'Masih ada pembayaran yang menunggu verifikasi admin.'
                 );
+        }
 
-        /*
-        |--------------------------------------------------------------------------
-        | TOTAL TAGIHAN
-        |--------------------------------------------------------------------------
-        */
-
-        $totalTagihan =
-
-            $tagihan
-                ->hargaKamar
-                ?->harga ?? 0;
-
-        /*
-        |--------------------------------------------------------------------------
-        | SISA
-        |--------------------------------------------------------------------------
-        */
-
-        $sisa =
-
-            $totalTagihan - $totalDibayar;
-
-        /*
-        |--------------------------------------------------------------------------
-        | VALIDASI NOMINAL
-        |--------------------------------------------------------------------------
-        */
-
-        if (
-
-            $d['nominal_pembayaran'] > $sisa
-
-        ) {
-
+        if ($tagihan->status_label === 'lunas' || $tagihan->sisa_tagihan <= 0) {
             return back()->with(
-
                 'error',
-
-                'Nominal melebihi sisa tagihan.'
-
+                'Tagihan ini sudah lunas.'
             );
         }
 
-        /*
-        |--------------------------------------------------------------------------
-        | UPLOAD
-        |--------------------------------------------------------------------------
-        */
+        if ((float) $data['nominal_pembayaran'] > $tagihan->sisa_tagihan) {
+            return back()
+                ->withInput()
+                ->with(
+                    'error',
+                    'Nominal melebihi sisa tagihan.'
+                );
+        }
 
         $path = $r->file('bukti_bayar')
-            ->store(
-                'bukti-bayar',
-                'public'
-            );
+            ->store('bukti-bayar', 'public');
 
-        /*
-        |--------------------------------------------------------------------------
-        | CREATE PEMBAYARAN BARU
-        |--------------------------------------------------------------------------
-        */
+        try {
+            DB::transaction(function () use ($data, $tagihan, $path) {
+                Pembayaran::create([
+                    'id_tagihan' => $tagihan->id_tagihan,
+                    'nominal_pembayaran' => $data['nominal_pembayaran'],
+                    'tanggal_bayar' => now(),
+                    'bukti_bayar' => $path,
+                    'status_validasi' => 'menunggu',
+                ]);
 
-        Pembayaran::create([
-
-            'id_tagihan'      => $tagihan->id_tagihan,
-            'nominal_pembayaran' => $d['nominal_pembayaran'],
-            'tanggal_bayar'   => now(),
-            'bukti_bayar'     => $path,
-            'status_validasi' => 'menunggu',
-
-        ]);
+                // Status finansial tetap pending/telat.
+                // Status UI otomatis menjadi menunggu_verifikasi
+                // dari pembayaran terakhir.
+                $tagihan->syncFinancialStatus();
+            });
+        } catch (\Throwable $e) {
+            Storage::disk('public')->delete($path);
+            throw $e;
+        }
 
         return redirect()
-            ->route(
-                'penghuni.pembayaran.index'
-            )
+            ->route('penghuni.pembayaran.index')
             ->with(
                 'success',
                 'Bukti pembayaran berhasil dikirim.'
@@ -241,184 +144,99 @@ class TagihanController extends Controller
     {
         $kostId = $r->user()->kost->id;
 
-        /*
-        |--------------------------------------------------------------------------
-        | AUTO TELAT
-        |--------------------------------------------------------------------------
-        */
-
-        Tagihan::whereIn('status', [
-
-                'pending',
-                'ditolak',
-                'menunggu_verifikasi'
-
-            ])
-            ->whereDate(
-
-                'tanggal_jatuh_tempo',
-
-                '<',
-
-                now()
-
-            )
-            ->update([
-
-                'status' => 'telat'
-
-            ]);
-
-        /*
-        |--------------------------------------------------------------------------
-        | QUERY
-        |--------------------------------------------------------------------------
-        */
-
-        $query = Tagihan::with([
-
+        $all = Tagihan::with([
                 'user',
                 'kamar',
                 'hargaKamar.periode',
                 'pembayaran',
-
             ])
-            ->whereHas('kamar', function ($q)
-            use ($kostId) {
-
-                $q->where(
-                    'id_kost',
-                    $kostId
-                );
-
-            });
-
-        /*
-        |--------------------------------------------------------------------------
-        | FILTER
-        |--------------------------------------------------------------------------
-        */
-
-        if ($r->filter === 'menunggu')
-        {
-            $query->where(
-                'status',
-                'menunggu_verifikasi'
-            );
-        }
-
-        elseif ($r->filter === 'lunas')
-        {
-            $query->where(
-                'status',
-                'lunas'
-            );
-        }
-
-        elseif ($r->filter === 'telat')
-        {
-            $query->where(
-                'status',
-                'telat'
-            );
-        }
-
-        elseif ($r->filter === 'tagihan')
-        {
-            $query->where(
-                'status',
-                'pending'
-            );
-        }
-
-        /*
-        |--------------------------------------------------------------------------
-        | ITEMS
-        |--------------------------------------------------------------------------
-        */
-
-        $items = $query
+            ->whereHas('kamar', function ($query) use ($kostId) {
+                $query->where('id_kost', $kostId);
+            })
             ->latest()
-            ->get()
-            ->groupBy('id_user');
+            ->get();
 
         /*
         |--------------------------------------------------------------------------
-        | ALL
+        | SINKRONKAN STATUS FINANSIAL
         |--------------------------------------------------------------------------
         */
 
-        $all = Tagihan::whereHas(
+        $all->each(
+            fn (Tagihan $tagihan) => $tagihan->syncFinancialStatus()
+        );
 
-                'kamar',
+        /*
+        |--------------------------------------------------------------------------
+        | FILTER BERDASARKAN STATUS LABEL
+        |--------------------------------------------------------------------------
+        |
+        | Jangan query DB dengan status = menunggu_verifikasi / ditolak,
+        | karena dua status tersebut adalah status validasi pembayaran,
+        | bukan status finansial pada tabel tagihans.
+        |
+        */
 
-                function ($q)
-                use ($kostId) {
+        $filtered = $all;
 
-                    $q->where(
-                        'id_kost',
-                        $kostId
-                    );
+        if ($r->filter === 'menunggu') {
+            $filtered = $all->filter(
+                fn (Tagihan $tagihan) =>
+                    $tagihan->status_label === 'menunggu_verifikasi'
+            );
+        } elseif ($r->filter === 'lunas') {
+            $filtered = $all->filter(
+                fn (Tagihan $tagihan) =>
+                    $tagihan->status_label === 'lunas'
+            );
+        } elseif ($r->filter === 'telat') {
+            $filtered = $all->filter(
+                fn (Tagihan $tagihan) =>
+                    $tagihan->status_label === 'telat'
+            );
+        } elseif ($r->filter === 'ditolak') {
+            $filtered = $all->filter(
+                fn (Tagihan $tagihan) =>
+                    $tagihan->status_label === 'ditolak'
+            );
+        } elseif ($r->filter === 'tagihan') {
+            $filtered = $all->filter(
+                fn (Tagihan $tagihan) =>
+                    $tagihan->status_label === 'pending'
+            );
+        }
 
-                }
+        $items = $filtered->groupBy('id_user');
 
-            )->get();
+        $totalMenunggu = $all->filter(
+            fn (Tagihan $tagihan) =>
+                $tagihan->status_label === 'menunggu_verifikasi'
+        )->count();
 
-        $totalMenunggu =
+        $totalLunas = $all->filter(
+            fn (Tagihan $tagihan) =>
+                $tagihan->status_label === 'lunas'
+        )->count();
 
-            $all
-                ->filter(function ($t) {
-
-                    return
-                        $t->status
-                        === 'menunggu_verifikasi';
-
-                })
-                ->count();
-
-        $totalLunas =
-
-            $all
-                ->filter(function ($t) {
-
-                    return
-                        $t->status
-                        === 'lunas';
-
-                })
-                ->count();
-
-        $totalTelat =
-
-            $all
-                ->filter(function ($t) {
-
-                    return
-                        $t->status
-                        === 'telat';
-
-                })
-                ->count();
+        $totalTelat = $all->filter(
+            fn (Tagihan $tagihan) =>
+                $tagihan->status_label === 'telat'
+        )->count();
 
         return view(
-
             'admin.tagihan.index',
-
             compact(
-
                 'items',
                 'totalMenunggu',
                 'totalLunas',
                 'totalTelat'
-
             )
-
         );
     }
 
     /*
     |--------------------------------------------------------------------------
-    | RIWAYAT
+    | RIWAYAT PEMBAYARAN ADMIN
     |--------------------------------------------------------------------------
     */
 
@@ -427,30 +245,43 @@ class TagihanController extends Controller
         $kostId = $r->user()->kost->id;
 
         $bulanTahun = $r->get('bulan', now()->format('Y-m'));
+
         if (str_contains($bulanTahun, '-')) {
-            [$tahun, $bln] = explode('-', $bulanTahun);
+            [$tahun, $bulan] = explode('-', $bulanTahun);
         } else {
-            $bln = $bulanTahun;
+            $bulan = $bulanTahun;
             $tahun = now()->year;
         }
 
-        $riwayat = Pembayaran::with(['tagihan.user', 'tagihan.kamar.kost'])
-            ->whereMonth('tanggal_bayar', $bln)
+        $riwayat = Pembayaran::with([
+                'tagihan.user',
+                'tagihan.kamar.kost',
+            ])
+            ->whereHas('tagihan.kamar', function ($query) use ($kostId) {
+                $query->where('id_kost', $kostId);
+            })
+            ->whereMonth('tanggal_bayar', $bulan)
             ->whereYear('tanggal_bayar', $tahun)
             ->where('status_validasi', 'diterima')
             ->latest('tanggal_bayar')
             ->get();
 
-        $totalNominalRiwayat = $riwayat->sum('nominal_pembayaran');
+        $totalNominalRiwayat = $riwayat
+            ->sum('nominal_pembayaran');
 
-        return view('admin.tagihan.riwayat', compact(
-            'riwayat', 'totalNominalRiwayat', 'bulanTahun'
-        ));
+        return view(
+            'admin.tagihan.riwayat',
+            compact(
+                'riwayat',
+                'totalNominalRiwayat',
+                'bulanTahun'
+            )
+        );
     }
 
     /*
     |--------------------------------------------------------------------------
-    | DETAIL
+    | DETAIL TAGIHAN PER PENGHUNI
     |--------------------------------------------------------------------------
     */
 
@@ -459,138 +290,78 @@ class TagihanController extends Controller
         $kostId = $r->user()->kost->id;
 
         $items = Tagihan::with([
-
                 'user',
                 'kamar',
                 'hargaKamar.periode',
                 'pembayaran',
-
             ])
             ->where('id_user', $userId)
-            ->whereHas('kamar', function ($q)
-            use ($kostId) {
-
-                $q->where(
-                    'id_kost',
-                    $kostId
-                );
-
+            ->whereHas('kamar', function ($query) use ($kostId) {
+                $query->where('id_kost', $kostId);
             })
             ->latest()
             ->get();
 
-        abort_if(
-            $items->isEmpty(),
-            404
+        abort_if($items->isEmpty(), 404);
+
+        $items->each(
+            fn (Tagihan $tagihan) => $tagihan->syncFinancialStatus()
         );
 
-        $user =
-            $items->first()->user;
+        $user = $items->first()->user;
 
         return view(
-
             'admin.tagihan.detail',
-
-            compact(
-
-                'items',
-                'user'
-
-            )
-
+            compact('items', 'user')
         );
     }
 
     /*
     |--------------------------------------------------------------------------
-    | VALIDASI PEMBAYARAN
+    | TERIMA PEMBAYARAN
     |--------------------------------------------------------------------------
     */
 
     public function validasiBukti(
         Request $r,
         Pembayaran $pembayaran
-    )
-    {
+    ) {
         $tagihan = $pembayaran->tagihan;
 
-        abort_if(
+        abort_if(!$tagihan, 404);
 
-            !$tagihan,
-
-            404
-
-        );
-
-        // ✅ BENAR
         abort_if(
             !$tagihan->kamar ||
-            $tagihan->kamar->id_kost != $r->user()->kost->id,
+            (int) $tagihan->kamar->id_kost !== (int) $r->user()->kost->id,
             403
         );
 
-        /*
-        |--------------------------------------------------------------------------
-        | UPDATE STATUS PEMBAYARAN
-        |--------------------------------------------------------------------------
-        */
+        if ($pembayaran->status_validasi !== 'menunggu') {
+            return back()->with(
+                'error',
+                'Pembayaran ini sudah pernah diproses.'
+            );
+        }
 
-        $pembayaran->update([
+        DB::transaction(function () use ($r, $pembayaran, $tagihan) {
+            $pembayaran->update([
+                'status_validasi' => 'diterima',
+            ]);
 
-            'status_validasi' => 'diterima'
+            $tagihan->update([
+                'validated_by' => $r->user()->id,
+                'validated_at' => now(),
+            ]);
 
-        ]);
-
-        /*
-        |--------------------------------------------------------------------------
-        | TOTAL CICILAN DITERIMA
-        |--------------------------------------------------------------------------
-        */
-
-        $totalPembayaran =
-
-            $tagihan
-                ->pembayaran()
-                ->where(
-                    'status_validasi',
-                    'diterima'
-                )
-                ->sum(
-                    'nominal_pembayaran'
-                );
-
-        /*
-        |--------------------------------------------------------------------------
-        | TOTAL TAGIHAN
-        |--------------------------------------------------------------------------
-        */
-
-        $totalTagihan =
-
-            $tagihan
-                ->hargaKamar
-                ?->harga ?? 0;
-
-        /*
-        |--------------------------------------------------------------------------
-        | STATUS TAGIHAN
-        |--------------------------------------------------------------------------
-        */
-
-        $tagihan->update([
-
-            'validated_by' => $r->user()->id,
-
-            'validated_at' => now(),
-
-        ]);
+            // Jika cicilan yang diterima sudah menutup seluruh nominal,
+            // status finansial otomatis menjadi lunas.
+            $tagihan->load('pembayaran', 'hargaKamar');
+            $tagihan->syncFinancialStatus();
+        });
 
         return back()->with(
-
             'success',
-
             'Pembayaran berhasil divalidasi.'
-
         );
     }
 
@@ -603,112 +374,76 @@ class TagihanController extends Controller
     public function tolakBukti(
         Request $r,
         Pembayaran $pembayaran
-    )
-    {
+    ) {
         $tagihan = $pembayaran->tagihan;
 
-        // Cek apakah ini sudah benar
+        abort_if(!$tagihan, 404);
+
         abort_if(
-            $tagihan->kamar->id_kost !== $r->user()->kost->id,
+            !$tagihan->kamar ||
+            (int) $tagihan->kamar->id_kost !== (int) $r->user()->kost->id,
             403
         );
 
-        $pembayaran->update(['status_validasi' => 'ditolak']);
+        if ($pembayaran->status_validasi !== 'menunggu') {
+            return back()->with(
+                'error',
+                'Pembayaran ini sudah pernah diproses.'
+            );
+        }
 
-        $tagihan->update([
+        DB::transaction(function () use ($r, $pembayaran, $tagihan) {
+            $pembayaran->update([
+                'status_validasi' => 'ditolak',
+            ]);
 
-            'validated_by' => $r->user()->id,
-            'validated_at' => now(),
+            $tagihan->update([
+                'validated_by' => $r->user()->id,
+                'validated_at' => now(),
+            ]);
 
-        ]);
+            $tagihan->load('pembayaran', 'hargaKamar');
+            $tagihan->syncFinancialStatus();
+        });
 
         return back()->with(
             'success',
             'Pembayaran ditolak.'
-
         );
     }
 
     /*
     |--------------------------------------------------------------------------
-    | BATAL PEMBAYARAN
-    |--------------------------------------------------------------------------
-    */
-
-    public function batalPembayaran(
-        Pembayaran $pembayaran
-    )
-    {
-        if (
-
-            $pembayaran->status_validasi
-            !== 'menunggu'
-
-        ) {
-
-            return back()->with(
-
-                'error',
-
-                'Pembayaran tidak dapat dibatalkan.'
-
-            );
-        }
-
-        if ($pembayaran->bukti_bayar) {
-
-            Storage::disk('public')->delete(
-
-                $pembayaran->bukti_bayar
-
-            );
-        }
-
-        $pembayaran->delete();
-
-        return back()->with(
-
-            'success',
-
-            'Pembayaran berhasil dibatalkan.'
-
-        );
-    }
-
-    /*
-    |--------------------------------------------------------------------------
-    | RIWAYAT PEMBAYARAN
+    | RIWAYAT PEMBAYARAN PENGHUNI
     |--------------------------------------------------------------------------
     */
 
     public function riwayatPembayaran(Request $r)
     {
         $items = Pembayaran::with([
-
                 'tagihan.kamar',
                 'tagihan.hargaKamar.periode',
-
             ])
-            ->whereHas('tagihan', function ($q)
-            use ($r) {
-
-                $q->where(
+            ->whereHas('tagihan', function ($query) use ($r) {
+                $query->where(
                     'id_user',
                     $r->user()->id
                 );
-
             })
             ->latest()
             ->get();
 
         return view(
-
             'penghuni.pembayaran.riwayat',
-
             compact('items')
-
         );
     }
+
+    /*
+    |--------------------------------------------------------------------------
+    | EXPORT PDF
+    |--------------------------------------------------------------------------
+    */
 
     public function exportPdf(Request $r)
     {
@@ -721,18 +456,36 @@ class TagihanController extends Controller
             $tahun = now()->year;
         }
 
-        $pembayaran = Pembayaran::with(['tagihan.user', 'tagihan.kamar.kost'])
+        $kostId = $r->user()->kost->id;
+
+        $pembayaran = Pembayaran::with([
+                'tagihan.user',
+                'tagihan.kamar.kost',
+            ])
+            ->whereHas('tagihan.kamar', function ($query) use ($kostId) {
+                $query->where('id_kost', $kostId);
+            })
             ->whereMonth('tanggal_bayar', $bulan)
             ->whereYear('tanggal_bayar', $tahun)
             ->where('status_validasi', 'diterima')
             ->latest('tanggal_bayar')
             ->get();
 
-        $totalNominal = $pembayaran->sum('nominal_pembayaran');
+        $totalNominal = $pembayaran
+            ->sum('nominal_pembayaran');
 
-        $pdf = Pdf::loadView('admin.tagihan.pdf', compact('pembayaran', 'totalNominal', 'bulanInput'))
+        $pdf = Pdf::loadView(
+                'admin.tagihan.pdf',
+                compact(
+                    'pembayaran',
+                    'totalNominal',
+                    'bulanInput'
+                )
+            )
             ->setPaper('a4', 'landscape');
 
-        return $pdf->download('laporan-pembayaran-' . $bulanInput . '.pdf');
+        return $pdf->download(
+            'laporan-pembayaran-' . $bulanInput . '.pdf'
+        );
     }
 }

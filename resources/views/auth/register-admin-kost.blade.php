@@ -154,7 +154,7 @@
 
                 <p class="text-gray-500 mt-2 lg:mt-3 text-sm lg:text-base leading-relaxed">
 
-                    Daftarkan kost anda dan tunggu persetujuan super admin.
+                    Daftarkan identitas Anda serta nama dan alamat kos. Detail kos dapat dilengkapi setelah akun disetujui Super Admin.
 
                 </p>
 
@@ -183,7 +183,7 @@
             @endif
 
             {{-- FORM --}}
-            <form method="POST" action="{{ route('register.admin') }}">
+            <form method="POST" action="{{ route('register.admin.store') }}">
 
                 @csrf
 

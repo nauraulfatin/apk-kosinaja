@@ -21,6 +21,24 @@
 
 </div>
 
+
+{{-- VALIDASI / ERROR --}}
+@if($errors->any())
+<div class="bg-red-50 border border-red-200 text-red-700 rounded-2xl px-6 py-4 mb-6">
+    <ul class="list-disc list-inside text-sm space-y-1">
+        @foreach($errors->all() as $error)
+            <li>{{ $error }}</li>
+        @endforeach
+    </ul>
+</div>
+@endif
+
+@if(session('error'))
+<div class="bg-red-50 border border-red-200 text-red-700 rounded-2xl px-6 py-4 mb-6 text-sm">
+    {{ session('error') }}
+</div>
+@endif
+
 {{-- ========================================================= --}}
 {{-- FORM --}}
 {{-- ========================================================= --}}

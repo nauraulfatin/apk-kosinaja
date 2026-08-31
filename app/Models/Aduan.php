@@ -7,10 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 class Aduan extends Model
 {
     protected $table = 'aduan';
-
     protected $primaryKey = 'id_aduan';
-
-    public $timestamps = false;
 
     protected $fillable = [
         'id_user',
@@ -19,7 +16,11 @@ class Aduan extends Model
         'foto_aduan',
         'tanggapan_admin',
         'status',
-        'tanggal'
+        'tanggal',
+    ];
+
+    protected $casts = [
+        'tanggal' => 'date',
     ];
 
     public function user()

@@ -3,7 +3,6 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
-use App\Models\Pembayaran;
 
 class Tagihan extends Model
 {
@@ -12,175 +11,117 @@ class Tagihan extends Model
     protected $primaryKey = 'id_tagihan';
 
     protected $fillable = [
-
         'id_kamar',
-
         'id_user',
-
         'id_harga_kamar',
-
         'tanggal_mulai',
-
         'tanggal_selesai',
-
         'tanggal_jatuh_tempo',
 
         /*
         |--------------------------------------------------------------------------
-        | STATUS TAGIHAN
+        | STATUS FINANSIAL TAGIHAN
         |--------------------------------------------------------------------------
         |
-        | pending
-        | menunggu_verifikasi
-        | ditolak
-        | telat
-        | lunas
+        | Kolom status hanya menyimpan keadaan finansial tagihan:
+        |
+        | pending = belum lunas dan belum lewat jatuh tempo
+        | telat   = belum lunas dan sudah lewat jatuh tempo
+        | lunas   = total pembayaran yang diterima >= nominal tagihan
+        |
+        | Status "menunggu_verifikasi" dan "ditolak" BUKAN status finansial
+        | tagihan. Keduanya berasal dari status_validasi pada pembayaran.
         |
         */
-
         'status',
 
-        /*
-        |--------------------------------------------------------------------------
-        | VALIDASI ADMIN
-        |--------------------------------------------------------------------------
-        */
-
         'validated_by',
-
         'validated_at',
-
     ];
 
     protected $casts = [
-
         'tanggal_mulai' => 'date',
-
         'tanggal_selesai' => 'date',
-
         'tanggal_jatuh_tempo' => 'date',
-
         'validated_at' => 'datetime',
-
     ];
 
     /*
     |--------------------------------------------------------------------------
-    | RELATION KAMAR
+    | RELATIONS
     |--------------------------------------------------------------------------
     */
 
     public function kamar()
-{
-    return $this->belongsTo(
-
-        KamarKost::class,
-
-        'id_kamar',
-
-        'id_kamar'
-
-    );
-}
-
-    /*
-    |--------------------------------------------------------------------------
-    | RELATION USER
-    |--------------------------------------------------------------------------
-    */
+    {
+        return $this->belongsTo(
+            KamarKost::class,
+            'id_kamar',
+            'id_kamar'
+        );
+    }
 
     public function user()
     {
         return $this->belongsTo(
-
             User::class,
-
             'id_user'
-
         );
     }
-
-    /*
-    |--------------------------------------------------------------------------
-    | RELATION HARGA KAMAR
-    |--------------------------------------------------------------------------
-    */
 
     public function hargaKamar()
     {
         return $this->belongsTo(
-
             HargaKamar::class,
-
             'id_harga_kamar'
-
         );
     }
-
-    /*
-    |--------------------------------------------------------------------------
-    | RELATION PEMBAYARAN
-    |--------------------------------------------------------------------------
-    |
-    | 1 TAGIHAN
-    | BISA PUNYA BANYAK PEMBAYARAN
-    | (CICILAN)
-    |
-    */
 
     public function pembayaran()
     {
         return $this->hasMany(
-
             Pembayaran::class,
-
             'id_tagihan',
-
             'id_tagihan'
-
         );
     }
-
-    /*
-    |--------------------------------------------------------------------------
-    | RELATION VALIDATOR
-    |--------------------------------------------------------------------------
-    */
 
     public function validator()
     {
         return $this->belongsTo(
-
             User::class,
-
             'validated_by'
-
         );
     }
 
     /*
     |--------------------------------------------------------------------------
-    | TOTAL SUDAH DIBAYAR
+    | TOTAL PEMBAYARAN YANG SUDAH DITERIMA
     |--------------------------------------------------------------------------
     */
 
-    public function getTotalDibayarAttribute()
+    public function getTotalDibayarAttribute(): float
     {
-        return $this->pembayaran()
+        if ($this->relationLoaded('pembayaran')) {
+            return (float) $this->pembayaran
+                ->where('status_validasi', 'diterima')
+                ->sum('nominal_pembayaran');
+        }
 
-            ->where(
+        return (float) $this->pembayaran()
+            ->where('status_validasi', 'diterima')
+            ->sum('nominal_pembayaran');
+    }
 
-                'status_validasi',
+    /*
+    |--------------------------------------------------------------------------
+    | NOMINAL TAGIHAN
+    |--------------------------------------------------------------------------
+    */
 
-                'diterima'
-
-            )
-
-            ->sum(
-
-                'nominal_pembayaran'
-
-            );
+    public function getTotalTagihanAttribute(): float
+    {
+        return (float) ($this->hargaKamar?->harga ?? 0);
     }
 
     /*
@@ -189,109 +130,117 @@ class Tagihan extends Model
     |--------------------------------------------------------------------------
     */
 
-    public function getSisaTagihanAttribute()
+    public function getSisaTagihanAttribute(): float
     {
         return max(
-
             0,
-
-            ($this->hargaKamar?->harga ?? 0)
-
-            -
-
-            $this->total_dibayar
-
+            $this->total_tagihan - $this->total_dibayar
         );
     }
 
     /*
     |--------------------------------------------------------------------------
-    | STATUS LABEL
+    | PEMBAYARAN TERAKHIR
     |--------------------------------------------------------------------------
     */
 
-    public function getStatusLabelAttribute()
+    public function getPembayaranTerakhirAttribute(): ?Pembayaran
     {
-        /*
-        |--------------------------------------------------------------------------
-        | LUNAS
-        |--------------------------------------------------------------------------
-        */
+        if ($this->relationLoaded('pembayaran')) {
+            return $this->pembayaran
+                ->sortByDesc('id_pembayaran')
+                ->first();
+        }
 
-        if (
+        return $this->pembayaran()
+            ->latest('id_pembayaran')
+            ->first();
+    }
 
-            $this->sisa_tagihan <= 0
+    /*
+    |--------------------------------------------------------------------------
+    | HITUNG STATUS FINANSIAL
+    |--------------------------------------------------------------------------
+    |
+    | Hanya menghasilkan: pending, telat, lunas.
+    |
+    */
 
-        ) {
-
+    public function calculateFinancialStatus(): string
+    {
+        if ($this->sisa_tagihan <= 0) {
             return 'lunas';
         }
 
-        /*
-        |--------------------------------------------------------------------------
-        | PEMBAYARAN TERAKHIR
-        |--------------------------------------------------------------------------
-        */
-
-        $pembayaranTerakhir =
-
-            $this->pembayaran()
-
-                ->latest()
-
-                ->first();
-
-        /*
-        |--------------------------------------------------------------------------
-        | MENUNGGU VERIFIKASI
-        |--------------------------------------------------------------------------
-        */
-
         if (
-
-            $pembayaranTerakhir?->status_validasi === 'menunggu'
-
+            $this->tanggal_jatuh_tempo &&
+            now()->startOfDay()->gt($this->tanggal_jatuh_tempo->copy()->startOfDay())
         ) {
-
-            return 'menunggu_verifikasi';
-        }
-
-        /*
-        |--------------------------------------------------------------------------
-        | DITOLAK
-        |--------------------------------------------------------------------------
-        */
-
-        if (
-
-            $pembayaranTerakhir?->status_validasi === 'ditolak'
-
-        ) {
-
-            return 'ditolak';
-        }
-
-        /*
-        |--------------------------------------------------------------------------
-        | TELAT
-        |--------------------------------------------------------------------------
-        */
-
-        if (
-
-            now()->gt($this->tanggal_jatuh_tempo)
-
-        ) {
-
             return 'telat';
         }
 
-        /*
-        |--------------------------------------------------------------------------
-        | DEFAULT
-        |--------------------------------------------------------------------------
-        */
-
         return 'pending';
+    }
+
+    /*
+    |--------------------------------------------------------------------------
+    | SINKRONKAN STATUS FINANSIAL KE DATABASE
+    |--------------------------------------------------------------------------
+    |
+    | Dipanggil setelah pembayaran berubah atau saat halaman tagihan dibuka.
+    |
+    */
+
+    public function syncFinancialStatus(): string
+    {
+        $newStatus = $this->calculateFinancialStatus();
+
+        if ($this->getRawOriginal('status') !== $newStatus) {
+            $this->forceFill([
+                'status' => $newStatus,
+            ])->saveQuietly();
+        }
+
+        // Pastikan nilai pada instance model ikut terbaru.
+        $this->setAttribute('status', $newStatus);
+
+        return $newStatus;
+    }
+
+    /*
+    |--------------------------------------------------------------------------
+    | STATUS LABEL UNTUK UI
+    |--------------------------------------------------------------------------
+    |
+    | Status UI merupakan gabungan dari:
+    | - status finansial tagihan
+    | - status validasi pembayaran terakhir
+    |
+    | Urutan prioritas:
+    | 1. lunas
+    | 2. menunggu_verifikasi
+    | 3. ditolak
+    | 4. telat
+    | 5. pending
+    |
+    */
+
+    public function getStatusLabelAttribute(): string
+    {
+        if ($this->sisa_tagihan <= 0) {
+            return 'lunas';
+        }
+
+        $pembayaranTerakhir = $this->pembayaran_terakhir;
+
+        if ($pembayaranTerakhir?->status_validasi === 'menunggu') {
+            return 'menunggu_verifikasi';
+        }
+
+        if ($pembayaranTerakhir?->status_validasi === 'ditolak') {
+            return 'ditolak';
+        }
+
+        return $this->calculateFinancialStatus();
     }
 }

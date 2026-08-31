@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Log;
 
 use App\Models\RiwayatHunian;
 use App\Models\Kost;
@@ -37,7 +38,7 @@ class ProfilPenghuniController extends Controller
         ->get();
 
     return view(
-        'penghuni.profil',
+        'profil.index',
         compact(
             'user',
             'riwayat',
@@ -198,28 +199,27 @@ if ($pernahTinggal)
 
     } catch (\Throwable $e) {
 
+        /*
+        |--------------------------------------------------------------------------
+        | JANGAN BO CORKAN DETAIL ERROR KE CLIENT
+        |--------------------------------------------------------------------------
+        |
+        | Detail exception bisa berisi nama tabel, query SQL, path server,
+        | atau informasi internal lain. Detail tetap dicatat ke log server,
+        | sedangkan pengguna hanya menerima pesan generik.
+        |
+        */
+        Log::error('Gagal memproses kode undangan penghuni.', [
+            'user_id' => Auth::id(),
+            'exception' => $e,
+        ]);
+
         return response()->json([
-
             'success' => false,
-
-            'message' => $e->getMessage()
-
+            'message' => 'Terjadi kesalahan pada sistem. Silakan coba lagi.',
         ], 500);
 
     }
 }
-    /*
-    |--------------------------------------------------------------------------
-    | DASHBOARD PENGHUNI
-    |--------------------------------------------------------------------------
-    */
 
-    public function dashboard()
-    {
-        return view(
-            'penghuni.dashboard'
-        );
-    }
-
-    
 }

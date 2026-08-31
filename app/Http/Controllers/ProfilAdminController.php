@@ -28,14 +28,5 @@ class ProfilAdminController extends Controller
         );
     }
 
-    /*
-    |--------------------------------------------------------------------------
-    | DASHBOARD ADMIN
-    |--------------------------------------------------------------------------
-    */
 
-    public function dashboard()
-    {
-        return redirect()->route('admin.dashboard');
-    }
 }

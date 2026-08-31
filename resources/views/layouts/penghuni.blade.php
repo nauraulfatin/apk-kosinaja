@@ -140,7 +140,7 @@
                             transition-all duration-200
                             overflow-hidden z-50">
 
-                    <a href="{{ route('profil.index') }}"
+                    <a href="{{ route('penghuni.profil.index') }}"
                         class="flex items-center gap-3 px-5 py-4 hover:bg-gray-50 transition">
                         <span class="font-medium">Profil Saya</span>
                     </a>

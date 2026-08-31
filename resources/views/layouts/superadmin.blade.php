@@ -54,6 +54,13 @@
     @endif
 
     {{-- ERROR --}}
+    @if(session('error'))
+    <div class="fixed top-5 right-5 bg-red-500 text-white px-5 py-3 rounded-lg shadow-lg z-50">
+        {{ session('error') }}
+    </div>
+    @endif
+
+    {{-- ERROR --}}
     @if($errors->any())
     <div class="fixed top-5 right-5 bg-red-500 text-white px-5 py-3 rounded-lg shadow-lg z-50">
         <ul class="text-sm">
@@ -245,6 +252,17 @@
                                 d="M3 7h18M3 12h18M3 17h18" />
                         </svg>
                         Daftar Fasilitas Kos
+                    </a>
+
+                    {{-- MASTER PERIODE PENAGIHAN --}}
+                    <a href="{{ route('superadmin.periode.index') }}"
+                        class="{{ $menuClass }} {{ request()->routeIs('superadmin.periode.*') ? $activeClass : $inactiveClass }}">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" fill="none" viewBox="0 0 24 24"
+                            stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M8 7V3m8 4V3M5 11h14M5 5h14a2 2 0 012 2v12a2 2 0 01-2 2H5a2 2 0 01-2-2V7a2 2 0 012-2z" />
+                        </svg>
+                        Periode Penagihan
                     </a>
 
                 </nav>

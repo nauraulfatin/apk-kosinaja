@@ -6,7 +6,8 @@ use App\Http\Controllers\Controller;
 use App\Models\Aduan;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
+use Illuminate\Validation\Rule;
 
 class AduanAdminController extends Controller
 {
@@ -14,72 +15,78 @@ class AduanAdminController extends Controller
     {
         $kost = Auth::user()->kost;
 
-        if (!$kost) {
-            return view('admin.aduan.index', ['aduan' => collect()]);
-        }
-
-        $aduan = DB::table('aduan')
-            ->join('users', 'users.id', '=', 'aduan.id_user')
-            ->select(
-                'aduan.*',
-                'users.nama'
-            )
-            // Filter berdasarkan kost_id milik admin yang login
-            ->where('aduan.kost_id', $kost->id)
-            ->latest('aduan.id_aduan')
-            ->get();
+        $aduan = $kost
+            ? Aduan::with('user')
+                ->where('kost_id', $kost->id)
+                ->latest('id_aduan')
+                ->get()
+                ->each(function (Aduan $item) {
+                    // Kompatibel dengan Blade lama yang membaca $item->nama.
+                    $item->setAttribute('nama', $item->user?->nama ?? '-');
+                })
+            : collect();
 
         return view('admin.aduan.index', compact('aduan'));
     }
 
     public function show($id)
     {
-        $kost = Auth::user()->kost;
+        $aduan = $this->aduanMilikAdmin($id);
 
-        abort_if(!$kost, 404);
-
-        $aduan = DB::table('aduan')
-            ->join('users', 'users.id', '=', 'aduan.id_user')
-            ->select(
-                'aduan.*',
-                'users.nama'
-            )
-            // Pastikan aduan ini milik kost admin yang login
-            ->where('aduan.kost_id', $kost->id)
-            ->where('aduan.id_aduan', $id)
-            ->first();
-
-        abort_if(!$aduan, 404);
+        // View lama menggunakan properti nama langsung.
+        $aduan->nama = $aduan->user?->nama ?? '-';
 
         return view('admin.aduan.show', compact('aduan'));
     }
 
     public function update(Request $request, $id)
     {
-        $request->validate([
-            'tanggapan_admin' => 'required',
-            'status' => 'required'
-        ]);
+        $data = $request->validate(
+            [
+                'tanggapan_admin' => ['required', 'string', 'min:3', 'max:3000'],
+                'status' => [
+                    'required',
+                    Rule::in(['baru', 'diproses', 'selesai']),
+                ],
+            ],
+            [
+                'tanggapan_admin.min' => 'Tanggapan admin minimal 3 karakter.',
+                'tanggapan_admin.max' => 'Tanggapan admin maksimal 3000 karakter.',
+                'status.in' => 'Status aduan tidak valid.',
+            ]
+        );
 
-        $kost = Auth::user()->kost;
+        $aduan = $this->aduanMilikAdmin($id);
 
-        abort_if(!$kost, 404);
+        try {
+            $aduan->update([
+                'tanggapan_admin' => $data['tanggapan_admin'],
+                'status' => $data['status'],
+            ]);
+        } catch (\Throwable $e) {
+            Log::error('Gagal memperbarui aduan.', [
+                'admin_id' => Auth::id(),
+                'aduan_id' => $aduan->id_aduan,
+                'exception' => $e,
+            ]);
 
-        $cek = DB::table('aduan')
-            // Pastikan aduan ini milik kost admin yang login
-            ->where('aduan.kost_id', $kost->id)
-            ->where('aduan.id_aduan', $id)
-            ->exists();
-
-        abort_if(!$cek, 404);
-
-        Aduan::where('id_aduan', $id)->update([
-            'tanggapan_admin' => $request->tanggapan_admin,
-            'status' => $request->status
-        ]);
+            return back()
+                ->withInput()
+                ->with('error', 'Tanggapan gagal disimpan. Silakan coba lagi.');
+        }
 
         return redirect()
             ->route('admin.aduan.index')
-            ->with('success', 'Aduan berhasil ditanggapi');
+            ->with('success', 'Aduan berhasil ditanggapi.');
+    }
+
+    private function aduanMilikAdmin($id): Aduan
+    {
+        $kost = Auth::user()->kost;
+        abort_unless($kost, 404);
+
+        return Aduan::with('user')
+            ->where('kost_id', $kost->id)
+            ->findOrFail($id);
     }
 }

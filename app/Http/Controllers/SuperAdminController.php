@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\User;
+use App\Services\KostDeletionService;
 
 class SuperAdminController extends Controller
 {
@@ -171,26 +172,15 @@ class SuperAdminController extends Controller
 |--------------------------------------------------------------------------
 */
 
-public function hapusAdmin(User $user)
+public function hapusAdmin(User $user, KostDeletionService $kostDeletionService)
 {
-    abort_if(
-        $user->role !== 'admin kost',
-        404
-    );
+    abort_if($user->role !== 'admin kost', 404);
 
-    /*
-    |--------------------------------------------------------------------------
-    | HAPUS DATA KOST
-    |--------------------------------------------------------------------------
-    */
+    $user->load('kost');
 
-    $user->kost()?->delete();
-
-    /*
-    |--------------------------------------------------------------------------
-    | HAPUS USER
-    |--------------------------------------------------------------------------
-    */
+    if ($user->kost) {
+        $kostDeletionService->delete($user->kost);
+    }
 
     $user->delete();
 
@@ -198,7 +188,7 @@ public function hapusAdmin(User $user)
         ->route('superadmin.riwayat.index')
         ->with(
             'success',
-            'Admin kost berhasil dihapus.'
+            'Admin kost dan seluruh data kos terkait berhasil dihapus.'
         );
 }
 

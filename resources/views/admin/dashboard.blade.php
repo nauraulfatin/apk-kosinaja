@@ -113,12 +113,6 @@
                     Menunggu Verifikasi
                 </span>
 
-                @elseif($item->status === 'lunas')
-
-                <span class="inline-flex mt-2 px-3 py-1 rounded-full text-xs font-semibold bg-green-100 text-green-700">
-                    Lunas
-                </span>
-
                 @endif
 
             </div>

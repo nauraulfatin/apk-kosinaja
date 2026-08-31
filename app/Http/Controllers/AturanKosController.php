@@ -3,235 +3,100 @@
 namespace App\Http\Controllers;
 
 use App\Models\AturanKos;
+use App\Models\RiwayatHunian;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\DB;
 
 class AturanKosController extends Controller
 {
-    /*
-    |--------------------------------------------------------------------------
-    | ADMIN - LIST ATURAN
-    |--------------------------------------------------------------------------
-    */
-
     public function index()
     {
-        $kost = DB::table('kosts')
-            ->where('id_user', Auth::user()->id)
-            ->first();
+        $kost = Auth::user()->kost;
 
-        if (!$kost) {
+        $aturans = $kost
+            ? $kost->aturanKos()->latest()->get()
+            : collect();
 
-            $aturans = collect();
-
-        } else {
-
-            $aturans = AturanKos::where(
-                'kost_id',
-                $kost->id
-            )->get();
-
-        }
-
-        return view(
-            'admin.aturan.index',
-            compact('aturans')
-        );
+        return view('admin.aturan.index', compact('aturans'));
     }
-
-    /*
-    |--------------------------------------------------------------------------
-    | ADMIN - FORM CREATE
-    |--------------------------------------------------------------------------
-    */
 
     public function create()
     {
+        abort_if(!Auth::user()->kost, 404);
+
         return view('admin.aturan.create');
     }
 
-    /*
-    |--------------------------------------------------------------------------
-    | ADMIN - STORE
-    |--------------------------------------------------------------------------
-    */
-
     public function store(Request $request)
     {
-        $request->validate([
-
-            'isi_aturan' => 'required'
-
+        $data = $request->validate([
+            'isi_aturan' => ['required', 'string', 'max:5000'],
         ]);
 
-        $kost = DB::table('kosts')
-            ->where('id_user', Auth::user()->id)
-            ->first();
-
-        if (!$kost) {
-
-            return back()->with(
-                'error',
-                'Data kost tidak ditemukan'
-            );
-
-        }
+        $kost = Auth::user()->kost;
+        abort_if(!$kost, 404);
 
         AturanKos::create([
-
             'kost_id' => $kost->id,
-
             'judul' => 'Aturan Kos',
-
-            'isi' => $request->isi_aturan
-
+            'isi' => $data['isi_aturan'],
         ]);
 
         return redirect()
             ->route('admin.aturan.index')
-            ->with(
-                'success',
-                'Aturan berhasil ditambahkan'
-            );
+            ->with('success', 'Aturan berhasil ditambahkan');
     }
-
-    /*
-    |--------------------------------------------------------------------------
-    | ADMIN - FORM EDIT
-    |--------------------------------------------------------------------------
-    */
 
     public function edit($id)
     {
-        $aturan = AturanKos::findOrFail($id);
+        $aturan = $this->aturanMilikAdmin($id);
 
-        return view(
-            'admin.aturan.edit',
-            compact('aturan')
-        );
+        return view('admin.aturan.edit', compact('aturan'));
     }
-
-    /*
-    |--------------------------------------------------------------------------
-    | ADMIN - UPDATE
-    |--------------------------------------------------------------------------
-    */
 
     public function update(Request $request, $id)
     {
-        $request->validate([
-
-            'isi_aturan' => 'required'
-
+        $data = $request->validate([
+            'isi_aturan' => ['required', 'string', 'max:5000'],
         ]);
 
-        $aturan = AturanKos::findOrFail($id);
-
-        $aturan->update([
-
-            'isi' => $request->isi_aturan
-
-        ]);
+        $aturan = $this->aturanMilikAdmin($id);
+        $aturan->update(['isi' => $data['isi_aturan']]);
 
         return redirect()
             ->route('admin.aturan.index')
-            ->with(
-                'success',
-                'Aturan berhasil diupdate'
-            );
+            ->with('success', 'Aturan berhasil diupdate');
     }
-
-    /*
-    |--------------------------------------------------------------------------
-    | ADMIN - DELETE
-    |--------------------------------------------------------------------------
-    */
 
     public function destroy($id)
     {
-        AturanKos::findOrFail($id)->delete();
+        $aturan = $this->aturanMilikAdmin($id);
+        $aturan->delete();
 
         return redirect()
             ->route('admin.aturan.index')
-            ->with(
-                'success',
-                'Aturan berhasil dihapus'
-            );
+            ->with('success', 'Aturan berhasil dihapus');
     }
-
-    /*
-    |--------------------------------------------------------------------------
-    | PENGHUNI - LIHAT ATURAN
-    |--------------------------------------------------------------------------
-    */
 
     public function penghuniIndex()
     {
-        $user = Auth::user();
-
-        /*
-        |--------------------------------------------------------------------------
-        | AMBIL TAGIHAN PENGHUNI
-        |--------------------------------------------------------------------------
-        */
-
-        $tagihan = DB::table('tagihans')
-            ->where('id_user', $user->id)
-            ->latest('id_tagihan')
+        $riwayat = RiwayatHunian::where('id_user', Auth::id())
+            ->whereIn('status', ['aktif', 'antrian'])
+            ->latest('id_riwayat_hunian')
             ->first();
 
-        /*
-        |--------------------------------------------------------------------------
-        | JIKA BELUM ADA TAGIHAN
-        |--------------------------------------------------------------------------
-        */
+        $aturans = $riwayat?->id_kost
+            ? AturanKos::where('kost_id', $riwayat->id_kost)->latest()->get()
+            : collect();
 
-        if (!$tagihan) {
+        return view('penghuni.aturan.aturan', compact('aturans'));
+    }
 
-            $aturans = collect();
+    private function aturanMilikAdmin($id): AturanKos
+    {
+        $kost = Auth::user()->kost;
+        abort_if(!$kost, 404);
 
-        } else {
-
-            /*
-            |--------------------------------------------------------------------------
-            | AMBIL DATA KAMAR
-            |--------------------------------------------------------------------------
-            */
-
-            $kamar = DB::table('kamar_kosts')
-                ->where('id_kamar', $tagihan->id_kamar)
-                ->first();
-
-            /*
-            |--------------------------------------------------------------------------
-            | JIKA KAMAR TIDAK ADA
-            |--------------------------------------------------------------------------
-            */
-
-            if (!$kamar) {
-
-                $aturans = collect();
-
-            } else {
-
-                /*
-                |--------------------------------------------------------------------------
-                | AMBIL ATURAN SESUAI KOST
-                |--------------------------------------------------------------------------
-                */
-
-                $aturans = DB::table('peraturans')
-                    ->where('kost_id', $kamar->id_kost)
-                    ->get();
-
-            }
-
-        }
-
-        return view(
-            'penghuni.aturan.aturan',
-            compact('aturans')
-        );
+        return AturanKos::where('kost_id', $kost->id)->findOrFail($id);
     }
 }

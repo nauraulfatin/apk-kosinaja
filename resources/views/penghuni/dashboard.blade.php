@@ -28,7 +28,7 @@
                 Silahkan masukkan kode kost atau tunggu approval admin kost.
             </p>
             <div class="mt-8 flex justify-center">
-                <a href="{{ route('kost.saya') }}"
+                <a href="{{ route('penghuni.profil.index') }}"
                     class="bg-[#6C8B6B] hover:bg-[#5B765A] text-white px-6 py-3 rounded-2xl font-semibold transition">
                     Masuk Kost
                 </a>
@@ -214,11 +214,11 @@
                 {{-- STATUS --}}
                 <div class="flex items-center justify-between pt-4 border-t border-gray-100">
                     <span class="text-sm text-gray-500">Status</span>
-                    @if($tagihanTerbaru->status === 'lunas')
+                    @if($tagihanTerbaru->status_label === 'lunas')
                     <span class="px-4 py-2 rounded-2xl bg-green-100 text-green-700 font-semibold text-sm">Lunas</span>
-                    @elseif($tagihanTerbaru->status === 'telat')
+                    @elseif($tagihanTerbaru->status_label === 'telat')
                     <span class="px-4 py-2 rounded-2xl bg-red-100 text-red-700 font-semibold text-sm">Telat</span>
-                    @elseif($tagihanTerbaru->status === 'menunggu_verifikasi')
+                    @elseif($tagihanTerbaru->status_label === 'menunggu_verifikasi')
                     <span class="px-4 py-2 rounded-2xl bg-yellow-100 text-yellow-700 font-semibold text-sm">Menunggu
                         Verifikasi</span>
                     @else

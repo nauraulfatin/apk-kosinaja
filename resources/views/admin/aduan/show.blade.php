@@ -13,6 +13,24 @@
         </a>
     </div>
 
+
+{{-- VALIDASI / ERROR --}}
+@if($errors->any())
+<div class="bg-red-50 border border-red-200 text-red-700 rounded-2xl px-6 py-4 mb-6">
+    <ul class="list-disc list-inside text-sm space-y-1">
+        @foreach($errors->all() as $error)
+            <li>{{ $error }}</li>
+        @endforeach
+    </ul>
+</div>
+@endif
+
+@if(session('error'))
+<div class="bg-red-50 border border-red-200 text-red-700 rounded-2xl px-6 py-4 mb-6 text-sm">
+    {{ session('error') }}
+</div>
+@endif
+
     <div class="bg-white rounded-2xl shadow p-6">
 
         {{-- Nama Penghuni --}}
@@ -59,9 +77,9 @@
                 <select name="status"
                     class="w-full border border-gray-300 rounded-xl px-4 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-[#6E8B74]"
                     required>
-                    <option value="baru" {{ $aduan->status == 'baru' ? 'selected' : '' }}>Baru</option>
-                    <option value="diproses" {{ $aduan->status == 'diproses' ? 'selected' : '' }}>Diproses</option>
-                    <option value="selesai" {{ $aduan->status == 'selesai' ? 'selected' : '' }}>Selesai</option>
+                    <option value="baru" {{ old('status', $aduan->status) == 'baru' ? 'selected' : '' }}>Baru</option>
+                    <option value="diproses" {{ old('status', $aduan->status) == 'diproses' ? 'selected' : '' }}>Diproses</option>
+                    <option value="selesai" {{ old('status', $aduan->status) == 'selesai' ? 'selected' : '' }}>Selesai</option>
                 </select>
             </div>
 
@@ -69,7 +87,7 @@
             <div class="mb-6">
                 <label class="block text-sm font-semibold text-gray-600 mb-1">Tanggapan Admin</label>
                 <textarea name="tanggapan_admin" rows="5" required
-                    class="w-full border border-gray-300 rounded-xl px-4 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-[#6E8B74]">{{ $aduan->tanggapan_admin }}</textarea>
+                    class="w-full border border-gray-300 rounded-xl px-4 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-[#6E8B74]">{{ old('tanggapan_admin', $aduan->tanggapan_admin) }}</textarea>
             </div>
 
             <button type="submit"

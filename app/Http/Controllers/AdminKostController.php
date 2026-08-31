@@ -4,172 +4,154 @@ namespace App\Http\Controllers;
 
 use App\Models\Fasilitas;
 use App\Models\Kost;
-use App\Models\User;
+use App\Models\RiwayatHunian;
 use App\Models\Pembayaran;
 use App\Models\Aduan;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Str;
+use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 
 class AdminKostController extends Controller
 {
-   //form register admin kos
-
-    public function create()
-    { return view('auth.register-admin-kost');}
-
-   //simpan register admin kos
-
-    public function store(Request $request)
-    {
-        $data = $request->validate([
-            //data user
-            'username' => 'required|unique:users',
-            'nik' => 'required|unique:users',
-            'nama' => 'required',
-            'password' => 'required|min:8|confirmed',
-            'no_hp' => 'required',
-            'g-recaptcha-response' => 'required|captcha',
-
-           //data kost
-            'nama_kost' => 'required',
-            'alamat' => 'required',
-            //opsional
-            'deskripsi' => 'nullable',
-
-            //multiple foto
-            'foto_kost' => 'nullable|array',
-            'foto_kost.*' => 'image|max:2048',
-
-            //gmaps
-            'lokasi' => 'nullable|string',
-        ]);
-
-        DB::transaction(function () use ($request, $data) {
-
-            //create user
-            $user = User::create([
-                'username' => $data['username'],
-                'nik' => $data['nik'],
-                'nama' => $data['nama'],
-                'password' => Hash::make($data['password']),
-                'no_hp' => $data['no_hp'],
-                'role' => 'admin kost',
-                'status' => 'pending',
-            ]);
-
-            //multiple foto kost
-            $fotos = [];
-            if ($request->hasFile('foto_kost'))
-            {
-                foreach ($request->file('foto_kost') as $file)
-                {
-                    $fotos[] = $file->store( 'kost','public'
-                    );
-                }
-            }
-
-           //create kost
-
-            Kost::create([
-                'nama_kost' => $data['nama_kost'],
-                'alamat' => $data['alamat'],
-                'deskripsi' => $data['deskripsi'] ?? null,
-                'foto_kost' => $fotos,
-                'lokasi' => $data['lokasi'] ?? null,
-                'id_user' => $user->id,
-            ]);
-        });
-
-        return redirect()
-    ->route('admin-kost.register')
-    ->with(
-        'register_success',
-        true
-    );
-    }
+    /*
+    |--------------------------------------------------------------------------
+    | CATATAN TANGGUNG JAWAB CONTROLLER
+    |--------------------------------------------------------------------------
+    |
+    | Registrasi Admin Kos ditangani sepenuhnya oleh AuthController.
+    | Controller ini hanya menangani fitur Admin Kos setelah login.
+    |
+    */
 
     //dashboard admin
     public function dashboard(Request $request)
-{
-    $kost = $request->user()->kost;
+    {
+        $kost = $request->user()->kost;
 
-    ///totalkamar
-    $totalKamar =
-        $kost
-            ?->kamars()
-            ->count() ?? 0;
+        /*
+        |--------------------------------------------------------------------------
+        | PASTIKAN ADMIN MEMILIKI KOS
+        |--------------------------------------------------------------------------
+        |
+        | Secara alur normal setiap Admin Kos sudah mempunyai record kos sejak
+        | registrasi. Pengecekan ini mencegah error null apabila data tidak utuh.
+        |
+        */
+        abort_unless(
+            $kost,
+            403,
+            'Admin belum memiliki data kos.'
+        );
 
-    //totalpenghuni
-    $totalPenghuni = User::whereHas( 'tagihans.kamar',
-        function($q) use ($kost){
-            $q->where(
+        /*
+        |--------------------------------------------------------------------------
+        | TOTAL KAMAR
+        |--------------------------------------------------------------------------
+        */
+        $totalKamar = $kost
+            ->kamars()
+            ->count();
+
+        /*
+        |--------------------------------------------------------------------------
+        | TOTAL PENGHUNI AKTIF
+        |--------------------------------------------------------------------------
+        |
+        | Sumber kebenaran penghuni adalah riwayat_hunians, bukan keberadaan
+        | tagihan. Dengan begitu penghuni aktif tetap terhitung meskipun belum
+        | mempunyai tagihan, dan penghuni lama yang masih mempunyai riwayat
+        | tagihan tidak ikut dihitung.
+        |
+        */
+        $totalPenghuni = RiwayatHunian::where(
                 'id_kost',
                 $kost->id
-            );
-        }
+            )
+            ->where(
+                'status',
+                'aktif'
+            )
+            ->distinct()
+            ->count('id_user');
 
-    )
-    ->where(
-        'role', 'penghuni kost'
-    )
-    ->distinct()
-    ->count();
+        /*
+        |--------------------------------------------------------------------------
+        | PEMBAYARAN MENUNGGU VERIFIKASI
+        |--------------------------------------------------------------------------
+        */
+        $pendingPembayaran = Pembayaran::where(
+                'status_validasi',
+                'menunggu'
+            )
+            ->whereHas(
+                'tagihan.kamar',
+                function ($query) use ($kost) {
+                    $query->where(
+                        'id_kost',
+                        $kost->id
+                    );
+                }
+            )
+            ->count();
 
-//pembayaran pending
-$pendingPembayaran = Pembayaran::where(
-        'status_validasi', 'menunggu'
-    )
-    ->whereHas(
-        'tagihan.kamar',
-        function($q) use ($kost){
-            $q->where(
-                'id_kost', $kost->id
-            );
-        }
-    )
-    ->count();
+        /*
+        |--------------------------------------------------------------------------
+        | PEMBAYARAN TERBARU
+        |--------------------------------------------------------------------------
+        */
+        $pembayaranTerbaru = Pembayaran::with([
+                'tagihan.user',
+                'tagihan.kamar',
+                'tagihan.hargaKamar',
+            ])
+            ->where(
+                'status_validasi',
+                'menunggu'
+            )
+            ->whereHas(
+                'tagihan.kamar',
+                function ($query) use ($kost) {
+                    $query->where(
+                        'id_kost',
+                        $kost->id
+                    );
+                }
+            )
+            ->latest()
+            ->take(5)
+            ->get();
 
-    //pembayaran terbaru
- $pembayaranTerbaru = Pembayaran::with([
-        'tagihan.user', 'tagihan.kamar', 'tagihan.hargaKamar',
-    ])
-    ->where(
-        'status_validasi', 'menunggu'
-
-    )
-    ->whereHas(
-        'tagihan.kamar',
-        function($q) use ($kost){
-            $q->where(
-                'id_kost',
+        /*
+        |--------------------------------------------------------------------------
+        | ADUAN TERBARU
+        |--------------------------------------------------------------------------
+        */
+        $aduanTerbaru = Aduan::with('user')
+            ->where(
+                'kost_id',
                 $kost->id
-            );
+            )
+            ->orderBy(
+                'tanggal',
+                'desc'
+            )
+            ->take(3)
+            ->get();
 
-        }
-
-    )
-    ->latest()
-    ->take(5)
-    ->get();
-
-    //aduan terbaru
-    $aduanTerbaru = Aduan::with('user')
-    ->where('kost_id', $kost->id)
-    ->orderBy('tanggal', 'desc')
-    ->take(3)
-    ->get();
-
-return view('admin.dashboard', [
-    'kost'                => $kost,
-    'totalKamar'          => $totalKamar,
-    'totalPenghuni'       => $totalPenghuni,
-    'pendingPembayaran'   => $pendingPembayaran,
-    'pembayaranTerbaru'   => $pembayaranTerbaru,
-    'aduanTerbaru'        => $aduanTerbaru,
-]);
-}
+        return view(
+            'admin.dashboard',
+            [
+                'kost' => $kost,
+                'totalKamar' => $totalKamar,
+                'totalPenghuni' => $totalPenghuni,
+                'pendingPembayaran' => $pendingPembayaran,
+                'pembayaranTerbaru' => $pembayaranTerbaru,
+                'aduanTerbaru' => $aduanTerbaru,
+            ]
+        );
+    }
 
     //infomrasi kost
 
@@ -184,7 +166,7 @@ return view('admin.dashboard', [
 
     public function editKost(Request $request)
     {
-        return view('admin.kost-edit', [
+        return view('admin.kost.kost-edit', [
             'kost' => $request->user()->kost,
             //fasilitas
             'fasilitas' => Fasilitas::all(),
@@ -194,74 +176,114 @@ return view('admin.dashboard', [
     //update kost
     public function updateKost(Request $request)
     {
-        $data = $request->validate([
-
-           //data kos
-            'nama_kost' => 'required',
-            'no_hp' => 'required',
-            'alamat' => 'required',
-            'deskripsi' => 'nullable',
-            'fasilitas' => 'nullable|array',
-            'fasilitas.*' => 'exists:fasilitas,id_fasilitas',
-            'foto_kost' => 'nullable|array',
-            'foto_kost.*' => 'image|max:2048',
-            'lokasi' => 'nullable|string',
-
-        ]);
-
         $kost = $request->user()->kost;
 
-        //foto lama
-        $oldPhotos = $kost->foto_kost ?? [];
+        abort_unless(
+            $kost,
+            403,
+            'Admin belum memiliki data kos.'
+        );
 
-        //foto yang dihapus
+        $data = $request->validate(
+            [
+                'nama_kost' => ['required', 'string', 'max:150'],
+                'no_hp' => ['required', 'string', 'regex:/^08[0-9]{8,13}$/'],
+                'alamat' => ['required', 'string', 'max:1000'],
+                'deskripsi' => ['nullable', 'string', 'max:5000'],
+                'fasilitas' => ['nullable', 'array'],
+                'fasilitas.*' => ['integer', 'distinct', 'exists:fasilitas,id_fasilitas'],
+                'foto_kost' => ['nullable', 'array', 'max:10'],
+                'foto_kost.*' => ['image', 'mimes:jpg,jpeg,png,webp', 'max:10240'],
+                'lokasi' => ['nullable', 'string', 'max:2000'],
+                'deleted_old_images' => ['nullable', 'json'],
+            ],
+            [
+                'no_hp.regex' => 'Nomor WhatsApp harus diawali 08 dan berisi 10–15 digit.',
+                'foto_kost.max' => 'Maksimal 10 foto dapat diunggah sekaligus.',
+                'foto_kost.*.image' => 'Setiap file foto kos harus berupa gambar yang valid.',
+                'foto_kost.*.mimes' => 'Format foto kos harus JPG, JPEG, PNG, atau WEBP.',
+                'foto_kost.*.max' => 'Ukuran setiap foto kos maksimal 10 MB.',
+            ]
+        );
+
+        $oldPhotos = $kost->foto_kost ?? [];
         $deletedPhotos = json_decode(
-            $request->deleted_old_images,
+            $data['deleted_old_images'] ?? '[]',
             true
         ) ?? [];
 
-       //filter ofot lama
-        if (count($deletedPhotos))
-        {
-            $oldPhotos = array_values(
-                array_filter(
-                    $oldPhotos,
-                    fn ($foto) =>
-                        !in_array($foto, $deletedPhotos)
-                )
-            );
-        }
-//upload foto bau
-        if ($request->hasFile('foto_kost'))
-        {
-            foreach ($request->file('foto_kost') as $foto)
-            {
-                $oldPhotos[] =
-                    $foto->store('kost', 'public');
-            }
-        }
-
-       //save foto
-        $data['foto_kost'] = $oldPhotos;
-
-        //update data kos
-        $kost->update($data);
-
-       //update no hp
-        $request->user()->update([
-            'no_hp' => $request->no_hp
-        ]);
-
-        //syncfasilitas
-        $kost->fasilitas()->sync(
-            $request->fasilitas ?? []
+        // User hanya boleh meminta penghapusan foto yang memang dimiliki kosnya.
+        $photosToDelete = array_values(
+            array_intersect($oldPhotos, $deletedPhotos)
         );
+
+        $remainingPhotos = array_values(
+            array_filter(
+                $oldPhotos,
+                fn ($foto) => !in_array($foto, $photosToDelete, true)
+            )
+        );
+
+        $newPhotos = [];
+
+        try {
+            if ($request->hasFile('foto_kost')) {
+                foreach ($request->file('foto_kost') as $foto) {
+                    $newPhotos[] = $foto->store('kost', 'public');
+                }
+            }
+
+            DB::transaction(function () use (
+                $request,
+                $kost,
+                $data,
+                $remainingPhotos,
+                $newPhotos
+            ) {
+                $kost->update([
+                    'nama_kost' => $data['nama_kost'],
+                    'alamat' => $data['alamat'],
+                    'deskripsi' => $data['deskripsi'] ?? null,
+                    'lokasi' => $data['lokasi'] ?? null,
+                    'foto_kost' => array_values([
+                        ...$remainingPhotos,
+                        ...$newPhotos,
+                    ]),
+                ]);
+
+                $request->user()->update([
+                    'no_hp' => $data['no_hp'],
+                ]);
+
+                $kost->fasilitas()->sync(
+                    $data['fasilitas'] ?? []
+                );
+            });
+        } catch (\Throwable $e) {
+            // Jika database gagal, jangan tinggalkan file baru tanpa record.
+            if ($newPhotos !== []) {
+                Storage::disk('public')->delete($newPhotos);
+            }
+
+            Log::error('Gagal memperbarui informasi kos.', [
+                'user_id' => $request->user()->id,
+                'kost_id' => $kost->id,
+                'exception' => $e,
+            ]);
+
+            return back()
+                ->withInput()
+                ->with('error', 'Informasi kos gagal diperbarui. Silakan coba lagi.');
+        }
+
+        // File lama baru dihapus setelah transaksi database benar-benar sukses.
+        if ($photosToDelete !== []) {
+            Storage::disk('public')->delete($photosToDelete);
+        }
+
         return redirect()
             ->route('admin.kost.index')
-            ->with(
-                'success',
-                'Informasi kost berhasil diperbarui.'
-            );
+            ->with('success', 'Informasi kost berhasil diperbarui.');
     }
  //refresh kode undangan
 

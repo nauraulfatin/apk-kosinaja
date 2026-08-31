@@ -11,6 +11,11 @@ class AturanKos extends Model
     protected $fillable = [
         'kost_id',
         'judul',
-        'isi'
+        'isi',
     ];
+
+    public function kost()
+    {
+        return $this->belongsTo(Kost::class, 'kost_id');
+    }
 }

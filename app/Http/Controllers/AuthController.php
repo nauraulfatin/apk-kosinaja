@@ -2,9 +2,14 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Kost;
+use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\RateLimiter;
+use Illuminate\Support\Str;
 
 class AuthController extends Controller
 {
@@ -19,33 +24,65 @@ class AuthController extends Controller
     {
         $credentials = $request->validate(
             [
-                'username' => 'required',
-                'password' => 'required',
+                'username' => ['required', 'string'],
+                'password' => ['required', 'string'],
             ],
-
             [
-
                 'username.required' => 'Username wajib diisi.',
                 'password.required' => 'Password wajib diisi.',
             ]
         );
 
-        //attempt login
+        /*
+        |--------------------------------------------------------------------------
+        | RATE LIMIT LOGIN
+        |--------------------------------------------------------------------------
+        |
+        | Maksimal 5 percobaan login gagal dalam 60 detik untuk kombinasi
+        | username + alamat IP yang sama. Ini memperlambat brute-force tanpa
+        | mengunci akun secara permanen.
+        |
+        */
+        $throttleKey = $this->loginThrottleKey(
+            $credentials['username'],
+            $request->ip()
+        );
 
-        if (!Auth::attempt($credentials))
-        {
+        if (RateLimiter::tooManyAttempts($throttleKey, 5)) {
+            $seconds = RateLimiter::availableIn($throttleKey);
+
             return back()
                 ->withErrors([
+                    'username' => "Terlalu banyak percobaan login. Coba lagi dalam {$seconds} detik.",
+                ])
+                ->onlyInput('username');
+        }
+
+        /*
+        |--------------------------------------------------------------------------
+        | AUTHENTICATION
+        |--------------------------------------------------------------------------
+        */
+        if (!Auth::attempt($credentials)) {
+            RateLimiter::hit($throttleKey, 60);
+
+            return back()
+                ->withErrors([
+                    // Pesan dibuat generik agar tidak membocorkan apakah
+                    // username tertentu terdaftar atau tidak.
                     'username' => 'Username atau password salah.',
                 ])
                 ->onlyInput('username');
         }
 
-        //regenerate session
+        // Login berhasil: hapus hit gagal untuk kombinasi ini.
+        RateLimiter::clear($throttleKey);
 
+        // Regenerate session untuk mencegah session fixation.
         $request
             ->session()
             ->regenerate();
+
         $user = $request->user();
 
        //force change password
@@ -210,82 +247,122 @@ class AuthController extends Controller
     {
         $data = $request->validate(
             [
+                // Data akun admin
+                'nama' => 'required|string|max:100',
+                'nik' => [
+                    'required',
+                    'digits:16',
+                    'regex:/^[0-9]+$/',
+                    'unique:users,nik',
+                ],
+                'username' => [
+                    'required',
+                    'string',
+                    'min:3',
+                    'max:30',
+                    'regex:/^[a-zA-Z0-9._]+$/',
+                    'unique:users,username',
+                ],
+                'no_hp' => [
+                    'required',
+                    'digits_between:10,13',
+                ],
+                'password' => [
+                    'required',
+                    'confirmed',
+                    'min:8',
+                    'regex:/[A-Z]/',
+                    'regex:/[a-z]/',
+                    'regex:/[0-9]/',
+                ],
 
-                //data akun
-                'nama' =>'required|string|max:100',
-                'nik' => ['required', 'digits:16','regex:/^[0-9]+$/', 'unique:users,nik'],
-                'username' => ['required','string', 'min:3', 'max:30', 'regex:/^[a-zA-Z0-9._]+$/','unique:users,username'],
-                'no_hp' => ['required', 'digits_between:10,13' ],
-                'password' => ['required', 'confirmed','min:8', 'regex:/[A-Z]/', 'regex:/[a-z]/','regex:/[0-9]/' ],
-
-               //data kost
-
-                'nama_kost' =>'required|string|max:255',
-                'alamat' =>'required|string',
+                // Data minimum kos saat registrasi
+                'nama_kost' => 'required|string|max:255',
+                'alamat' => 'required|string|max:2000',
             ],
-
             [
-
-                //error message nama dll
-                'nama.required' =>'Nama wajib diisi.',
+                'nama.required' => 'Nama wajib diisi.',
                 'nama.max' => 'Nama maksimal 100 karakter.',
 
-                //nik
-                'nik.required' =>'NIK wajib diisi.',
-                'nik.digits' =>'NIK harus 16 digit.',
-                'nik.regex' =>'NIK hanya boleh angka.',
-                'nik.unique' =>'NIK sudah digunakan.',
+                'nik.required' => 'NIK wajib diisi.',
+                'nik.digits' => 'NIK harus 16 digit.',
+                'nik.regex' => 'NIK hanya boleh angka.',
+                'nik.unique' => 'NIK sudah digunakan.',
 
-                //username
                 'username.required' => 'Username wajib diisi.',
                 'username.min' => 'Username minimal 3 karakter.',
                 'username.max' => 'Username maksimal 30 karakter.',
                 'username.regex' => 'Username hanya boleh huruf, angka, titik, dan underscore.',
                 'username.unique' => 'Username sudah digunakan.',
 
-                //no HP
                 'no_hp.required' => 'Nomor HP wajib diisi.',
                 'no_hp.digits_between' => 'Nomor HP harus 10 sampai 13 digit.',
 
-                //pw
-                'password.required' =>'Password wajib diisi.',
-                'password.confirmed' =>'Konfirmasi password tidak cocok.',
-                'password.min' =>'Password minimal 8 karakter.',
-                'password.regex' =>'Password harus mengandung huruf besar, huruf kecil, dan angka.',
+                'password.required' => 'Password wajib diisi.',
+                'password.confirmed' => 'Konfirmasi password tidak cocok.',
+                'password.min' => 'Password minimal 8 karakter.',
+                'password.regex' => 'Password harus mengandung huruf besar, huruf kecil, dan angka.',
 
-               //kkost
-                'nama_kost.required' => 'Nama kost wajib diisi.',
-                'alamat.required' => 'Alamat wajib diisi.',
+                'nama_kost.required' => 'Nama kos wajib diisi.',
+                'nama_kost.max' => 'Nama kos maksimal 255 karakter.',
+                'alamat.required' => 'Alamat kos wajib diisi.',
+                'alamat.max' => 'Alamat kos terlalu panjang.',
             ]
-
         );
 
-        //create user
+        /*
+        |--------------------------------------------------------------------------
+        | REGISTRASI DALAM SATU TRANSAKSI
+        |--------------------------------------------------------------------------
+        |
+        | Pada tahap registrasi hanya dibuat identitas admin dan data minimum kos.
+        | Foto, deskripsi, lokasi, fasilitas, dan data detail lainnya diisi oleh
+        | Admin Kos setelah akun disetujui Super Admin.
+        |
+        */
+        DB::transaction(function () use ($data) {
+            $user = User::create([
+                'nama' => $data['nama'],
+                'nik' => $data['nik'],
+                'username' => $data['username'],
+                'no_hp' => $data['no_hp'],
+                'password' => Hash::make($data['password']),
+                'role' => 'admin kost',
+                'status' => 'pending',
+                'must_change_password' => false,
+            ]);
 
-        $user = \App\Models\User::create([
-            'nama' => $data['nama'],
-            'nik' => $data['nik'],
-            'username' => $data['username'],
-            'no_hp' => $data['no_hp'],
-            'password' => bcrypt( $data['password']),
-            'role' => 'admin kost',
-            'status' => 'pending',
-            'must_change_password' => false,
-        ]);
+            Kost::create([
+                'id_user' => $user->id,
+                'nama_kost' => $data['nama_kost'],
+                'alamat' => $data['alamat'],
 
-        //create kost
-        \App\Models\Kost::create([
-            'nama_kost' =>$data['nama_kost'],
-            'alamat' =>$data['alamat'],
-            'id_user' =>$user->id,
-        ]);
+                // Data berikut sengaja belum diisi saat registrasi.
+                'deskripsi' => null,
+                'foto_kost' => null,
+                'lokasi' => null,
+            ]);
+        });
 
-        //redirect
         return redirect()
             ->route('login')
             ->with(
                 'success',
-                'Registrasi admin berhasil. Tunggu persetujuan super admin.'
+                'Registrasi Admin Kos berhasil. Silakan tunggu persetujuan Super Admin.'
             );
     }
+    /*
+    |--------------------------------------------------------------------------
+    | LOGIN THROTTLE KEY
+    |--------------------------------------------------------------------------
+    */
+    private function loginThrottleKey(string $username, ?string $ip): string
+    {
+        $normalizedUsername = Str::lower(trim($username));
+
+        return 'login:' . sha1(
+            $normalizedUsername . '|' . ($ip ?? 'unknown')
+        );
+    }
+
 }

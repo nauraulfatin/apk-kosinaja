@@ -181,7 +181,7 @@ $grouped = $tagihanAktif->groupBy(fn($i) => $i->tanggal_mulai->format('F Y'));
                     $dibayar = $t->pembayaran->where('status_validasi', 'diterima')->sum('nominal_pembayaran');
                     $sisa = ($t->hargaKamar?->harga ?? 0) - $dibayar;
                     @endphp
-                    @if(in_array($t->status, ['pending', 'telat', 'ditolak', 'menunggu_verifikasi']))
+                    @if(in_array($t->status_label, ['pending', 'telat', 'ditolak'], true))
                     <option value="{{ $t->id_tagihan }}">
                         {{ $t->tanggal_mulai->format('d M Y') }} - {{ $t->tanggal_selesai->format('d M Y') }}
                         | Sisa: Rp {{ number_format($sisa, 0, ',', '.') }}

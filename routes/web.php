@@ -12,7 +12,6 @@ use App\Http\Controllers\TagihanController;
 use App\Http\Controllers\AturanKosController;
 use App\Http\Controllers\Admin\PengajuanPenghuniController;
 use App\Http\Controllers\ProfilPenghuniController;
-use App\Http\Controllers\PengajuanSewaController;
 use App\Http\Controllers\Admin\AduanAdminController;
 use App\Http\Controllers\Penghuni\AduanPenghuniController;
 use App\Http\Controllers\ProfilAdminController;
@@ -90,15 +89,18 @@ Route::post('/logout', [
 |--------------------------------------------------------------------------
 */
 
-Route::get('/register-admin-kost', [
-    AdminKostController::class,
-    'create'
-])->name('admin-kost.register');
-
-Route::post('/register-admin-kost', [
-    AdminKostController::class,
-    'store'
-])->name('admin-kost.register.store');
+/*
+|--------------------------------------------------------------------------
+| LEGACY URL REGISTRASI ADMIN
+|--------------------------------------------------------------------------
+|
+| Link lama tetap diarahkan ke halaman registrasi resmi agar bookmark/link
+| lama tidak rusak. Tidak ada lagi POST/store registrasi di AdminKostController.
+|
+*/
+Route::get('/register-admin-kost', function () {
+    return redirect()->route('register.admin');
+})->name('admin-kost.register');
 
 Route::get('/register/penghuni', [
     AuthController::class,
@@ -141,7 +143,9 @@ Route::middleware('auth')->group(function () {
     Route::post('/hubungkan-kode', [
         ProfilPenghuniController::class,
         'submitKode'
-    ])->name('penghuni.hubungkan.kode');
+    ])
+    ->middleware('role:penghuni kost')
+    ->name('penghuni.hubungkan.kode');
 });
 
 /*
@@ -180,6 +184,18 @@ Route::middleware([
     ])->name('admin.hapus');
 
     Route::resource('/fasilitas', FasilitasController::class)
+        ->except(['show']);
+
+    /*
+    |--------------------------------------------------------------------------
+    | MASTER PERIODE PENAGIHAN
+    |--------------------------------------------------------------------------
+    |
+    | Periode bersifat global untuk seluruh kos, sehingga hanya Super Admin
+    | yang boleh menambah, mengubah, dan menghapus master periode.
+    |
+    */
+    Route::resource('/periode', PeriodePenagihanController::class)
         ->except(['show']);
 
     Route::get('/pengajuan', [
@@ -270,15 +286,9 @@ Route::middleware([
         'updateFasilitas'
     ])->name('kamar.fasilitas.update');
 
-    Route::resource('/periode', PeriodePenagihanController::class)
-        ->except(['show']);
-
     Route::resource('/kamar/{kamar}/harga', HargaKamarController::class)
         ->except(['show'])
         ->names('kamar.harga');
-
-    Route::resource('/penghuni', PenghuniController::class)
-        ->except(['show']);
 
     Route::get('/penghuni/aktif', [
         PenghuniController::class, 'aktif'
@@ -357,12 +367,6 @@ Route::middleware([
     Route::get('/profil', [ProfilAdminController::class, 'index'])->name('profil.index');
 });
 
-Route::middleware(['auth', 'force.password'])
-    ->group(function () {
-        Route::get('/admin/profil', [ProfilAdminController::class, 'index'])
-            ->name('admin.profil.index');
-    });
-
 /*
 |--------------------------------------------------------------------------
 | PENGHUNI KOST
@@ -387,11 +391,6 @@ Route::middleware([
         TagihanController::class,
         'penghuniIndex'
     ])->name('pembayaran.index');
-
-    Route::get('/pembayaran/create', [
-        TagihanController::class,
-        'createPembayaran'
-    ])->name('pembayaran.create');
 
     Route::post('/pembayaran', [
         TagihanController::class,
@@ -422,50 +421,10 @@ Route::middleware([
         'store'
     ])->name('aduan.store');
 
-    Route::get('/profil', function () {
-        return view('profil.index');
-    })->name('penghuni.profil.index');
-
-    Route::get('/profil/edit', function () {
-        return view('profil.index');
-    })->name('profil.edit');
-
-    Route::put('/profil', [
-        PenghuniController::class,
-        'updateProfil'
-    ])->name('profil.update');
-
-    Route::post('/pengajuan-sewa', [
-        PengajuanPenghuniController::class,
-        'store'
-    ])->name('pengajuan.store');
-
-    Route::post('/penghuni/hubungkan', [
-        PenghuniController::class,
-        'hubungkan'
-    ])->name('penghuni.hubungkan');
+    Route::get('/profil', [
+        ProfilPenghuniController::class,
+        'index'
+    ])->name('profil.index');
 
 });
 
-/*
-|--------------------------------------------------------------------------
-| PROFIL (GLOBAL - agar kompatibel dengan route('profil.index'))
-|--------------------------------------------------------------------------
-*/
-
-Route::get('/profil', function () {
-
-    $riwayat = \App\Models\RiwayatHunian::with('kamar.kost')
-        ->where('id_user', auth()->id())
-        ->latest()
-        ->first();
-
-    $riwayatList = \App\Models\RiwayatHunian::with(['kamar.kost.user'])
-        ->where('id_user', auth()->id())
-        ->where('status', 'nonaktif')
-        ->latest()
-        ->get();
-
-    return view('profil.index', compact('riwayat', 'riwayatList'));
-
-})->name('profil.index');

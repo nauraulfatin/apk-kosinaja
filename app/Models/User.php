@@ -11,137 +11,54 @@ class User extends Authenticatable
     use HasFactory, Notifiable;
 
     protected $fillable = [
-
         'username',
-
         'nik',
-
         'nama',
-
         'password',
-
         'no_hp',
-
         'role',
-
         'status',
-
         'must_change_password',
-
-        /*
-        |--------------------------------------------------------------------------
-        | REVISI PENGHUNI
-        |--------------------------------------------------------------------------
-        */
-
-        'id_kost',
-
-        'id_kamar',
-
-        'status_penghuni',
-
         'created_by',
-
     ];
 
     protected $hidden = [
-
         'password',
-
-        'remember_token'
-
+        'remember_token',
     ];
 
     protected $casts = [
-
         'must_change_password' => 'boolean',
-
-        'password' => 'hashed'
-
+        'password' => 'hashed',
     ];
-
-    /*
-    |--------------------------------------------------------------------------
-    | RELASI KOST ADMIN
-    |--------------------------------------------------------------------------
-    */
 
     public function kost()
     {
-        return $this->hasOne(
-            Kost::class,
-            'id_user'
-        );
+        return $this->hasOne(Kost::class, 'id_user');
     }
-
-    /*
-    |--------------------------------------------------------------------------
-    | RELASI TAGIHAN
-    |--------------------------------------------------------------------------
-    */
 
     public function tagihans()
     {
-        return $this->hasMany(
-            Tagihan::class,
-            'id_user'
-        );
+        return $this->hasMany(Tagihan::class, 'id_user');
     }
-
-    /*
-    |--------------------------------------------------------------------------
-    | RELASI ADUAN
-    |--------------------------------------------------------------------------
-    */
 
     public function aduan()
     {
-        return $this->hasMany(
-            Aduan::class,
-            'id_user'
-        );
+        return $this->hasMany(Aduan::class, 'id_user');
     }
-
-    /*
-    |--------------------------------------------------------------------------
-    | RELASI RIWAYAT HUNIAN
-    |--------------------------------------------------------------------------
-    */
 
     public function riwayatHunian()
     {
-        return $this->hasMany(
-            RiwayatHunian::class,
-            'id_user'
-        );
+        return $this->hasMany(RiwayatHunian::class, 'id_user');
     }
 
-    /*
-    |--------------------------------------------------------------------------
-    | KAMAR AKTIF
-    |--------------------------------------------------------------------------
-    */
-
-    public function kamar()
+    public function createdBy()
     {
-        return $this->belongsTo(
-            KamarKost::class,
-            'id_kamar',
-            'id_kamar'
-        );
+        return $this->belongsTo(User::class, 'created_by');
     }
 
-    /*
-    |--------------------------------------------------------------------------
-    | KOST AKTIF
-    |--------------------------------------------------------------------------
-    */
-
-    public function kostAktif()
+    public function createdUsers()
     {
-        return $this->belongsTo(
-            Kost::class,
-            'id_kost'
-        );
+        return $this->hasMany(User::class, 'created_by');
     }
 }
