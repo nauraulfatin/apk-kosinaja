@@ -206,13 +206,14 @@
                 bg-white/85 backdrop-blur-xl
                 border-b border-[#edf1ed]">
 
-        <div class="max-w-7xl mx-auto
+        <div class="max-w-full px-6 lg:px-8
                     px-6 lg:px-8
                     h-[72px] lg:h-[84px]
                     flex items-center justify-between">
 
             {{-- LOGO --}}
-            <a href="{{ route('home') }}" class="flex items-center gap-3">
+            <a href="{{ route('home') }}" 
+   class="flex items-center gap-3 shrink-0">
 
                 <img
                     src="{{ asset('logo.png') }}"
@@ -309,6 +310,9 @@
             <div class="hidden lg:flex items-center gap-4">
 
                 @auth
+
+                     {{-- NOTIFICATION --}}
+                    <x-notification-bell />
 
                     {{-- PROFILE DROPDOWN --}}
                     <div class="relative group">
@@ -568,6 +572,10 @@
                         <div class="bg-[#F8F5F0]
                                     rounded-[22px]
                                     p-3">
+
+                         <div class="mb-3 flex justify-end">
+                            <x-notification-bell />
+                        </div>
 
                             {{-- USER HEADER / TOGGLE --}}
                             <button

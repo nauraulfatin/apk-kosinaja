@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\User;
+use App\Notifications\AdminKostDisetujui;
 use App\Services\KostDeletionService;
 
 class SuperAdminController extends Controller
@@ -47,6 +48,10 @@ class SuperAdminController extends Controller
         $user->update([
             'status' => 'aktif'
         ]);
+
+        $user->notify(
+    new AdminKostDisetujui($user)
+);
 
         return redirect()
             ->route('superadmin.pengajuan.index')

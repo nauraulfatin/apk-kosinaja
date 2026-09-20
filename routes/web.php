@@ -16,7 +16,7 @@ use App\Http\Controllers\Admin\AduanAdminController;
 use App\Http\Controllers\Penghuni\AduanPenghuniController;
 use App\Http\Controllers\ProfilAdminController;
 use App\Http\Controllers\ContactController;
-
+use App\Http\Controllers\NotificationController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\HomeController;
 
@@ -41,11 +41,7 @@ Route::get('/hubungi', [
 // EMAIL
 Route::post('/hubungi', [ContactController::class, 'send'])->name('contact.send');
 
-/*
-|--------------------------------------------------------------------------
-| KATALOG
-|--------------------------------------------------------------------------
-*/
+//KATALOG
 
 Route::get('/katalog', [
     HomeController::class,
@@ -146,6 +142,22 @@ Route::middleware('auth')->group(function () {
     ])
     ->middleware('role:penghuni kost')
     ->name('penghuni.hubungkan.kode');
+
+        Route::get(
+        '/notifications',
+        [NotificationController::class, 'index']
+    )->name('notifications.index');
+
+
+    Route::get(
+        '/notifications/{id}/read',
+        [NotificationController::class, 'read']
+    )->name('notifications.read');
+
+    Route::post(
+    '/notifications/read-all',
+    [NotificationController::class, 'markAllRead']
+)->name('notifications.readAll');
 });
 
 /*

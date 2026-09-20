@@ -106,6 +106,9 @@
                     </a>
                 </li>
             </ul>
+<div class="flex items-center gap-4">
+            {{-- NOTIFICATION --}}
+            <x-notification-bell />
 
             {{-- PROFILE DROPDOWN --}}
             <div class="relative group">
@@ -159,6 +162,7 @@
             </div>
 
         </div>
+</div>
 
     </nav>
 

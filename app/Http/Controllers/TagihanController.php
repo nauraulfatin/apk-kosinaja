@@ -4,6 +4,9 @@ namespace App\Http\Controllers;
 
 use App\Models\Pembayaran;
 use App\Models\Tagihan;
+use App\Notifications\PembayaranMasuk;
+use App\Notifications\PembayaranDiterima;
+use App\Notifications\PembayaranDitolak;
 use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -107,25 +110,44 @@ class TagihanController extends Controller
             ->store('bukti-bayar', 'public');
 
         try {
-            DB::transaction(function () use ($data, $tagihan, $path) {
-                Pembayaran::create([
-                    'id_tagihan' => $tagihan->id_tagihan,
-                    'nominal_pembayaran' => $data['nominal_pembayaran'],
-                    'tanggal_bayar' => now(),
-                    'bukti_bayar' => $path,
-                    'status_validasi' => 'menunggu',
-                ]);
+          DB::transaction(function () use ($data, $tagihan, $path) {
 
-                // Status finansial tetap pending/telat.
-                // Status UI otomatis menjadi menunggu_verifikasi
-                // dari pembayaran terakhir.
-                $tagihan->syncFinancialStatus();
-            });
-        } catch (\Throwable $e) {
-            Storage::disk('public')->delete($path);
-            throw $e;
-        }
+    Pembayaran::create([
+        'id_tagihan' => $tagihan->id_tagihan,
+        'nominal_pembayaran' => $data['nominal_pembayaran'],
+        'tanggal_bayar' => now(),
+        'bukti_bayar' => $path,
+        'status_validasi' => 'menunggu',
+    ]);
 
+    $tagihan->syncFinancialStatus();
+
+});
+
+
+} catch (\Throwable $e) {
+    Storage::disk('public')->delete($path);
+    throw $e;
+}
+
+
+// NOTIFIKASI ADMIN KOS
+
+$admin = $tagihan
+    ->kamar
+    ->kost
+    ->user;
+
+
+if ($admin) {
+
+    $admin->notify(
+        new PembayaranMasuk(
+            $r->user()->nama
+        )
+    );
+
+}
         return redirect()
             ->route('penghuni.pembayaran.index')
             ->with(
@@ -359,6 +381,11 @@ class TagihanController extends Controller
             $tagihan->syncFinancialStatus();
         });
 
+        // NOTIFIKASI PENGHUNI
+$tagihan->user?->notify(
+    new PembayaranDiterima()
+);
+
         return back()->with(
             'success',
             'Pembayaran berhasil divalidasi.'
@@ -405,6 +432,11 @@ class TagihanController extends Controller
             $tagihan->load('pembayaran', 'hargaKamar');
             $tagihan->syncFinancialStatus();
         });
+// NOTIFIKASI PENGHUNI
+
+$tagihan->user?->notify(
+    new PembayaranDitolak()
+);
 
         return back()->with(
             'success',

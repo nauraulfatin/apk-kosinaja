@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Penghuni;
 use App\Http\Controllers\Controller;
 use App\Models\Aduan;
 use App\Models\RiwayatHunian;
+use App\Notifications\AduanBaru;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -49,7 +50,6 @@ class AduanPenghuniController extends Controller
 
         $user = Auth::user();
 
-        // Cari kos terlebih dahulu sebelum mengunggah file agar tidak muncul orphan file.
         $riwayat = RiwayatHunian::where('id_user', $user->id)
             ->whereIn('status', ['aktif', 'antrian'])
             ->latest('id_riwayat_hunian')
@@ -71,8 +71,8 @@ class AduanPenghuniController extends Controller
                     ->store('aduan', 'public');
             }
 
-            DB::transaction(function () use ($data, $user, $riwayat, $fotoPath) {
-                Aduan::create([
+            $aduan = DB::transaction(function () use ($data, $user, $riwayat, $fotoPath) {
+                return Aduan::create([
                     'id_user' => $user->id,
                     'kost_id' => $riwayat->id_kost,
                     'isi_aduan' => $data['isi_aduan'],
@@ -81,7 +81,17 @@ class AduanPenghuniController extends Controller
                     'tanggal' => now()->toDateString(),
                 ]);
             });
+
+            $admin = $riwayat->kost->user;
+
+            if ($admin) {
+                $admin->notify(
+                    new AduanBaru($aduan)
+                );
+            }
+
         } catch (\Throwable $e) {
+
             if ($fotoPath) {
                 Storage::disk('public')->delete($fotoPath);
             }

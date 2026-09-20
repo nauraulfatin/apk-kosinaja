@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
+use App\Notifications\PengajuanPenghuniBaru;
 
 use App\Models\RiwayatHunian;
 use App\Models\Kost;
@@ -190,6 +191,20 @@ if ($pernahTinggal)
             'status' => 'menunggu'
 
         ]);
+
+        // NOTIFIKASI ADMIN KOS
+
+$admin = $kost->user;
+
+if ($admin) {
+
+    $admin->notify(
+        new PengajuanPenghuniBaru(
+            Auth::user()->nama
+        )
+    );
+
+}
 
         return response()->json([
 

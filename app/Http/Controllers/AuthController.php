@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Kost;
 use App\Models\User;
+use App\Notifications\AdminKostBaru;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -320,7 +321,8 @@ class AuthController extends Controller
         | Admin Kos setelah akun disetujui Super Admin.
         |
         */
-        DB::transaction(function () use ($data) {
+
+        $user = DB::transaction(function () use ($data) {
             $user = User::create([
                 'nama' => $data['nama'],
                 'nik' => $data['nik'],
@@ -342,7 +344,22 @@ class AuthController extends Controller
                 'foto_kost' => null,
                 'lokasi' => null,
             ]);
+            return $user;
         });
+
+        $superAdmin = User::where(
+    'role',
+    'super admin'
+)->first();
+
+
+if ($superAdmin) {
+
+    $superAdmin->notify(
+        new AdminKostBaru($user)
+    );
+
+}
 
         return redirect()
             ->route('login')

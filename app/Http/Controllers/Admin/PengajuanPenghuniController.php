@@ -8,6 +8,7 @@ use App\Models\KamarKost;
 use App\Models\Kost;
 use App\Models\RiwayatHunian;
 use App\Models\Tagihan;
+use App\Notifications\PenghuniDiterima;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -120,18 +121,6 @@ class PengajuanPenghuniController extends Controller
         RiwayatHunian $riwayatHunian
     ) {
         $kost = $this->getAdminKost();
-
-        /*
-        |--------------------------------------------------------------------------
-        | CEK OWNERSHIP PENGAJUAN
-        |--------------------------------------------------------------------------
-        |
-        | Tidak cukup hanya route middleware role.
-        | Kita juga harus memastikan object yang sedang diproses
-        | memang milik kos admin login.
-        |
-        */
-
         $this->ensureRiwayatOwnedByKost(
             $riwayatHunian,
             $kost->id,
@@ -344,20 +333,6 @@ class PengajuanPenghuniController extends Controller
                 return;
             }
 
-            /*
-            |--------------------------------------------------------------------------
-            | HAPUS TAGIHAN LAMA DI KOS INI
-            |--------------------------------------------------------------------------
-            |
-            | Sebelumnya:
-            |
-            | Tagihan::where('id_user', ...)->delete();
-            |
-            | Itu bisa menghapus tagihan user tersebut dari kos lain.
-            |
-            | Sekarang tagihan dibatasi hanya untuk kos admin login.
-            |
-            */
 
             Tagihan::where(
                     'id_user',
@@ -419,6 +394,16 @@ class PengajuanPenghuniController extends Controller
                 ]);
             }
         });
+
+        $riwayatHunian->load('user');
+
+        if ($data['status'] === 'aktif' && $riwayatHunian->user) {
+
+            $riwayatHunian->user->notify(
+                new PenghuniDiterima($riwayatHunian)
+            );
+
+        }
 
         /*
         |--------------------------------------------------------------------------
