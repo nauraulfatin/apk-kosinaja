@@ -47,11 +47,23 @@ class TagihanController extends Controller
 
     public function storePembayaran(Request $r)
     {
+        
+    
         $data = $r->validate([
-            'id_tagihan' => 'required|exists:tagihans,id_tagihan',
-            'nominal_pembayaran' => 'required|numeric|min:1000',
-            'bukti_bayar' => 'required|image|mimes:jpg,jpeg,png|max:4096',
-        ]);
+    'id_tagihan' => 'required|exists:tagihans,id_tagihan',
+    'nominal_pembayaran' => 'required|numeric|min:1000',
+    'bukti_bayar' => [
+        'required',
+        'image',
+        'mimes:jpg,jpeg,png',
+        'max:4096',
+    ],
+], [
+    'bukti_bayar.required' => 'Bukti pembayaran wajib diunggah.',
+    'bukti_bayar.image' => 'File bukti pembayaran harus berupa gambar.',
+    'bukti_bayar.mimes' => 'Bukti pembayaran hanya boleh berupa JPG, JPEG, atau PNG.',
+    'bukti_bayar.max' => 'Ukuran bukti pembayaran maksimal 4 MB.',
+]);
 
         $tagihan = Tagihan::with([
                 'hargaKamar',
