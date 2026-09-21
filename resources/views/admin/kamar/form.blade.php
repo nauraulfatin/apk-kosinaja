@@ -278,109 +278,100 @@
         </div>
 
 
-        {{-- FOTO KAMAR --}}
+  {{-- FOTO KAMAR --}}
+<div class="bg-white rounded-2xl shadow-sm border border-gray-100 p-6">
 
-        <div
-            class="bg-white rounded-2xl shadow-sm
-                   border border-gray-100 p-6"
-        >
+<h2 class="text-lg font-semibold text-[#0F0937] mb-5">
+    Foto Kamar
+</h2>
 
-            <h2 class="text-lg font-semibold text-[#0F0937] mb-5">
+<label class="block text-sm font-medium text-gray-700 mb-3">
+    Tambahkan Foto
+</label>
 
-                Foto Kamar
-
-            </h2>
-
-
-            <label
-                for="foto_kamar"
-                class="block text-sm font-medium
-                       text-gray-700 mb-2"
-            >
-
-                Tambahkan Foto
-
-            </label>
-
-            <input
-                type="file"
-                id="foto_kamar"
-                name="foto_kamar[]"
-                multiple
-                accept="image/jpeg,image/png,image/webp"
-                class="w-full rounded-xl border
-                       border-gray-200 px-4 py-3
-                       text-sm"
-            >
-
-            <p class="text-xs text-gray-400 mt-2">
-
-                Format JPG, JPEG, PNG, atau WEBP.
-                Maksimal 5MB per foto.
-
-            </p>
+<input type="file"
+       id="foto_kamar"
+       name="foto_kamar[]"
+       accept="image/jpeg,image/png,image/webp"
+       multiple
+       class="hidden">
 
 
-            @error('foto_kamar')
-                <p class="text-red-500 text-xs mt-1">
-                    {{ $message }}
-                </p>
-            @enderror
+<label for="foto_kamar"
+       class="inline-flex items-center px-5 py-3 rounded-xl border border-gray-200 cursor-pointer hover:bg-gray-50 text-sm font-medium">
+    Pilih Foto
+</label>
 
 
-            @error('foto_kamar.*')
-                <p class="text-red-500 text-xs mt-1">
-                    {{ $message }}
-                </p>
-            @enderror
+<p id="jumlah-foto"
+   class="mt-4 text-sm text-gray-500">
+    Belum ada foto dipilih
+</p>
 
 
-            {{-- FOTO LAMA SAAT EDIT --}}
-
-            @if($item->exists && !empty($item->foto_kamar))
-
-                <div class="mt-5">
-
-                    <p class="text-sm font-medium
-                              text-gray-700 mb-3">
-
-                        Foto Saat Ini
-
-                    </p>
+<div id="preview-foto"
+     class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4 mt-6">
+</div>
 
 
-                    <div class="grid grid-cols-2
-                                sm:grid-cols-3
-                                md:grid-cols-4 gap-4">
+<p class="text-xs text-gray-400 mt-4">
+    Format JPG, JPEG, PNG, atau WEBP. Maksimal 5MB per foto.
+</p>
 
-                        @foreach($item->foto_kamar as $foto)
 
-                            <div
-                                class="rounded-xl overflow-hidden
-                                       border border-gray-200"
-                            >
+@error('foto_kamar')
+<p class="text-red-500 text-xs mt-2">
+    {{ $message }}
+</p>
+@enderror
 
-                                <img
-                                    src="{{ asset(
-                                        'storage/' . $foto
-                                    ) }}"
-                                    alt="Foto kamar"
-                                    class="w-full h-32
-                                           object-cover"
-                                >
 
-                            </div>
+@error('foto_kamar.*')
+<p class="text-red-500 text-xs mt-2">
+    {{ $message }}
+</p>
+@enderror
 
-                        @endforeach
 
-                    </div>
 
-                </div>
+@if($item->exists && !empty($item->foto_kamar))
 
-            @endif
+<div class="mt-8">
 
-        </div>
+<p class="text-sm font-medium text-gray-700 mb-4">
+    Foto Saat Ini
+</p>
 
+
+<div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4">
+
+@foreach($item->foto_kamar as $index => $foto)
+
+<div class="relative rounded-xl overflow-hidden border">
+
+<img src="{{ asset('storage/'.$foto) }}"
+     class="w-full h-32 object-cover">
+
+
+@if($index == 0)
+
+<span class="absolute top-2 left-2 bg-[#6C8B6B] text-white text-xs px-2 py-1 rounded-full">
+Foto Utama
+</span>
+
+@endif
+
+</div>
+
+@endforeach
+
+</div>
+
+</div>
+
+@endif
+
+</div>
 
         {{-- BUTTON --}}
 
@@ -425,4 +416,109 @@
 
 </div>
 
+<script>
+
+let daftarFoto=[];
+
+const inputFoto=document.getElementById('foto_kamar');
+const preview=document.getElementById('preview-foto');
+const jumlah=document.getElementById('jumlah-foto');
+
+
+inputFoto.addEventListener('change',function(){
+
+    Array.from(this.files).forEach(file=>{
+
+        if(file.type.startsWith('image/')){
+            daftarFoto.push(file);
+        }
+
+    });
+
+    updatePreview();
+
+    sinkronFile();
+
+});
+
+
+function updatePreview(){
+
+    preview.innerHTML='';
+
+    jumlah.innerHTML =
+        daftarFoto.length
+        ? daftarFoto.length+' foto dipilih'
+        : 'Belum ada foto dipilih';
+
+
+    daftarFoto.forEach((file,index)=>{
+
+        let reader=new FileReader();
+
+
+        reader.onload=function(e){
+
+            preview.innerHTML+=`
+
+            <div class="relative rounded-xl overflow-hidden border">
+
+                <img src="${e.target.result}"
+                     class="w-full h-36 object-cover">
+
+
+                <button type="button"
+                onclick="hapusFoto(${index})"
+                class="absolute top-2 right-2
+                bg-red-500 text-white
+                w-8 h-8 rounded-full">
+
+                ✕
+
+                </button>
+
+            </div>
+
+            `;
+
+        };
+
+
+        reader.readAsDataURL(file);
+
+    });
+
+}
+
+
+
+function hapusFoto(index){
+
+    daftarFoto.splice(index,1);
+
+    sinkronFile();
+
+    updatePreview();
+
+}
+
+
+
+function sinkronFile(){
+
+    let dataTransfer=new DataTransfer();
+
+
+    daftarFoto.forEach(file=>{
+
+        dataTransfer.items.add(file);
+
+    });
+
+
+    inputFoto.files=dataTransfer.files;
+
+}
+
+</script>
 @endsection
