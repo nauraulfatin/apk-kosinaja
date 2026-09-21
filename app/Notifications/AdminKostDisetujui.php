@@ -31,20 +31,12 @@ class AdminKostDisetujui extends Notification
 
             'jenis_notifikasi' =>
                 'admin_kost_disetujui',
-
-
             'title' =>
                 'Registrasi Admin Kost Disetujui',
-
-
             'message' =>
                 'Selamat, akun Admin Kost kamu telah disetujui. Silakan login ke KosinAja.',
-
-
             'admin_id' =>
                 $this->admin->id,
-
-
             'url' =>
                 route('login'),
 
