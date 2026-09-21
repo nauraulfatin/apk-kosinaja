@@ -125,62 +125,6 @@
     text-shadow: 0 1px 10px rgba(10, 22, 12, 0.30);
 }
 
-/* Search bar */
-.hero-search {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    background: #fff;
-    border: 1px solid rgba(255, 255, 255, 0.2);
-    border-radius: 20px;
-    padding: 8px 8px 8px 16px;
-    max-width: 540px;
-    width: 100%;
-    margin-bottom: 28px;
-    box-shadow: 0 12px 40px rgba(0, 0, 0, 0.22);
-}
-
-.hero-search svg {
-    width: 18px;
-    height: 18px;
-    fill: #9CA3AF;
-    flex-shrink: 0;
-}
-
-.hero-search input {
-    flex: 1;
-    min-width: 0;
-    border: none;
-    outline: none;
-    font-family: 'DM Sans', sans-serif;
-    font-size: 0.9rem;
-    background: transparent;
-    color: var(--text-dark);
-}
-
-.hero-search input::placeholder {
-    color: #9CA3AF;
-}
-
-.hero-search button {
-    flex-shrink: 0;
-    padding: 12px 22px;
-    background: var(--green-mid);
-    color: #fff;
-    border: none;
-    border-radius: 14px;
-    font-weight: 700;
-    font-size: 0.92rem;
-    cursor: pointer;
-    white-space: nowrap;
-    transition: all 0.25s ease;
-}
-
-.hero-search button:hover {
-    background: var(--green-dark);
-    transform: translateY(-1px);
-}
-
 /* Trust badges */
 .hero-trust {
     display: flex;
@@ -356,6 +300,40 @@
     justify-content: space-between;
     margin-bottom: 36px;
     gap: 20px;
+}
+
+.rekom-search{
+    display:flex;
+    gap:8px;
+    max-width:480px;
+    margin:25px 0 35px;
+}
+
+.rekom-search input{
+    flex:1;
+    height:42px;
+    border:1px solid #dfe6dd;
+    border-radius:12px;
+    padding:0 16px;
+    background:white;
+    font-size:.85rem;
+    outline:none;
+}
+
+.rekom-search input:focus{
+    border-color:var(--green-mid);
+}
+
+.rekom-search button{
+    height:42px;
+    padding:0 20px;
+    background:var(--green-mid);
+    color:white;
+    border:none;
+    border-radius:12px;
+    font-size:.85rem;
+    font-weight:700;
+    cursor:pointer;
 }
 
 /* ─── KOS CARD ────────────────────────────────── */
@@ -1661,12 +1639,44 @@
         <div class="sec-header">
             <div>
                 <div class="sec-label">🏡 Pilihan Terbaik</div>
-                <h2 class="sec-title">Rekomendasi Kos</h2>
+
+                <h2 class="sec-title">
+                    Rekomendasi Kos
+                </h2>
+
                 <p class="sec-sub">
                     Temukan kos nyaman dengan fasilitas lengkap,<br>
                     lokasi strategis, dan harga terbaik untuk kebutuhanmu.
                 </p>
+
+
+                {{-- SEARCH KOS --}}
+                <form method="GET"
+                      action="{{ route('katalog') }}"
+                      class="rekom-search">
+
+                    <input
+                        type="text"
+                        name="search"
+                        placeholder="Cari nama atau alamat kos..."
+                    >
+
+                    <button type="submit">
+                        Cari
+                    </button>
+
+                </form>
+
             </div>
+
+
+            <a href="{{ route('katalog') }}"
+               class="btn-lihat-semua">
+
+                Lihat Semua Kos →
+
+            </a>
+
         </div>
 
         <div class="kos-grid">

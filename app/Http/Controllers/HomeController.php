@@ -8,12 +8,6 @@ use App\Models\KamarKost;
 
 class HomeController extends Controller
 {
-    /**
-     * Daftar fasilitas populer untuk tampilan katalog.
-     *
-     * Daftar ini bersifat statis dan tidak mengambil data
-     * dari tabel fasilitas di database.
-     */
     private function getFasilitasPopuler(): array
     {
         return [
@@ -27,6 +21,7 @@ class HomeController extends Controller
             'Area Parkir',
         ];
     }
+
 
     /**
      * BERANDA
@@ -45,7 +40,9 @@ class HomeController extends Controller
             ->take(6)
             ->get();
 
+
         $fasilitasPopuler = $this->getFasilitasPopuler();
+
 
         return view(
             'katalog.home',
@@ -55,6 +52,7 @@ class HomeController extends Controller
             )
         );
     }
+
 
     /**
      * TENTANG
@@ -64,6 +62,7 @@ class HomeController extends Controller
         return view('katalog.tentang');
     }
 
+
     /**
      * HUBUNGI
      */
@@ -72,99 +71,129 @@ class HomeController extends Controller
         return view('katalog.hubungi');
     }
 
+
     /**
-     * KATALOG
+     * SEMUA KOS
      */
     public function katalog(Request $request)
     {
         $query = Kost::with([
-            'kamars.fasilitas',
-            'kamars.hargaKamars',
-            'fasilitas',
-            'user',
-        ])
-            ->whereHas('user', function ($query) {
-                $query->where('status', 'aktif');
-            });
-
-        /*
-        |--------------------------------------------------------------------------
-        | Pencarian Nama Kos
-        |--------------------------------------------------------------------------
-        */
-        if ($request->filled('search')) {
-            $query->where(
-                'nama_kost',
-                'like',
-                '%' . $request->search . '%'
-            );
-        }
-
-        /*
-        |--------------------------------------------------------------------------
-        | Filter Fasilitas
-        |--------------------------------------------------------------------------
-        */
-        if ($request->filled('fasilitas')) {
-            $fasilitas = $request->fasilitas;
-
-            $query->where(function ($q) use ($fasilitas) {
-                $q->whereHas('fasilitas', function ($query) use ($fasilitas) {
-                    $query->where(
-                        'nama_fasilitas',
-                        $fasilitas
-                    );
-                });
-
-                $q->orWhereHas(
-                    'kamars.fasilitas',
-                    function ($query) use ($fasilitas) {
-                        $query->where(
-                            'nama_fasilitas',
-                            $fasilitas
-                        );
-                    }
-                );
-            });
-        }
-
-        $kost = $query
-            ->latest()
-            ->paginate(9)
-            ->withQueryString();
-
-        /*
-        |--------------------------------------------------------------------------
-        | Kos Terbaru
-        |--------------------------------------------------------------------------
-        |
-        | Hanya menampilkan kos dari Admin Kos yang
-        | sudah disetujui oleh Super Admin.
-        |
-        */
-        $kostTerbaru = Kost::with([
+                'kamars.fasilitas',
                 'kamars.hargaKamars',
                 'fasilitas',
                 'user',
             ])
             ->whereHas('user', function ($query) {
                 $query->where('status', 'aktif');
-            })
+            });
+
+
+        /*
+        |--------------------------------------------------------------------------
+        | SEARCH NAMA DAN ALAMAT KOS
+        |--------------------------------------------------------------------------
+        */
+        if ($request->filled('search')) {
+
+    $keywords = explode(
+        ' ',
+        $request->search
+    );
+
+
+    $query->where(function ($q) use ($keywords) {
+
+        foreach ($keywords as $keyword) {
+
+            $q->where(function ($sub) use ($keyword) {
+
+                $sub->where(
+                    'nama_kost',
+                    'like',
+                    '%' . $keyword . '%'
+                )
+                ->orWhere(
+                    'alamat',
+                    'like',
+                    '%' . $keyword . '%'
+                );
+
+            });
+
+        }
+
+    });
+
+}
+
+
+
+        /*
+        |--------------------------------------------------------------------------
+        | FILTER FASILITAS
+        |--------------------------------------------------------------------------
+        */
+        if ($request->filled('fasilitas')) {
+
+            $fasilitas = $request->fasilitas;
+
+
+            $query->where(function ($q) use ($fasilitas) {
+
+
+                $q->whereHas(
+                    'fasilitas',
+                    function ($query) use ($fasilitas) {
+
+                        $query->where(
+                            'nama_fasilitas',
+                            $fasilitas
+                        );
+
+                    }
+                );
+
+
+                $q->orWhereHas(
+                    'kamars.fasilitas',
+                    function ($query) use ($fasilitas) {
+
+                        $query->where(
+                            'nama_fasilitas',
+                            $fasilitas
+                        );
+
+                    }
+                );
+
+
+            });
+
+        }
+
+
+
+        $kost = $query
             ->latest()
-            ->take(6)
-            ->get();
+            ->paginate(9)
+            ->withQueryString();
+
+
 
         $fasilitasPopuler = $this->getFasilitasPopuler();
 
+
+
         return view(
-            'katalog.home',
+            'katalog.list',
             compact(
                 'kost',
-                'kostTerbaru',
                 'fasilitasPopuler'
             )
         );
     }
+
+
 
     /**
      * DETAIL KOST
@@ -180,11 +209,14 @@ class HomeController extends Controller
             ])
             ->findOrFail($id);
 
+
         return view(
             'katalog.detail-kost',
             compact('kost')
         );
     }
+
+
 
     /**
      * DETAIL KAMAR
@@ -201,8 +233,13 @@ class HomeController extends Controller
             ])
             ->findOrFail($id);
 
+
+
         $kos = $kamar->kost;
+
         $kamars = $kos->kamars;
+
+
 
         return view(
             'katalog.detail-kamar',

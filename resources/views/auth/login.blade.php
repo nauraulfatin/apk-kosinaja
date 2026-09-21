@@ -341,23 +341,35 @@
                 </div>
 
                 {{-- REGISTER --}}
-                <div class="text-center">
+<div class="text-center">
 
-                    <p class="text-gray-500">
+    <p class="text-gray-500">
 
-                        Belum punya akun?
+        Belum punya akun?
 
-                        <button type="button"
-                            onclick="bukaModal()"
-                            class="text-[#6C8B6B]
-                                   font-semibold
-                                   hover:underline">
+        <button type="button"
+            onclick="bukaModal()"
+            class="text-[#6C8B6B]
+                   font-semibold
+                   hover:underline">
 
-                            Daftar Sekarang
+            Daftar Sekarang
 
-                        </button>
+        </button>
 
-                    </p>
+    </p>
+
+
+    <a href="/"
+       class="inline-block mt-4
+              text-sm
+              text-[#6C8B6B]
+              font-semibold
+              hover:underline">
+
+        ← Kembali ke Beranda
+
+    </a>
 
                 </div>
 
