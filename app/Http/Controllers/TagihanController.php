@@ -59,13 +59,13 @@ class TagihanController extends Controller
         'required',
         'image',
         'mimes:jpg,jpeg,png',
-        'max:4096',
+        'max:10240',
     ],
 ], [
     'bukti_bayar.required' => 'Bukti pembayaran wajib diunggah.',
     'bukti_bayar.image' => 'File bukti pembayaran harus berupa gambar.',
     'bukti_bayar.mimes' => 'Bukti pembayaran hanya boleh berupa JPG, JPEG, atau PNG.',
-    'bukti_bayar.max' => 'Ukuran bukti pembayaran maksimal 4 MB.',
+    'bukti_bayar.max' => 'Ukuran bukti pembayaran maksimal 10 MB.',
 ]);
 
         $tagihan = Tagihan::with([

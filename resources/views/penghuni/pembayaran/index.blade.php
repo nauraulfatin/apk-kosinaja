@@ -353,7 +353,7 @@ $grouped = $tagihanAktif->groupBy(fn($i) => $i->tanggal_mulai->format('F Y'));
                 {{-- INFO FORMAT DAN UKURAN --}}
                 <p class="text-xs text-gray-500 mt-2">
                     Format: JPG, JPEG, PNG.
-                    <strong>Maksimal ukuran file 4 MB.</strong>
+                    <strong>Maksimal ukuran file 10 MB.</strong>
                 </p>
 
 
@@ -589,13 +589,13 @@ buktiBayar.addEventListener('change', function() {
     // CEK UKURAN FILE
     // =====================================================
 
-    const maxSize = 4 * 1024 * 1024;
+    const maxSize = 10 * 1024 * 1024;
 
 
     if (file.size > maxSize) {
 
         fileError.innerText =
-            'Ukuran file terlalu besar. Maksimal ukuran bukti pembayaran adalah 4 MB.';
+            'Ukuran file terlalu besar. Maksimal ukuran bukti pembayaran adalah 10 MB.';
 
 
         fileError.classList.remove('hidden');
