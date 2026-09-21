@@ -38,19 +38,13 @@ class HomeController extends Controller
                 'fasilitas',
                 'user',
             ])
+            ->whereHas('user', function ($query) {
+                $query->where('status', 'aktif');
+            })
             ->latest()
             ->take(6)
             ->get();
 
-        /*
-        |--------------------------------------------------------------------------
-        | Fasilitas Populer
-        |--------------------------------------------------------------------------
-        |
-        | Hanya digunakan untuk tampilan.
-        | Tidak bergantung pada isi database.
-        |
-        */
         $fasilitasPopuler = $this->getFasilitasPopuler();
 
         return view(
@@ -88,7 +82,10 @@ class HomeController extends Controller
             'kamars.hargaKamars',
             'fasilitas',
             'user',
-        ]);
+        ])
+            ->whereHas('user', function ($query) {
+                $query->where('status', 'aktif');
+            });
 
         /*
         |--------------------------------------------------------------------------
@@ -107,19 +104,11 @@ class HomeController extends Controller
         |--------------------------------------------------------------------------
         | Filter Fasilitas
         |--------------------------------------------------------------------------
-        |
-        | Daftar fasilitas pada halaman bersifat statis.
-        | Database hanya digunakan ketika pengguna menekan fasilitas
-        | untuk mencari kos yang memiliki fasilitas tersebut.
-        |
         */
         if ($request->filled('fasilitas')) {
             $fasilitas = $request->fasilitas;
 
             $query->where(function ($q) use ($fasilitas) {
-                /*
-                 * Fasilitas yang dimiliki oleh kos.
-                 */
                 $q->whereHas('fasilitas', function ($query) use ($fasilitas) {
                     $query->where(
                         'nama_fasilitas',
@@ -127,9 +116,6 @@ class HomeController extends Controller
                     );
                 });
 
-                /*
-                 * Atau fasilitas yang terdapat pada kamar.
-                 */
                 $q->orWhereHas(
                     'kamars.fasilitas',
                     function ($query) use ($fasilitas) {
@@ -151,24 +137,23 @@ class HomeController extends Controller
         |--------------------------------------------------------------------------
         | Kos Terbaru
         |--------------------------------------------------------------------------
+        |
+        | Hanya menampilkan kos dari Admin Kos yang
+        | sudah disetujui oleh Super Admin.
+        |
         */
         $kostTerbaru = Kost::with([
                 'kamars.hargaKamars',
                 'fasilitas',
                 'user',
             ])
+            ->whereHas('user', function ($query) {
+                $query->where('status', 'aktif');
+            })
             ->latest()
             ->take(6)
             ->get();
 
-        /*
-        |--------------------------------------------------------------------------
-        | Fasilitas Populer
-        |--------------------------------------------------------------------------
-        |
-        | Selalu tersedia meskipun database fasilitas kosong.
-        |
-        */
         $fasilitasPopuler = $this->getFasilitasPopuler();
 
         return view(
