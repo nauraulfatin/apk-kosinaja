@@ -167,7 +167,7 @@
                         <div class="flex flex-wrap gap-2">
 
 
-                            {{-- KELOLA KAMAR --}}
+                            {{-- EDIT --}}
 
                             <a
                                 href="{{ route(
@@ -204,7 +204,59 @@
                                 </svg>
 
 
-                                Kelola Kamar
+                                Edit
+
+                            </a>
+
+
+                            {{-- HARGA --}}
+
+                            <a
+                                href="{{ route(
+                                    'admin.kamar.harga.index',
+                                    $i
+                                ) }}"
+                                class="inline-flex items-center gap-1.5
+                                       px-3 py-1.5 rounded-full
+                                       bg-green-50 text-green-700
+                                       hover:bg-green-100
+                                       text-xs font-medium
+                                       transition-colors"
+                            >
+
+                                <svg
+                                    xmlns="http://www.w3.org/2000/svg"
+                                    class="w-3.5 h-3.5"
+                                    viewBox="0 0 24 24"
+                                    fill="none"
+                                    stroke="currentColor"
+                                    stroke-width="2"
+                                    stroke-linecap="round"
+                                    stroke-linejoin="round"
+                                >
+
+                                    <circle
+                                        cx="12"
+                                        cy="12"
+                                        r="9"
+                                    />
+
+                                    <path
+                                        d="M12 7v10"
+                                    />
+
+                                    <path
+                                        d="M15 9.5c-.5-1-1.5-1.5-3-1.5
+                                           -1.7 0-3 0.8-3 2
+                                           0 3 6 1.5 6 4
+                                           0 1.2-1.2 2-3 2
+                                           -1.5 0-2.5-.5-3-1.5"
+                                    />
+
+                                </svg>
+
+
+                                Harga
 
                             </a>
 
@@ -273,6 +325,7 @@
                                 </button>
 
                             </form>
+
 
                         </div>
 
