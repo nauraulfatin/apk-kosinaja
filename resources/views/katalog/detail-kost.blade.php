@@ -1458,8 +1458,8 @@ $embedDefault = 'https://maps.google.com/maps?q=' . urlencode((string) $kost->al
    DATA
 ========================================================= */
 const galeriUrls = @json($galeriUrls);
-const alamatKost = @json($kost - > alamat);
-const namaKost = @json($kost - > nama_kost);
+const alamatKost = @json($kost -> alamat);
+const namaKost = @json($kost -> nama_kost);
 const koordinatKostAwal = {
     latitude: @json($routeLatitude),
     longitude: @json($routeLongitude)
