@@ -10,8 +10,24 @@ class RoleMiddleware
 {
     public function handle(Request $request, Closure $next, string $role): Response
     {
-        abort_if(!$request->user() || $request->user()->role !== $role, 403);
-        abort_if($role === 'admin kost' && $request->user()->status !== 'aktif', 403, 'Akun admin kost belum divalidasi. Silahkan hubungi Kami!');
+        abort_if(
+            !$request->user() || $request->user()->role !== $role,
+            403
+        );
+
+        if ($role === 'admin kost') {
+            if ($request->user()->status === 'ditolak') {
+                abort(403, 'Akun anda ditolak Super Admin.');
+            }
+
+            if ($request->user()->status !== 'aktif') {
+                abort(
+                    403,
+                    'Akun admin kost belum divalidasi. Silahkan hubungi Kami!'
+                );
+            }
+        }
+
         return $next($request);
     }
 }

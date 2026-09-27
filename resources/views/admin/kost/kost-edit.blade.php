@@ -592,7 +592,7 @@
 
                         <span class="bg-white px-2 py-1 rounded mt-2 inline-block text-xs">
 
-                            src="https://www.google.com/maps/embed?pb=..."
+                            https://www.google.com/maps/embed?pb=...
 
                         </span>
 
