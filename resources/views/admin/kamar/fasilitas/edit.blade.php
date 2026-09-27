@@ -23,11 +23,7 @@
 
 <div class="bg-white rounded-2xl shadow-sm border border-gray-100 p-8">
 
-    <form
-        method="POST"
-        action="{{ route('admin.kamar.fasilitas.update', $kamar) }}"
-        class="space-y-8"
-    >
+    <form method="POST" action="{{ route('admin.kamar.fasilitas.update', $kamar) }}" class="space-y-8">
 
         @csrf
         @method('PUT')
@@ -44,15 +40,11 @@
                 @foreach($fasilitas as $f)
 
                 <label
-                    class="flex items-center gap-4 border border-gray-200 rounded-2xl px-5 py-4 hover:border-[#6C8B6B] hover:bg-[#F8F5F0] transition cursor-pointer"
-                >
+                    class="flex items-center gap-4 border border-gray-200 rounded-2xl px-5 py-4 hover:border-[#6C8B6B] hover:bg-[#F8F5F0] transition cursor-pointer">
 
-                    <input
-                        type="checkbox"
-                        name="fasilitas[]"
-                        value="{{ $f->id_fasilitas }}"
+                    <input type="checkbox" name="fasilitas[]" value="{{ $f->id_fasilitas }}"
                         @checked(in_array($f->id_fasilitas, $selected))
-                        class="w-5 h-5 text-[#6C8B6B] border-gray-300 rounded focus:ring-[#6C8B6B]"
+                    class="w-5 h-5 text-[#6C8B6B] border-gray-300 rounded focus:ring-[#6C8B6B]"
                     >
 
                     <div>
@@ -74,19 +66,15 @@
         {{-- BUTTON --}}
         <div class="flex flex-wrap gap-3 pt-4">
 
-            <button
-                type="submit"
-                class="bg-[#6C8B6B] hover:bg-[#5B765A] text-white px-8 py-3 rounded-xl font-semibold transition"
-            >
+            <button type="submit"
+                class="bg-[#6C8B6B] hover:bg-[#5B765A] text-white px-8 py-3 rounded-xl font-semibold transition">
 
                 Simpan Fasilitas
 
             </button>
 
-            <a
-                href="{{ route('admin.kamar.index') }}"
-                class="bg-gray-100 hover:bg-gray-200 text-gray-700 px-8 py-3 rounded-xl font-semibold transition"
-            >
+            <a href="{{ route('admin.kamar.index') }}"
+                class="bg-gray-100 hover:bg-gray-200 text-gray-700 px-8 py-3 rounded-xl font-semibold transition">
 
                 Kembali
 

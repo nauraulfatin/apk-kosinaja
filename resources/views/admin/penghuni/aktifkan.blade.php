@@ -2,68 +2,84 @@
 
 @section('content')
 
-<div class="w-full"></div>
+<div class="p-6 space-y-6">
 
-{{-- HEADER --}}
-<div class="mb-8">
+    {{-- ===================================================== --}}
+    {{-- HEADER --}}
+    {{-- ===================================================== --}}
+    <div class="flex items-start gap-4">
 
-    <h1 class="text-3xl font-bold text-[#0F0937]">
+        {{-- Icon header saja --}}
+        <div class="w-12 h-12 rounded-2xl bg-[#EEF4EF] flex items-center justify-center shrink-0">
 
-        Aktifkan Penghuni
+            <svg class="w-6 h-6 text-[#6C8B6B]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
 
-    </h1>
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8"
+                    d="M16 21v-2a4 4 0 00-4-4H6a4 4 0 00-4 4v2M9 11a4 4 0 100-8 4 4 0 000 8zm7-3a4 4 0 110-8 4 4 0 000 8zm0 3a4 4 0 014 4v2" />
 
-    <p class="text-gray-500 mt-2">
+            </svg>
 
-        Pilih kamar dan atur periode tinggal penghuni.
+        </div>
 
-    </p>
+        <div>
 
-</div>
+            <h1 class="text-2xl sm:text-3xl font-bold text-[#0F0937]">
+                Aktifkan Penghuni
+            </h1>
 
-{{-- CARD --}}
-<div class="bg-white rounded-3xl shadow-sm border border-gray-100 p-8">
+            <p class="text-gray-500 mt-1 text-sm sm:text-base">
+                Pilih kamar dan atur periode tinggal penghuni.
+            </p>
 
+        </div>
+
+    </div>
+
+
+    {{-- ===================================================== --}}
     {{-- DATA PENGHUNI --}}
-    <div class="mb-8">
+    {{-- ===================================================== --}}
+    <div class="bg-white rounded-3xl border border-gray-100 shadow-sm overflow-hidden">
 
-        <h2 class="text-lg font-bold text-gray-800 mb-4">
+        <div class="px-6 sm:px-8 py-5 border-b border-gray-100">
 
-            Data Penghuni
+            <h2 class="text-lg font-bold text-[#0F0937]">
+                Data Penghuni
+            </h2>
 
-        </h2>
+            <p class="text-sm text-gray-500 mt-1">
+                Informasi penghuni yang akan diaktifkan.
+            </p>
 
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
+        </div>
 
-            <div>
+        <div class="p-6 sm:p-8">
 
-                <p class="text-sm text-gray-400 mb-1">
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
 
-                    Nama
+                <div class="bg-[#F8F5F0] rounded-2xl px-5 py-4">
 
-                </p>
+                    <p class="text-xs text-gray-500 mb-1">
+                        Nama
+                    </p>
 
-                <p class="font-semibold text-gray-800">
+                    <p class="font-semibold text-[#0F0937]">
+                        {{ $riwayatHunian->user->nama }}
+                    </p>
 
-                    {{ $riwayatHunian->user->nama }}
+                </div>
 
-                </p>
+                <div class="bg-[#F8F5F0] rounded-2xl px-5 py-4">
 
-            </div>
+                    <p class="text-xs text-gray-500 mb-1">
+                        Username
+                    </p>
 
-            <div>
+                    <p class="font-semibold text-[#0F0937]">
+                        {{ $riwayatHunian->user->username }}
+                    </p>
 
-                <p class="text-sm text-gray-400 mb-1">
-
-                    Username
-
-                </p>
-
-                <p class="font-semibold text-gray-800">
-
-                    {{ $riwayatHunian->user->username }}
-
-                </p>
+                </div>
 
             </div>
 
@@ -71,280 +87,331 @@
 
     </div>
 
-    {{-- FORM --}}
-    <form method="POST" action="{{ route('admin.penghuni.aktifkan', $riwayatHunian) }}" class="space-y-7">
 
-        @csrf
-        @method('PUT')
+    {{-- ===================================================== --}}
+    {{-- FORM AKTIFKAN --}}
+    {{-- ===================================================== --}}
+    <div class="bg-white rounded-3xl border border-gray-100 shadow-sm overflow-hidden">
 
-        {{-- PILIH KAMAR --}}
-        <div>
+        <div class="px-6 sm:px-8 py-5 border-b border-gray-100">
 
-            <label class="block mb-2 font-semibold text-gray-700">
+            <h2 class="text-lg font-bold text-[#0F0937]">
+                Detail Hunian
+            </h2>
 
-                Pilih Kamar
+            <p class="text-sm text-gray-500 mt-1">
+                Tentukan kamar, periode tinggal, dan harga yang digunakan.
+            </p>
 
-            </label>
+        </div>
 
-            <select id="selectKamar" name="id_kamar" required class="w-full border border-gray-300
-                           rounded-xl px-4 py-3
-                           focus:outline-none
-                           focus:ring-2
-                           focus:ring-[#6C8B6B]">
 
-                <option value="">
+        <form method="POST" action="{{ route('admin.penghuni.aktifkan', $riwayatHunian) }}"
+            class="p-6 sm:p-8 space-y-7">
 
-                    -- Pilih Kamar --
+            @csrf
+            @method('PUT')
 
-                </option>
 
-                @foreach($kamars as $k)
+            {{-- ================================================= --}}
+            {{-- PILIH KAMAR --}}
+            {{-- ================================================= --}}
+            <div>
 
-                @php
+                <label for="selectKamar" class="block mb-2 text-sm font-semibold text-gray-700">
 
-                $aktif = $k->riwayatHunian
-                ->where('status', 'aktif')
-                ->first();
+                    Pilih Kamar
 
-                @endphp
+                </label>
 
-                <option value="{{ $k->id_kamar }}">
+                <select id="selectKamar" name="id_kamar" required class="w-full bg-gray-50 border border-gray-200
+                               rounded-2xl px-4 py-3.5
+                               text-gray-800
+                               focus:outline-none
+                               focus:ring-2 focus:ring-[#6C8B6B]/20
+                               focus:border-[#6C8B6B]
+                               transition">
 
-                    {{ $k->nomor_kamar }}
+                    <option value="">
+                        -- Pilih Kamar --
+                    </option>
 
-                    -
+                    @foreach($kamars as $k)
 
-                    {{ strtoupper($k->status) }}
+                    @php
 
-                    @if($aktif)
+                    $aktif = $k->riwayatHunian
+                    ->where('status', 'aktif')
+                    ->first();
 
-                    | Terisi oleh:
+                    @endphp
 
-                    {{ $aktif->user->nama }}
+                    <option value="{{ $k->id_kamar }}">
 
+                        {{ $k->nomor_kamar }}
+
+                        -
+
+                        {{ strtoupper($k->status) }}
+
+                        @if($aktif)
+
+                        | Terisi oleh:
+                        {{ $aktif->user->nama }}
+
+                        @endif
+
+                    </option>
+
+                    @endforeach
+
+                </select>
+
+                @error('id_kamar')
+
+                <p class="text-red-500 text-sm mt-2">
+                    {{ $message }}
+                </p>
+
+                @enderror
+
+            </div>
+
+
+            {{-- ================================================= --}}
+            {{-- TANGGAL MASUK & KELUAR --}}
+            {{-- ================================================= --}}
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
+
+                {{-- TANGGAL MASUK --}}
+                <div>
+
+                    <label for="tanggal_masuk" class="block mb-2 text-sm font-semibold text-gray-700">
+
+                        Tanggal Masuk
+
+                    </label>
+
+                    <input type="date" id="tanggal_masuk" name="tanggal_masuk" required
+                        value="{{ old('tanggal_masuk') }}" class="w-full bg-gray-50 border border-gray-200
+                                  rounded-2xl px-4 py-3.5
+                                  text-gray-800
+                                  focus:outline-none
+                                  focus:ring-2 focus:ring-[#6C8B6B]/20
+                                  focus:border-[#6C8B6B]
+                                  transition">
+
+                    @error('tanggal_masuk')
+
+                    <p class="text-red-500 text-sm mt-2">
+                        {{ $message }}
+                    </p>
+
+                    @enderror
+
+                </div>
+
+
+                {{-- TANGGAL KELUAR --}}
+                <div>
+
+                    <label for="tanggal_keluar" class="block mb-2 text-sm font-semibold text-gray-700">
+
+                        Tanggal Keluar
+
+                    </label>
+
+                    <input type="date" id="tanggal_keluar" name="tanggal_keluar" required
+                        value="{{ old('tanggal_keluar') }}" class="w-full bg-gray-50 border border-gray-200
+                                  rounded-2xl px-4 py-3.5
+                                  text-gray-800
+                                  focus:outline-none
+                                  focus:ring-2 focus:ring-[#6C8B6B]/20
+                                  focus:border-[#6C8B6B]
+                                  transition">
+
+                    @error('tanggal_keluar')
+
+                    <p class="text-red-500 text-sm mt-2">
+                        {{ $message }}
+                    </p>
+
+                    @enderror
+
+                </div>
+
+            </div>
+
+
+            {{-- ================================================= --}}
+            {{-- HARGA KAMAR --}}
+            {{-- ================================================= --}}
+            <div>
+
+                <label for="selectHarga" class="block mb-2 text-sm font-semibold text-gray-700">
+
+                    Pilih Harga Kamar
+
+                </label>
+
+                <select id="selectHarga" name="id_harga_kamar" required class="w-full bg-gray-50 border border-gray-200
+                               rounded-2xl px-4 py-3.5
+                               text-gray-800
+                               focus:outline-none
+                               focus:ring-2 focus:ring-[#6C8B6B]/20
+                               focus:border-[#6C8B6B]
+                               transition">
+
+                    <option value="">
+                        -- Pilih Harga --
+                    </option>
+
+                    @foreach($hargaKamars as $h)
+
+                    <option value="{{ $h->id_harga_kamar }}" data-kamar="{{ $h->id_kamar }}">
+
+                        Rp {{ number_format($h->harga, 0, ',', '.') }}
+
+                        /
+
+                        {{ $h->periode->periode_penagihan }}
+
+                    </option>
+
+                    @endforeach
+
+                </select>
+
+                <p class="text-xs text-gray-400 mt-2">
+                    Harga yang muncul akan menyesuaikan kamar yang dipilih.
+                </p>
+
+                @error('id_harga_kamar')
+
+                <p class="text-red-500 text-sm mt-2">
+                    {{ $message }}
+                </p>
+
+                @enderror
+
+            </div>
+
+
+            {{-- ================================================= --}}
+            {{-- JATUH TEMPO --}}
+            {{-- ================================================= --}}
+            <div>
+
+                <label for="jatuh_tempo_hari" class="block mb-2 text-sm font-semibold text-gray-700">
+
+                    Jatuh Tempo Setelah (Hari)
+
+                </label>
+
+                <input type="number" id="jatuh_tempo_hari" name="jatuh_tempo_hari" min="1" max="31"
+                    value="{{ old('jatuh_tempo_hari', 5) }}" required class="w-full bg-gray-50 border border-gray-200
+                              rounded-2xl px-4 py-3.5
+                              text-gray-800
+                              focus:outline-none
+                              focus:ring-2 focus:ring-[#6C8B6B]/20
+                              focus:border-[#6C8B6B]
+                              transition">
+
+                <p class="text-sm text-gray-400 mt-2">
+                    Contoh: 5 = tagihan jatuh tempo 5 hari setelah periode dimulai.
+                </p>
+
+                @error('jatuh_tempo_hari')
+
+                <p class="text-red-500 text-sm mt-2">
+                    {{ $message }}
+                </p>
+
+                @enderror
+
+            </div>
+
+
+            {{-- ================================================= --}}
+            {{-- BUTTON --}}
+            {{-- ================================================= --}}
+            <div class="pt-5 border-t border-gray-100
+                        flex flex-col-reverse sm:flex-row
+                        sm:justify-end gap-3">
+
+                <a href="
+                    @if(request('from') === 'aktif')
+                        {{ route('admin.penghuni.aktif') }}
+                    @elseif(request('from') === 'antrian')
+                        {{ route('admin.penghuni.antrian') }}
+                    @else
+                        {{ route('admin.penghuni.nonaktif') }}
                     @endif
+                " class="inline-flex items-center justify-center
+                          bg-gray-100 hover:bg-gray-200
+                          text-gray-700
+                          px-6 py-3.5 rounded-xl
+                          font-semibold transition">
 
-                </option>
+                    Kembali
 
-                @endforeach
+                </a>
 
-            </select>
 
-            @error('id_kamar')
+                <button type="submit" class="inline-flex items-center justify-center gap-2
+                               bg-[#6C8B6B] hover:bg-[#5B765A]
+                               text-white
+                               px-6 py-3.5 rounded-xl
+                               font-semibold
+                               shadow-sm hover:shadow-md
+                               transition">
 
-            <p class="text-red-500 text-sm mt-2">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
 
-                {{ $message }}
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
 
-            </p>
+                    </svg>
 
-            @enderror
+                    Aktifkan Penghuni
 
-        </div>
+                </button>
 
-        {{-- TANGGAL MASUK --}}
-        <div>
+            </div>
 
-            <label class="block mb-2 font-semibold text-gray-700">
+        </form>
 
-                Tanggal Masuk
-
-            </label>
-
-            <input type="date" name="tanggal_masuk" required value="{{ old('tanggal_masuk') }}" class="w-full border border-gray-300
-                           rounded-xl px-4 py-3
-                           focus:outline-none
-                           focus:ring-2
-                           focus:ring-[#6C8B6B]">
-
-            @error('tanggal_masuk')
-
-            <p class="text-red-500 text-sm mt-2">
-
-                {{ $message }}
-
-            </p>
-
-            @enderror
-
-        </div>
-
-        {{-- TANGGAL KELUAR --}}
-        <div>
-
-            <label class="block mb-2 font-semibold text-gray-700">
-
-                Tanggal Keluar
-
-            </label>
-
-            <input type="date" name="tanggal_keluar" required value="{{ old('tanggal_keluar') }}" class="w-full border border-gray-300
-                           rounded-xl px-4 py-3
-                           focus:outline-none
-                           focus:ring-2
-                           focus:ring-[#6C8B6B]">
-
-            @error('tanggal_keluar')
-
-            <p class="text-red-500 text-sm mt-2">
-
-                {{ $message }}
-
-            </p>
-
-            @enderror
-
-        </div>
-
-        {{-- HARGA KAMAR --}}
-        <div>
-
-            <label class="block mb-2 font-semibold text-gray-700">
-
-                Pilih Harga Kamar
-
-            </label>
-
-            <select id="selectHarga" name="id_harga_kamar" required class="w-full border border-gray-300
-                           rounded-xl px-4 py-3
-                           focus:outline-none
-                           focus:ring-2
-                           focus:ring-[#6C8B6B]">
-
-                <option value="">
-
-                    -- Pilih Harga --
-
-                </option>
-
-                @foreach($hargaKamars as $h)
-
-                <option value="{{ $h->id_harga_kamar }}" data-kamar="{{ $h->id_kamar }}">
-
-
-                    Rp {{ number_format($h->harga, 0, ',', '.') }}
-
-                    /
-
-                    {{ $h->periode->periode_penagihan }}
-
-                </option>
-
-                @endforeach
-
-            </select>
-
-            @error('id_harga_kamar')
-
-            <p class="text-red-500 text-sm mt-2">
-
-                {{ $message }}
-
-            </p>
-
-            @enderror
-
-        </div>
-
-        <label class="block mb-2 font-semibold text-gray-700">
-
-            Jatuh Tempo Setelah (Hari)
-
-        </label>
-
-        <input type="number" name="jatuh_tempo_hari" min="1" max="31" value="{{ old('jatuh_tempo_hari', 5) }}" required
-            class="w-full border border-gray-300
-           rounded-xl px-4 py-3
-           focus:outline-none
-           focus:ring-2
-           focus:ring-[#6C8B6B]">
-
-        <p class="text-sm text-gray-400 mt-2">
-
-            Contoh:
-            5 = tagihan jatuh tempo
-            5 hari setelah periode dimulai
-
-        </p>
-
-        @error('jatuh_tempo_hari')
-
-        <p class="text-red-500 text-sm mt-2">
-
-            {{ $message }}
-
-        </p>
-
-        @enderror
-
-        {{-- BUTTON --}}
-        <div class="pt-4 flex items-center gap-4">
-
-            <button type="submit" class="bg-[#6C8B6B]
-                           hover:bg-[#5B765A]
-                           text-white
-                           px-8 py-3
-                           rounded-xl
-                           font-semibold
-                           transition">
-
-                Aktifkan Penghuni
-
-            </button>
-
-            <a href="
-@if(request('from') === 'aktif')
-    {{ route('admin.penghuni.aktif') }}
-
-@elseif(request('from') === 'antrian')
-    {{ route('admin.penghuni.antrian') }}
-
-@else
-    {{ route('admin.penghuni.nonaktif') }}
-@endif
-" class="bg-gray-100
-                           hover:bg-gray-200
-                           text-gray-700
-                           px-8 py-3
-                           rounded-xl
-                           font-semibold
-                           transition">
-
-                Kembali
-
-            </a>
-
-        </div>
-
-    </form>
+    </div>
 
 </div>
 
-</div>
 
+{{-- ========================================================= --}}
 {{-- FILTER HARGA BERDASARKAN KAMAR --}}
+{{-- ========================================================= --}}
 <script>
 document.addEventListener('DOMContentLoaded', function() {
 
     const selectKamar = document.getElementById('selectKamar');
-
     const selectHarga = document.getElementById('selectHarga');
 
     const semuaOptionHarga = [
         ...selectHarga.querySelectorAll('option')
     ];
 
+
     selectKamar.addEventListener('change', function() {
 
         const kamarDipilih = this.value;
 
+
         /*
         |--------------------------------------------------------------------------
-        | RESET
+        | RESET SELECT HARGA
         |--------------------------------------------------------------------------
         */
 
         selectHarga.innerHTML = '';
+
 
         /*
         |--------------------------------------------------------------------------
@@ -355,39 +422,25 @@ document.addEventListener('DOMContentLoaded', function() {
         const defaultOption = document.createElement('option');
 
         defaultOption.value = '';
-
-        defaultOption.textContent =
-            '-- Pilih Harga --';
+        defaultOption.textContent = '-- Pilih Harga --';
 
         selectHarga.appendChild(defaultOption);
 
+
         /*
         |--------------------------------------------------------------------------
-        | FILTER HARGA
+        | FILTER HARGA SESUAI KAMAR
         |--------------------------------------------------------------------------
         */
 
         semuaOptionHarga.forEach(option => {
 
-            /*
-            |--------------------------------------------------------------------------
-            | SKIP DEFAULT
-            |--------------------------------------------------------------------------
-            */
-
             if (!option.value) {
                 return;
             }
 
-            /*
-            |--------------------------------------------------------------------------
-            | TAMPILKAN SESUAI KAMAR
-            |--------------------------------------------------------------------------
-            */
 
-            if (
-                option.dataset.kamar === kamarDipilih
-            ) {
+            if (option.dataset.kamar === kamarDipilih) {
 
                 selectHarga.appendChild(
                     option.cloneNode(true)

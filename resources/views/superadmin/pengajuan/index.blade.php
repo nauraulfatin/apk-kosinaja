@@ -6,169 +6,406 @@
 
 @section('content')
 
-{{-- ========================================================= --}}
-{{-- HEADER --}}
-{{-- ========================================================= --}}
-<div class="flex items-center justify-between mb-8">
+<div class="p-6 space-y-7">
 
-    <div>
+    {{-- =========================================================
+        HEADER
+    ========================================================== --}}
+    <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
 
-        <h1 class="text-3xl font-bold text-[#0F0937]">
-            Pengajuan Admin Kost
-        </h1>
+        <div class="flex items-center gap-3">
 
-        <p class="text-gray-500 mt-2">
-            Daftar admin kost yang menunggu verifikasi.
-        </p>
+            <div class="w-11 h-11 rounded-2xl
+                       bg-[#F3F0E9]
+                       flex items-center justify-center">
+                <svg class="w-5 h-5 text-[#7A806F]" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5
+                           a2 2 0 012-2h5.5L18 8.5V19a2 2 0 01-2 2z" />
+
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M14 3v6h6" />
+                </svg>
+            </div>
+
+            <div>
+
+                <h1 class="text-2xl font-bold text-[#0F0937]">
+                    Pengajuan Admin Kost
+                </h1>
+
+                <p class="text-sm text-gray-500 mt-1">
+                    Daftar admin kost yang menunggu verifikasi.
+                </p>
+
+            </div>
+
+        </div>
+
+
+        {{-- KEMBALI --}}
+        <a href="{{ route('superadmin.dashboard') }}" class="inline-flex items-center justify-center
+                   px-5 py-3
+                   rounded-xl
+                   bg-gray-100
+                   hover:bg-gray-200
+                   text-gray-700
+                   text-sm
+                   font-semibold
+                   transition">
+            Kembali
+        </a>
 
     </div>
 
-    {{-- KEMBALI --}}
-    <a href="{{ route('superadmin.dashboard') }}"
-        class="bg-gray-100 hover:bg-gray-200 text-gray-700 px-5 py-3 rounded-xl font-semibold transition">
 
-        Kembali
+    {{-- =========================================================
+        SUMMARY
+    ========================================================== --}}
+    <div class="bg-white
+               rounded-3xl
+               border border-gray-100
+               shadow-sm
+               p-5
+               flex items-center justify-between">
 
-    </a>
+        <div>
 
-</div>
+            <p class="text-sm text-gray-500">
+                Total Pengajuan
+            </p>
 
-{{-- ========================================================= --}}
-{{-- TABLE --}}
-{{-- ========================================================= --}}
-<div class="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden">
+            <h2 class="text-3xl font-bold text-[#0F0937] mt-1">
+                {{ $items->count() }}
+            </h2>
 
-    <div class="overflow-x-auto">
+        </div>
 
-        <table class="w-full">
 
-            <thead class="bg-[#E6F4EC]">
+        <span class="px-3 py-1.5
+                   rounded-full
+                   bg-[#FFF4D9]
+                   text-[#A27D35]
+                   text-xs
+                   font-semibold">
+            Menunggu Verifikasi
+        </span>
 
-                <tr>
+    </div>
 
-                    <th class="px-6 py-4 text-left text-sm font-semibold text-gray-600">
-                        No
-                    </th>
 
-                    <th class="px-6 py-4 text-left text-sm font-semibold text-gray-600">
-                        Nama
-                    </th>
+    {{-- =========================================================
+        TABLE CARD
+    ========================================================== --}}
+    <div class="bg-white
+               rounded-3xl
+               border border-gray-100
+               shadow-sm
+               overflow-hidden">
 
-                    <th class="px-6 py-4 text-left text-sm font-semibold text-gray-600">
-                        Username
-                    </th>
+        {{-- CARD HEADER --}}
+        <div class="px-6 py-5
+                   border-b border-gray-100
+                   bg-[#FBFAF7]
+                   flex items-center justify-between">
 
-                    <th class="px-6 py-4 text-left text-sm font-semibold text-gray-600">
-                        No HP
-                    </th>
+            <div>
 
-                    <th class="px-6 py-4 text-left text-sm font-semibold text-gray-600">
-                        Nama Kost
-                    </th>
+                <h2 class="text-base font-bold text-[#0F0937]">
+                    Daftar Pengajuan
+                </h2>
 
-                    <th class="px-6 py-4 text-left text-sm font-semibold text-gray-600">
-                        Status
-                    </th>
+                <p class="text-xs text-gray-400 mt-1">
+                    Periksa informasi admin sebelum melakukan verifikasi.
+                </p>
 
-                    <th class="px-6 py-4 text-left text-sm font-semibold text-gray-600">
-                        Aksi
-                    </th>
+            </div>
 
-                </tr>
+            @if($items->count())
 
-            </thead>
+            <span class="hidden sm:inline-flex
+                           px-3 py-1.5
+                           rounded-full
+                           bg-[#F3F0E9]
+                           text-[#777C6D]
+                           text-xs
+                           font-semibold">
+                {{ $items->count() }} Data
+            </span>
 
-            <tbody class="divide-y divide-gray-100">
+            @endif
 
-                @forelse($items as $u)
+        </div>
 
-                <tr class="hover:bg-gray-50">
 
-                    {{-- NO --}}
-                    <td class="px-6 py-5">
+        {{-- =====================================================
+            TABLE
+        ====================================================== --}}
+        <div class="overflow-x-auto">
 
-                        {{ $loop->iteration }}
+            <table class="w-full min-w-[1050px]">
 
-                    </td>
+                <thead>
 
-                    {{-- NAMA --}}
-                    <td class="px-6 py-5">
+                    <tr class="border-b border-gray-100">
 
-                        <div class="font-semibold text-[#0F0937]">
+                        <th class="px-6 py-4
+                                   text-left
+                                   text-xs
+                                   font-semibold
+                                   text-gray-400
+                                   uppercase
+                                   tracking-wide
+                                   w-16">
+                            No
+                        </th>
 
-                            {{ $u->nama }}
+                        <th class="px-4 py-4
+                                   text-left
+                                   text-xs
+                                   font-semibold
+                                   text-gray-400
+                                   uppercase
+                                   tracking-wide">
+                            Nama
+                        </th>
 
-                        </div>
+                        <th class="px-4 py-4
+                                   text-left
+                                   text-xs
+                                   font-semibold
+                                   text-gray-400
+                                   uppercase
+                                   tracking-wide">
+                            Username
+                        </th>
 
-                    </td>
+                        <th class="px-4 py-4
+                                   text-left
+                                   text-xs
+                                   font-semibold
+                                   text-gray-400
+                                   uppercase
+                                   tracking-wide">
+                            No HP
+                        </th>
 
-                    {{-- USERNAME --}}
-                    <td class="px-6 py-5 text-gray-600">
+                        <th class="px-4 py-4
+                                   text-left
+                                   text-xs
+                                   font-semibold
+                                   text-gray-400
+                                   uppercase
+                                   tracking-wide">
+                            Nama Kost
+                        </th>
 
-                        {{ $u->username }}
+                        <th class="px-4 py-4
+                                   text-left
+                                   text-xs
+                                   font-semibold
+                                   text-gray-400
+                                   uppercase
+                                   tracking-wide">
+                            Status
+                        </th>
 
-                    </td>
+                        <th class="px-6 py-4
+                                   text-left
+                                   text-xs
+                                   font-semibold
+                                   text-gray-400
+                                   uppercase
+                                   tracking-wide">
+                            Aksi
+                        </th>
 
-                    {{-- HP --}}
-                    <td class="px-6 py-5 text-gray-600">
+                    </tr>
 
-                        {{ $u->no_hp }}
+                </thead>
 
-                    </td>
 
-                    {{-- KOST --}}
-                    <td class="px-6 py-5">
+                <tbody>
 
-                        <div class="font-medium text-[#0F0937]">
+                    @forelse($items as $u)
 
-                            {{ $u->kost?->nama_kost }}
+                    <tr class="border-b
+                                   border-gray-100
+                                   last:border-0
+                                   hover:bg-[#FAFAF7]
+                                   transition">
 
-                        </div>
+                        {{-- NO --}}
+                        <td class="px-6 py-5">
 
-                    </td>
+                            <span class="w-8 h-8
+                                           rounded-xl
+                                           bg-[#F3F0E9]
+                                           text-[#777C6D]
+                                           flex items-center
+                                           justify-center
+                                           text-xs
+                                           font-bold">
+                                {{ $loop->iteration }}
+                            </span>
 
-                    {{-- STATUS --}}
-                    <td class="px-6 py-5">
+                        </td>
 
-                        <span class="px-3 py-1 rounded-full bg-yellow-100 text-yellow-700 text-xs font-semibold">
 
-                            Menunggu Verifikasi
+                        {{-- NAMA --}}
+                        <td class="px-4 py-5">
 
-                        </span>
+                            <div class="flex items-center gap-3">
 
-                    </td>
+                                <div class="w-9 h-9
+                                               rounded-full
+                                               bg-[#F3F0E9]
+                                               text-[#777C6D]
+                                               flex items-center
+                                               justify-center
+                                               text-xs
+                                               font-bold
+                                               shrink-0">
+                                    {{ strtoupper(substr($u->nama ?? '-', 0, 1)) }}
+                                </div>
 
-                    {{-- AKSI --}}
-                    <td class="px-6 py-5">
+                                <p class="text-sm
+                                               font-semibold
+                                               text-[#0F0937]">
+                                    {{ $u->nama }}
+                                </p>
 
-                        <a href="{{ route('superadmin.admin.detail', $u) }}"
-                            class="text-[#3A5C3A] hover:underline font-semibold">
+                            </div>
 
-                            Lihat Detail
+                        </td>
 
-                        </a>
 
-                    </td>
+                        {{-- USERNAME --}}
+                        <td class="px-4 py-5
+                                       text-sm
+                                       text-gray-600">
+                            {{ $u->username }}
+                        </td>
 
-                </tr>
 
-                @empty
+                        {{-- NO HP --}}
+                        <td class="px-4 py-5
+                                       text-sm
+                                       text-gray-600">
+                            {{ $u->no_hp }}
+                        </td>
 
-                <tr>
 
-                    <td colspan="7" class="px-6 py-10 text-center text-gray-500">
+                        {{-- NAMA KOST --}}
+                        <td class="px-4 py-5">
 
-                        Belum ada pengajuan admin kost.
+                            <p class="text-sm
+                                           font-medium
+                                           text-[#0F0937]">
+                                {{ $u->kost?->nama_kost ?? '-' }}
+                            </p>
 
-                    </td>
+                        </td>
 
-                </tr>
 
-                @endforelse
+                        {{-- STATUS --}}
+                        <td class="px-4 py-5">
 
-            </tbody>
+                            <span class="inline-flex
+                                           items-center
+                                           gap-2
+                                           px-3 py-1.5
+                                           rounded-full
+                                           bg-[#FFF4D9]
+                                           text-[#A27D35]
+                                           border border-[#F5E6BD]
+                                           text-xs
+                                           font-semibold
+                                           whitespace-nowrap">
+                                <span class="w-1.5 h-1.5
+                                               rounded-full
+                                               bg-[#C69A43]"></span>
 
-        </table>
+                                Menunggu Verifikasi
+                            </span>
+
+                        </td>
+
+
+                        {{-- AKSI --}}
+                        <td class="px-6 py-5">
+
+                            <a href="{{ route('superadmin.admin.detail', $u) }}" class="inline-flex
+                                           items-center
+                                           gap-2
+                                           text-sm
+                                           font-semibold
+                                           text-[#7A806F]
+                                           hover:text-[#686D60]
+                                           transition">
+                                Lihat Detail
+
+                                <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8"
+                                        d="M9 5l7 7-7 7" />
+                                </svg>
+
+                            </a>
+
+                        </td>
+
+                    </tr>
+
+                    @empty
+
+                    <tr>
+
+                        <td colspan="7" class="px-6 py-16">
+
+                            <div class="text-center">
+
+                                <div class="w-16 h-16
+                                               mx-auto
+                                               rounded-2xl
+                                               bg-[#F3F0E9]
+                                               flex items-center
+                                               justify-center">
+
+                                    <svg class="w-7 h-7 text-[#858979]" fill="none" viewBox="0 0 24 24"
+                                        stroke="currentColor">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.7" d="M9 12h6m-6 4h6m2 5H7
+                                                   a2 2 0 01-2-2V5
+                                                   a2 2 0 012-2h5.5L18 8.5V19
+                                                   a2 2 0 01-2 2z" />
+                                    </svg>
+
+                                </div>
+
+
+                                <h3 class="mt-4
+                                               text-base
+                                               font-semibold
+                                               text-[#0F0937]">
+                                    Belum Ada Pengajuan
+                                </h3>
+
+                                <p class="mt-1
+                                               text-sm
+                                               text-gray-400">
+                                    Belum ada admin kost yang menunggu verifikasi.
+                                </p>
+
+                            </div>
+
+                        </td>
+
+                    </tr>
+
+                    @endforelse
+
+                </tbody>
+
+            </table>
+
+        </div>
 
     </div>
 

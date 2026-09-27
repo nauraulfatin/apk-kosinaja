@@ -2,191 +2,345 @@
 
 @section('content')
 
-<div class="flex items-center justify-between mb-8">
+<div class="p-6 space-y-6">
 
-    <div>
+    {{-- ===================================================== --}}
+    {{-- HEADER --}}
+    {{-- ===================================================== --}}
+    <div class="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-5">
 
-        <h1 class="text-3xl font-bold text-[#0F0937]">
+        <div class="flex items-start gap-4">
 
-            Penghuni Aktif
+            {{-- Icon header --}}
+            <div class="w-12 h-12 rounded-2xl bg-[#EEF4EF] flex items-center justify-center shrink-0">
 
-        </h1>
+                <svg class="w-6 h-6 text-[#6C8B6B]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
 
-        <p class="text-gray-500 mt-2">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8"
+                        d="M16 21v-2a4 4 0 00-4-4H6a4 4 0 00-4 4v2M9 11a4 4 0 100-8 4 4 0 000 8zm7-3a4 4 0 110-8 4 4 0 000 8zm0 3a4 4 0 014 4v2" />
 
-            Daftar penghuni yang sedang aktif menempati kamar.
+                </svg>
 
-        </p>
+            </div>
+
+            <div>
+
+                <h1 class="text-2xl sm:text-3xl font-bold text-[#0F0937]">
+                    Penghuni Aktif
+                </h1>
+
+                <p class="text-gray-500 mt-1 text-sm sm:text-base">
+                    Daftar penghuni yang sedang aktif menempati kamar.
+                </p>
+
+            </div>
+
+        </div>
 
     </div>
 
-</div>
 
-{{-- NAVIGATION --}}
-<div class="flex items-center gap-8 mb-10 border-b border-gray-200">
+    {{-- ===================================================== --}}
+    {{-- NAVIGATION --}}
+    {{-- ===================================================== --}}
+    <div class="border-b border-gray-200">
 
-    <a href="{{ route('admin.penghuni.aktif') }}" class="pb-3 text-sm font-semibold transition
-        {{ request()->routeIs('admin.penghuni.aktif')
-            ? 'text-[#6C8B6B] border-b-2 border-[#6C8B6B]'
-            : 'text-gray-400 hover:text-[#6C8B6B]'
-        }}">
+        <div class="flex items-center gap-7 sm:gap-8 overflow-x-auto">
 
-        Penghuni Aktif
+            {{-- Penghuni Aktif --}}
+            <a href="{{ route('admin.penghuni.aktif') }}" class="relative pb-3 text-sm font-semibold whitespace-nowrap transition
+               {{ request()->routeIs('admin.penghuni.aktif')
+                    ? 'text-[#6C8B6B]'
+                    : 'text-gray-400 hover:text-[#6C8B6B]' }}">
 
-    </a>
+                Penghuni Aktif
 
-    <a href="{{ route('admin.penghuni.antrian') }}" class="pb-3 text-sm font-semibold transition
-        {{ request()->routeIs('admin.penghuni.antrian')
-            ? 'text-[#E8B44D] border-b-2 border-[#E8B44D]'
-            : 'text-gray-400 hover:text-[#E8B44D]'
-        }}">
+                @if(request()->routeIs('admin.penghuni.aktif'))
+                <span class="absolute left-0 right-0 bottom-0 h-0.5 bg-[#6C8B6B] rounded-full"></span>
+                @endif
 
-        Dalam Antrian
+            </a>
 
-    </a>
 
-    <a href="{{ route('admin.penghuni.nonaktif') }}" class="pb-3 text-sm font-semibold transition
-        {{ request()->routeIs('admin.penghuni.nonaktif')
-            ? 'text-red-500 border-b-2 border-red-500'
-            : 'text-gray-400 hover:text-red-500'
-        }}">
+            {{-- Dalam Antrian --}}
+            <a href="{{ route('admin.penghuni.antrian') }}" class="relative pb-3 text-sm font-semibold whitespace-nowrap transition
+               {{ request()->routeIs('admin.penghuni.antrian')
+                    ? 'text-[#E8B44D]'
+                    : 'text-gray-400 hover:text-[#E8B44D]' }}">
 
-        Riwayat Penghuni
+                Dalam Antrian
 
-    </a>
+                @if(request()->routeIs('admin.penghuni.antrian'))
+                <span class="absolute left-0 right-0 bottom-0 h-0.5 bg-[#E8B44D] rounded-full"></span>
+                @endif
 
-</div>
+            </a>
 
-<div class="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden">
 
-    <div class="overflow-x-auto">
+            {{-- Riwayat Penghuni --}}
+            <a href="{{ route('admin.penghuni.nonaktif') }}" class="relative pb-3 text-sm font-semibold whitespace-nowrap transition
+               {{ request()->routeIs('admin.penghuni.nonaktif')
+                    ? 'text-red-500'
+                    : 'text-gray-400 hover:text-red-500' }}">
 
-        <table class="w-full">
+                Riwayat Penghuni
 
-            <thead class="bg-[#F8F5F0]">
+                @if(request()->routeIs('admin.penghuni.nonaktif'))
+                <span class="absolute left-0 right-0 bottom-0 h-0.5 bg-red-500 rounded-full"></span>
+                @endif
 
-                <tr>
+            </a>
 
-                    <th class="px-6 py-4 text-left text-sm font-semibold text-gray-600">
-                        Nama
-                    </th>
+        </div>
 
-                    <th class="px-6 py-4 text-left text-sm font-semibold text-gray-600">
-                        Kamar
-                    </th>
+    </div>
 
-                    <th class="px-6 py-4 text-left text-sm font-semibold text-gray-600">
-                        Tanggal Masuk
-                    </th>
 
-                    <th class="px-6 py-4 text-left text-sm font-semibold text-gray-600">
-                        Tanggal Keluar
-                    </th>
+    {{-- ===================================================== --}}
+    {{-- TABLE CARD --}}
+    {{-- ===================================================== --}}
+    <div class="bg-white rounded-3xl border border-gray-100 shadow-sm overflow-hidden">
 
-                    <th class="px-6 py-4 text-left text-sm font-semibold text-gray-600">
-                        Status
-                    </th>
+        {{-- TABLE HEADER --}}
+        <div class="px-6 sm:px-8 py-5 border-b border-gray-100">
 
-                    <th class="px-6 py-4 text-left text-sm font-semibold text-gray-600">
-                        Aksi
-                    </th>
+            <div class="flex items-center justify-between gap-4">
 
-                </tr>
+                <div>
 
-            </thead>
+                    <h2 class="text-lg font-bold text-[#0F0937]">
+                        Daftar Penghuni
+                    </h2>
 
-            <tbody class="divide-y divide-gray-100">
+                    <p class="text-sm text-gray-500 mt-1">
+                        Penghuni yang saat ini masih menempati kamar.
+                    </p>
 
-                @forelse($items as $i)
+                </div>
 
-                <tr class="hover:bg-gray-50">
+                @if($items->count() > 0)
 
-                    <td class="px-6 py-4">
+                <span
+                    class="px-3 py-1.5 rounded-full bg-[#EEF4EF] text-[#52705A] text-xs font-semibold whitespace-nowrap">
+                    {{ $items->count() }} Penghuni
+                </span>
 
-                        <div>
+                @endif
 
-                            <h4 class="font-semibold text-gray-800">
+            </div>
 
-                                {{ $i->user->nama }}
+        </div>
 
-                            </h4>
 
-                            <p class="text-sm text-gray-400">
+        {{-- ================================================= --}}
+        {{-- TABLE --}}
+        {{-- ================================================= --}}
+        <div class="overflow-x-auto">
 
-                                {{ $i->user->username }}
+            <table class="w-full min-w-[950px]">
 
-                            </p>
+                <thead class="bg-[#F8F5F0]">
 
-                        </div>
+                    <tr>
 
-                    </td>
+                        <th class="px-6 py-4 text-left text-xs font-semibold uppercase tracking-wide text-gray-500">
+                            Nama
+                        </th>
 
-                    <td class="px-6 py-4 text-gray-600">
+                        <th class="px-6 py-4 text-left text-xs font-semibold uppercase tracking-wide text-gray-500">
+                            Kamar
+                        </th>
 
-                        {{ $i->kamar->nomor_kamar ?? '-' }}
+                        <th class="px-6 py-4 text-left text-xs font-semibold uppercase tracking-wide text-gray-500">
+                            Tanggal Masuk
+                        </th>
 
-                    </td>
+                        <th class="px-6 py-4 text-left text-xs font-semibold uppercase tracking-wide text-gray-500">
+                            Tanggal Keluar
+                        </th>
 
-                    <td class="px-6 py-4 text-gray-600">
+                        <th class="px-6 py-4 text-left text-xs font-semibold uppercase tracking-wide text-gray-500">
+                            Status
+                        </th>
 
-                        {{ \Carbon\Carbon::parse($i->tanggal_masuk)->format('d M Y') }}
+                        <th class="px-6 py-4 text-left text-xs font-semibold uppercase tracking-wide text-gray-500">
+                            Aksi
+                        </th>
 
-                    </td>
+                    </tr>
 
-                    <td class="px-6 py-4 text-gray-600">
+                </thead>
 
-                        {{ \Carbon\Carbon::parse($i->tanggal_keluar)->format('d M Y') }}
 
-                    </td>
+                <tbody class="divide-y divide-gray-100">
 
-                    <td class="px-6 py-4">
+                    @forelse($items as $i)
 
-                        <span class="bg-green-100 text-green-700 px-3 py-1 rounded-full text-xs font-semibold">
+                    <tr class="hover:bg-[#FAFBFA] transition">
 
-                            Aktif
 
-                        </span>
+                        {{-- ================================= --}}
+                        {{-- NAMA --}}
+                        {{-- ================================= --}}
+                        <td class="px-6 py-5">
 
-                    </td>
+                            <div class="flex items-center gap-3">
 
-                    <td class="px-6 py-4">
+                                {{-- Avatar --}}
+                                <div class="w-10 h-10 rounded-full bg-[#E2EAE3]
+                                            flex items-center justify-center
+                                            text-[#52705A] font-bold shrink-0">
 
-                        <form method="POST" action="{{ route('admin.penghuni.nonaktifkan', $i) }}"
-                            onsubmit="return confirm('Nonaktifkan penghuni ini?')">
+                                    {{ strtoupper(substr($i->user->nama ?? 'P', 0, 1)) }}
 
-                            @csrf
-                            @method('PUT')
+                                </div>
 
-                            <button
-                                class="bg-[#FCEBEB] hover:bg-[#F7C1C1] text-[#791F1F] px-6 py-2.5 rounded-xl font-medium text-sm transition">
+                                <div>
 
-                                Nonaktifkan
+                                    <h4 class="font-semibold text-[#0F0937]">
+                                        {{ $i->user->nama }}
+                                    </h4>
 
-                            </button>
+                                    <p class="text-sm text-gray-400 mt-0.5">
+                                        {{ $i->user->username }}
+                                    </p>
 
-                        </form>
+                                </div>
 
-                    </td>
+                            </div>
 
-                </tr>
+                        </td>
 
-                @empty
 
-                <tr>
+                        {{-- ================================= --}}
+                        {{-- KAMAR --}}
+                        {{-- ================================= --}}
+                        <td class="px-6 py-5">
 
-                    <td colspan="6" class="px-6 py-10 text-center text-gray-500">
+                            <span class="inline-flex items-center px-3 py-1.5
+                                         rounded-xl bg-gray-100
+                                         text-gray-700 text-sm font-semibold">
 
-                        Belum ada penghuni aktif
+                                {{ $i->kamar->nomor_kamar ?? '-' }}
 
-                    </td>
+                            </span>
 
-                </tr>
+                        </td>
 
-                @endforelse
 
-            </tbody>
+                        {{-- ================================= --}}
+                        {{-- TANGGAL MASUK --}}
+                        {{-- ================================= --}}
+                        <td class="px-6 py-5 text-sm text-gray-600">
 
-        </table>
+                            {{ \Carbon\Carbon::parse($i->tanggal_masuk)->format('d M Y') }}
+
+                        </td>
+
+
+                        {{-- ================================= --}}
+                        {{-- TANGGAL KELUAR --}}
+                        {{-- ================================= --}}
+                        <td class="px-6 py-5 text-sm text-gray-600">
+
+                            {{ \Carbon\Carbon::parse($i->tanggal_keluar)->format('d M Y') }}
+
+                        </td>
+
+
+                        {{-- ================================= --}}
+                        {{-- STATUS --}}
+                        {{-- ================================= --}}
+                        <td class="px-6 py-5">
+
+                            <span class="inline-flex items-center gap-2
+                                         px-3 py-1.5 rounded-full
+                                         bg-[#E2EAE3] text-[#52705A]
+                                         text-xs font-semibold">
+
+                                <span class="w-1.5 h-1.5 rounded-full bg-[#6C8B6B]"></span>
+
+                                Aktif
+
+                            </span>
+
+                        </td>
+
+
+                        {{-- ================================= --}}
+                        {{-- AKSI --}}
+                        {{-- ================================= --}}
+                        <td class="px-6 py-5">
+
+                            <form method="POST" action="{{ route('admin.penghuni.nonaktifkan', $i) }}"
+                                onsubmit="return confirm('Nonaktifkan penghuni ini?')">
+
+                                @csrf
+                                @method('PUT')
+
+                                <button type="submit" class="bg-[#FCEBEB] hover:bg-[#F7C1C1]
+                                           text-[#791F1F]
+                                           px-4 py-2.5 rounded-xl
+                                           font-semibold text-sm transition">
+
+                                    Nonaktifkan
+
+                                </button>
+
+                            </form>
+
+                        </td>
+
+                    </tr>
+
+
+                    @empty
+
+                    {{-- ================================= --}}
+                    {{-- EMPTY STATE --}}
+                    {{-- ================================= --}}
+                    <tr>
+
+                        <td colspan="6" class="px-6 py-16">
+
+                            <div class="text-center">
+
+                                {{-- Satu icon untuk empty state --}}
+                                <div class="w-14 h-14 mx-auto rounded-2xl
+                                            bg-[#EEF4EF]
+                                            flex items-center justify-center mb-4">
+
+                                    <svg class="w-7 h-7 text-[#6C8B6B]" fill="none" stroke="currentColor"
+                                        viewBox="0 0 24 24">
+
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.7"
+                                            d="M16 21v-2a4 4 0 00-4-4H6a4 4 0 00-4 4v2M9 11a4 4 0 100-8 4 4 0 000 8zm7-3a4 4 0 110-8 4 4 0 000 8zm0 3a4 4 0 014 4v2" />
+
+                                    </svg>
+
+                                </div>
+
+                                <h3 class="font-bold text-[#0F0937]">
+                                    Belum Ada Penghuni Aktif
+                                </h3>
+
+                                <p class="text-sm text-gray-500 mt-1">
+                                    Belum ada penghuni yang sedang aktif menempati kamar.
+                                </p>
+
+                            </div>
+
+                        </td>
+
+                    </tr>
+
+                    @endforelse
+
+                </tbody>
+
+            </table>
+
+        </div>
 
     </div>
 
