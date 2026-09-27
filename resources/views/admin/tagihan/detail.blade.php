@@ -9,7 +9,7 @@
         <p class="text-gray-500 mt-2">Daftar tagihan milik penghuni.</p>
     </div>
     <a href="{{ route('admin.tagihan.index') }}"
-       class="bg-gray-100 hover:bg-gray-200 text-gray-700 px-5 py-3 rounded-2xl font-semibold transition w-fit">
+        class="bg-gray-100 hover:bg-gray-200 text-gray-700 px-5 py-3 rounded-2xl font-semibold transition w-fit">
         Kembali
     </a>
 </div>
@@ -25,15 +25,15 @@
     @forelse($items as $i)
 
     @php
-        $totalBayar = $i->pembayaran
-            ->where('status_validasi', 'diterima')
-            ->sum('nominal_pembayaran');
+    $totalBayar = $i->pembayaran
+    ->where('status_validasi', 'diterima')
+    ->sum('nominal_pembayaran');
 
-        $sisa = ($i->hargaKamar?->harga ?? 0) - $totalBayar;
+    $sisa = ($i->hargaKamar?->harga ?? 0) - $totalBayar;
 
-        $pembayaranTerakhir = $i->pembayaran
-            ->sortByDesc('created_at')
-            ->first();
+    $pembayaranTerakhir = $i->pembayaran
+    ->sortByDesc('created_at')
+    ->first();
     @endphp
 
     <div class="bg-white rounded-3xl border border-gray-100 shadow-sm p-6">
@@ -79,15 +79,17 @@
             <div>
                 <p class="text-xs text-gray-500 mb-1">Status</p>
                 @if($i->status_label === 'lunas')
-                    <span class="px-3 py-1.5 rounded-full bg-green-100 text-green-700 text-xs font-semibold">Lunas</span>
+                <span class="px-3 py-1.5 rounded-full bg-green-100 text-green-700 text-xs font-semibold">Lunas</span>
                 @elseif($i->status_label === 'telat')
-                    <span class="px-3 py-1.5 rounded-full bg-red-100 text-red-700 text-xs font-semibold">Telat</span>
+                <span class="px-3 py-1.5 rounded-full bg-red-100 text-red-700 text-xs font-semibold">Telat</span>
                 @elseif($pembayaranTerakhir?->status_validasi === 'menunggu')
-                    <span class="px-3 py-1.5 rounded-full bg-yellow-100 text-yellow-700 text-xs font-semibold">Menunggu Verifikasi</span>
+                <span class="px-3 py-1.5 rounded-full bg-yellow-100 text-yellow-700 text-xs font-semibold">Menunggu
+                    Verifikasi</span>
                 @elseif($pembayaranTerakhir?->status_validasi === 'ditolak')
-                    <span class="px-3 py-1.5 rounded-full bg-red-100 text-red-700 text-xs font-semibold">Ditolak</span>
+                <span class="px-3 py-1.5 rounded-full bg-red-100 text-red-700 text-xs font-semibold">Ditolak</span>
                 @else
-                    <span class="px-3 py-1.5 rounded-full bg-gray-100 text-gray-700 text-xs font-semibold">Belum Lunas</span>
+                <span class="px-3 py-1.5 rounded-full bg-gray-100 text-gray-700 text-xs font-semibold">Belum
+                    Lunas</span>
                 @endif
             </div>
 
@@ -107,11 +109,11 @@
                 <div class="border border-gray-200 rounded-2xl p-3 flex flex-col gap-3">
 
                     {{-- FOTO --}}
-                    <a href="{{ asset('storage/' . $p->bukti_bayar) }}" target="_blank"
-                       class="block w-full aspect-square overflow-hidden rounded-xl border border-gray-100">
-                        <img src="{{ asset('storage/' . $p->bukti_bayar) }}"
-                             class="w-full h-full object-cover hover:scale-105 transition-transform duration-200">
-                    </a>
+                    <button type="button" onclick="openImageModal('{{ asset('storage/' . $p->bukti_bayar) }}')"
+                        class="block w-full aspect-square overflow-hidden rounded-xl border border-gray-100 cursor-pointer">
+                        <img src="{{ asset('storage/' . $p->bukti_bayar) }}" alt="Bukti Pembayaran"
+                            class="w-full h-full object-cover hover:scale-105 transition-transform duration-200">
+                    </button>
 
                     {{-- INFO --}}
                     <div>
@@ -130,29 +132,33 @@
                     <div class="mt-auto flex flex-col gap-2">
 
                         @if($p->status_validasi === 'diterima')
-                            <span class="text-center px-2 py-1 rounded-full bg-green-100 text-green-700 text-xs font-semibold">
-                                Diterima
-                            </span>
+                        <span
+                            class="text-center px-2 py-1 rounded-full bg-green-100 text-green-700 text-xs font-semibold">
+                            Diterima
+                        </span>
                         @elseif($p->status_validasi === 'ditolak')
-                            <span class="text-center px-2 py-1 rounded-full bg-red-100 text-red-700 text-xs font-semibold">
-                                Ditolak
-                            </span>
+                        <span class="text-center px-2 py-1 rounded-full bg-red-100 text-red-700 text-xs font-semibold">
+                            Ditolak
+                        </span>
                         @else
-                            <span class="text-center px-2 py-1 rounded-full bg-yellow-100 text-yellow-700 text-xs font-semibold">
-                                Menunggu
-                            </span>
+                        <span
+                            class="text-center px-2 py-1 rounded-full bg-yellow-100 text-yellow-700 text-xs font-semibold">
+                            Menunggu
+                        </span>
                         @endif
 
                         @if($p->status_validasi === 'menunggu')
                         <form method="POST" action="{{ route('admin.tagihan.validasi', $p->id_pembayaran) }}">
                             @csrf
-                            <button class="w-full bg-green-500 hover:bg-green-600 text-white py-1.5 rounded-xl text-xs font-semibold transition">
+                            <button
+                                class="w-full bg-green-500 hover:bg-green-600 text-white py-1.5 rounded-xl text-xs font-semibold transition">
                                 Validasi
                             </button>
                         </form>
                         <form method="POST" action="{{ route('admin.tagihan.tolak', $p) }}">
                             @csrf
-                            <button class="w-full bg-red-500 hover:bg-red-600 text-white py-1.5 rounded-xl text-xs font-semibold transition">
+                            <button
+                                class="w-full bg-red-500 hover:bg-red-600 text-white py-1.5 rounded-xl text-xs font-semibold transition">
                                 Tolak
                             </button>
                         </form>
@@ -182,4 +188,57 @@
     @endforelse
 
 </div>
+
+{{-- MODAL PREVIEW BUKTI PEMBAYARAN --}}
+<div id="imageModal" class="fixed inset-0 z-[9999] hidden items-center justify-center bg-black/70 backdrop-blur-sm p-5"
+    onclick="closeImageModal(event)">
+
+    <div class="relative inline-block max-w-4xl max-h-[90vh]" onclick="event.stopPropagation()">
+
+        {{-- GAMBAR --}}
+        <img id="modalImage" src="" alt="Bukti Pembayaran"
+            class="max-w-full max-h-[85vh] object-contain rounded-2xl shadow-2xl bg-white">
+
+        {{-- TOMBOL X MENEMPEL DI POJOK GAMBAR --}}
+        <button type="button" onclick="closeImageModal()"
+            class="absolute top-3 right-3 w-9 h-9 rounded-full bg-white/95 text-gray-700 text-xl font-bold shadow-md hover:bg-gray-100 transition flex items-center justify-center">
+            &times;
+        </button>
+
+    </div>
+</div>
+
+<script>
+function openImageModal(imageUrl) {
+    const modal = document.getElementById('imageModal');
+    const image = document.getElementById('modalImage');
+
+    image.src = imageUrl;
+
+    modal.classList.remove('hidden');
+    modal.classList.add('flex');
+
+    document.body.classList.add('overflow-hidden');
+}
+
+function closeImageModal() {
+    const modal = document.getElementById('imageModal');
+    const image = document.getElementById('modalImage');
+
+    modal.classList.add('hidden');
+    modal.classList.remove('flex');
+
+    image.src = '';
+
+    document.body.classList.remove('overflow-hidden');
+}
+
+// Tutup dengan tombol ESC
+document.addEventListener('keydown', function(event) {
+    if (event.key === 'Escape') {
+        closeImageModal();
+    }
+});
+</script>
+
 @endsection
