@@ -252,7 +252,7 @@
                         <p class="text-xs
                                    text-gray-400
                                    mt-3">
-                            Format: JPG, PNG, JPEG · Maks. 5MB
+                            Format: JPG, PNG, JPEG · Maks. 10MB
                         </p>
 
 
