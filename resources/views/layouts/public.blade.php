@@ -1037,7 +1037,6 @@
     </footer>
 
     @include('auth.pilih-role')
-
     @stack('scripts')
 
     <script>
