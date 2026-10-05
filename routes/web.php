@@ -19,6 +19,8 @@ use App\Http\Controllers\ContactController;
 use App\Http\Controllers\NotificationController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\HomeController;
+use App\Http\Controllers\KosAssistantController;
+
 
 /*
 |--------------------------------------------------------------------------
@@ -58,6 +60,12 @@ Route::get('/kamar/{id}', [
     'detailKamar'
 ])->name('detailKamar');
 
+
+// ASISTEN KOS (publik)
+Route::post('/asisten/tanya', [KosAssistantController::class, 'ask'])
+    ->middleware('throttle:20,1')
+    ->name('asisten.tanya');
+    
 /*
 |--------------------------------------------------------------------------
 | AUTH
@@ -439,4 +447,3 @@ Route::middleware([
     ])->name('profil.index');
 
 });
-
