@@ -278,8 +278,8 @@ class AuthController extends Controller
                 ],
 
                 // Data minimum kos saat registrasi
-                'nama_kost' => 'required|string|max:255',
-                'alamat' => 'required|string|max:2000',
+                'nama_kost' => 'required|string|max:100',
+                'alamat' => 'required|string|max:300',
             ],
             [
                 'nama.required' => 'Nama wajib diisi.',
@@ -305,7 +305,7 @@ class AuthController extends Controller
                 'password.regex' => 'Password harus mengandung huruf besar, huruf kecil, dan angka.',
 
                 'nama_kost.required' => 'Nama kos wajib diisi.',
-                'nama_kost.max' => 'Nama kos maksimal 255 karakter.',
+                'nama_kost.max' => 'Nama kos maksimal 100 karakter.', 
                 'alamat.required' => 'Alamat kos wajib diisi.',
                 'alamat.max' => 'Alamat kos terlalu panjang.',
             ]

@@ -182,8 +182,6 @@ class HomeController extends Controller
 
         $fasilitasPopuler = $this->getFasilitasPopuler();
 
-
-
         return view(
             'katalog.list',
             compact(

@@ -186,22 +186,28 @@ class AdminKostController extends Controller
 
         $data = $request->validate(
             [
-                'nama_kost' => ['required', 'string', 'max:150'],
-                'no_hp' => ['required', 'string', 'regex:/^08[0-9]{8,13}$/'],
-                'alamat' => ['required', 'string', 'max:1000'],
-                'deskripsi' => ['nullable', 'string', 'max:5000'],
+                'nama_kost' => ['required', 'string', 'max:100'],
+                'no_hp' => ['required', 'digits_between:10,13' ],
+                'alamat' => ['required', 'string', 'max:300'],
+                'deskripsi' => ['nullable', 'string', 'max:2000'],
                 'fasilitas' => ['nullable', 'array'],
                 'fasilitas.*' => ['integer', 'distinct', 'exists:fasilitas,id_fasilitas'],
                 'foto_kost' => ['nullable', 'array', 'max:10'],
-                'foto_kost.*' => ['image', 'mimes:jpg,jpeg,png,webp', 'max:10240'],
+                'foto_kost.*' => ['image', 'mimes:jpg,jpeg,png', 'max:10240'],
                 'lokasi' => ['nullable', 'string', 'max:2000'],
                 'deleted_old_images' => ['nullable', 'json'],
             ],
             [
-                'no_hp.regex' => 'Nomor WhatsApp harus diawali 08 dan berisi 10–15 digit.',
+                'nama_kost.required' => 'Nama kos wajib diisi.',
+                'nama_kost.max' => 'Nama kos maksimal 100 karakter.', 
+                'alamat.required' => 'Alamat kos wajib diisi.',
+                'alamat.max' => 'Alamat kos terlalu panjang.',
+                'deskripsi.max' => 'Deskripsi Kos terlalu panjang.',
+                'no_hp.digits_between' => 'Nomor WhatsApp harus berisi 10-13 digit.',
+                'no_hp.required' => 'Nomor HP wajib diisi.',
                 'foto_kost.max' => 'Maksimal 10 foto dapat diunggah sekaligus.',
                 'foto_kost.*.image' => 'Setiap file foto kos harus berupa gambar yang valid.',
-                'foto_kost.*.mimes' => 'Format foto kos harus JPG, JPEG, PNG, atau WEBP.',
+                'foto_kost.*.mimes' => 'Format foto kos harus JPG, JPEG, PNG',
                 'foto_kost.*.max' => 'Ukuran setiap foto kos maksimal 10 MB.',
             ]
         );
