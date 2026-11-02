@@ -86,6 +86,26 @@ class AuthController extends Controller
 
         $user = $request->user();
 
+        
+        // Tolak login Admin Kos yang belum disetujui
+        // atau pengajuannya ditolak Super Admin
+        if ($user->role === 'admin kost' && $user->status !== 'aktif') {
+
+            $pesan = $user->status === 'ditolak'
+                ? 'Pengajuan anda ditolak oleh Super Admin.'
+                : 'Akun admin kost anda belum divalidasi Super Admin.';
+
+            // Hapus autentikasi agar user tetap dianggap belum login
+            Auth::logout();
+
+            // Hapus sesi dan perbarui token CSRF
+            $request->session()->invalidate();
+            $request->session()->regenerateToken();
+
+            // Tampilkan halaman 403
+            abort(403, $pesan);
+        }
+
        //force change password
 
         if ($user->must_change_password)
@@ -181,7 +201,7 @@ class AuthController extends Controller
                 'nik' => ['required', 'digits:16', 'regex:/^[0-9]+$/', 'unique:users,nik' ],
                 'username' => [ 'required', 'string','min:3','max:30', 'regex:/^[a-zA-Z0-9._]+$/', 'unique:users,username' ],
                 'no_hp' => ['required', 'digits_between:10,13' ],
-                'password' => [ 'required', 'confirmed','min:8','regex:/[A-Z]/', 'regex:/[a-z]/','regex:/[0-9]/' ],
+                'password' => [ 'required', 'confirmed','min:8','regex:/[A-Z]/', 'regex:/[a-z]/','regex:/[0-9]/', 'not_regex:/[^a-zA-Z0-9]/', ],
             ],
 
             [
@@ -212,6 +232,7 @@ class AuthController extends Controller
                 'password.confirmed' => 'Konfirmasi password tidak cocok.',
                 'password.min' =>'Password minimal 8 karakter.',
                 'password.regex' => 'Password harus mengandung huruf besar, huruf kecil, dan angka.',
+                'password.not_regex' => 'Password hanya boleh mengandung huruf besar, huruf kecil, dan angka.',
             ]
 
         );
@@ -275,6 +296,7 @@ class AuthController extends Controller
                     'regex:/[A-Z]/',
                     'regex:/[a-z]/',
                     'regex:/[0-9]/',
+                     'not_regex:/[^a-zA-Z0-9]/',
                 ],
 
                 // Data minimum kos saat registrasi
@@ -303,6 +325,7 @@ class AuthController extends Controller
                 'password.confirmed' => 'Konfirmasi password tidak cocok.',
                 'password.min' => 'Password minimal 8 karakter.',
                 'password.regex' => 'Password harus mengandung huruf besar, huruf kecil, dan angka.',
+                'password.not_regex' => 'Password hanya boleh mengandung huruf besar, huruf kecil, dan angka.',
 
                 'nama_kost.required' => 'Nama kos wajib diisi.',
                 'nama_kost.max' => 'Nama kos maksimal 100 karakter.', 
