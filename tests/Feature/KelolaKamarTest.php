@@ -481,9 +481,10 @@ public function test_tc_107_admin_dapat_menghapus_data_kamar(): void
         'id_kamar' => $kamar->id_kamar,
     ]);
 
-    Storage::disk('public')->assertMissing(
-        'kamar/foto-hapus.jpg'
-    );
+    $this->assertFalse(
+    Storage::disk('public')->exists('kamar/foto-hapus.jpg'),
+    'File foto kamar masih ada setelah kamar dihapus.'
+);
 }
 
 
