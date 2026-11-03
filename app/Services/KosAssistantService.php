@@ -10,7 +10,7 @@ use Throwable;
 
 class KosAssistantService
 {
-    private const MAX_STEPS = 4;
+    private const MAX_STEPS = 2;
 
     /**
      * Memproses pertanyaan user dan berkomunikasi dengan OpenRouter.
