@@ -11,20 +11,20 @@ use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Storage;
 
-class KelolaKamarTest extends TestCase
+class KelolaKamarTest extends TestCase //menampung pengujian data kamar
 {
-    use RefreshDatabase;
+    use RefreshDatabase; //bisa digunakan di data lain
 
-    protected function setUp(): void
+    protected function setUp(): void //kondisi awal sebelum test dijalankan 
     {
         parent::setUp();
 
         Storage::fake('public');
     }
 
-    private function buatDataKamar(): array
+    private function buatDataKamar(): array // data dummy untuk pengujian kamar
     {
-        $admin = User::create([
+        $admin = User::create([ //tabel baru
             'username' => 'admin_jelita',
             'nik' => '3507010101010001',
             'nama' => 'Admin Kos Jelita',
@@ -48,13 +48,13 @@ class KelolaKamarTest extends TestCase
             'Spring Bed',
             'Lemari',
             'AC',
-        ])->map(function ($nama) {
+        ])->map(function ($nama) { //memproses setiap fasilitas satu persatu scr otomatis tanpa
             return Fasilitas::create([
                 'nama_fasilitas' => $nama,
             ]);
         });
 
-        return compact('admin', 'kost', 'fasilitas');
+        return compact('admin', 'kost', 'fasilitas'); //menggabungkan jadi 1 jadi kalo memanggil gapelru satu"
     }
 
     private function fotoPngValid(): UploadedFile
@@ -63,21 +63,21 @@ class KelolaKamarTest extends TestCase
             'iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mP8/x8AAwMCAO+/f+QAAAAASUVORK5CYII='
         );
 
-        return UploadedFile::fake()->createWithContent(
-            'foto-kamar.png',
+        return UploadedFile::fake()->createWithContent( // nama dan isi yg sudah ditemukan
+            'foto-kamar.png', //hasil
             $isiPng
         );
     }
 
     private function dataKamar($fasilitas, array $tambahan = []): array
     {
-        return array_merge([
+        return array_merge([ // data kamar diubah sesuai kebutuhan (digabungkan)
             'nama_kamar' => 'Kamar Jelita',
             'nomor_kamar' => '01',
             'ukuran_kamar' => '3x3 meter',
             'fasilitas' => $fasilitas->pluck('id_fasilitas')->toArray(),
             'foto_kamar' => [
-                $this->fotoPngValid(),
+                $this->fotoPngValid(), //dlm bentuk array
             ],
         ], $tambahan);
     }
@@ -88,38 +88,38 @@ class KelolaKamarTest extends TestCase
         $data = $this->buatDataKamar();
 
         $response = $this->actingAs($data['admin'])
-            ->post(
+            ->post( 
                 route('admin.kamar.store'),
-                $this->dataKamar($data['fasilitas'])
+                $this->dataKamar($data['fasilitas']) //menyiapkan data yg akan dikirim 
             );
 
-        $response->assertRedirect(route('admin.kamar.index'));
-        $response->assertSessionHas(
+        $response->assertRedirect(route('admin.kamar.index')); //penambahan kamar berhasil  
+        $response->assertSessionHas( //pesan berhasil
             'success',
             'Kamar berhasil ditambahkan.'
-        );
+        ); //jadi tidak hanya back ke halman admin tpi juga ngasih info beerhasil
 
-        $this->assertDatabaseHas('kamar_kosts', [
-            'id_kost' => $data['kost']->id,
+        $this->assertDatabaseHas('kamar_kosts', [ //apakah benar data tersimpan di DB
+            'id_kost' => $data['kost']->id, //ambil id otomatis dari data kost yg dibuat diawal
             'nama_kamar' => 'Kamar Jelita',
             'nomor_kamar' => '01',
             'ukuran_kamar' => '3x3 meter',
         ]);
 
-        $kamar = KamarKost::where(
+        $kamar = KamarKost::where( //mengambil data kamar yg sdh tersimpan
             'id_kost',
             $data['kost']->id
-        )->firstOrFail();
+        )->firstOrFail(); // mencari data pertama yg ditemukan kemudian disimpan dlm var kamar
 
-        $this->assertNotEmpty($kamar->foto_kamar);
+        $this->assertNotEmpty($kamar->foto_kamar); //memeriksa apakah foto kamar tidak kosogn
 
         $this->assertTrue(
-            Storage::disk('public')->exists($kamar->foto_kamar[0])
+            Storage::disk('public')->exists($kamar->foto_kamar[0]) //apakah foto benar" tersimpan di storage
         );
 
-        $this->assertEqualsCanonicalizing(
+        $this->assertEqualsCanonicalizing( //memeriksah apakah fasilitas sdh terhubung
             $data['fasilitas']->pluck('id_fasilitas')->toArray(),
-            $kamar->fasilitas()->pluck('fasilitas.id_fasilitas')->toArray()
+            $kamar->fasilitas()->pluck('fasilitas.id_fasilitas')->toArray() //mengambol id yg sdh terhubung di kamar dengan relasi model
         );
     }
 

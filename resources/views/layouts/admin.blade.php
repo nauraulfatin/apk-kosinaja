@@ -41,14 +41,16 @@
 
     {{-- Alert Success --}}
     @if(session('success'))
-    <div class="fixed top-5 right-5 bg-green-500 text-white px-5 py-3 rounded-lg shadow-lg z-50">
+    <div
+        class="fixed top-20 sm:top-5 left-4 right-4 sm:left-auto sm:right-5 bg-green-500 text-white px-5 py-3 rounded-lg shadow-lg z-[60]">
         {{ session('success') }}
     </div>
     @endif
 
     {{-- Alert Error --}}
     @if($errors->any())
-    <div class="fixed top-5 right-5 bg-red-500 text-white px-5 py-3 rounded-lg shadow-lg z-50">
+    <div
+        class="fixed top-20 sm:top-5 left-4 right-4 sm:left-auto sm:right-5 bg-red-500 text-white px-5 py-3 rounded-lg shadow-lg z-[60]">
         <ul class="text-sm">
             @foreach($errors->all() as $e)
             <li>{{ $e }}</li>
@@ -67,13 +69,22 @@
     {{-- ========================================================= --}}
     <div class="flex min-h-screen pt-[72px] lg:pt-[84px]">
 
+        {{-- OVERLAY (khusus mobile) --}}
+        <div id="sidebarOverlay" onclick="closeSidebar()"
+            class="hidden fixed inset-x-0 bottom-0 top-[72px] bg-black/40 z-30 lg:hidden"></div>
+
         {{-- ========================================================= --}}
         {{-- SIDEBAR --}}
+        {{-- Mobile: tersembunyi, geser masuk saat tombol menu ditekan --}}
+        {{-- Desktop (lg+): selalu tampil --}}
         {{-- ========================================================= --}}
-        <aside class="w-64 bg-white border-r border-gray-100
-                      fixed top-[72px] lg:top-[84px]
+        <aside id="sidebar" class="w-64 bg-white border-r border-gray-100
+                      fixed top-[72px] lg:top-[84px] left-0
                       h-[calc(100vh-72px)] lg:h-[calc(100vh-84px)]
-                      flex flex-col justify-between">
+                      flex flex-col justify-between overflow-y-auto
+                      z-40
+                      -translate-x-full lg:translate-x-0
+                      transition-transform duration-300 ease-in-out">
 
             <div>
 
@@ -200,11 +211,83 @@
         {{-- ========================================================= --}}
         {{-- CONTENT --}}
         {{-- ========================================================= --}}
-        <main class="ml-64 flex-1 p-8">
-            @yield('content')
+        <main class="lg:ml-64 flex-1 min-w-0">
+
+            {{-- BAR TOMBOL MENU (khusus mobile, menempel di bawah navbar) --}}
+            <div class="lg:hidden sticky top-[72px] z-20 bg-[#FDFBF7]/95 backdrop-blur
+                        border-b border-gray-100 px-4 py-2.5">
+                <button type="button" id="sidebarToggle" onclick="toggleSidebar()" class="inline-flex items-center gap-2 px-3 py-2 rounded-xl bg-white border border-gray-200
+                           text-sm font-semibold text-[#3A5C3A] shadow-sm active:scale-95 transition"
+                    aria-controls="sidebar" aria-expanded="false" aria-label="Buka menu">
+                    <svg id="iconMenu" xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none"
+                        viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M4 6h16M4 12h16M4 18h16" />
+                    </svg>
+                    <svg id="iconClose" xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 hidden" fill="none"
+                        viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M6 18L18 6M6 6l12 12" />
+                    </svg>
+                    Menu
+                </button>
+            </div>
+
+            <div class="p-4 sm:p-6 lg:p-8">
+                @yield('content')
+            </div>
+
         </main>
 
     </div>
+
+    {{-- ========================================================= --}}
+    {{-- SCRIPT SIDEBAR MOBILE --}}
+    {{-- ========================================================= --}}
+    <script>
+    const sidebar = document.getElementById('sidebar');
+    const sidebarOverlay = document.getElementById('sidebarOverlay');
+    const sidebarToggle = document.getElementById('sidebarToggle');
+    const iconMenu = document.getElementById('iconMenu');
+    const iconClose = document.getElementById('iconClose');
+
+    function openSidebar() {
+        sidebar.classList.remove('-translate-x-full');
+        sidebarOverlay.classList.remove('hidden');
+        iconMenu.classList.add('hidden');
+        iconClose.classList.remove('hidden');
+        sidebarToggle.setAttribute('aria-expanded', 'true');
+        document.body.classList.add('overflow-hidden', 'lg:overflow-auto');
+    }
+
+    function closeSidebar() {
+        sidebar.classList.add('-translate-x-full');
+        sidebarOverlay.classList.add('hidden');
+        iconMenu.classList.remove('hidden');
+        iconClose.classList.add('hidden');
+        sidebarToggle.setAttribute('aria-expanded', 'false');
+        document.body.classList.remove('overflow-hidden', 'lg:overflow-auto');
+    }
+
+    function toggleSidebar() {
+        sidebar.classList.contains('-translate-x-full') ? openSidebar() : closeSidebar();
+    }
+
+    // Tutup sidebar saat menu/link di dalamnya ditekan
+    sidebar.querySelectorAll('a').forEach(function(link) {
+        link.addEventListener('click', closeSidebar);
+    });
+
+    // Tutup dengan tombol Esc
+    document.addEventListener('keydown', function(e) {
+        if (e.key === 'Escape') closeSidebar();
+    });
+
+    // Reset state kalau layar diperbesar ke desktop
+    window.addEventListener('resize', function() {
+        if (window.innerWidth >= 1024) closeSidebar();
+    });
+    </script>
 
 </body>
 

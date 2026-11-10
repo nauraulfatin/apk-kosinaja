@@ -132,70 +132,6 @@
             display: none !important;
         }
     }
-
-    @media (max-width: 768px) {
-
-        footer {
-            margin-top: 40px !important;
-        }
-
-        footer .relative.z-10 {
-            padding-top: 38px !important;
-            padding-bottom: 22px !important;
-        }
-
-        footer .grid {
-            gap: 28px !important;
-        }
-
-        footer img {
-            width: 36px !important;
-            height: 36px !important;
-        }
-
-        footer h2 {
-            font-size: 1.45rem !important;
-        }
-
-        footer h3 {
-            font-size: 0.95rem !important;
-            margin-bottom: 12px !important;
-        }
-
-        footer p,
-        footer a {
-            font-size: 0.8rem !important;
-            line-height: 1.6 !important;
-        }
-
-        footer .flex.flex-col.gap-4 {
-            gap: 10px !important;
-        }
-
-        footer .space-y-5 {
-            gap: 14px !important;
-        }
-
-        footer .w-10.h-10 {
-            width: 34px !important;
-            height: 34px !important;
-            border-radius: 10px !important;
-        }
-
-        footer svg {
-            width: 17px !important;
-            height: 17px !important;
-        }
-
-        footer .border-t {
-            margin-top: 24px !important;
-            padding-top: 16px !important;
-        }
-
-        footer .border-t p {
-            font-size: 0.72rem !important;
-        }
-    }
     </style>
 
     @yield('styles')
@@ -204,14 +140,9 @@
 <body class="overflow-x-hidden">
 
     {{-- NAVBAR --}}
-    <nav class="fixed top-0 left-0 right-0 z-50
-                bg-white/85 backdrop-blur-xl
-                border-b border-[#edf1ed]">
+    <nav class="fixed top-0 left-0 right-0 z-50 bg-white/85 backdrop-blur-xl border-b border-[#edf1ed]">
 
-        <div class="max-w-full px-6 lg:px-8
-                    px-6 lg:px-8
-                    h-[72px] lg:h-[84px]
-                    flex items-center justify-between">
+        <div class="max-w-full px-6 lg:px-8 h-[72px] lg:h-[84px] flex items-center justify-between">
 
             {{-- LOGO --}}
             <a href="{{ route('home') }}" class="flex items-center gap-3 shrink-0">
@@ -269,18 +200,12 @@
             </ul>
 
             {{-- MOBILE MENU BUTTON --}}
-            <button id="mobileMenuButton" type="button" onclick="toggleMobileMenu()" aria-expanded="false" class="lg:hidden
-                       w-10 h-10
-                       rounded-xl
-                       border border-gray-200
-                       flex items-center justify-center
-                       text-[#314233]">
+            <button id="mobileMenuButton" type="button" onclick="toggleMobileMenu()" aria-expanded="false"
+                class="lg:hidden w-10 h-10 rounded-xl border border-gray-200 flex items-center justify-center text-[#314233]">
 
                 <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" fill="none" viewBox="0 0 24 24"
                     stroke="currentColor">
-
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
-
                 </svg>
 
             </button>
@@ -298,9 +223,7 @@
 
                     <button type="button" class="flex items-center gap-3">
 
-                        <div class="w-11 h-11 rounded-full
-                                        overflow-hidden border-2
-                                        border-[#6C8B6B]">
+                        <div class="w-11 h-11 rounded-full overflow-hidden border-2 border-[#6C8B6B]">
 
                             <img src="https://ui-avatars.com/api/?name={{ urlencode(auth()->user()->nama) }}"
                                 class="w-full h-full object-cover" alt="Profil">
@@ -321,65 +244,41 @@
 
                         <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 text-gray-500" fill="none"
                             viewBox="0 0 24 24" stroke="currentColor">
-
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
-
                         </svg>
 
                     </button>
 
                     {{-- DROPDOWN --}}
-                    <div class="absolute right-0 mt-4
-                                    w-64 bg-white rounded-2xl
-                                    shadow-xl border border-gray-100
-                                    opacity-0 invisible
-                                    translate-y-2
-                                    group-hover:opacity-100
-                                    group-hover:visible
-                                    group-hover:translate-y-0
-                                    transition-all duration-200
-                                    overflow-hidden z-50">
+                    <div class="absolute right-0 mt-4 w-64 bg-white rounded-2xl shadow-xl border border-gray-100
+                                opacity-0 invisible translate-y-2
+                                group-hover:opacity-100 group-hover:visible group-hover:translate-y-0
+                                transition-all duration-200 overflow-hidden z-50">
 
                         @if(auth()->user()->role === 'super admin')
 
                         <a href="{{ route('superadmin.profil') }}"
                             class="flex items-center gap-3 px-5 py-4 hover:bg-gray-50 transition">
-
-                            <span class="font-medium">
-                                Profil Saya
-                            </span>
-
+                            <span class="font-medium">Profil Saya</span>
                         </a>
 
                         <a href="{{ route('superadmin.dashboard') }}"
                             class="flex items-center gap-3 px-5 py-4 hover:bg-gray-50 transition">
-
-                            <span class="font-medium">
-                                Dashboard Super Admin
-                            </span>
-
+                            <span class="font-medium">Dashboard Super Admin</span>
                         </a>
 
                         @elseif(auth()->user()->role === 'admin kost')
 
                         <a href="{{ route('admin.profil.index') }}"
                             class="flex items-center gap-3 px-5 py-4 hover:bg-gray-50 transition">
-
-                            <span class="font-medium">
-                                Profil Saya
-                            </span>
-
+                            <span class="font-medium">Profil Saya</span>
                         </a>
 
                         @if(auth()->user()->status === 'aktif')
 
                         <a href="{{ route('admin.dashboard') }}"
                             class="flex items-center gap-3 px-5 py-4 hover:bg-gray-50 transition">
-
-                            <span class="font-medium">
-                                Dashboard Saya
-                            </span>
-
+                            <span class="font-medium">Dashboard Saya</span>
                         </a>
 
                         @endif
@@ -388,22 +287,14 @@
 
                         <a href="{{ route('penghuni.profil.index') }}"
                             class="flex items-center gap-3 px-5 py-4 hover:bg-gray-50 transition">
-
-                            <span class="font-medium">
-                                Profil Saya
-                            </span>
-
+                            <span class="font-medium">Profil Saya</span>
                         </a>
 
                         @if(auth()->user()->riwayatHunian()->where('status', 'aktif')->exists())
 
                         <a href="{{ route('penghuni.dashboard') }}"
                             class="flex items-center gap-3 px-5 py-4 hover:bg-gray-50 transition">
-
-                            <span class="font-medium">
-                                Dashboard Saya
-                            </span>
-
+                            <span class="font-medium">Dashboard Saya</span>
                         </a>
 
                         @endif
@@ -415,15 +306,9 @@
 
                             @csrf
 
-                            <button type="submit" class="w-full text-left
-                                           flex items-center gap-3
-                                           px-5 py-4 hover:bg-red-50
-                                           text-red-500 transition">
-
-                                <span class="font-medium">
-                                    Logout
-                                </span>
-
+                            <button type="submit"
+                                class="w-full text-left flex items-center gap-3 px-5 py-4 hover:bg-red-50 text-red-500 transition">
+                                <span class="font-medium">Logout</span>
                             </button>
 
                         </form>
@@ -436,26 +321,18 @@
 
                 <a href="{{ route('login') }}" class="px-4 py-2.5 lg:px-6 lg:py-3
                                text-sm lg:text-base rounded-2xl
-                               border border-[#6C8B6B]
-                               text-[#6C8B6B]
-                               font-semibold
-                               hover:bg-[#6C8B6B]
-                               hover:text-white
+                               border border-[#6C8B6B] text-[#6C8B6B] font-semibold
+                               hover:bg-[#6C8B6B] hover:text-white
                                transition-all duration-200">
-
                     Masuk
-
                 </a>
 
                 <button type="button" onclick="bukaModal()" class="px-4 py-2.5 lg:px-6 lg:py-3
                                text-sm lg:text-base rounded-2xl
-                               bg-[#6C8B6B]
-                               hover:bg-[#587357]
+                               bg-[#6C8B6B] hover:bg-[#587357]
                                text-white font-semibold
                                transition-all duration-200">
-
                     Daftar
-
                 </button>
 
                 @endauth
@@ -469,40 +346,26 @@
     {{-- MOBILE MENU --}}
     <div id="mobileMenu" class="lg:hidden">
 
-        <div id="mobileMenuPanel" class="bg-white
-                   border-b border-gray-100
-                   shadow-lg">
+        <div id="mobileMenuPanel" class="bg-white border-b border-gray-100 shadow-lg">
 
             <div class="px-5 py-5 flex flex-col gap-3">
 
                 {{-- BERANDA --}}
-                <a href="{{ route('home') }}" onclick="closeMobileMenu()" class="mobile-link font-semibold text-sm
-                           px-4 py-3 rounded-2xl
-                           hover:bg-[#F4F7F4]
+                <a href="{{ route('home') }}" onclick="closeMobileMenu()" class="mobile-link font-semibold text-sm px-4 py-3 rounded-2xl hover:bg-[#F4F7F4]
                            {{ request()->is('/') ? 'bg-[#EEF5EE] text-[#6C8B6B]' : 'text-[#314233]' }}">
-
                     Beranda
-
                 </a>
 
                 {{-- TENTANG --}}
-                <a href="{{ route('tentang') }}" onclick="closeMobileMenu()" class="mobile-link font-semibold text-sm
-                           px-4 py-3 rounded-2xl
-                           hover:bg-[#F4F7F4]
+                <a href="{{ route('tentang') }}" onclick="closeMobileMenu()" class="mobile-link font-semibold text-sm px-4 py-3 rounded-2xl hover:bg-[#F4F7F4]
                            {{ request()->is('tentang') ? 'bg-[#EEF5EE] text-[#6C8B6B]' : 'text-[#314233]' }}">
-
                     Tentang
-
                 </a>
 
                 {{-- HUBUNGI --}}
-                <a href="{{ route('hubungi') }}" onclick="closeMobileMenu()" class="mobile-link font-semibold text-sm
-                           px-4 py-3 rounded-2xl
-                           hover:bg-[#F4F7F4]
+                <a href="{{ route('hubungi') }}" onclick="closeMobileMenu()" class="mobile-link font-semibold text-sm px-4 py-3 rounded-2xl hover:bg-[#F4F7F4]
                            {{ request()->is('hubungi') ? 'bg-[#EEF5EE] text-[#6C8B6B]' : 'text-[#314233]' }}">
-
                     Hubungi
-
                 </a>
 
                 {{-- USER CARD --}}
@@ -510,26 +373,19 @@
 
                 <div class="mt-2 pt-4 border-t border-gray-100">
 
-                    <div class="bg-[#F8F5F0]
-                                    rounded-[22px]
-                                    p-3">
+                    <div class="bg-[#F8F5F0] rounded-[22px] p-3">
 
                         <div class="mb-3 flex justify-end">
                             <x-notification-bell />
                         </div>
 
                         {{-- USER HEADER / TOGGLE --}}
-                        <button type="button" onclick="toggleMobileUserMenu()" class="w-full flex items-center justify-between gap-3
-                                       text-left
-                                       rounded-[18px]
-                                       transition">
+                        <button type="button" onclick="toggleMobileUserMenu()"
+                            class="w-full flex items-center justify-between gap-3 text-left rounded-[18px] transition">
 
                             <div class="flex items-center gap-3 min-w-0">
 
-                                <div class="w-10 h-10 rounded-full
-                                                overflow-hidden
-                                                border border-[#6C8B6B]
-                                                shrink-0">
+                                <div class="w-10 h-10 rounded-full overflow-hidden border border-[#6C8B6B] shrink-0">
 
                                     <img src="https://ui-avatars.com/api/?name={{ urlencode(auth()->user()->nama) }}"
                                         class="w-full h-full object-cover" alt="Profil">
@@ -554,19 +410,13 @@
 
                             </div>
 
-                            <div id="mobileUserArrow" class="w-8 h-8 rounded-full
-                                           bg-white
-                                           border border-gray-100
-                                           flex items-center justify-center
-                                           text-[#6C8B6B]
-                                           shrink-0">
+                            <div id="mobileUserArrow"
+                                class="w-8 h-8 rounded-full bg-white border border-gray-100 flex items-center justify-center text-[#6C8B6B] shrink-0">
 
                                 <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="none" viewBox="0 0 24 24"
                                     stroke="currentColor">
-
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                         d="M19 9l-7 7-7-7" />
-
                                 </svg>
 
                             </div>
@@ -581,53 +431,33 @@
                                 @if(auth()->user()->role === 'super admin')
 
                                 <a href="{{ route('superadmin.profil') }}" onclick="closeMobileMenu()"
-                                    class="mobile-link flex items-center justify-between
-                                                   px-4 py-3
-                                                   text-sm font-semibold
-                                                   hover:bg-[#F4F7F4]
-                                                   {{ request()->routeIs('superadmin.profil') ? 'text-[#6C8B6B] bg-[#EEF5EE]' : 'text-[#314233]' }}">
-
+                                    class="mobile-link flex items-center justify-between px-4 py-3 text-sm font-semibold hover:bg-[#F4F7F4]
+                                           {{ request()->routeIs('superadmin.profil') ? 'text-[#6C8B6B] bg-[#EEF5EE]' : 'text-[#314233]' }}">
                                     <span>Profil Saya</span>
                                     <span class="text-gray-400">›</span>
-
                                 </a>
 
-                                <a href="{{ route('superadmin.dashboard') }}" onclick="closeMobileMenu()" class="mobile-link flex items-center justify-between
-                                                   px-4 py-3
-                                                   text-sm font-semibold text-[#314233]
-                                                   hover:bg-[#F4F7F4]
-                                                   border-t border-gray-100">
-
+                                <a href="{{ route('superadmin.dashboard') }}" onclick="closeMobileMenu()"
+                                    class="mobile-link flex items-center justify-between px-4 py-3 text-sm font-semibold text-[#314233] hover:bg-[#F4F7F4] border-t border-gray-100">
                                     <span>Dashboard Saya</span>
                                     <span class="text-gray-400">›</span>
-
                                 </a>
 
                                 @elseif(auth()->user()->role === 'admin kost')
 
                                 <a href="{{ route('admin.profil.index') }}" onclick="closeMobileMenu()"
-                                    class="mobile-link flex items-center justify-between
-                                                   px-4 py-3
-                                                   text-sm font-semibold
-                                                   hover:bg-[#F4F7F4]
-                                                   {{ request()->routeIs('admin.profil.*') ? 'text-[#6C8B6B] bg-[#EEF5EE]' : 'text-[#314233]' }}">
-
+                                    class="mobile-link flex items-center justify-between px-4 py-3 text-sm font-semibold hover:bg-[#F4F7F4]
+                                           {{ request()->routeIs('admin.profil.*') ? 'text-[#6C8B6B] bg-[#EEF5EE]' : 'text-[#314233]' }}">
                                     <span>Profil Saya</span>
                                     <span class="text-gray-400">›</span>
-
                                 </a>
 
                                 @if(auth()->user()->status === 'aktif')
 
-                                <a href="{{ route('admin.dashboard') }}" onclick="closeMobileMenu()" class="mobile-link flex items-center justify-between
-                                                       px-4 py-3
-                                                       text-sm font-semibold text-[#314233]
-                                                       hover:bg-[#F4F7F4]
-                                                       border-t border-gray-100">
-
+                                <a href="{{ route('admin.dashboard') }}" onclick="closeMobileMenu()"
+                                    class="mobile-link flex items-center justify-between px-4 py-3 text-sm font-semibold text-[#314233] hover:bg-[#F4F7F4] border-t border-gray-100">
                                     <span>Dashboard Saya</span>
                                     <span class="text-gray-400">›</span>
-
                                 </a>
 
                                 @endif
@@ -635,28 +465,18 @@
                                 @elseif(auth()->user()->role === 'penghuni kost')
 
                                 <a href="{{ route('penghuni.profil.index') }}" onclick="closeMobileMenu()"
-                                    class="mobile-link flex items-center justify-between
-                                                   px-4 py-3
-                                                   text-sm font-semibold
-                                                   hover:bg-[#F4F7F4]
-                                                   {{ request()->routeIs('penghuni.profil.*') ? 'text-[#6C8B6B] bg-[#EEF5EE]' : 'text-[#314233]' }}">
-
+                                    class="mobile-link flex items-center justify-between px-4 py-3 text-sm font-semibold hover:bg-[#F4F7F4]
+                                           {{ request()->routeIs('penghuni.profil.*') ? 'text-[#6C8B6B] bg-[#EEF5EE]' : 'text-[#314233]' }}">
                                     <span>Profil Saya</span>
                                     <span class="text-gray-400">›</span>
-
                                 </a>
 
                                 @if(auth()->user()->riwayatHunian()->where('status', 'aktif')->exists())
 
-                                <a href="{{ route('penghuni.dashboard') }}" onclick="closeMobileMenu()" class="mobile-link flex items-center justify-between
-                                                       px-4 py-3
-                                                       text-sm font-semibold text-[#314233]
-                                                       hover:bg-[#F4F7F4]
-                                                       border-t border-gray-100">
-
+                                <a href="{{ route('penghuni.dashboard') }}" onclick="closeMobileMenu()"
+                                    class="mobile-link flex items-center justify-between px-4 py-3 text-sm font-semibold text-[#314233] hover:bg-[#F4F7F4] border-t border-gray-100">
                                     <span>Dashboard Saya</span>
                                     <span class="text-gray-400">›</span>
-
                                 </a>
 
                                 @endif
@@ -668,15 +488,10 @@
 
                                     @csrf
 
-                                    <button type="submit" class="mobile-link w-full flex items-center justify-between
-                                                   px-4 py-3
-                                                   text-sm font-semibold
-                                                   text-red-500
-                                                   hover:bg-red-50">
-
+                                    <button type="submit"
+                                        class="mobile-link w-full flex items-center justify-between px-4 py-3 text-sm font-semibold text-red-500 hover:bg-red-50">
                                         <span>Logout</span>
                                         <span class="text-red-300">›</span>
-
                                     </button>
 
                                 </form>
@@ -694,28 +509,14 @@
                 {{-- GUEST --}}
                 <div class="flex flex-col gap-3 pt-4 mt-2 border-t border-gray-100">
 
-                    <a href="{{ route('login') }}" onclick="closeMobileMenu()" class="mobile-link w-full text-center
-                                   px-4 py-3 rounded-2xl
-                                   border border-[#6C8B6B]
-                                   text-[#6C8B6B]
-                                   font-semibold
-                                   text-sm
-                                   hover:bg-[#EEF5EE]">
-
+                    <a href="{{ route('login') }}" onclick="closeMobileMenu()"
+                        class="mobile-link w-full text-center px-4 py-3 rounded-2xl border border-[#6C8B6B] text-[#6C8B6B] font-semibold text-sm hover:bg-[#EEF5EE]">
                         Masuk
-
                     </a>
 
-                    <button type="button" onclick="bukaModal(); closeMobileMenu();" class="mobile-link w-full
-                                   px-4 py-3 rounded-2xl
-                                   bg-[#6C8B6B]
-                                   hover:bg-[#587357]
-                                   text-white
-                                   text-sm
-                                   font-semibold">
-
+                    <button type="button" onclick="bukaModal(); closeMobileMenu();"
+                        class="mobile-link w-full px-4 py-3 rounded-2xl bg-[#6C8B6B] hover:bg-[#587357] text-white text-sm font-semibold">
                         Daftar
-
                     </button>
 
                 </div>
@@ -729,12 +530,17 @@
     </div>
 
     {{-- CONTENT --}}
-    <main class="pt-[84px]">
+    <main class="pt-[72px] lg:pt-[84px]">
         @yield('content')
     </main>
 
-    {{-- FOOTER --}}
-    <footer class="bg-[#162818] mt-14 lg:mt-24 overflow-hidden relative pb-0">
+    {{-- ========================================================= --}}
+    {{-- FOOTER                                                    --}}
+    {{-- Mobile : brand, navigasi berbentuk pill, kontak dalam kartu --}}
+    {{-- sm     : brand penuh, navigasi & kontak 2 kolom            --}}
+    {{-- lg     : 4 kolom seperti desktop                           --}}
+    {{-- ========================================================= --}}
+    <footer class="relative overflow-hidden bg-[#162818] mt-12 lg:mt-24">
 
         <div class="absolute inset-0 opacity-30">
             <img src="{{ asset('footer.png') }}" class="w-full h-full object-cover" alt="">
@@ -742,17 +548,18 @@
 
         <div class="absolute inset-0 bg-[#162818]/60"></div>
 
-        <div class="relative z-10
-                    max-w-7xl mx-auto
-                    px-4 lg:px-8
-                    py-10 lg:py-20">
+        {{-- Cahaya hijau lembut di pojok (mobile saja) --}}
+        <div class="absolute -right-20 -bottom-20 w-64 h-64 rounded-full pointer-events-none lg:hidden
+                    bg-[radial-gradient(circle,rgba(108,139,107,0.28),transparent_70%)]"></div>
 
-            <div class="grid lg:grid-cols-4 gap-10 lg:gap-14">
+        <div class="relative z-10 max-w-7xl mx-auto px-5 sm:px-6 lg:px-8 pt-10 pb-24 sm:pb-8 lg:pt-20">
+
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-7 sm:gap-10 lg:gap-14">
 
                 {{-- BRAND --}}
-                <div class="lg:col-span-2">
+                <div class="sm:col-span-2 lg:col-span-2">
 
-                    <div class="flex items-center gap-3 mb-6">
+                    <div class="flex items-center gap-3 mb-3.5 lg:mb-6">
 
                         <img src="{{ asset('logo.png') }}" class="w-10 h-10 lg:w-12 lg:h-12 object-contain" alt="Logo">
 
@@ -762,31 +569,40 @@
 
                     </div>
 
-                    <p class="text-[#c7d5c8] leading-7 text-sm lg:text-base max-w-md">
+                    <p class="text-[#c7d5c8] text-sm lg:text-base leading-relaxed lg:leading-7 max-w-md">
                         Platform pencarian dan pengelolaan kos modern yang membantu pencari kos menemukan hunian nyaman
                         dengan cepat, aman, dan terpercaya.
                     </p>
 
                 </div>
 
-                {{-- MENU --}}
+                {{-- NAVIGASI --}}
                 <div>
 
-                    <h3 class="text-white font-bold text-lg mb-6">
+                    <h3 class="text-white font-bold text-base lg:text-lg mb-3 lg:mb-6">
                         Navigasi
                     </h3>
 
-                    <div class="flex flex-col gap-4">
+                    {{-- Mobile: pill berjajar | sm+: daftar link vertikal --}}
+                    <div class="flex flex-wrap gap-2 sm:flex-col sm:gap-3 lg:gap-4">
 
-                        <a href="{{ route('home') }}" class="text-[#c7d5c8] hover:text-white transition">
+                        @php
+                        $footerLink = 'inline-flex items-center min-h-[44px] px-[18px] rounded-full
+                        bg-[#223725] border border-[#2b412d]
+                        text-[#c7d5c8] hover:text-white text-sm font-medium transition
+                        sm:min-h-0 sm:px-0 sm:rounded-none sm:bg-transparent sm:border-0
+                        sm:font-normal lg:text-base';
+                        @endphp
+
+                        <a href="{{ route('home') }}" class="{{ $footerLink }}">
                             Beranda
                         </a>
 
-                        <a href="{{ route('hubungi') }}" class="text-[#c7d5c8] hover:text-white transition">
+                        <a href="{{ route('hubungi') }}" class="{{ $footerLink }}">
                             Hubungi Kami
                         </a>
 
-                        <a href="{{ route('tentang') }}" class="text-[#c7d5c8] hover:text-white transition">
+                        <a href="{{ route('tentang') }}" class="{{ $footerLink }}">
                             Tentang Kami
                         </a>
 
@@ -794,78 +610,88 @@
 
                 </div>
 
-                {{-- CONTACT --}}
+                {{-- KONTAK --}}
                 <div>
 
-                    <h3 class="text-white font-bold text-lg mb-6">
+                    <h3 class="text-white font-bold text-base lg:text-lg mb-3 lg:mb-6">
                         Kontak
                     </h3>
 
-                    <div class="space-y-5">
+                    {{-- Mobile: satu kartu dengan garis pemisah | sm+: daftar biasa --}}
+                    <div class="flex flex-col rounded-[20px] bg-[#223725]/60 border border-[#2b412d] overflow-hidden
+                                sm:block sm:rounded-none sm:bg-transparent sm:border-0 sm:overflow-visible
+                                sm:space-y-4 lg:space-y-5">
 
-                        <div class="flex items-start gap-3">
+                        {{-- ALAMAT --}}
+                        <div class="flex items-center gap-3 px-3.5 py-3
+                                    border-t border-[#2b412d] first:border-t-0
+                                    sm:p-0 sm:border-0">
 
-                            <div class="w-10 h-10 rounded-xl bg-[#223725] flex items-center justify-center shrink-0">
+                            <div
+                                class="w-9 h-9 lg:w-10 lg:h-10 rounded-[10px] lg:rounded-xl bg-[#223725] flex items-center justify-center shrink-0">
 
-                                <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 text-[#6C8B6B]" fill="none"
+                                <svg xmlns="http://www.w3.org/2000/svg"
+                                    class="w-[18px] h-[18px] lg:w-5 lg:h-5 text-[#6C8B6B]" fill="none"
                                     viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8">
-
                                     <path stroke-linecap="round" stroke-linejoin="round"
                                         d="M12 2C8.686 2 6 4.686 6 8c0 4.418 6 12 6 12s6-7.582 6-12c0-3.314-2.686-6-6-6z" />
-
                                     <circle cx="12" cy="8" r="2" fill="currentColor" stroke="none" />
-
                                 </svg>
 
                             </div>
 
-                            <p class="text-[#c7d5c8] leading-7 pt-1">
+                            <p class="text-[#c7d5c8] text-sm lg:text-base min-w-0">
                                 Banyuwangi, Indonesia
                             </p>
 
                         </div>
 
-                        <div class="flex items-start gap-3">
+                        {{-- EMAIL --}}
+                        <div class="flex items-center gap-3 px-3.5 py-3
+                                    border-t border-[#2b412d] first:border-t-0
+                                    sm:p-0 sm:border-0">
 
-                            <div class="w-10 h-10 rounded-xl bg-[#223725] flex items-center justify-center shrink-0">
+                            <div
+                                class="w-9 h-9 lg:w-10 lg:h-10 rounded-[10px] lg:rounded-xl bg-[#223725] flex items-center justify-center shrink-0">
 
-                                <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 text-[#6C8B6B]" fill="none"
+                                <svg xmlns="http://www.w3.org/2000/svg"
+                                    class="w-[18px] h-[18px] lg:w-5 lg:h-5 text-[#6C8B6B]" fill="none"
                                     viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8">
-
                                     <rect x="2" y="5" width="20" height="14" rx="2" stroke="currentColor"
                                         stroke-width="1.8" fill="none" />
-
                                     <path stroke-linecap="round" stroke-linejoin="round" d="M2 7l10 7 10-7" />
-
                                 </svg>
 
                             </div>
 
                             <a href="mailto:twoorbital@gmail.com"
-                                class="text-[#c7d5c8] hover:text-white transition pt-1">
+                                class="text-[#c7d5c8] hover:text-white transition text-sm lg:text-base min-w-0 break-all">
                                 twoorbital@gmail.com
                             </a>
 
                         </div>
 
-                        <div class="flex items-start gap-3">
+                        {{-- WHATSAPP --}}
+                        <div class="flex items-center gap-3 px-3.5 py-3
+                                    border-t border-[#2b412d] first:border-t-0
+                                    sm:p-0 sm:border-0">
 
-                            <div class="w-10 h-10 rounded-xl bg-[#223725] flex items-center justify-center shrink-0">
+                            <div
+                                class="w-9 h-9 lg:w-10 lg:h-10 rounded-[10px] lg:rounded-xl bg-[#223725] flex items-center justify-center shrink-0">
 
-                                <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 text-[#6C8B6B]" fill="none"
+                                <svg xmlns="http://www.w3.org/2000/svg"
+                                    class="w-[18px] h-[18px] lg:w-5 lg:h-5 text-[#6C8B6B]" fill="none"
                                     viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8">
-
                                     <path stroke-linecap="round" stroke-linejoin="round" d="M6.6 10.8c1.4 2.8 3.8 5.1 6.6 6.6l2.2-2.2c.3-.3.7-.4 1-.2
                                            1.1.4 2.3.6 3.6.6.6 0 1 .4 1 1V20c0 .6-.4 1-1 1
                                            C9.6 21 3 14.4 3 6.4c0-.6.4-1 1-1h3.5c.6 0 1 .4 1 1
                                            0 1.3.2 2.5.6 3.6.1.3 0 .7-.2 1L6.6 10.8z" />
-
                                 </svg>
 
                             </div>
 
-                            <a href="https://wa.me/6282264676843" target="_blank"
-                                class="text-[#c7d5c8] hover:text-white transition pt-1">
+                            <a href="https://wa.me/6282264676843" target="_blank" rel="noopener"
+                                class="text-[#c7d5c8] hover:text-white transition text-sm lg:text-base min-w-0">
                                 (+62) 82264676843
                             </a>
 
@@ -878,9 +704,9 @@
             </div>
 
             {{-- COPYRIGHT --}}
-            <div class="border-t border-[#2b412d] mt-10 pt-6 text-center">
+            <div class="border-t border-[#2b412d] mt-7 sm:mt-10 lg:mt-12 pt-4 lg:pt-6 text-center">
 
-                <p class="text-[#91A392] text-sm">
+                <p class="text-[#91A392] text-xs sm:text-sm">
                     © {{ date('Y') }} KosinAja! — Orbit
                 </p>
 
@@ -898,84 +724,50 @@
 
     <script>
     function toggleMobileMenu() {
-
-        const menu =
-            document.getElementById('mobileMenu');
-
-        const button =
-            document.getElementById('mobileMenuButton');
-
-        const isOpen =
-            menu.classList.toggle('is-open');
+        const menu = document.getElementById('mobileMenu');
+        const button = document.getElementById('mobileMenuButton');
+        const isOpen = menu.classList.toggle('is-open');
 
         if (button) {
-
             button.classList.toggle('is-active', isOpen);
-
-            button.setAttribute(
-                'aria-expanded',
-                isOpen ? 'true' : 'false'
-            );
-
+            button.setAttribute('aria-expanded', isOpen ? 'true' : 'false');
         }
-
     }
 
     function closeMobileMenu() {
-
-        const menu =
-            document.getElementById('mobileMenu');
-
-        const button =
-            document.getElementById('mobileMenuButton');
+        const menu = document.getElementById('mobileMenu');
+        const button = document.getElementById('mobileMenuButton');
 
         if (menu) {
             menu.classList.remove('is-open');
         }
 
         if (button) {
-
             button.classList.remove('is-active');
-
-            button.setAttribute(
-                'aria-expanded',
-                'false'
-            );
-
+            button.setAttribute('aria-expanded', 'false');
         }
 
         closeMobileUserMenu();
-
     }
 
     function toggleMobileUserMenu() {
-
-        const submenu =
-            document.getElementById('mobileUserSubmenu');
-
-        const arrow =
-            document.getElementById('mobileUserArrow');
+        const submenu = document.getElementById('mobileUserSubmenu');
+        const arrow = document.getElementById('mobileUserArrow');
 
         if (!submenu) {
             return;
         }
 
-        const isOpen =
-            submenu.classList.toggle('is-open');
+        const isOpen = submenu.classList.toggle('is-open');
 
         if (arrow) {
             arrow.classList.toggle('is-open', isOpen);
         }
-
     }
 
     function closeMobileUserMenu() {
-
-        const submenu =
-            document.getElementById('mobileUserSubmenu');
-
-        const arrow =
-            document.getElementById('mobileUserArrow');
+        const submenu = document.getElementById('mobileUserSubmenu');
+        const arrow = document.getElementById('mobileUserArrow');
 
         if (submenu) {
             submenu.classList.remove('is-open');
@@ -984,43 +776,28 @@
         if (arrow) {
             arrow.classList.remove('is-open');
         }
-
     }
 
     document.addEventListener('click', function(event) {
-
-        const menu =
-            document.getElementById('mobileMenu');
-
-        const button =
-            document.getElementById('mobileMenuButton');
+        const menu = document.getElementById('mobileMenu');
+        const button = document.getElementById('mobileMenuButton');
 
         if (!menu || !button) {
             return;
         }
 
-        const clickInsideMenu =
-            menu.contains(event.target);
+        const clickInsideMenu = menu.contains(event.target);
+        const clickButton = button.contains(event.target);
 
-        const clickButton =
-            button.contains(event.target);
-
-        if (
-            menu.classList.contains('is-open') &&
-            !clickInsideMenu &&
-            !clickButton
-        ) {
+        if (menu.classList.contains('is-open') && !clickInsideMenu && !clickButton) {
             closeMobileMenu();
         }
-
     });
 
     document.addEventListener('keydown', function(event) {
-
         if (event.key === 'Escape') {
             closeMobileMenu();
         }
-
     });
     </script>
 
